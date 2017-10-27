@@ -14,6 +14,7 @@
 		0D949CE21FA3B7B600960BA2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */; };
 		0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CE91FA3B82500960BA2 /* Data Feed.swift */; };
 		0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */; };
+		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		0D949CE31FA3B7B600960BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D949CE91FA3B82500960BA2 /* Data Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Feed.swift"; sourceTree = "<group>"; };
 		0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Price Data.swift"; sourceTree = "<group>"; };
+		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
 		B7BD1E7FA33370B91C2B6AC2 /* Pods-Channel System.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.release.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.release.xcconfig"; sourceTree = "<group>"; };
 		DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Channel_System.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +70,7 @@
 				0D949CDB1FA3B7B600960BA2 /* Main.storyboard */,
 				0D949CD91FA3B7B600960BA2 /* ViewController.swift */,
 				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
+				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 				0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -218,6 +221,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D949CDA1FA3B7B600960BA2 /* ViewController.swift in Sources */,
+				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,
