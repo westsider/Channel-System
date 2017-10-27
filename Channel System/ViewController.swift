@@ -7,19 +7,27 @@
 //
 
 import UIKit
+import RealmSwift
+import Realm
 
 class ViewController: UIViewController {
 
+    let dataFeed = DataFeed()
+    
+    let realm = try! Realm()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.dataFeed.getLastPrice(ticker: "AAPL", saveIt: false, debug: false){ ( doneWork ) in
+            if doneWork {
+                print("Price data loaded\n")
+                for prices in self.dataFeed.lastPrice {
+                    //print(prices.date! ,prices.open!, prices.high!, prices.low!, prices.close!)
+                    print("\(prices.date!)\tO:\(prices.open!)\tH:\(prices.high!)\tL:\(prices.low!)\tC:\(prices.close!)")
+                }
+            }
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 
