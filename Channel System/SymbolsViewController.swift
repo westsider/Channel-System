@@ -33,11 +33,13 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
-        // for custom cell
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as!StockTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = titleArray[indexPath.row]
         
+        let close = (String(format: "%.2f", dataFeed.sortedPrices.last!.close!))
+        print(close)
+        
+        cell.detailTextLabel?.text = close
         return cell
     }
     
