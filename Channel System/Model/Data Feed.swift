@@ -20,7 +20,9 @@ class LastPrice {
     var low: Double?
     var close: Double?
     var volume: Double?
-    
+    var movAvg10: Double?
+    var movAvg200:Double?
+    var wPctR:Double?
 }
 
 class DataFeed {

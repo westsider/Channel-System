@@ -8,20 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */; };
-		0D949CDA1FA3B7B600960BA2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD91FA3B7B600960BA2 /* ViewController.swift */; };
+		0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */; };
 		0D949CDD1FA3B7B600960BA2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CDB1FA3B7B600960BA2 /* Main.storyboard */; };
 		0D949CDF1FA3B7B600960BA2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */; };
 		0D949CE21FA3B7B600960BA2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */; };
 		0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CE91FA3B82500960BA2 /* Data Feed.swift */; };
 		0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */; };
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
+		0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0D949CD41FA3B7B600960BA2 /* Channel System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channel System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0D949CD91FA3B7B600960BA2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		0D949CDC1FA3B7B600960BA2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0D949CE11FA3B7B600960BA2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -29,6 +30,7 @@
 		0D949CE91FA3B82500960BA2 /* Data Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Feed.swift"; sourceTree = "<group>"; };
 		0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Price Data.swift"; sourceTree = "<group>"; };
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
+		0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsViewController.swift; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
 		B7BD1E7FA33370B91C2B6AC2 /* Pods-Channel System.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.release.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.release.xcconfig"; sourceTree = "<group>"; };
 		DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Channel_System.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,16 +70,25 @@
 			isa = PBXGroup;
 			children = (
 				0D949CDB1FA3B7B600960BA2 /* Main.storyboard */,
-				0D949CD91FA3B7B600960BA2 /* ViewController.swift */,
-				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
-				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
-				0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */,
+				0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */,
+				0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */,
+				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
 				0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */,
 				0D949CE31FA3B7B600960BA2 /* Info.plist */,
 			);
 			path = "Channel System";
+			sourceTree = "<group>";
+		};
+		0DEFBCBF1FA912BC00C156B9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
+				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
+				0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		2EABDA4A3F375D4F45B350AB /* Frameworks */ = {
@@ -220,10 +231,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D949CDA1FA3B7B600960BA2 /* ViewController.swift in Sources */,
+				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
+				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
