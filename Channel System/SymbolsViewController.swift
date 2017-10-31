@@ -21,7 +21,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
 
         print("Price data loaded from Scan VC Total days: \(self.dataFeed.lastPrice .count)\n")
         for prices in self.dataFeed.sortedPrices {
-            print("\(prices.date!)\t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tL:\(prices.low!)\tC:\(prices.close!)")
+            print("\(prices.date!)\t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tl:\(prices.low!)\tc:\(prices.close!)")
         }
         titleArray.append((self.dataFeed.sortedPrices.last?.ticker)!)
     }

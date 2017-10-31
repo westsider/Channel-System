@@ -17,6 +17,7 @@
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
 		0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */; };
 		0DEFBCC11FA91B8400C156B9 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC01FA91B8400C156B9 /* ChartViewController.swift */; };
+		0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsViewController.swift; sourceTree = "<group>"; };
 		0DEFBCC01FA91B8400C156B9 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
+		0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart_iOS_v2.0.0.1640_SDK/SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
 		B7BD1E7FA33370B91C2B6AC2 /* Pods-Channel System.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.release.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.release.xcconfig"; sourceTree = "<group>"; };
 		DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Channel_System.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +55,7 @@
 		0D949CCB1FA3B7B600960BA2 = {
 			isa = PBXGroup;
 			children = (
+				0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */,
 				0D949CD61FA3B7B600960BA2 /* Channel System */,
 				0D949CD51FA3B7B600960BA2 /* Products */,
 				9544AE71E32ACBD9A2F92DE0 /* Pods */,
@@ -234,6 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0DEFBCC11FA91B8400C156B9 /* ChartViewController.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
