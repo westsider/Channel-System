@@ -26,8 +26,6 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         titleArray.append((self.dataFeed.sortedPrices.last?.ticker)!)
     }
     
-    
-    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titleArray.count
     }
@@ -35,14 +33,19 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = titleArray[indexPath.row]
-        
         let close = (String(format: "%.2f", dataFeed.sortedPrices.last!.close!))
-        print(close)
-        
         cell.detailTextLabel?.text = close
         return cell
     }
     
-
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Tapped row \(indexPath.row)")
+        selectedSymbol()
+    }
+    
+    func selectedSymbol() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! ChartViewController
+        myVC.dataFeed = dataFeed
+        navigationController?.pushViewController(myVC, animated: true)
+    }
 }
