@@ -88,6 +88,8 @@ class DataFeed {
                     enterDoStuff(true)
                     
                     self.sortedPrices = self.sortPrices(arrayToSort: self.lastPrice)
+                    self.averageOf(period: 10, debug: false)
+                    self.averageOf(period: 200, debug: false)
                     
                 case .failure(let error):
                     debugPrint(error)
@@ -99,4 +101,75 @@ class DataFeed {
         
         return arrayToSort.sorted(by: { $0.date?.compare($1.date!) == .orderedAscending })
     }
+    
+    func averageOf(period:Int, debug: Bool){
+        
+        var closes = [Double]()
+        
+        for eachClose in sortedPrices {
+            closes.append(eachClose.close!)
+        }
+        
+        var sum:Double
+        var tenPeriodArray = [Double]()
+        var averages = [Double]()
+        for close in closes {
+            tenPeriodArray.append(close)
+            if tenPeriodArray.count > period {
+                tenPeriodArray.remove(at: 0)
+                sum = tenPeriodArray.reduce(0, +)
+                let average = sum / Double(period)
+                averages.append(average)
+            } else {
+                averages.append(close)
+            }
+        }
+        
+        if ( period == 10 ) {
+            if ( debug ) { print("10 SMA--------------------------------------") }
+            for (index, eachAverage) in averages.enumerated() {
+                sortedPrices[index].movAvg10 = eachAverage
+                if ( debug ) {print("\(sortedPrices[index].close!) \(eachAverage)") }
+            }
+        } else {
+            if ( debug ) { print("200 SMA--------------------------------------") }
+            for (index, eachAverage) in averages.enumerated() {
+                sortedPrices[index].movAvg200 = eachAverage
+                if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
+            }
+        }
+        
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

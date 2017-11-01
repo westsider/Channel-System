@@ -27,6 +27,8 @@ class ChartViewController: UIViewController {
         addAxis(BarsToShow: 50)
         addDefaultModifiers()
         addDataSeries()
+        addFastSmaSeries()
+        addSlowSmaSeries()
     }
     
     fileprivate func addSurface() {
@@ -127,6 +129,36 @@ class ChartViewController: UIViewController {
         let groupModifier = SCIChartModifierCollection(childModifiers: [xAxisDragmodifier, yAxisDragmodifier, pinchZoomModifier, extendZoomModifier, rolloverModifier])
         
         surface.chartModifiers = groupModifier
+    }
+    
+    fileprivate func addFastSmaSeries() {
+        let fourierDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let items = dataFeed.sortedPrices
+        for ( index, things) in items.enumerated() {
+            fourierDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10!))
+        }
+        
+        let renderSeries = SCIFastLineRenderableSeries()
+        renderSeries.dataSeries = fourierDataSeries
+        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 1.0)
+        renderSeries.style.isDigitalLine = false
+        renderSeries.hitTestProvider().hitTestMode = .verticalInterpolate
+        surface.renderableSeries.add(renderSeries)
+    }
+    
+    fileprivate func addSlowSmaSeries() {
+        let fourierDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let items = dataFeed.sortedPrices
+        for ( index, things) in items.enumerated() {
+            fourierDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200!))
+        }
+        
+        let renderSeries = SCIFastLineRenderableSeries()
+        renderSeries.dataSeries = fourierDataSeries
+        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1), withThickness: 1.0)
+        renderSeries.style.isDigitalLine = false
+        renderSeries.hitTestProvider().hitTestMode = .verticalInterpolate
+        surface.renderableSeries.add(renderSeries)
     }
 
 }

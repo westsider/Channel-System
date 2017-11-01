@@ -29,6 +29,10 @@ class ScanViewController: UIViewController {
                 if doneWork {
                     if ( self.dataFeed.lastPrice.count == 300) {
                         self.finishedScanning()
+                        
+//                        for prices in self.dataFeed.sortedPrices {
+//                            let average = self.dataFeed.averageOf(closes: prices.close, period: 10)
+//                        }
                     }
                 }
             }
