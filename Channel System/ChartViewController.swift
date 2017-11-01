@@ -106,7 +106,7 @@ class ChartViewController: UIViewController {
         
         let xAxisDragmodifier = SCIXAxisDragModifier()
         
-        xAxisDragmodifier.dragMode = .scale
+        xAxisDragmodifier.dragMode = .pan
         xAxisDragmodifier.clipModeX = .none
         
         let yAxisDragmodifier = SCIYAxisDragModifier()

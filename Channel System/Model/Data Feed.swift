@@ -87,9 +87,11 @@ class DataFeed {
                     
                     enterDoStuff(true)
                     
+                    // sort and calc indicators
                     self.sortedPrices = self.sortPrices(arrayToSort: self.lastPrice)
                     self.averageOf(period: 10, debug: false)
                     self.averageOf(period: 200, debug: false)
+                    self.williamsPctR()
                     
                 case .failure(let error):
                     debugPrint(error)
@@ -137,6 +139,60 @@ class DataFeed {
                 sortedPrices[index].movAvg200 = eachAverage
                 if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
             }
+        }
+    }
+    
+    func williamsPctR() {
+        // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
+        
+        // need to find HH + LL of last N periods
+        var highs = [Double]()
+        var lows = [Double]()
+        var highestHigh = [Double]()
+        var lowestLow = [Double]()
+        for each in sortedPrices {
+            highs.append(each.high!)
+            lows.append(each.low!)
+        }
+        
+        // max high of last 10
+        var highArray = [Double]()
+        for high in highs {
+            highArray.append(high)
+            if highArray.count > 10 {
+                highArray.remove(at: 0)
+            }
+            highestHigh.append(highArray.max()!)
+        }
+        
+        // min low of last 10
+        var lowArray = [Double]()
+        for low in lows {
+            lowArray.append(low)
+            if lowArray.count > 10 {
+                lowArray.remove(at: 0)
+            }
+            lowestLow.append(highArray.max()!)
+        }
+        
+        //(Highest High – Closing Price)
+        var leftSideEquation = [Double]()
+        for ( index, each ) in sortedPrices.enumerated() {
+            let answer = highestHigh[index] - each.close!
+            leftSideEquation.append(answer)
+        }
+        
+        //(Highest High – Lowest Low)
+        var rightSideEquation = [Double]()
+        for ( index, eachLow ) in lowestLow.enumerated() {
+            let answer = highestHigh[index] - eachLow
+            rightSideEquation.append(answer)
+        }
+        
+        // divide then multiply answer
+        for ( index, each ) in sortedPrices.enumerated() {
+            let answer = leftSideEquation[index] / rightSideEquation[index]
+            each.wPctR = answer * -100
         }
         
     }
