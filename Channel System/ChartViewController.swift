@@ -24,7 +24,7 @@ class ChartViewController: UIViewController {
         super.viewDidLoad()
 
         addSurface()
-        addAxis(BarsToShow: 75)
+        addAxis(BarsToShow: 50)
         addDefaultModifiers()
         addDataSeries()
     }
@@ -42,13 +42,17 @@ class ChartViewController: UIViewController {
         let totalBars = dataFeed.sortedPrices.count
         let rangeStart = totalBars - BarsToShow
         
-        let xAxis = SCIDateTimeAxis()
+        let xAxis = SCINumericAxis()
         xAxis.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        xAxis.style.labelStyle.fontName = "Helvetica"
+        xAxis.style.labelStyle.fontSize = 14
         surface.xAxes.add(xAxis)
         
         let yAxis = SCINumericAxis()
         yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        yAxis.style.labelStyle.fontName = "Helvetica"
+        yAxis.style.labelStyle.fontSize = 14
         surface.yAxes.add(yAxis)
     }
     
@@ -68,7 +72,7 @@ class ChartViewController: UIViewController {
                                            downWickPen: SCISolidPenStyle,
                                            count: Int) -> SCIFastCandlestickRenderableSeries {
         
-        let ohlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
+        let ohlcDataSeries = SCIOhlcDataSeries(xType: .double, yType: .double)
         
         ohlcDataSeries.acceptUnsortedData = true
         
@@ -76,10 +80,10 @@ class ChartViewController: UIViewController {
         
         print("array Size = \(items.count)")
         
-        for things in items {
+        for ( index, things) in items.enumerated() {
             let date:Date = things.date!
             ///print("Date OHLC: \(date) \(items[i].open!) \(items[i].high!) \(items[i].low!) \(items[i].close!)")
-            ohlcDataSeries.appendX(SCIGeneric(date),
+            ohlcDataSeries.appendX(SCIGeneric(index),
                                    open: SCIGeneric(things.open!),
                                    high: SCIGeneric(things.high!),
                                    low: SCIGeneric(things.low!),
