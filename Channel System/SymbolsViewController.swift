@@ -44,7 +44,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func selectedSymbol() {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! ChartViewController
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.dataFeed = dataFeed
         navigationController?.pushViewController(myVC, animated: true)
     }

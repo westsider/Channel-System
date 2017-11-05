@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */; };
+		0D771E0B1FAE627F006269DD /* EURUSD_Daily.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */; };
 		0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */; };
 		0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */; };
 		0D949CDD1FA3B7B600960BA2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CDB1FA3B7B600960BA2 /* Main.storyboard */; };
@@ -16,12 +18,13 @@
 		0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */; };
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
 		0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */; };
-		0DEFBCC11FA91B8400C156B9 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC01FA91B8400C156B9 /* ChartViewController.swift */; };
 		0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSMultipleSurfaceChartView.swift; sourceTree = "<group>"; };
+		0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EURUSD_Daily.txt; sourceTree = "<group>"; };
 		0D949CD41FA3B7B600960BA2 /* Channel System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channel System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
@@ -33,7 +36,6 @@
 		0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Price Data.swift"; sourceTree = "<group>"; };
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsViewController.swift; sourceTree = "<group>"; };
-		0DEFBCC01FA91B8400C156B9 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart_iOS_v2.0.0.1640_SDK/SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
 		B7BD1E7FA33370B91C2B6AC2 /* Pods-Channel System.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.release.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.release.xcconfig"; sourceTree = "<group>"; };
@@ -77,7 +79,7 @@
 				0D949CDB1FA3B7B600960BA2 /* Main.storyboard */,
 				0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */,
 				0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */,
-				0DEFBCC01FA91B8400C156B9 /* ChartViewController.swift */,
+				0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
+				0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 				0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */,
 			);
@@ -176,6 +179,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D771E0B1FAE627F006269DD /* EURUSD_Daily.txt in Resources */,
 				0D949CE21FA3B7B600960BA2 /* LaunchScreen.storyboard in Resources */,
 				0D949CDF1FA3B7B600960BA2 /* Assets.xcassets in Resources */,
 				0D949CDD1FA3B7B600960BA2 /* Main.storyboard in Resources */,
@@ -239,9 +243,9 @@
 			files = (
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
-				0DEFBCC11FA91B8400C156B9 /* ChartViewController.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
+				0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,
