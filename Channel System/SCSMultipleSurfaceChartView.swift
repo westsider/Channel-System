@@ -45,7 +45,8 @@ class SCSSyncMultiChartView: UIViewController {
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        //addDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
@@ -141,27 +142,26 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
 
-        surface.renderableSeries.add(getCandleRenderSeries(isReverse:false,  xID: xID, yID: yID))
+        surface.renderableSeries.add(getCandleRenderSeries(debug: false, isReverse:false,  xID: xID, yID: yID))
 
     }
     
-    fileprivate func getCandleRenderSeries(isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
+    fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
         
         let upBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         let downBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
         let upWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)
         let downWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
         let ohlcDataSeries = SCIOhlcDataSeries(xType: .double, yType: .double)
-        
         ohlcDataSeries.acceptUnsortedData = true
         
         let items = dataFeed.sortedPrices
         
-        print("getting candle render series\narray Size = \(items.count)")
+        if ( debug ) { print("getting candle render series\narray Size = \(items.count)") }
         
         for ( index, things) in items.enumerated() {
 
-            print("\(things.open!) \(things.high!) \(things.low!) \(things.close!)")
+            if ( debug ) { print("\(things.open!) \(things.high!) \(things.low!) \(things.close!)") }
             ohlcDataSeries.appendX(SCIGeneric(index),
                                    open: SCIGeneric(things.open!),
                                    high: SCIGeneric(things.high!),
@@ -178,21 +178,50 @@ class SCSSyncMultiChartView: UIViewController {
         
         candleRendereSeries.xAxisId = xID
         candleRendereSeries.yAxisId = yID
-        candleRendereSeries.dataSeries = ohlcDataSeries
         
         return candleRendereSeries
     }
     
+    fileprivate func addWPctRSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
+        
+        let indicatorDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
+        indicatorDataSeries.acceptUnsortedData = true
+        
+        let items = dataFeed.sortedPrices
+        if ( debug ) { print("getting wPctR render series\narray Size = \(items.count)") }
+        
+        var lastReading = 0.0
+        
+        for ( index, things) in items.enumerated() {
+            
+            var wPctR = things.wPctR!
+            
+            if ( wPctR > 300 || wPctR < 0) {
+                wPctR = lastReading
+            }
+            if ( debug ) { print("c:\(things.close!) wPctR: \(wPctR)") }
+            indicatorDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(wPctR))
+            lastReading = wPctR
+        }
+        
+        let indicatorRenderSeries = SCIFastLineRenderableSeries()
+        indicatorRenderSeries.dataSeries = indicatorDataSeries
+        indicatorRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 1.0)
+        indicatorRenderSeries.xAxisId = xID
+        indicatorRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(indicatorRenderSeries)
+    }
+    
     fileprivate func addFastSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
-        let fourierDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
         let items = dataFeed.sortedPrices
         for ( index, things) in items.enumerated() {
-            fourierDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10!))
+            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10!))
         }
         
         let renderSeries = SCIFastLineRenderableSeries()
-        renderSeries.dataSeries = fourierDataSeries
-        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)
+        renderSeries.dataSeries = smaDataSeries
+        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 0.7)
         renderSeries.style.isDigitalLine = false
         renderSeries.hitTestProvider().hitTestMode = .verticalInterpolate
         renderSeries.xAxisId = xID
@@ -201,15 +230,15 @@ class SCSSyncMultiChartView: UIViewController {
     }
     
     fileprivate func addSlowSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
-        let fourierDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
         let items = dataFeed.sortedPrices
         for ( index, things) in items.enumerated() {
-            fourierDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200!))
+            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200!))
         }
         
         let renderSeries = SCIFastLineRenderableSeries()
-        renderSeries.dataSeries = fourierDataSeries
-        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 1.2)
+        renderSeries.dataSeries = smaDataSeries
+        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1), withThickness: 2)
         renderSeries.style.isDigitalLine = false
         renderSeries.hitTestProvider().hitTestMode = .verticalInterpolate
         renderSeries.xAxisId = xID

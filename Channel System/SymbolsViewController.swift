@@ -19,10 +19,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("Price data loaded from Scan VC Total days: \(self.dataFeed.lastPrice .count)\n")
-        for prices in self.dataFeed.sortedPrices {
-            print("\(prices.date!)\t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tl:\(prices.low!)\tc:\(prices.close!) 10:\(prices.movAvg10!) %R:\(prices.wPctR!)")
-        }
+        debugDataSeries(on: false)
         titleArray.append((self.dataFeed.sortedPrices.last?.ticker)!)
     }
     
@@ -47,5 +44,14 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.dataFeed = dataFeed
         navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    func debugDataSeries(on: Bool) {
+        if ( !on ) { return }
+        print("Price data loaded from Scan VC Total days: \(self.dataFeed.lastPrice .count)\n")
+        for prices in self.dataFeed.sortedPrices {
+            print("\(prices.date!)\t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tl:\(prices.low!)\tc:\(prices.close!) 10:\(prices.movAvg10!) %R:\(prices.wPctR!)")
+        }
+        
     }
 }
