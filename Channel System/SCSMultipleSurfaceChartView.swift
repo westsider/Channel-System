@@ -186,6 +186,8 @@ class SCSSyncMultiChartView: UIViewController {
         
         let indicatorDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
         indicatorDataSeries.acceptUnsortedData = true
+        let triggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
+        triggerDataSeries.acceptUnsortedData = true
         
         let items = dataFeed.sortedPrices
         if ( debug ) { print("getting wPctR render series\narray Size = \(items.count)") }
@@ -201,6 +203,7 @@ class SCSSyncMultiChartView: UIViewController {
             }
             if ( debug ) { print("c:\(things.close!) wPctR: \(wPctR)") }
             indicatorDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(wPctR))
+            triggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(30.0))
             lastReading = wPctR
         }
         
@@ -210,6 +213,13 @@ class SCSSyncMultiChartView: UIViewController {
         indicatorRenderSeries.xAxisId = xID
         indicatorRenderSeries.yAxisId = yID
         surface.renderableSeries.add(indicatorRenderSeries)
+        
+        let triggerRenderSeries = SCIFastLineRenderableSeries()
+        triggerRenderSeries.dataSeries = triggerDataSeries
+        triggerRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 2.0)
+        triggerRenderSeries.xAxisId = xID
+        triggerRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(triggerRenderSeries)
     }
     
     fileprivate func addFastSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
