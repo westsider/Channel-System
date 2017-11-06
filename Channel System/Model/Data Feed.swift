@@ -23,6 +23,7 @@ class LastPrice {
     var movAvg10: Double?
     var movAvg200:Double?
     var wPctR:Double?
+    var longEntry:Bool?
 }
 
 class DataFeed {
@@ -92,6 +93,7 @@ class DataFeed {
                     self.averageOf(period: 10, debug: false)
                     self.averageOf(period: 200, debug: false)
                     self.williamsPctR()
+                    self.checkForLongEntry()
                     
                 case .failure(let error):
                     debugPrint(error)
@@ -102,6 +104,15 @@ class DataFeed {
     func sortPrices(arrayToSort: [LastPrice])-> [LastPrice] {
         
         return arrayToSort.sorted(by: { $0.date?.compare($1.date!) == .orderedAscending })
+    }
+    
+    func checkForLongEntry() {
+        for each in sortedPrices {
+            if ( each.close! < each.movAvg10! && each.close! > each.movAvg200! && each.wPctR! < -80 ) {
+                each.longEntry = true
+                print("LE on \(each.date!)")
+            }
+        }
     }
     
     func averageOf(period:Int, debug: Bool){
