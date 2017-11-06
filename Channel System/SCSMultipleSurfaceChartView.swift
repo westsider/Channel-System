@@ -41,7 +41,7 @@ class SCSSyncMultiChartView: UIViewController {
     // MARK: Internal Functions    
     func completeConfiguration() {
         configureChartSuraface()
-        addAxis(BarsToShow: 50)
+        addAxis(BarsToShow: 75)
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
@@ -188,23 +188,21 @@ class SCSSyncMultiChartView: UIViewController {
         indicatorDataSeries.acceptUnsortedData = true
         let triggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
         triggerDataSeries.acceptUnsortedData = true
+        let sellTriggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
+        sellTriggerDataSeries.acceptUnsortedData = true
         
         let items = dataFeed.sortedPrices
         if ( debug ) { print("getting wPctR render series\narray Size = \(items.count)") }
-        
-        var lastReading = 0.0
-        
+
+        var wPctR = 0.0
         for ( index, things) in items.enumerated() {
             
-            var wPctR = things.wPctR!
+            wPctR = things.wPctR!
             
-            if ( wPctR > 300 || wPctR < 0) {
-                wPctR = lastReading
-            }
             if ( debug ) { print("c:\(things.close!) wPctR: \(wPctR)") }
             indicatorDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(wPctR))
-            triggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(30.0))
-            lastReading = wPctR
+            triggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-20.0))
+            sellTriggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-80.0))
         }
         
         let indicatorRenderSeries = SCIFastLineRenderableSeries()
@@ -213,6 +211,7 @@ class SCSSyncMultiChartView: UIViewController {
         indicatorRenderSeries.xAxisId = xID
         indicatorRenderSeries.yAxisId = yID
         surface.renderableSeries.add(indicatorRenderSeries)
+        addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: SCIGeneric( wPctR))
         
         let triggerRenderSeries = SCIFastLineRenderableSeries()
         triggerRenderSeries.dataSeries = triggerDataSeries
@@ -220,13 +219,22 @@ class SCSSyncMultiChartView: UIViewController {
         triggerRenderSeries.xAxisId = xID
         triggerRenderSeries.yAxisId = yID
         surface.renderableSeries.add(triggerRenderSeries)
+        
+        let sellTriggerRenderSeries = SCIFastLineRenderableSeries()
+        sellTriggerRenderSeries.dataSeries = sellTriggerDataSeries
+        sellTriggerRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 2.0)
+        sellTriggerRenderSeries.xAxisId = xID
+        sellTriggerRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(sellTriggerRenderSeries)
     }
     
     fileprivate func addFastSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        var lastValue = SCIGeneric(0.0)
         let items = dataFeed.sortedPrices
         for ( index, things) in items.enumerated() {
             smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10!))
+            lastValue = SCIGeneric(things.movAvg10!)
         }
         
         let renderSeries = SCIFastLineRenderableSeries()
@@ -237,15 +245,17 @@ class SCSSyncMultiChartView: UIViewController {
         renderSeries.xAxisId = xID
         renderSeries.yAxisId = yID
         surface.renderableSeries.add(renderSeries)
+        addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: lastValue)
     }
     
     fileprivate func addSlowSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        var lastValue = SCIGeneric(0.0)
         let items = dataFeed.sortedPrices
         for ( index, things) in items.enumerated() {
             smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200!))
+            lastValue = SCIGeneric(things.movAvg200!)
         }
-        
         let renderSeries = SCIFastLineRenderableSeries()
         renderSeries.dataSeries = smaDataSeries
         renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1), withThickness: 2)
@@ -254,6 +264,25 @@ class SCSSyncMultiChartView: UIViewController {
         renderSeries.xAxisId = xID
         renderSeries.yAxisId = yID
         surface.renderableSeries.add(renderSeries)
+        addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: lastValue)
+    
+    }
+    
+    func addAxisMarkerAnnotation(surface:SCIChartSurface, yID:String, color:UIColor, valueFormat:String, value:SCIGenericType){
+        let axisMarker = SCIAxisMarkerAnnotation()
+        axisMarker.yAxisId = yID;
+        axisMarker.style.margin = 5;
+        
+        let textFormatting = SCITextFormattingStyle();
+        textFormatting.color = UIColor.white;
+        textFormatting.fontSize = 10;
+        axisMarker.style.textStyle = textFormatting;
+        axisMarker.formattedValue = String.init(format: valueFormat, SCIGenericDouble(value));
+        axisMarker.coordinateMode = .absolute
+        axisMarker.style.backgroundColor = color
+        axisMarker.position = value;
+        //print("SMA Anntation \(value.doubleData)")
+        surface.annotations.add(axisMarker);
     }
     
 }

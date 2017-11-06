@@ -172,7 +172,7 @@ class DataFeed {
             if lowArray.count > 10 {
                 lowArray.remove(at: 0)
             }
-            lowestLow.append(highArray.max()!)
+            lowestLow.append(lowArray.min()!)
         }
         
         //(Highest High – Closing Price)
@@ -191,8 +191,11 @@ class DataFeed {
         
         // divide then multiply answer
         for ( index, each ) in sortedPrices.enumerated() {
-            let answer = leftSideEquation[index] / rightSideEquation[index]
-            each.wPctR = answer * -100
+            var answer = leftSideEquation[index] / rightSideEquation[index]
+            answer = answer * -100
+            each.wPctR = answer
+            
+            print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100")
         }
         
     }
