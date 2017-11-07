@@ -39,6 +39,26 @@ class SCSSyncMultiChartView: UIViewController {
         completeConfiguration()
     }
 
+    @IBAction func addToPortfolioAction(_ sender: Any) {
+        print("tapped add")
+        if let ticker = dataFeed.sortedPrices.last?.ticker!, let close = dataFeed.sortedPrices.last?.close!  {
+            let alert = UIAlertController(title: "\(ticker) Entry", message: "Entry: \(close) Stop: \(close)", preferredStyle: UIAlertControllerStyle.alert)
+            let action = UIAlertAction(title: "Record Trade", style: .default) { (alertAction) in
+                let textField = alert.textFields![0] as UITextField
+                                print("You entered \(String(describing: textField.text))")
+            }
+            alert.addTextField { (textField) in
+                textField.placeholder = "\(close)"
+                textField.keyboardAppearance = .dark
+                textField.keyboardType = .numberPad
+            }
+            alert.addAction(action)
+            present(alert, animated:true, completion: nil)
+        } else {
+            print("Trouble with Ticker")
+        }
+    }
+    
     // MARK: Internal Functions    
     func completeConfiguration() {
         configureChartSuraface()
