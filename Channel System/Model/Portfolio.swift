@@ -19,10 +19,16 @@ class Entries {
 }
 
 class Portfolio: Entries {
+    
     var open = [Entries]()
     var closed = [Entries]()
     
-    func makeEntry(ticker:String, entryString:String, target:Double, stop:Double, debug:Bool) {
+    func calcShares(stopDist:Double, risk:Int)-> Int {
+        let shares = Double(risk) / stopDist
+        return Int( shares )
+    }
+    
+    func makeEntry(ticker:String, entryString:String, shares:Int, target:Double, stop:Double, debug:Bool) {
         print("You entered \(entryString)")
         let entries = Entries()
         let entry = Double(entryString)
@@ -30,7 +36,7 @@ class Portfolio: Entries {
         entries.entry = entry
         entries.stop = stop
         entries.target = target
-        entries.shares = 100
+        entries.shares = shares
         entries.risk = 50
         entries.date = Date()
         //let portfolio = Portfolio()

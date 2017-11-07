@@ -49,13 +49,14 @@ class SCSSyncMultiChartView: UIViewController {
             let stopString = String(format: "%.2f", stop)
             
             //MARK: - TODO - number of shares + risk
-            let message = "Entry:\(close)\tStop:\(stopString)\tTarget:\(target)"
+            let shares = portfolio.calcShares(stopDist: stopDistance, risk: 100)
+            let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"
             print(message)
             let alert = UIAlertController(title: "\(ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
             let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
                 let textField = alert.textFields![0] as UITextField
                 if let entryString = textField.text {
-                    self.portfolio.makeEntry(ticker: ticker, entryString: entryString, target: target, stop: stop, debug: true)
+                    self.portfolio.makeEntry(ticker: ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
                 }
             }
             let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
