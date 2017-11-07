@@ -18,6 +18,7 @@
 		0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CE91FA3B82500960BA2 /* Data Feed.swift */; };
 		0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */; };
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
+		0DBE20151FB256F80089FFB2 /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBE20141FB256F80089FFB2 /* Portfolio.swift */; };
 		0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */; };
 		0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
@@ -37,6 +38,7 @@
 		0D949CE91FA3B82500960BA2 /* Data Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Feed.swift"; sourceTree = "<group>"; };
 		0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Price Data.swift"; sourceTree = "<group>"; };
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
+		0DBE20141FB256F80089FFB2 /* Portfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Portfolio.swift; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsViewController.swift; sourceTree = "<group>"; };
 		0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart_iOS_v2.0.0.1640_SDK/SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
+				0DBE20141FB256F80089FFB2 /* Portfolio.swift */,
 				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
 				0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
@@ -248,6 +251,7 @@
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
+				0DBE20151FB256F80089FFB2 /* Portfolio.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,

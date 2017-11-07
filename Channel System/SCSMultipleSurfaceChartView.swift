@@ -13,6 +13,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     var dataFeed = DataFeed()
     let showTrades = ShowTrades()
+    let portfolio = Portfolio()
     
     let axisY1Id = "Y1"
     let axisX1Id = "X1"
@@ -42,16 +43,29 @@ class SCSSyncMultiChartView: UIViewController {
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
         if let ticker = dataFeed.sortedPrices.last?.ticker!, let close = dataFeed.sortedPrices.last?.close!  {
-            let alert = UIAlertController(title: "\(ticker) Entry", message: "Entry: \(close) Stop: \(close)", preferredStyle: UIAlertControllerStyle.alert)
-            let action = UIAlertAction(title: "Record Trade", style: .default) { (alertAction) in
+            let stopDistance = Double(close) * 0.03
+            let stop = Double(close) - stopDistance
+            let target = Double(close) + stopDistance
+            let stopString = String(format: "%.2f", stop)
+            
+            //MARK: - TODO - number of shares + risk
+            let message = "Entry:\(close)\tStop:\(stopString)\tTarget:\(target)"
+            print(message)
+            let alert = UIAlertController(title: "\(ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
                 let textField = alert.textFields![0] as UITextField
-                                print("You entered \(String(describing: textField.text))")
+                if let entryString = textField.text {
+                    self.portfolio.makeEntry(ticker: ticker, entryString: entryString, target: target, stop: stop, debug: true)
+                }
+            }
+            let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
             }
             alert.addTextField { (textField) in
-                textField.placeholder = "\(close)"
+                textField.text = "\(close)"
                 textField.keyboardAppearance = .dark
-                textField.keyboardType = .numberPad
+                textField.keyboardType = .decimalPad
             }
+            alert.addAction(cancel)
             alert.addAction(action)
             present(alert, animated:true, completion: nil)
         } else {
