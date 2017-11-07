@@ -32,7 +32,7 @@ class ShowTrades {
     
     func createUpArrow(Date: Int, Entry:Double, xID:String, yID:String)-> SCICustomAnnotation {
         let customAnnotationGreen = SCICustomAnnotation()
-        customAnnotationGreen.customView = UIImageView.init(image: UIImage.init(named: "triangleUp"))
+        customAnnotationGreen.customView = UIImageView.init(image: UIImage.init(named: "chevronUpBlue"))
         customAnnotationGreen.x1=SCIGeneric(Date)
         customAnnotationGreen.y1=SCIGeneric(Entry)
         customAnnotationGreen.xAxisId = xID

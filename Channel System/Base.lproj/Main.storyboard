@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="utR-kH-12Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="utR-kH-12Z">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -116,24 +116,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xsk-wm-kOS">
-                                <rect key="frame" x="0.0" y="64" width="375" height="382"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="485"/>
                                 <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u8c-Sm-UNG">
-                                <rect key="frame" x="0.0" y="446" width="375" height="221"/>
+                                <rect key="frame" x="0.0" y="550" width="375" height="117"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="top" secondItem="Xsk-wm-kOS" secondAttribute="bottom" id="CeH-f0-PYP"/>
-                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="trailing" secondItem="u8c-Sm-UNG" secondAttribute="trailing" id="E3R-NT-bV9"/>
-                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="bottom" secondItem="jWr-EO-Fpj" secondAttribute="bottom" id="FRU-gW-MSf"/>
-                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="leading" secondItem="u8c-Sm-UNG" secondAttribute="leading" id="TVH-bw-ebw"/>
-                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="leading" secondItem="HG1-74-wyX" secondAttribute="leading" id="aoi-WO-pV2"/>
-                            <constraint firstAttribute="trailing" secondItem="Xsk-wm-kOS" secondAttribute="trailing" id="lde-8W-uzq"/>
-                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="top" secondItem="HG1-74-wyX" secondAttribute="top" constant="446" id="mIh-y4-glt"/>
-                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="top" secondItem="jWr-EO-Fpj" secondAttribute="top" id="oZJ-yH-bcD"/>
+                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="leading" secondItem="u8c-Sm-UNG" secondAttribute="leading" id="6hJ-yj-MuD"/>
+                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="bottom" secondItem="jWr-EO-Fpj" secondAttribute="bottom" id="7qA-BT-hM3"/>
+                            <constraint firstAttribute="trailing" secondItem="Xsk-wm-kOS" secondAttribute="trailing" id="F7T-lV-NAL"/>
+                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="top" secondItem="jWr-EO-Fpj" secondAttribute="top" id="FQB-1L-92H"/>
+                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="top" secondItem="Xsk-wm-kOS" secondAttribute="bottom" constant="1" id="GMz-4r-sys"/>
+                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="leading" secondItem="HG1-74-wyX" secondAttribute="leading" id="RS3-1U-n48"/>
+                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="top" secondItem="HG1-74-wyX" secondAttribute="top" constant="550" id="phV-tt-CMP"/>
+                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="trailing" secondItem="u8c-Sm-UNG" secondAttribute="trailing" id="yvW-mS-Y4Y"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jWr-EO-Fpj"/>
                     </view>
