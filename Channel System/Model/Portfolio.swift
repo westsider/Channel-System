@@ -4,7 +4,8 @@
 //
 //  Created by Warren Hansen on 11/7/17.
 //  Copyright © 2017 Warren Hansen. All rights reserved.
-//
+//  Risk $50 Monthly profit $342 if risk 500k
+//  If Monthly Risk is $50k Gain is $342K 
 import Foundation
 
 class Entries {

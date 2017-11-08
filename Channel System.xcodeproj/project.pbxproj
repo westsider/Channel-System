@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5CEC751FB378A400762900 /* PortfolioViewController.swift */; };
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
 		0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */; };
 		0D771E0B1FAE627F006269DD /* EURUSD_Daily.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
 		0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSMultipleSurfaceChartView.swift; sourceTree = "<group>"; };
 		0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EURUSD_Daily.txt; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */,
 				0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */,
 				0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */,
+				0D5CEC751FB378A400762900 /* PortfolioViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -256,6 +259,7 @@
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,
+				0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */,
 				0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

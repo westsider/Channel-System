@@ -13,7 +13,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     var dataFeed = DataFeed()
     let showTrades = ShowTrades()
-    let portfolio = Portfolio()
+    var portfolio = Portfolio()
     
     let axisY1Id = "Y1"
     let axisX1Id = "X1"
@@ -57,6 +57,7 @@ class SCSSyncMultiChartView: UIViewController {
                 let textField = alert.textFields![0] as UITextField
                 if let entryString = textField.text {
                     self.portfolio.makeEntry(ticker: ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
+                    self.sequeToPortfolio()
                 }
             }
             let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
@@ -72,6 +73,12 @@ class SCSSyncMultiChartView: UIViewController {
         } else {
             print("Trouble with Ticker")
         }
+    }
+    
+    func sequeToPortfolio() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
+        myVC.portfolio = portfolio
+        navigationController?.pushViewController(myVC, animated: true)
     }
     
     // MARK: Internal Functions    
