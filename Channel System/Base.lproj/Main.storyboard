@@ -46,16 +46,16 @@
             </objects>
             <point key="canvasLocation" x="750" y="117"/>
         </scene>
-        <!--Symbols View Controller-->
+        <!--Candidates-->
         <scene sceneID="70W-qy-HoG">
             <objects>
-                <viewController storyboardIdentifier="SymbolsVC" id="rsc-Si-hcx" customClass="SymbolsViewController" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SymbolsVC" title="Candidates" id="rsc-Si-hcx" customClass="SymbolsViewController" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LLy-So-AA8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fQZ-Wh-aOk">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="627"/>
                                 <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -94,13 +94,42 @@
                                     <outlet property="delegate" destination="rsc-Si-hcx" id="Xcj-Ie-RTa"/>
                                 </connections>
                             </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="aFC-Jt-Cw3">
+                                <rect key="frame" x="16" y="632" width="341" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCC-xV-E7u">
+                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="30"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Clear Realm">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="clearRealmAction:" destination="rsc-Si-hcx" eventType="touchUpInside" id="7tB-9z-UHY"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VJE-NN-i7A">
+                                        <rect key="frame" x="173.5" y="0.0" width="167.5" height="30"/>
+                                        <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Portfolio">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="readRealmContents:" destination="rsc-Si-hcx" eventType="touchUpInside" id="gzI-nx-icD"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="bottom" secondItem="6NJ-we-50Y" secondAttribute="bottom" id="EFt-lO-rc8"/>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="top" secondItem="6NJ-we-50Y" secondAttribute="top" id="L1I-5y-c01"/>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="trailing" secondItem="6NJ-we-50Y" secondAttribute="trailing" id="VF1-Ds-rcm"/>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" id="vzo-Lg-xQO"/>
+                            <constraint firstItem="6NJ-we-50Y" firstAttribute="bottom" secondItem="aFC-Jt-Cw3" secondAttribute="bottom" constant="5" id="7ZE-8G-cXi"/>
+                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" id="Bkt-NV-wwI"/>
+                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="top" secondItem="fQZ-Wh-aOk" secondAttribute="bottom" constant="5" id="JCT-At-3mr"/>
+                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="trailing" secondItem="6NJ-we-50Y" secondAttribute="trailing" id="JXh-Xz-cPx"/>
+                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="top" secondItem="fQZ-Wh-aOk" secondAttribute="bottom" constant="5" id="Upu-Yu-Ho0"/>
+                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="top" secondItem="LLy-So-AA8" secondAttribute="top" id="YcD-hV-u6w"/>
+                            <constraint firstItem="6NJ-we-50Y" firstAttribute="trailing" secondItem="aFC-Jt-Cw3" secondAttribute="trailing" constant="18" id="aZL-Ue-Uxc"/>
+                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" constant="16" id="bsq-PI-SUc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6NJ-we-50Y"/>
                     </view>
@@ -113,10 +142,10 @@
             </objects>
             <point key="canvasLocation" x="1544.8" y="106.59670164917542"/>
         </scene>
-        <!--Sync Multi Chart View-->
+        <!--Chart-->
         <scene sceneID="kwo-RN-pHH">
             <objects>
-                <viewController storyboardIdentifier="ChartVC" id="x0Q-wm-iek" customClass="SCSSyncMultiChartView" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChartVC" title="Chart" id="x0Q-wm-iek" customClass="SCSSyncMultiChartView" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HG1-74-wyX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -126,7 +155,7 @@
                                 <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u8c-Sm-UNG">
-                                <rect key="frame" x="0.0" y="550" width="375" height="117"/>
+                                <rect key="frame" x="0.0" y="550" width="375" height="73"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
@@ -143,6 +172,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jWr-EO-Fpj"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Item" id="LVd-d1-LWB"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="BXZ-W2-m9r">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="J9V-Si-h9t">
                             <connections>
@@ -150,6 +182,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="bottomView" destination="u8c-Sm-UNG" id="cJY-Ex-6E9"/>
                         <outlet property="topView" destination="Xsk-wm-kOS" id="l41-0F-LdE"/>
@@ -160,16 +193,16 @@
             </objects>
             <point key="canvasLocation" x="2871" y="107"/>
         </scene>
-        <!--Portfolio View Controller-->
+        <!--Portfolio-->
         <scene sceneID="Z8A-w9-ByB">
             <objects>
-                <viewController storyboardIdentifier="PortfolioVC" id="elU-G9-o6D" customClass="PortfolioViewController" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PortfolioVC" title="Portfolio" id="elU-G9-o6D" customClass="PortfolioViewController" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sDE-Lh-EH2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UG5-we-OMK">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="jhL-G9-lrH" detailTextLabel="FX9-zd-05C" style="IBUITableViewCellStyleValue1" id="Ynw-OM-yQu">

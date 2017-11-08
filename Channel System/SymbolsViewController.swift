@@ -23,6 +23,16 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         titleArray.append((self.dataFeed.sortedPrices.last?.ticker)!)
     }
     
+    @IBAction func clearRealmAction(_ sender: Any) {
+        RealmHelpers().deleteAll()
+    }
+    
+    // NOW Sugue to Portfolio
+    @IBAction func readRealmContents(_ sender: Any) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titleArray.count
     }

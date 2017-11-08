@@ -7,31 +7,33 @@
 //
 
 import UIKit
+import RealmSwift
 
 class PortfolioViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var portfolio = Portfolio()
+    let realm = try! Realm()
     
-    let testArray = ["AAPL", "GOOG", "AOL"]
+    var tasks: Results<Entries>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tasks = realm.objects(Entries.self)
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return portfolio.open.count
+        return  tasks.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = portfolio.open[indexPath.row].ticker
-        if let profit = portfolio.open[indexPath.row].profit {
-            cell.detailTextLabel?.text = String(profit)
-        } else {
-            cell.detailTextLabel?.text = "N/A"
-        }
+        let task = "\(tasks[indexPath.row].ticker)"
+        cell.textLabel?.text = task
+        
+        let profit = tasks[indexPath.row].profit
+        cell.detailTextLabel?.text = String(profit)
+  
         
         return cell
     }
@@ -55,5 +57,5 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
 //        }
 //
 //    }
-
+ 
 }
