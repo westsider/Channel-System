@@ -18,15 +18,15 @@ class ShowTrades {
             print("\nLong signal: \(signal) on bar \(currentBar)")
             annotationGroup.add( createUpArrow(Date: currentBar, Entry: low, xID: xID, yID: yID) )
         }
-//        if(signal == -1) {
-//            print("\nShrt signal: \(signal) on bar \(currentBar)")
-//            annotationGroup.add( createDnArrow(Date: currentBar, Entry: high) )
-//        }
-//
-//        if(signal == -2 || signal == 2) {
-//            print("\nExit signal: \(signal) on bar \(currentBar)")
-//            annotationGroup.add( createExit(Date: currentBar, Entry: close) )
-//        }
+        //        if(signal == -1) {
+        //            print("\nShrt signal: \(signal) on bar \(currentBar)")
+        //            annotationGroup.add( createDnArrow(Date: currentBar, Entry: high) )
+        //        }
+        //
+        //        if(signal == -2 || signal == 2) {
+        //            print("\nExit signal: \(signal) on bar \(currentBar)")
+        //            annotationGroup.add( createExit(Date: currentBar, Entry: close) )
+        //        }
         return annotationGroup
     }
     

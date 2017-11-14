@@ -131,10 +131,10 @@ class DataFeed {
     }
     
     func calcIndicators() {
-            self.averageOf(period: 10, debug: true)
+            self.averageOf(period: 10, debug: false)
             self.averageOf(period: 200, debug: false)
             self.williamsPctR(debug: false)
-            //self.checkForLongEntry(debug: false)
+            self.checkForLongEntry(debug: true)
     }
     
     func returnSortedSymbol()-> [LastPrice]{
@@ -153,17 +153,16 @@ class DataFeed {
     }
     
     func checkForLongEntry(debug: Bool) {
-        for each in sortedPrices {
-            if ( each.close! < each.movAvg10! && each.close! > each.movAvg200! && each.wPctR! < -80 ) {
-                each.longEntry = true
-                if ( debug ) { print("LE on \(each.date!)") }
+        
+        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
+            for (index, each) in symbolFile.enumerated() {
+                if ( each.close! < each.movAvg10! && each.close! > each.movAvg200! && each.wPctR! < -80 ) {
+                    allSortedPrices[mainindex][index].longEntry = true
+                    if ( debug ) { print("LE on \(allSortedPrices[mainindex][index].date!)") }
+                }
             }
         }
     }
-    
-    
-    // stuck here till tomorrow - used up all my data calls
-    
     
     func averageOf(period:Int, debug: Bool){
         
@@ -207,7 +206,6 @@ class DataFeed {
     
     func williamsPctR(debug: Bool) {
         // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
-        
         for (mainindex, symbolFile) in allSortedPrices.enumerated() {
             
             var highs = [Double]()
@@ -256,7 +254,7 @@ class DataFeed {
             }
             
             // divide then multiply answer
-            for (index, each) in symbolFile.enumerated() {
+            for (index, _) in symbolFile.enumerated() {
                 var answer = leftSideEquation[index] / rightSideEquation[index]
                 answer = answer * -100
                 wPctR.append(answer)
@@ -281,41 +279,6 @@ class DataFeed {
             for prices in symbols {
                 print("\(prices.dateString!) \t\(prices.ticker!)\to:\(String(format: "%.2f", prices.open!))\th:\(String(format: "%.2f", prices.high!))\tl:\(String(format: "%.2f", prices.low!))\tc:\(String(format: "%.2f", prices.close!)) 10:\(String(format: "%.2f", prices.movAvg10!))")
             }
-
         }
     }
-    
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
