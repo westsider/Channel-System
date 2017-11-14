@@ -20,20 +20,24 @@ class ScanViewController: UIViewController {
     
     let realm = try! Realm()
     
-    let universe = ["SPY", "QQQ"] //, "DIA"] //, "MDY", "IWM", "EFA", "ILF", "EEM", "EPP",  "IEV"]
+    let universe = ["SPY"] //, "QQQ"] //, "DIA"] //, "MDY", "IWM", "EFA", "ILF", "EEM", "EPP",  "IEV"]
 
+    var updateUI = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
  
+        updateLable.text = "Getting Closing Prices..."
         for (index, symbol) in universe.enumerated() {
            // counter += 1
             //MARK: - TODO update the lable not working
-            let updateUI = "\nDownloading \(symbol) \(index)"
-            print(updateUI)
+            updateUI = "\nDownloading \(symbol) \(index)"
+            self.updateLable.text = updateUI; print(updateUI)
             self.updateLable.text = updateUI
             self.dataFeed.getLastPrice(ticker: symbol, saveIt: false, debug: false){ ( doneWork ) in
                 if doneWork {
-                    print("Finished downloading \(symbol)\n")
+                    self.updateUI = "Finished downloading \(index) symbols..."
+                    self.updateLable.text = self.updateUI; print(self.updateUI)
                     if ( index == self.universe.count-1 ) {
                         self.finishedScanning()
                     }
@@ -50,7 +54,7 @@ class ScanViewController: UIViewController {
         //dataFeed.printThis(priceSeries: self.dataFeed.lastPrice)
         activityIndicator.isHidden = true
         dataFeed.separateSymbols(debug: false)
-        //dataFeed.calcIndicators()
+        dataFeed.calcIndicators()
         dataFeed.debugAllSortedPrices(on: true)
         self.updateLable.text = "Downloaded \(self.dataFeed.symbolArray.count) Tickers..."
         

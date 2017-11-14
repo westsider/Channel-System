@@ -48,6 +48,7 @@ class DataFeed {
             var request = "https://api.intrinio.com/prices?ticker=\(ticker)"
             if (page > 1) {
                 request = "https://api.intrinio.com/prices?identifier=\(ticker)&page_number=\(page)"
+                // https://api.intrinio.com/prices?identifier=AAPL&page_number=1
             }
             let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
             let password = "e6cf8f921bb621f398240e315ab79068"
@@ -130,9 +131,9 @@ class DataFeed {
     }
     
     func calcIndicators() {
-            self.averageOf(period: 10, debug: false)
+            self.averageOf(period: 10, debug: true)
             self.averageOf(period: 200, debug: false)
-            //self.williamsPctR(debug: false)
+            self.williamsPctR(debug: false)
             //self.checkForLongEntry(debug: false)
     }
     
@@ -160,11 +161,15 @@ class DataFeed {
         }
     }
     
+    
+    // stuck here till tomorrow - used up all my data calls
+    
+    
     func averageOf(period:Int, debug: Bool){
         
         var closes = [Double]()
         
-        for symbolFile in allSortedPrices {
+        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
             for eachClose in symbolFile {
                 closes.append(eachClose.close!)
             }
@@ -187,14 +192,14 @@ class DataFeed {
             if ( period == 10 ) {
                 if ( debug ) { print("10 SMA--------------------------------------") }
                 for (index, eachAverage) in averages.enumerated() {
-                    symbolFile[index].movAvg10 = eachAverage
-                    if ( debug ) {print("\(sortedPrices[index].close!) \(eachAverage)") }
+                    allSortedPrices[mainindex][index].movAvg10 = eachAverage
+                    if ( debug ) {print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
                 }
             } else {
                 if ( debug ) { print("200 SMA--------------------------------------") }
                 for (index, eachAverage) in averages.enumerated() {
-                    symbolFile[index].movAvg200 = eachAverage
-                    if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
+                    allSortedPrices[mainindex][index].movAvg200 = eachAverage
+                    if ( debug ) { print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
                 }
             }
         }
@@ -203,57 +208,65 @@ class DataFeed {
     func williamsPctR(debug: Bool) {
         // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
         
-        // need to find HH + LL of last N periods
-        var highs = [Double]()
-        var lows = [Double]()
-        var highestHigh = [Double]()
-        var lowestLow = [Double]()
-        for each in sortedPrices {
-            highs.append(each.high!)
-            lows.append(each.low!)
-        }
-        
-        // max high of last 10
-        var highArray = [Double]()
-        for high in highs {
-            highArray.append(high)
-            if highArray.count > 10 {
-                highArray.remove(at: 0)
-            }
-            highestHigh.append(highArray.max()!)
-        }
-        
-        // min low of last 10
-        var lowArray = [Double]()
-        for low in lows {
-            lowArray.append(low)
-            if lowArray.count > 10 {
-                lowArray.remove(at: 0)
-            }
-            lowestLow.append(lowArray.min()!)
-        }
-        
-        //(Highest High – Closing Price)
-        var leftSideEquation = [Double]()
-        for ( index, each ) in sortedPrices.enumerated() {
-            let answer = highestHigh[index] - each.close!
-            leftSideEquation.append(answer)
-        }
-        
-        //(Highest High – Lowest Low)
-        var rightSideEquation = [Double]()
-        for ( index, eachLow ) in lowestLow.enumerated() {
-            let answer = highestHigh[index] - eachLow
-            rightSideEquation.append(answer)
-        }
-        
-        // divide then multiply answer
-        for ( index, each ) in sortedPrices.enumerated() {
-            var answer = leftSideEquation[index] / rightSideEquation[index]
-            answer = answer * -100
-            each.wPctR = answer
+        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
             
-            if ( debug ) { print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100") }
+            var highs = [Double]()
+            var lows = [Double]()
+            var highestHigh = [Double]()
+            var lowestLow = [Double]()
+            var wPctR = [Double]()
+            // need to find HH + LL of last N periods
+            for each in symbolFile {
+                highs.append(each.high!)
+                lows.append(each.low!)
+            }
+        
+            // max high of last 10
+            var highArray = [Double]()
+            for high in highs {
+                highArray.append(high)
+                if highArray.count > 10 {
+                    highArray.remove(at: 0)
+                }
+                highestHigh.append(highArray.max()!)
+            }
+            
+            // min low of last 10
+            var lowArray = [Double]()
+            for low in lows {
+                lowArray.append(low)
+                if lowArray.count > 10 {
+                    lowArray.remove(at: 0)
+                }
+                lowestLow.append(lowArray.min()!)
+            }
+            
+            //(Highest High – Closing Price)
+            var leftSideEquation = [Double]()
+            for ( index, each ) in sortedPrices.enumerated() {
+                let answer = highestHigh[index] - each.close!
+                leftSideEquation.append(answer)
+            }
+            
+            //(Highest High – Lowest Low)
+            var rightSideEquation = [Double]()
+            for ( index, eachLow ) in lowestLow.enumerated() {
+                let answer = highestHigh[index] - eachLow
+                rightSideEquation.append(answer)
+            }
+            
+            // divide then multiply answer
+            for (index, each) in symbolFile.enumerated() {
+                var answer = leftSideEquation[index] / rightSideEquation[index]
+                answer = answer * -100
+                wPctR.append(answer)
+                if ( debug ) { print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100") }
+            }
+            
+            // add values to main price object
+            for ( index, eachWpctR ) in wPctR.enumerated() {
+                allSortedPrices[mainindex][index].wPctR = eachWpctR
+            }
         }
     }
     
@@ -266,7 +279,7 @@ class DataFeed {
 
             print("Currently listing prices for \(ticker!) Sorted prices loaded from Scan VC. Total days: \(symbols.count)\n")
             for prices in symbols {
-                print("\(prices.dateString!) \t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tl:\(prices.low!)\tc:\(prices.close!)") //" 10:\(prices.movAvg10!)")
+                print("\(prices.dateString!) \t\(prices.ticker!)\to:\(String(format: "%.2f", prices.open!))\th:\(String(format: "%.2f", prices.high!))\tl:\(String(format: "%.2f", prices.low!))\tc:\(String(format: "%.2f", prices.close!)) 10:\(String(format: "%.2f", prices.movAvg10!))")
             }
 
         }
