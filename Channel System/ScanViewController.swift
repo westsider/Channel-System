@@ -5,6 +5,7 @@
 //  Created by Warren Hansen on 10/27/17.
 //  Copyright © 2017 Warren Hansen. All rights reserved.
 //
+import Foundation
 
 import UIKit
 import RealmSwift
@@ -20,16 +21,43 @@ class ScanViewController: UIViewController {
     
     let realm = try! Realm()
     
-    let universe = ["SPY"] //, "QQQ"] //, "DIA"] //, "MDY", "IWM", "EFA", "ILF", "EEM", "EPP",  "IEV"]
+    let universe = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP",  "IEV"]
 
     var updateUI = ""
     
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
- 
         updateLable.text = "Getting Closing Prices..."
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        getDataFromPriorDownload()
+    }
+    
+    func getDataFromPriorDownload() {
+        
+        for symbols in universe {
+
+            self.updateLable.text = "Getting CSV Data for \(symbols)..."
+          
+            dataFeed.getCsvData(ticker: symbols, debug: false){ ( doneWork ) in
+                if doneWork {
+                    self.updateLable.text = "All Symbols Retrieved!"
+                    print("Data Retrieved for \(symbols)")
+                    self.activityIndicator.isHidden = true
+                    // need to separate symbols
+                }
+            }
+        }
+    }
+
+    
+    func getLiveData() {
         for (index, symbol) in universe.enumerated() {
-           // counter += 1
+            // counter += 1
             //MARK: - TODO update the lable not working
             updateUI = "\nDownloading \(symbol) \(index)"
             self.updateLable.text = updateUI; print(updateUI)
@@ -44,8 +72,8 @@ class ScanViewController: UIViewController {
                 }
             }
         }
+
     }
-    
     
     func finishedScanning() {
         
