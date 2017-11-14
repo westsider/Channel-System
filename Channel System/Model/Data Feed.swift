@@ -32,85 +32,130 @@ class DataFeed {
     
     var sortedPrices = [LastPrice]()
     
+    var allSortedPrices = [[LastPrice]]()
+    
+    var symbolArray = [String]()
+    
     /// Get realtime ohlc
-    func getLastPrice(ticker: String, page: Int, saveIt: Bool, debug: Bool, enterDoStuff: @escaping (Bool) -> Void ) {
+    func getLastPrice(ticker: String, saveIt: Bool, debug: Bool, doneWork: @escaping (Bool) -> Void ) {
+        var counter = 0
+        var rowCounter = 0
+        for page in 1...3 {
+            print("requesting JSON for \(ticker) page \(page)")
+            if ( debug ) {  print("looking for \(ticker)...") }
+            doneWork(false)
+            // get last price from intrio
+            var request = "https://api.intrinio.com/prices?ticker=\(ticker)"
+            if (page > 1) {
+                request = "https://api.intrinio.com/prices?identifier=\(ticker)&page_number=\(page)"
+            }
+            let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
+            let password = "e6cf8f921bb621f398240e315ab79068"
         
-        if ( debug ) {  print("looking for \(ticker)...") }
-        enterDoStuff(false)
-        // get last price from intrio
-        var request = "https://api.intrinio.com/prices?ticker=\(ticker)"
-        if (page > 1) {
-            request = "https://api.intrinio.com/prices?identifier=\(ticker)&page_number=\(page)"
-        }
-        let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
-        let password = "e6cf8f921bb621f398240e315ab79068"
-        
-        
-        Alamofire.request("\(request)")
-            .authenticate(user: user, password: password)
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    if ( debug ) { print("JSON: \(json)") }
-                    
-                    for data in json["data"].arrayValue {
+            Alamofire.request("\(request)")
+                .authenticate(user: user, password: password)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        if ( debug ) { print("JSON: \(json)") }
                         
-                        let lastPriceObject = LastPrice()
-                        
-                        lastPriceObject.ticker = ticker
-                        
-                        if let date = data["date"].string {
-                            lastPriceObject.dateString = date
-                            lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
+                        for data in json["data"].arrayValue {
+                            rowCounter += 1
+                            if ( rowCounter == 1 ) { print("Parsing page \(page) row 1 for \(ticker)")}
+                            let lastPriceObject = LastPrice()
+                            
+                            lastPriceObject.ticker = ticker
+                            
+                            if let date = data["date"].string {
+                                lastPriceObject.dateString = date
+                                lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
+                            }
+                            
+                            if let open = data["open"].double {
+                                lastPriceObject.open = open
+                            }
+                            
+                            if let high = data["high"].double {
+                                lastPriceObject.high = high
+                            }
+                            if let low = data["low"].double {
+                                lastPriceObject.low = low
+                            }
+                            
+                            if let close = data["close"].double {
+                                lastPriceObject.close = close
+                            }
+                            self.lastPrice.append(lastPriceObject)
                         }
                         
-                        if let open = data["open"].double {
-                            lastPriceObject.open = open
+                        counter += 1
+                        if ( counter == 3 ) {
+                            
+                            print("\(ticker) request complete")
+                            self.sortPrices(arrayToSort: self.lastPrice)
+                            
+                            doneWork(true)
                         }
-                        
-                        if let high = data["high"].double {
-                            lastPriceObject.high = high
-                        }
-                        if let low = data["low"].double {
-                            lastPriceObject.low = low
-                        }
-                        
-                        if let close = data["close"].double {
-                            lastPriceObject.close = close
-                        }
-                        self.lastPrice.append(lastPriceObject)
+                        rowCounter = 0
+                    case .failure(let error):
+                        debugPrint(error)
                     }
-                    
-                    let item = self.lastPrice.first
-                    
-                    if (saveIt && item?.ticker != nil) { RealmHelpers().saveToRealm(ticker: (item?.ticker)!, last: (item?.close)!, date: (item?.dateString)!) }
-                    
-                    enterDoStuff(true)
-                    
-                    // sort and calc indicators
-                    self.sortedPrices = self.sortPrices(arrayToSort: self.lastPrice)
-                    self.averageOf(period: 10, debug: false)
-                    self.averageOf(period: 200, debug: false)
-                    self.williamsPctR()
-                    self.checkForLongEntry()
-                    
-                case .failure(let error):
-                    debugPrint(error)
-                }
+            }
+         }
+        
+      }
+    
+    //MARK: - TODO calc all indicators and signals
+    func separateSymbols(debug: Bool) {
+ 
+        var fullSymbolDataSet = [LastPrice]()
+        
+        for each in sortedPrices {
+            if ( !symbolArray.contains(each.ticker!)) {
+                symbolArray.append(each.ticker!)
+            }
+        }
+        
+        for symbol in symbolArray {
+            if ( debug ) {print("\nFound \(symbol) in array!") }
+            let foundItems = sortedPrices.filter { $0.ticker == symbol }
+            for each in foundItems {
+                if ( debug ) { print("\(each.ticker!) \(each.dateString!)") }
+                fullSymbolDataSet.append(each)
+            }
+            allSortedPrices.append(fullSymbolDataSet)
+            fullSymbolDataSet.removeAll()
         }
     }
     
-    func sortPrices(arrayToSort: [LastPrice])-> [LastPrice] {
-        
-        return arrayToSort.sorted(by: { $0.date?.compare($1.date!) == .orderedAscending })
+    func calcIndicators() {
+            self.averageOf(period: 10, debug: false)
+            self.averageOf(period: 200, debug: false)
+            //self.williamsPctR(debug: false)
+            //self.checkForLongEntry(debug: false)
     }
     
-    func checkForLongEntry() {
+    func returnSortedSymbol()-> [LastPrice]{
+        print("returnSortedSymbol")
+        return self.sortedPrices
+    }
+    
+    func printThis(priceSeries: [LastPrice]) {
+        print("\nprintThis")
+        for item in priceSeries {
+            print("\(item.ticker!) \(item.date!)")
+        }
+    }
+    func sortPrices(arrayToSort: [LastPrice]) {
+        sortedPrices = arrayToSort.sorted(by: { $0.date?.compare($1.date!) == .orderedAscending })
+    }
+    
+    func checkForLongEntry(debug: Bool) {
         for each in sortedPrices {
             if ( each.close! < each.movAvg10! && each.close! > each.movAvg200! && each.wPctR! < -80 ) {
                 each.longEntry = true
-                print("LE on \(each.date!)")
+                if ( debug ) { print("LE on \(each.date!)") }
             }
         }
     }
@@ -119,41 +164,43 @@ class DataFeed {
         
         var closes = [Double]()
         
-        for eachClose in sortedPrices {
-            closes.append(eachClose.close!)
-        }
-        
-        var sum:Double
-        var tenPeriodArray = [Double]()
-        var averages = [Double]()
-        for close in closes {
-            tenPeriodArray.append(close)
-            if tenPeriodArray.count > period {
-                tenPeriodArray.remove(at: 0)
-                sum = tenPeriodArray.reduce(0, +)
-                let average = sum / Double(period)
-                averages.append(average)
+        for symbolFile in allSortedPrices {
+            for eachClose in symbolFile {
+                closes.append(eachClose.close!)
+            }
+            
+            var sum:Double
+            var tenPeriodArray = [Double]()
+            var averages = [Double]()
+            for close in closes {
+                tenPeriodArray.append(close)
+                if tenPeriodArray.count > period {
+                    tenPeriodArray.remove(at: 0)
+                    sum = tenPeriodArray.reduce(0, +)
+                    let average = sum / Double(period)
+                    averages.append(average)
+                } else {
+                    averages.append(close)
+                }
+            }
+            
+            if ( period == 10 ) {
+                if ( debug ) { print("10 SMA--------------------------------------") }
+                for (index, eachAverage) in averages.enumerated() {
+                    symbolFile[index].movAvg10 = eachAverage
+                    if ( debug ) {print("\(sortedPrices[index].close!) \(eachAverage)") }
+                }
             } else {
-                averages.append(close)
-            }
-        }
-        
-        if ( period == 10 ) {
-            if ( debug ) { print("10 SMA--------------------------------------") }
-            for (index, eachAverage) in averages.enumerated() {
-                sortedPrices[index].movAvg10 = eachAverage
-                if ( debug ) {print("\(sortedPrices[index].close!) \(eachAverage)") }
-            }
-        } else {
-            if ( debug ) { print("200 SMA--------------------------------------") }
-            for (index, eachAverage) in averages.enumerated() {
-                sortedPrices[index].movAvg200 = eachAverage
-                if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
+                if ( debug ) { print("200 SMA--------------------------------------") }
+                for (index, eachAverage) in averages.enumerated() {
+                    symbolFile[index].movAvg200 = eachAverage
+                    if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
+                }
             }
         }
     }
     
-    func williamsPctR() {
+    func williamsPctR(debug: Bool) {
         // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
         
         // need to find HH + LL of last N periods
@@ -206,10 +253,26 @@ class DataFeed {
             answer = answer * -100
             each.wPctR = answer
             
-            print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100")
+            if ( debug ) { print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100") }
         }
-        
     }
+    
+    func debugAllSortedPrices(on: Bool) {
+        if ( !on ) { return }
+        print("All Sorted prices loaded from Scan VC. Total symbols: \(allSortedPrices.count)\n")
+        for symbols in allSortedPrices {
+
+            let ticker = symbols.first?.ticker
+
+            print("Currently listing prices for \(ticker!) Sorted prices loaded from Scan VC. Total days: \(symbols.count)\n")
+            for prices in symbols {
+                print("\(prices.dateString!) \t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tl:\(prices.low!)\tc:\(prices.close!)") //" 10:\(prices.movAvg10!)")
+            }
+
+        }
+    }
+    
+
 }
 
 

@@ -16,6 +16,9 @@ class SCSSyncMultiChartView: UIViewController {
    // var portfolio = Portfolio()
     var entriesR = Entries()
     
+    var indexSelected = Int()
+    //var chartSelected = [LastPrice]()
+    
     let axisY1Id = "Y1"
     let axisX1Id = "X1"
     
@@ -43,7 +46,7 @@ class SCSSyncMultiChartView: UIViewController {
 
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
-        if let ticker = dataFeed.sortedPrices.last?.ticker!, let close = dataFeed.sortedPrices.last?.close!  {
+        if let ticker = dataFeed.allSortedPrices[indexSelected].last?.ticker!, let close = dataFeed.allSortedPrices[indexSelected].last?.close!  {
             let stopDistance = Double(close) * 0.03
             let stop = Double(close) - stopDistance
             let target = Double(close) + stopDistance
@@ -86,15 +89,16 @@ class SCSSyncMultiChartView: UIViewController {
     
     // MARK: Internal Functions    
     func completeConfiguration() {
+        //chartSelected = dataFeed.allSortedPrices[indexSelected]
         configureChartSuraface()
         addAxis(BarsToShow: 75)
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
-        addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        //addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
     // MARK: Private Functions
@@ -119,7 +123,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func addAxis(BarsToShow: Int) {
         
-        let totalBars = dataFeed.sortedPrices.count
+        let totalBars = dataFeed.allSortedPrices[indexSelected].count
         let rangeStart = totalBars - BarsToShow
         
         let axisX1 = SCINumericAxis()
@@ -215,7 +219,7 @@ class SCSSyncMultiChartView: UIViewController {
         
         if ( debug ) { print("getting candle render series\narray Size = \(items.count)") }
         
-        for ( index, things) in items.enumerated() {
+        for ( index, things) in dataFeed.allSortedPrices[indexSelected].enumerated() {
 
             if ( debug ) { print("\(things.open!) \(things.high!) \(things.low!) \(things.close!)") }
             ohlcDataSeries.appendX(SCIGeneric(index),

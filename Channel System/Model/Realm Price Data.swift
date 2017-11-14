@@ -34,7 +34,7 @@ class RealmHelpers: Object {
         
         print("Begin Realm Save \(prices.ticker) \(prices.time) \(prices.last)")
         
-        try! realm.write({ // [2]
+        try! realm.write({ 
             realm.add(prices)
         })
     }
@@ -45,7 +45,7 @@ class RealmHelpers: Object {
         try! realm.write {
             realm.deleteAll()
         }
-        print("\nRealm\tClearer!\n")
+        print("\nRealm \tCleared!\n")
     }
 }
 

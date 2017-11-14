@@ -39,6 +39,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="biD-pr-RAe"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="uQc-2E-c5A" id="SIX-H3-Xa7"/>
+                        <outlet property="updateLable" destination="4fr-Wa-2ad" id="od2-3n-3nb"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>
                     </connections>
                 </viewController>
@@ -191,7 +193,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0IU-Ei-hOa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2871" y="107"/>
+            <point key="canvasLocation" x="750" y="824"/>
         </scene>
         <!--Portfolio-->
         <scene sceneID="Z8A-w9-ByB">
@@ -251,7 +253,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="awq-di-R2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3522.4000000000001" y="109.29535232383809"/>
+            <point key="canvasLocation" x="1545" y="824"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VeR-NG-g8r">
@@ -270,7 +272,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1wq-Ow-4SI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="116.8" y="117.84107946026987"/>
+            <point key="canvasLocation" x="65" y="107"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="NkZ-gF-HfG">
@@ -288,7 +290,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vgM-b3-6sn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2228.8000000000002" y="108.84557721139431"/>
+            <point key="canvasLocation" x="65" y="825"/>
         </scene>
     </scenes>
 </document>
