@@ -13,7 +13,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     var dataFeed = DataFeed()
     let showTrades = ShowTrades()
-   // var portfolio = Portfolio()
+
     var entriesR = Entries()
     
     var indexSelected = Int()
@@ -95,10 +95,10 @@ class SCSSyncMultiChartView: UIViewController {
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
-        addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        //addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+//showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
     // MARK: Private Functions
@@ -192,7 +192,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
 
-        surface.renderableSeries.add(getCandleRenderSeries(debug: false, isReverse:false,  xID: xID, yID: yID))
+        surface.renderableSeries.add(getCandleRenderSeries(debug: true, isReverse:false,  xID: xID, yID: yID))
     }
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
@@ -202,12 +202,12 @@ class SCSSyncMultiChartView: UIViewController {
             if let signal = things.longEntry, let high = things.high , let low = things.low {
                 surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
             }
-            
         }
     }
     
     fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
         
+        print("\nPopulating candle series\n")
         let upBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         let downBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
         let upWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)

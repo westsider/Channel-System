@@ -168,7 +168,7 @@ class DataFeed {
     }
     
     func calcIndicators() {
-            self.averageOf(period: 10, debug: false)
+            self.averageOf(period: 10, debug: true)
             self.averageOf(period: 200, debug: false)
             self.williamsPctR(debug: false)
             self.checkForLongEntry(debug: true)
@@ -206,6 +206,7 @@ class DataFeed {
         var closes = [Double]()
         
         for (mainindex, symbolFile) in allSortedPrices.enumerated() {
+            closes.removeAll()
             for eachClose in symbolFile {
                 closes.append(eachClose.close!)
             }
@@ -228,6 +229,8 @@ class DataFeed {
             if ( period == 10 ) {
                 if ( debug ) { print("10 SMA--------------------------------------") }
                 for (index, eachAverage) in averages.enumerated() {
+                    
+                    print("index is \(index) count is \(averages.count)")
                     allSortedPrices[mainindex][index].movAvg10 = eachAverage
                     if ( debug ) {print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
                 }
@@ -250,6 +253,11 @@ class DataFeed {
             var highestHigh = [Double]()
             var lowestLow = [Double]()
             var wPctR = [Double]()
+            highs.removeAll()
+            lows.removeAll()
+            highestHigh.removeAll()
+            lowestLow.removeAll()
+            wPctR.removeAll()
             // need to find HH + LL of last N periods
             for each in symbolFile {
                 highs.append(each.high!)
@@ -278,7 +286,7 @@ class DataFeed {
             
             //(Highest High – Closing Price)
             var leftSideEquation = [Double]()
-            for ( index, each ) in sortedPrices.enumerated() {
+            for ( index, each ) in symbolFile.enumerated() {
                 let answer = highestHigh[index] - each.close!
                 leftSideEquation.append(answer)
             }
