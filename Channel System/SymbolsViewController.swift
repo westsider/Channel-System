@@ -7,29 +7,34 @@
 //   open-source TA-Lib to integrate technical indicators to SciChart!
 
 import UIKit
+import RealmSwift
 
 class SymbolsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var dataFeed = DataFeed()
+    //var dataFeed = DataFeed()
+    
+    let realm = try! Realm()
+    
+    var tasks: Results<Prices>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        for tickers in self.dataFeed.allSortedPrices {
-//            for items in tickers {
-//                //symbol = items.ticker!.last
-//                titleArray.append(items.ticker!)
-//                closeArray.append(items.close!)
-//                print("Appending: \(items.dateString!) \(items.ticker!) and \(items.close!)")
-//            }
-//            print("titles count:\(titleArray.count) closes: \(closeArray.count)")
-//        }
-        
-       
-        
-        //titleArray.append((self.dataFeed.sortedPrices.last?.ticker)!)
+        tasks = getEntriesFromRealm(debug: true)
+    }
+    
+    func getEntriesFromRealm(debug: Bool)-> Results<Prices> {
+        // get objects // filter onbjects
+        let id = true
+        let allEntries = realm.objects(Prices.self).filter("longEntry == %@", id)
+        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
+        if ( debug ) {
+            for entries in sortedByDate {
+                print("\(entries.ticker) \(entries.dateString)")
+            }
+        }
+        return sortedByDate
     }
     
     @IBAction func clearRealmAction(_ sender: Any) {
@@ -43,13 +48,13 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataFeed.symbolArray.count
+        return tasks.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = dataFeed.symbolArray[indexPath.row]
-        cell.detailTextLabel?.text = "Buy Signal"
+        cell.textLabel?.text = tasks[indexPath.row].ticker
+        cell.detailTextLabel?.text = tasks[indexPath.row].dateString
         return cell
     }
     
@@ -60,7 +65,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func selectedSymbol(index: Int) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
-        myVC.dataFeed = dataFeed
+        //myVC.dataFeed = dataFeed
         myVC.indexSelected = index
         navigationController?.pushViewController(myVC, animated: true)
     }

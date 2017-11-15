@@ -16,13 +16,13 @@ class ProcessCSV {
     // save to realm
     // get next symbol
 
-    let universe = ["SPY", "QQQ", "DIA"]//, "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
+    let universe = ["SPY", "QQQ"] //, "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
     
     
     func calcIndicators(prices: [LastPrice])-> [LastPrice] {
         var pricesProcessed  = SMA().averageOf(period: 10, debug: true, prices: prices)
         pricesProcessed  = SMA().averageOf(period: 200, debug: true, prices: pricesProcessed)
-        pricesProcessed  = PctR().williamsPctR(debug: true, prices: pricesProcessed)
+        pricesProcessed  = PctR().williamsPctR(debug: false, prices: pricesProcessed)
         pricesProcessed = Entry().calcLong(debug: false, prices: pricesProcessed)
         return pricesProcessed
     }
@@ -36,7 +36,8 @@ class ProcessCSV {
         doneWork(true)
     }
     
-    func loopThroughTickers() {
+    func loopThroughTickers(doneTickers: @escaping (Bool) -> Void ) {
+        doneTickers(false)
         for symbol in universe {
             saveCSVtoRealm(ticker: symbol){ ( doneWork ) in
                 if doneWork {
@@ -44,10 +45,13 @@ class ProcessCSV {
                 }
             }
         }
+        doneTickers(true)
     }
 }
 
 /*
+     Closure example
+ 
      func makeIncrementer(forIncrement amount: Int) -> () -> Int {
      var runningTotal = 0
      func incrementer() -> Int {

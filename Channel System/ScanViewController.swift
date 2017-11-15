@@ -21,7 +21,7 @@ class ScanViewController: UIViewController {
     
     let realm = try! Realm()
     
-    let universe = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
+    let universe = ["SPY", "QQQ", "DIA"] //, "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
 
     var updateUI = ""
     
@@ -30,12 +30,16 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLable.text = "Getting Closing Prices..."
-RealmHelpers().deleteAll()
-        ProcessCSV().loopThroughTickers()
+        ProcessCSV().loopThroughTickers() { ( doneTickers ) in
+            if doneTickers {
+                print("Finished importing and segue begins now")
+                self.segueToCandidatesVC()
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //getDataFromPriorDownload()
+        RealmHelpers().deleteAll()
     }
     
     func getDataFromPriorDownload() {
@@ -88,7 +92,7 @@ RealmHelpers().deleteAll()
         self.updateLable.text = "Downloaded \(self.dataFeed.symbolArray.count) Tickers..."
         
         let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
-        myVC.dataFeed = dataFeed
+        //myVC.dataFeed = dataFeed
         navigationController?.pushViewController(myVC, animated: true)
     }
     
@@ -103,8 +107,12 @@ RealmHelpers().deleteAll()
         dataFeed.debugAllSortedPrices(on: true)
         self.updateLable.text = "Downloaded \(self.dataFeed.symbolArray.count) Tickers..."
         
+        
+    }
+    
+    func segueToCandidatesVC() {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
-        myVC.dataFeed = dataFeed
+       // myVC.dataFeed = dataFeed
         navigationController?.pushViewController(myVC, animated: true)
     }
     
