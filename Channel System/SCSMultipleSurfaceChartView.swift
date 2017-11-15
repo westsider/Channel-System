@@ -41,6 +41,7 @@ class SCSSyncMultiChartView: UIViewController {
     @IBOutlet weak var bottomView: UIView!
     
     override func viewDidLoad() {
+        title = "title"
         completeConfiguration()
     }
 
@@ -95,9 +96,9 @@ class SCSSyncMultiChartView: UIViewController {
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
-        //addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
 //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     

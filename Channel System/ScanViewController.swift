@@ -30,11 +30,12 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLable.text = "Getting Closing Prices..."
-        
+RealmHelpers().deleteAll()
+        ProcessCSV().loopThroughTickers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        getDataFromPriorDownload()
+        //getDataFromPriorDownload()
     }
     
     func getDataFromPriorDownload() {

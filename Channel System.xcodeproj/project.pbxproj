@@ -31,6 +31,12 @@
 		0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */; };
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
 		0DBE20151FB256F80089FFB2 /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBE20141FB256F80089FFB2 /* Portfolio.swift */; };
+		0DCAAFD71FBC37D200095560 /* Price Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFD61FBC37D200095560 /* Price Temp.swift */; };
+		0DCAAFD91FBC385100095560 /* SMA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFD81FBC385100095560 /* SMA.swift */; };
+		0DCAAFDB1FBC3AF200095560 /* PctR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDA1FBC3AF200095560 /* PctR.swift */; };
+		0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */; };
+		0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDF1FBC401600095560 /* Get CSV.swift */; };
+		0DCAAFE21FBC419400095560 /* ProcessCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFE11FBC419400095560 /* ProcessCSV.swift */; };
 		0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */; };
 		0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
@@ -63,6 +69,12 @@
 		0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Price Data.swift"; sourceTree = "<group>"; };
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
 		0DBE20141FB256F80089FFB2 /* Portfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Portfolio.swift; sourceTree = "<group>"; };
+		0DCAAFD61FBC37D200095560 /* Price Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Price Temp.swift"; sourceTree = "<group>"; };
+		0DCAAFD81FBC385100095560 /* SMA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMA.swift; sourceTree = "<group>"; };
+		0DCAAFDA1FBC3AF200095560 /* PctR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PctR.swift; sourceTree = "<group>"; };
+		0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Long Entry.swift"; sourceTree = "<group>"; };
+		0DCAAFDF1FBC401600095560 /* Get CSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV.swift"; sourceTree = "<group>"; };
+		0DCAAFE11FBC419400095560 /* ProcessCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCSV.swift; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsViewController.swift; sourceTree = "<group>"; };
 		0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart_iOS_v2.0.0.1640_SDK/SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
@@ -137,15 +149,29 @@
 			path = "Channel System";
 			sourceTree = "<group>";
 		};
+		0DCAAFDE1FBC3EF600095560 /* Indicators */ = {
+			isa = PBXGroup;
+			children = (
+				0DCAAFD81FBC385100095560 /* SMA.swift */,
+				0DCAAFDA1FBC3AF200095560 /* PctR.swift */,
+				0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */,
+			);
+			path = Indicators;
+			sourceTree = "<group>";
+		};
 		0DEFBCBF1FA912BC00C156B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
+				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
+				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
+				0DCAAFDF1FBC401600095560 /* Get CSV.swift */,
+				0DCAAFE11FBC419400095560 /* ProcessCSV.swift */,
+				0DCAAFDE1FBC3EF600095560 /* Indicators */,
 				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
 				0DBE20141FB256F80089FFB2 /* Portfolio.swift */,
-				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 				0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */,
+				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -302,16 +328,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DCAAFD71FBC37D200095560 /* Price Temp.swift in Sources */,
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
+				0DCAAFE21FBC419400095560 /* ProcessCSV.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
+				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Portfolio.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,
+				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
+				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,
 				0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */,
+				0DCAAFDB1FBC3AF200095560 /* PctR.swift in Sources */,
 				0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

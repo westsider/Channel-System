@@ -12,21 +12,6 @@ import SwiftyJSON
 import RealmSwift
 import CSV
 
-class LastPrice {
-    var ticker: String?
-    var dateString: String?
-    var date: Date?
-    var open: Double?
-    var high: Double?
-    var low: Double?
-    var close: Double?
-    var volume: Double?
-    var movAvg10: Double?
-    var movAvg200:Double?
-    var wPctR:Double?
-    var longEntry:Bool?
-}
-
 class DataFeed {
     
     var lastPrice = [LastPrice]()
@@ -168,10 +153,10 @@ class DataFeed {
     }
     
     func calcIndicators() {
-            self.averageOf(period: 10, debug: true)
-            self.averageOf(period: 200, debug: false)
-            self.williamsPctR(debug: false)
-            self.checkForLongEntry(debug: true)
+            //self.averageOf(period: 10, debug: true)
+            //self.averageOf(period: 200, debug: false)
+            //self.williamsPctR(debug: false)
+            //self.checkForLongEntry(debug: true)
     }
     
     func returnSortedSymbol()-> [LastPrice]{

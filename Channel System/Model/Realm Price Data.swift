@@ -10,33 +10,52 @@ import Foundation
 import RealmSwift
 
 class Prices: Object {
-    
-    @objc dynamic var ticker  = ""
-    @objc dynamic var last    = 0.0
-    @objc dynamic var time    = ""
-    @objc dynamic var taskID  = NSUUID().uuidString
+
+    @objc dynamic var ticker     = ""
+    @objc dynamic var dateString = ""
+    @objc dynamic var date:Date?
+    @objc dynamic var open       = 0.00
+    @objc dynamic var high       = 0.00
+    @objc dynamic var low        = 0.00
+    @objc dynamic var close      = 0.00
+    @objc dynamic var volume     = 0.00
+    @objc dynamic var movAvg10   = 0.00
+    @objc dynamic var movAvg200  = 0.00
+    @objc dynamic var wPctR      = 0.00
+    @objc dynamic var longEntry  = false
+    @objc dynamic var taskID     = NSUUID().uuidString
 }
 
 class RealmHelpers: Object {
     
-    func saveToRealm(ticker: String, last: Double, date: String) {
-        // populate realm with last
-        print("ready for realm")
+    func saveSymbolsToRealm(prices: [LastPrice]) {
+        
+        print("Saving to realm")
+        
         let realm = try! Realm()
         
-        let prices = Prices()
-        
-        prices.time = date
-        
-        prices.last = last
-        
-        prices.ticker = ticker
-        
-        print("Begin Realm Save \(prices.ticker) \(prices.time) \(prices.last)")
-        
-        try! realm.write({ 
-            realm.add(prices)
-        })
+        for each in prices {
+            
+            let price = Prices()
+            
+            price.ticker = each.ticker!
+            price.date = each.date
+            price.dateString = each.dateString!
+            price.open = each.open!
+            price.high = each.high!
+            price.low = each.low!
+            price.close = each.close!
+            price.volume = each.volume!
+            price.movAvg10 = each.movAvg10!
+            price.movAvg200 = each.movAvg200!
+            price.wPctR = each.wPctR!
+            price.longEntry = each.longEntry!
+            price.taskID = NSUUID().uuidString
+   
+            try! realm.write({
+                realm.add(price)
+            })
+        }
     }
     
     func deleteAll() {
