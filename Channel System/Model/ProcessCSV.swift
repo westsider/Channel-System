@@ -32,7 +32,7 @@ class ProcessCSV {
         //let tickers = loadTicker(ticker: ticker)
         let tickers = GetCSV().load(fromCSV: ticker, debug: true)
         let processedTickers = calcIndicators(prices: tickers())
-        RealmHelpers().saveSymbolsToRealm(prices: processedTickers)
+        //RealmHelpers().saveSymbolsToRealm(prices: processedTickers)
         doneWork(true)
     }
     

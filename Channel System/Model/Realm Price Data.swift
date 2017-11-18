@@ -28,34 +28,31 @@ class Prices: Object {
 
 class RealmHelpers: Object {
     
-    func saveSymbolsToRealm(prices: [LastPrice]) {
+    func saveSymbolsToRealm(each: Prices) {
         
-        print("Saving to realm")
+        //print("Saving to realm")
         
         let realm = try! Realm()
-        
-        for each in prices {
-            
+
             let price = Prices()
             
-            price.ticker = each.ticker!
+            price.ticker = each.ticker
             price.date = each.date
-            price.dateString = each.dateString!
-            price.open = each.open!
-            price.high = each.high!
-            price.low = each.low!
-            price.close = each.close!
-            price.volume = each.volume!
-            price.movAvg10 = each.movAvg10!
-            price.movAvg200 = each.movAvg200!
-            price.wPctR = each.wPctR!
-            price.longEntry = each.longEntry!
+            price.dateString = each.dateString
+            price.open = each.open
+            price.high = each.high
+            price.low = each.low
+            price.close = each.close
+            price.volume = each.volume
+            price.movAvg10 = 0.00
+            price.movAvg200 = 0.00
+            price.wPctR = 0.00
+            price.longEntry = false
             price.taskID = NSUUID().uuidString
    
             try! realm.write({
                 realm.add(price)
             })
-        }
     }
     
     func deleteAll() {

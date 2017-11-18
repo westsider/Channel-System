@@ -31,26 +31,22 @@ class DataFeed {
         //"date","close","volume","open","high","low"
         while let row = csv.next() {
             if ( debug ) { print("\(row)") }
-            let lastPriceObject = LastPrice()
-            
-            lastPriceObject.ticker = ticker
-            
+            let prices = Prices()
+            prices.ticker = ticker
             let date = row[0]
-            lastPriceObject.dateString = date
-            lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
-            
-            if let open = Double(row[3]) {
-                lastPriceObject.open = open }
-            
-            if let high = Double(row[4]){
-                lastPriceObject.high = high }
-            
-            if let low = Double(row[4]){
-                lastPriceObject.low = low }
-            
+            prices.dateString = date
+            prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
             if let close = Double(row[1]){
-                lastPriceObject.close = close }
-            //self.lastPrice.append(lastPriceObject)
+                prices.close = close }
+            if let volume = Double(row[2]){
+                prices.volume = volume }
+            if let open = Double(row[3]) {
+                prices.open = open }
+            if let high = Double(row[4]){
+                prices.high = high }
+            if let low = Double(row[5]){
+                prices.low = low }
+            RealmHelpers().saveSymbolsToRealm(each: prices)
         }
         // update  UI on completion
         DispatchQueue.main.async {
