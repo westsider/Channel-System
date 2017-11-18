@@ -18,22 +18,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scanning Markets..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4fr-Wa-2ad">
-                                <rect key="frame" x="94" y="278" width="187" height="21"/>
+                                <rect key="frame" x="97" y="197" width="181" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="uQc-2E-c5A">
-                                <rect key="frame" x="169" y="152" width="37" height="37"/>
+                                <rect key="frame" x="169" y="226" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="uQc-2E-c5A" secondAttribute="bottom" constant="89" id="1PV-M7-4dP"/>
-                            <constraint firstItem="uQc-2E-c5A" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="88" id="MIY-bN-tPe"/>
-                            <constraint firstItem="uQc-2E-c5A" firstAttribute="centerX" secondItem="4fr-Wa-2ad" secondAttribute="centerX" id="Mas-9w-KHW"/>
-                            <constraint firstItem="uQc-2E-c5A" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cph-bK-J4b"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="94" id="eKr-u3-lsQ"/>
+                            <constraint firstItem="uQc-2E-c5A" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="8" symbolic="YES" id="5rN-pz-ofr"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="MbQ-fW-ehq"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="133" id="VYo-dR-f5Q"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="97" id="Zcu-iW-kov"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="centerX" secondItem="uQc-2E-c5A" secondAttribute="centerX" id="jje-NP-vuN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -46,7 +46,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750" y="117"/>
+            <point key="canvasLocation" x="749.60000000000002" y="116.49175412293854"/>
         </scene>
         <!--Candidates-->
         <scene sceneID="70W-qy-HoG">
