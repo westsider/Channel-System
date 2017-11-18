@@ -93,46 +93,40 @@ class DataFeed {
         
       }
     
-    func getCsvData(ticker: String, debug: Bool, doneWork: @escaping (Bool) -> Void ) {
+    func getPricesFromCSV(count: Int, total: Int, ticker: String,debug: Bool, completion: @escaping () -> ()) {
         
-        doneWork(false)
-        
-       
-            let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
-            let stream = InputStream(fileAtPath: filleURLProject!)!
-            let csv = try! CSVReader(stream: stream)
-            //"date","close","volume","open","high","low"
-            while let row = csv.next() {
-                if ( debug ) { print("\(row)") }
-                let lastPriceObject = LastPrice()
-                
-                lastPriceObject.ticker = ticker
-                
-                let date = row[0]
-                    lastPriceObject.dateString = date
-                    lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
-                
-                if let open = Double(row[3]) {
-                    lastPriceObject.open = open }
-                
-                if let high = Double(row[4]){
-                    lastPriceObject.high = high }
-                
-                if let low = Double(row[4]){
-                    lastPriceObject.low = low }
-                
-                if let close = Double(row[1]){
-                    lastPriceObject.close = close }
-                
-                self.lastPrice.append(lastPriceObject)
-            }
-        //self.sortPrices(arrayToSort: self.lastPrice)
-        
-        DispatchQueue.main.async {
-            doneWork(true)
+        // the call to csv
+        let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
+        let stream = InputStream(fileAtPath: filleURLProject!)!
+        let csv = try! CSVReader(stream: stream)
+        //"date","close","volume","open","high","low"
+        while let row = csv.next() {
+            if ( debug ) { print("\(row)") }
+            let lastPriceObject = LastPrice()
+            
+            lastPriceObject.ticker = ticker
+            
+            let date = row[0]
+            lastPriceObject.dateString = date
+            lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
+            
+            if let open = Double(row[3]) {
+                lastPriceObject.open = open }
+            
+            if let high = Double(row[4]){
+                lastPriceObject.high = high }
+            
+            if let low = Double(row[4]){
+                lastPriceObject.low = low }
+            
+            if let close = Double(row[1]){
+                lastPriceObject.close = close }
+            //self.lastPrice.append(lastPriceObject)
         }
-        
-        // need to separate symbols
+        // update  UI on completion
+        DispatchQueue.main.async {
+            completion()
+        }
     }
     
     func separateSymbols(debug: Bool) {
