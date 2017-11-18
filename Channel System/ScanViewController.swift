@@ -6,7 +6,7 @@
 //  Copyright © 2017 Warren Hansen. All rights reserved.
 //
 import Foundation
-
+import RealmSwift
 import UIKit
 
 class ScanViewController: UIViewController {
@@ -17,6 +17,8 @@ class ScanViewController: UIViewController {
     
     let dataFeed = DataFeed()
     
+    let prices = Prices()
+    
     let universe = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
     
     let block = { print( "\nData returned from CSV <----------\n" ) }
@@ -26,8 +28,22 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        RealmHelpers().deleteAll()
-        getDataFromCSV()
+        
+        //let realm = try! Realm()
+        let priceCount = prices.allPricesCount()
+
+        if ( priceCount > 0 ) {
+            self.updateLable(with: "Historical Data Found")
+            activityIndicator.isHidden = true
+            let oneTicker = prices.sortOneTicker(ticker: universe[0], debug: true)
+   
+            // calc SMA 10 on Spy
+            // Print results
+            // show chart
+        } else {
+            RealmHelpers().deleteAll()
+            getDataFromCSV()
+        }
     }
     
     func getDataFromCSV() {

@@ -24,18 +24,33 @@ class Prices: Object {
     @objc dynamic var wPctR      = 0.00
     @objc dynamic var longEntry  = false
     @objc dynamic var taskID     = NSUUID().uuidString
+    
+    func allPricesCount()-> Int {
+        let realm = try! Realm()
+        let allPrices = realm.objects(Prices.self)
+        return allPrices.count
+    }
+    
+    func sortOneTicker(ticker:String, debug:Bool)-> Results<Prices> {
+        let realm = try! Realm()
+        //let allPrices = realm.objects(Prices.self)
+        let id = ticker
+        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
+        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: false)
+        if ( debug ) {
+            for each in sortedByDate {
+                print("\(each.ticker) \(each.dateString)")
+            }
+        }
+        return sortedByDate
+    }
 }
 
 class RealmHelpers: Object {
     
     func saveSymbolsToRealm(each: Prices) {
-        
-        //print("Saving to realm")
-        
         let realm = try! Realm()
-
             let price = Prices()
-            
             price.ticker = each.ticker
             price.date = each.date
             price.dateString = each.dateString
