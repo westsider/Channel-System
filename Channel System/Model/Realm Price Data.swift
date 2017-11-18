@@ -36,7 +36,7 @@ class Prices: Object {
         //let allPrices = realm.objects(Prices.self)
         let id = ticker
         let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
-        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: false)
+        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
         if ( debug ) {
             for each in sortedByDate {
                 print("\(each.ticker) \(each.dateString)")

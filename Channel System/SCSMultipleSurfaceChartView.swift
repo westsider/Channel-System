@@ -8,15 +8,19 @@
 
 import Foundation
 import SciChart
+import RealmSwift
 
 class SCSSyncMultiChartView: UIViewController {
     
     var dataFeed = DataFeed()
+    let prices = Prices()
+    var oneTicker: Results<Prices>!
     let showTrades = ShowTrades()
 
     var entriesR = Entries()
     
     var indexSelected = Int()
+    var tickerSelected: String?
     //var chartSelected = [LastPrice]()
     
     let axisY1Id = "Y1"
@@ -41,10 +45,49 @@ class SCSSyncMultiChartView: UIViewController {
     @IBOutlet weak var bottomView: UIView!
     
     override func viewDidLoad() {
-        title = "title"
+        title = tickerSelected!
+        print("tickerSelected \(tickerSelected!)")
+        oneTicker = Prices().sortOneTicker(ticker: tickerSelected!, debug: false)
+        print("oneTicker count: \(oneTicker.count)")
         completeConfiguration()
     }
 
+    fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
+        
+        print("\nPopulating candle series\n")
+        let upBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
+        let downBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
+        let upWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)
+        let downWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
+        let ohlcDataSeries = SCIOhlcDataSeries(xType: .double, yType: .double)
+        ohlcDataSeries.acceptUnsortedData = true
+        
+        //let items = dataFeed.sortedPrices
+        //let oneTicker = prices.sortOneTicker(ticker: "SPY", debug: false)
+        //if ( debug ) { print("getting candle render series\narray Size = \(items.count)") }
+        
+        for ( index, things) in oneTicker.enumerated() {
+            
+            if ( debug ) { print("\(things.open) \(things.high) \(things.low) \(things.close)") }
+            ohlcDataSeries.appendX(SCIGeneric(index),
+                                   open: SCIGeneric(things.open),
+                                   high: SCIGeneric(things.high),
+                                   low: SCIGeneric(things.low),
+                                   close: SCIGeneric(things.close))
+        }
+        
+        let candleRendereSeries = SCIFastCandlestickRenderableSeries()
+        candleRendereSeries.dataSeries = ohlcDataSeries
+        candleRendereSeries.fillUpBrushStyle = upBrush
+        candleRendereSeries.fillDownBrushStyle = downBrush
+        candleRendereSeries.strokeUpStyle = upWickPen
+        candleRendereSeries.strokeDownStyle = downWickPen
+        
+        candleRendereSeries.xAxisId = xID
+        candleRendereSeries.yAxisId = yID
+        
+        return candleRendereSeries
+    }
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
         if let ticker = dataFeed.allSortedPrices[indexSelected].last?.ticker!, let close = dataFeed.allSortedPrices[indexSelected].last?.close!  {
@@ -91,14 +134,15 @@ class SCSSyncMultiChartView: UIViewController {
     // MARK: Internal Functions    
     func completeConfiguration() {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
+
         configureChartSuraface()
         addAxis(BarsToShow: 75)
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        //addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
 //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
@@ -124,7 +168,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func addAxis(BarsToShow: Int) {
         
-        let totalBars = dataFeed.allSortedPrices[indexSelected].count
+        let totalBars = oneTicker.count
         let rangeStart = totalBars - BarsToShow
         
         let axisX1 = SCINumericAxis()
@@ -193,7 +237,7 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
 
-        surface.renderableSeries.add(getCandleRenderSeries(debug: true, isReverse:false,  xID: xID, yID: yID))
+        surface.renderableSeries.add(getCandleRenderSeries(debug: false, isReverse:false,  xID: xID, yID: yID))
     }
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
@@ -206,42 +250,7 @@ class SCSSyncMultiChartView: UIViewController {
         }
     }
     
-    fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
-        
-        print("\nPopulating candle series\n")
-        let upBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
-        let downBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
-        let upWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)
-        let downWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
-        let ohlcDataSeries = SCIOhlcDataSeries(xType: .double, yType: .double)
-        ohlcDataSeries.acceptUnsortedData = true
-        
-        let items = dataFeed.sortedPrices
-        
-        if ( debug ) { print("getting candle render series\narray Size = \(items.count)") }
-        
-        for ( index, things) in dataFeed.allSortedPrices[indexSelected].enumerated() {
 
-            if ( debug ) { print("\(things.open!) \(things.high!) \(things.low!) \(things.close!)") }
-            ohlcDataSeries.appendX(SCIGeneric(index),
-                                   open: SCIGeneric(things.open!),
-                                   high: SCIGeneric(things.high!),
-                                   low: SCIGeneric(things.low!),
-                                   close: SCIGeneric(things.close!))
-        }
-        
-        let candleRendereSeries = SCIFastCandlestickRenderableSeries()
-        candleRendereSeries.dataSeries = ohlcDataSeries
-        candleRendereSeries.fillUpBrushStyle = upBrush
-        candleRendereSeries.fillDownBrushStyle = downBrush
-        candleRendereSeries.strokeUpStyle = upWickPen
-        candleRendereSeries.strokeDownStyle = downWickPen
-        
-        candleRendereSeries.xAxisId = xID
-        candleRendereSeries.yAxisId = yID
-        
-        return candleRendereSeries
-    }
     
     fileprivate func addWPctRSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
         
@@ -292,10 +301,10 @@ class SCSSyncMultiChartView: UIViewController {
     fileprivate func addFastSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
         var lastValue = SCIGeneric(0.0)
-        let items = dataFeed.sortedPrices
-        for ( index, things) in items.enumerated() {
-            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10!))
-            lastValue = SCIGeneric(things.movAvg10!)
+        //let items = dataFeed.sortedPrices
+        for ( index, things) in oneTicker.enumerated() {
+            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10))
+            lastValue = SCIGeneric(things.movAvg10)
         }
         
         let renderSeries = SCIFastLineRenderableSeries()

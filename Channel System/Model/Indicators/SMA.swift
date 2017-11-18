@@ -7,17 +7,18 @@
 //
 
 import Foundation
+import RealmSwift
 
 class SMA {
     
-    func averageOf(period:Int, debug: Bool, prices: [LastPrice] )-> [LastPrice]  {
+    func averageOf(period:Int, debug: Bool, prices: Results<Prices>, completion: @escaping () -> ()) {
         
-        var sortedPrices = prices
+        let sortedPrices = prices
         
         var closes = [Double]()
         
         for eachClose in sortedPrices {
-            closes.append(eachClose.close!)
+            closes.append(eachClose.close)
         }
         
         var sum:Double
@@ -35,19 +36,39 @@ class SMA {
             }
         }
         
-        if ( debug ) { print("\nFinished calc for\(period) SMA for \(String(describing: sortedPrices.last!.ticker!))\n") }
+        if ( debug ) { print("\nFinished calc for\(period) SMA for \(String(describing: sortedPrices.last!.ticker))\n") }
         if ( period == 10 ) {
             for (index, eachAverage) in averages.enumerated() {
-                sortedPrices[index].movAvg10 = eachAverage
+                
+                let realm = try! Realm()
+                
+                try! realm.write {
+                    sortedPrices[index].movAvg10 = eachAverage
+                }
                 //if ( debug ) {print("\(sortedPrices[index].close!) \(eachAverage)") }
             }
         } else {
             for (index, eachAverage) in averages.enumerated() {
-                sortedPrices[index].movAvg200 = eachAverage
+                
                 //if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
+                let realm = try! Realm()
+                try! realm.write {
+                    sortedPrices[index].movAvg200 = eachAverage
+                }
             }
         }
-        return sortedPrices
+        if (debug) {
+            // show SMA 10 on Spy
+            let smaTicker = Prices().sortOneTicker(ticker: "SPY", debug: false)
+            // Print results
+            for each in smaTicker {
+                
+                print("\(each.ticker) \(each.dateString) c:\(String(format: "%.02f", each.close)) 10:\(String(format: "%.02f",each.movAvg10))")
+            }
+        }
+        DispatchQueue.main.async {
+            completion()
+        }
     }
 }
 

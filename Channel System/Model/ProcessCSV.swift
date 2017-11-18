@@ -19,34 +19,34 @@ class ProcessCSV {
     let universe = ["SPY", "QQQ"] //, "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
     
     
-    func calcIndicators(prices: [LastPrice])-> [LastPrice] {
-        var pricesProcessed  = SMA().averageOf(period: 10, debug: true, prices: prices)
-        pricesProcessed  = SMA().averageOf(period: 200, debug: true, prices: pricesProcessed)
-        pricesProcessed  = PctR().williamsPctR(debug: false, prices: pricesProcessed)
-        pricesProcessed = Entry().calcLong(debug: false, prices: pricesProcessed)
-        return pricesProcessed
-    }
-    
-    func saveCSVtoRealm(ticker:String, doneWork: @escaping (Bool) -> Void ) {
-        doneWork(false)
-        //let tickers = loadTicker(ticker: ticker)
-        let tickers = GetCSV().load(fromCSV: ticker, debug: true)
-        let processedTickers = calcIndicators(prices: tickers())
-        //RealmHelpers().saveSymbolsToRealm(prices: processedTickers)
-        doneWork(true)
-    }
-    
-    func loopThroughTickers(doneTickers: @escaping (Bool) -> Void ) {
-        doneTickers(false)
-        for symbol in universe {
-            saveCSVtoRealm(ticker: symbol){ ( doneWork ) in
-                if doneWork {
-                    print("Saved \(symbol) to realm")
-                }
-            }
-        }
-        doneTickers(true)
-    }
+//    func calcIndicators(prices: [LastPrice])-> [LastPrice] {
+//        var pricesProcessed  = SMA().averageOf(period: 10, debug: true, prices: prices)
+//        pricesProcessed  = SMA().averageOf(period: 200, debug: true, prices: pricesProcessed)
+//        pricesProcessed  = PctR().williamsPctR(debug: false, prices: pricesProcessed)
+//        pricesProcessed = Entry().calcLong(debug: false, prices: pricesProcessed)
+//        return pricesProcessed
+//    }
+//    
+//    func saveCSVtoRealm(ticker:String, doneWork: @escaping (Bool) -> Void ) {
+//        doneWork(false)
+//        //let tickers = loadTicker(ticker: ticker)
+//        let tickers = GetCSV().load(fromCSV: ticker, debug: true)
+//        let processedTickers = calcIndicators(prices: tickers())
+//        //RealmHelpers().saveSymbolsToRealm(prices: processedTickers)
+//        doneWork(true)
+//    }
+//    
+//    func loopThroughTickers(doneTickers: @escaping (Bool) -> Void ) {
+//        doneTickers(false)
+//        for symbol in universe {
+//            saveCSVtoRealm(ticker: symbol){ ( doneWork ) in
+//                if doneWork {
+//                    print("Saved \(symbol) to realm")
+//                }
+//            }
+//        }
+//        doneTickers(true)
+//    }
 }
 
 /*

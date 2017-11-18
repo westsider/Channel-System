@@ -18,6 +18,8 @@
 		0D129D631FBB4D1F003C6E5E /* EPP.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D581FBB4D1F003C6E5E /* EPP.csv */; };
 		0D129D641FBB4D1F003C6E5E /* IEV.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D591FBB4D1F003C6E5E /* IEV.csv */; };
 		0D129D651FBB4D1F003C6E5E /* ILF.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D5A1FBB4D1F003C6E5E /* ILF.csv */; };
+		0D47FA931FC0D3F300A1F123 /* SPY2.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D47FA921FC0D3F300A1F123 /* SPY2.csv */; };
+		0D47FA951FC0DE9E00A1F123 /* QQQ2.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D47FA941FC0DE9E00A1F123 /* QQQ2.csv */; };
 		0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5CEC751FB378A400762900 /* PortfolioViewController.swift */; };
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
 		0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */; };
@@ -54,6 +56,8 @@
 		0D129D581FBB4D1F003C6E5E /* EPP.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EPP.csv; sourceTree = "<group>"; };
 		0D129D591FBB4D1F003C6E5E /* IEV.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IEV.csv; sourceTree = "<group>"; };
 		0D129D5A1FBB4D1F003C6E5E /* ILF.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ILF.csv; sourceTree = "<group>"; };
+		0D47FA921FC0D3F300A1F123 /* SPY2.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = SPY2.csv; sourceTree = "<group>"; };
+		0D47FA941FC0DE9E00A1F123 /* QQQ2.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = QQQ2.csv; sourceTree = "<group>"; };
 		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
 		0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSMultipleSurfaceChartView.swift; sourceTree = "<group>"; };
@@ -109,6 +113,8 @@
 				0D129D501FBB4D1D003C6E5E /* MDY.csv */,
 				0D129D531FBB4D1E003C6E5E /* QQQ.csv */,
 				0D129D561FBB4D1E003C6E5E /* SPY.csv */,
+				0D47FA921FC0D3F300A1F123 /* SPY2.csv */,
+				0D47FA941FC0DE9E00A1F123 /* QQQ2.csv */,
 			);
 			path = "Historical Data";
 			sourceTree = "<group>";
@@ -255,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D47FA931FC0D3F300A1F123 /* SPY2.csv in Resources */,
 				0D129D5B1FBB4D1F003C6E5E /* MDY.csv in Resources */,
 				0D129D5D1FBB4D1F003C6E5E /* IWM.csv in Resources */,
 				0D771E0B1FAE627F006269DD /* EURUSD_Daily.txt in Resources */,
@@ -270,6 +277,7 @@
 				0D129D601FBB4D1F003C6E5E /* AAPL.csv in Resources */,
 				0D129D631FBB4D1F003C6E5E /* EPP.csv in Resources */,
 				0D949CDD1FA3B7B600960BA2 /* Main.storyboard in Resources */,
+				0D47FA951FC0DE9E00A1F123 /* QQQ2.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
