@@ -93,7 +93,7 @@ class DataFeed {
         
       }
     
-    func getPricesFromCSV(count: Int, total: Int, ticker: String,debug: Bool, completion: @escaping () -> ()) {
+    func getPricesFromCSV(count: Int, ticker: String,debug: Bool, completion: @escaping () -> ()) {
         
         // the call to csv
         let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
@@ -151,12 +151,12 @@ class DataFeed {
         }
     }
     
-    func calcIndicators() {
-            //self.averageOf(period: 10, debug: true)
-            //self.averageOf(period: 200, debug: false)
-            //self.williamsPctR(debug: false)
-            //self.checkForLongEntry(debug: true)
-    }
+//    func calcIndicators() {
+//            //self.averageOf(period: 10, debug: true)
+//            //self.averageOf(period: 200, debug: false)
+//            //self.williamsPctR(debug: false)
+//            //self.checkForLongEntry(debug: true)
+//    }
     
     func returnSortedSymbol()-> [LastPrice]{
         print("returnSortedSymbol")
@@ -185,116 +185,116 @@ class DataFeed {
         }
     }
     
-    func averageOf(period:Int, debug: Bool){
-        
-        var closes = [Double]()
-        
-        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
-            closes.removeAll()
-            for eachClose in symbolFile {
-                closes.append(eachClose.close!)
-            }
-            
-            var sum:Double
-            var tenPeriodArray = [Double]()
-            var averages = [Double]()
-            for close in closes {
-                tenPeriodArray.append(close)
-                if tenPeriodArray.count > period {
-                    tenPeriodArray.remove(at: 0)
-                    sum = tenPeriodArray.reduce(0, +)
-                    let average = sum / Double(period)
-                    averages.append(average)
-                } else {
-                    averages.append(close)
-                }
-            }
-            
-            if ( period == 10 ) {
-                if ( debug ) { print("10 SMA--------------------------------------") }
-                for (index, eachAverage) in averages.enumerated() {
-                    
-                    print("index is \(index) count is \(averages.count)")
-                    allSortedPrices[mainindex][index].movAvg10 = eachAverage
-                    if ( debug ) {print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
-                }
-            } else {
-                if ( debug ) { print("200 SMA--------------------------------------") }
-                for (index, eachAverage) in averages.enumerated() {
-                    allSortedPrices[mainindex][index].movAvg200 = eachAverage
-                    if ( debug ) { print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
-                }
-            }
-        }
-    }
-    
-    func williamsPctR(debug: Bool) {
-        // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
-        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
-            
-            var highs = [Double]()
-            var lows = [Double]()
-            var highestHigh = [Double]()
-            var lowestLow = [Double]()
-            var wPctR = [Double]()
-            highs.removeAll()
-            lows.removeAll()
-            highestHigh.removeAll()
-            lowestLow.removeAll()
-            wPctR.removeAll()
-            // need to find HH + LL of last N periods
-            for each in symbolFile {
-                highs.append(each.high!)
-                lows.append(each.low!)
-            }
-        
-            // max high of last 10
-            var highArray = [Double]()
-            for high in highs {
-                highArray.append(high)
-                if highArray.count > 10 {
-                    highArray.remove(at: 0)
-                }
-                highestHigh.append(highArray.max()!)
-            }
-            
-            // min low of last 10
-            var lowArray = [Double]()
-            for low in lows {
-                lowArray.append(low)
-                if lowArray.count > 10 {
-                    lowArray.remove(at: 0)
-                }
-                lowestLow.append(lowArray.min()!)
-            }
-            
-            //(Highest High – Closing Price)
-            var leftSideEquation = [Double]()
-            for ( index, each ) in symbolFile.enumerated() {
-                let answer = highestHigh[index] - each.close!
-                leftSideEquation.append(answer)
-            }
-            
-            //(Highest High – Lowest Low)
-            var rightSideEquation = [Double]()
-            for ( index, eachLow ) in lowestLow.enumerated() {
-                let answer = highestHigh[index] - eachLow
-                rightSideEquation.append(answer)
-            }
-            
-            // divide then multiply answer
-            for (index, _) in symbolFile.enumerated() {
-                var answer = leftSideEquation[index] / rightSideEquation[index]
-                answer = answer * -100
-                wPctR.append(answer)
-                if ( debug ) { print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100") }
-            }
-            
-            // add values to main price object
-            for ( index, eachWpctR ) in wPctR.enumerated() {
-                allSortedPrices[mainindex][index].wPctR = eachWpctR
-            }
-        }
+//    func averageOf(period:Int, debug: Bool){
+//
+//        var closes = [Double]()
+//
+//        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
+//            closes.removeAll()
+//            for eachClose in symbolFile {
+//                closes.append(eachClose.close!)
+//            }
+//
+//            var sum:Double
+//            var tenPeriodArray = [Double]()
+//            var averages = [Double]()
+//            for close in closes {
+//                tenPeriodArray.append(close)
+//                if tenPeriodArray.count > period {
+//                    tenPeriodArray.remove(at: 0)
+//                    sum = tenPeriodArray.reduce(0, +)
+//                    let average = sum / Double(period)
+//                    averages.append(average)
+//                } else {
+//                    averages.append(close)
+//                }
+//            }
+//
+//            if ( period == 10 ) {
+//                if ( debug ) { print("10 SMA--------------------------------------") }
+//                for (index, eachAverage) in averages.enumerated() {
+//
+//                    print("index is \(index) count is \(averages.count)")
+//                    allSortedPrices[mainindex][index].movAvg10 = eachAverage
+//                    if ( debug ) {print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
+//                }
+//            } else {
+//                if ( debug ) { print("200 SMA--------------------------------------") }
+//                for (index, eachAverage) in averages.enumerated() {
+//                    allSortedPrices[mainindex][index].movAvg200 = eachAverage
+//                    if ( debug ) { print("\(allSortedPrices[mainindex][index].close!) \(eachAverage)") }
+//                }
+//            }
+//        }
+//    }
+//
+//    func williamsPctR(debug: Bool) {
+//        // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
+//        for (mainindex, symbolFile) in allSortedPrices.enumerated() {
+//
+//            var highs = [Double]()
+//            var lows = [Double]()
+//            var highestHigh = [Double]()
+//            var lowestLow = [Double]()
+//            var wPctR = [Double]()
+//            highs.removeAll()
+//            lows.removeAll()
+//            highestHigh.removeAll()
+//            lowestLow.removeAll()
+//            wPctR.removeAll()
+//            // need to find HH + LL of last N periods
+//            for each in symbolFile {
+//                highs.append(each.high!)
+//                lows.append(each.low!)
+//            }
+//
+//            // max high of last 10
+//            var highArray = [Double]()
+//            for high in highs {
+//                highArray.append(high)
+//                if highArray.count > 10 {
+//                    highArray.remove(at: 0)
+//                }
+//                highestHigh.append(highArray.max()!)
+//            }
+//
+//            // min low of last 10
+//            var lowArray = [Double]()
+//            for low in lows {
+//                lowArray.append(low)
+//                if lowArray.count > 10 {
+//                    lowArray.remove(at: 0)
+//                }
+//                lowestLow.append(lowArray.min()!)
+//            }
+//
+//            //(Highest High – Closing Price)
+//            var leftSideEquation = [Double]()
+//            for ( index, each ) in symbolFile.enumerated() {
+//                let answer = highestHigh[index] - each.close!
+//                leftSideEquation.append(answer)
+//            }
+//
+//            //(Highest High – Lowest Low)
+//            var rightSideEquation = [Double]()
+//            for ( index, eachLow ) in lowestLow.enumerated() {
+//                let answer = highestHigh[index] - eachLow
+//                rightSideEquation.append(answer)
+//            }
+//
+//            // divide then multiply answer
+//            for (index, _) in symbolFile.enumerated() {
+//                var answer = leftSideEquation[index] / rightSideEquation[index]
+//                answer = answer * -100
+//                wPctR.append(answer)
+//                if ( debug ) { print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100") }
+//            }
+//
+//            // add values to main price object
+//            for ( index, eachWpctR ) in wPctR.enumerated() {
+//                allSortedPrices[mainindex][index].wPctR = eachWpctR
+//            }
+//        }
     }
     
     func debugAllSortedPrices(on: Bool) {

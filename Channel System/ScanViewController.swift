@@ -37,7 +37,7 @@ class ScanViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
                 self.updateLable(with: "Getting data for \(symbols) \(index) of \( self.universe.count-1)")
-                self.dataFeed.getPricesFromCSV( count: index, total: self.universe.count-1, ticker: symbols, debug: false, completion: self.block)
+                self.dataFeed.getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.block)
             }
             DispatchQueue.main.async { self.activityIndicator.isHidden = true }
             self.updateLable(with: "All tickers have been downloaded!")
