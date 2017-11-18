@@ -8,9 +8,6 @@
 import Foundation
 
 import UIKit
-import RealmSwift
-import Realm
-import CSV
 
 class ScanViewController: UIViewController {
 
@@ -50,109 +47,12 @@ class ScanViewController: UIViewController {
             self.updateLable?.text =  with
         }
     }
+
+    func segueToCandidatesVC() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
+       // myVC.dataFeed = dataFeed
+        navigationController?.pushViewController(myVC, animated: true)
+    }
 }
-
-
-
-
-//    func getCsvData(ticker: String, debug: Bool, doneWork: @escaping (Bool) -> Void ) {
-//
-//        doneWork(false)
-//
-//
-//        let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
-//        let stream = InputStream(fileAtPath: filleURLProject!)!
-//        let csv = try! CSVReader(stream: stream)
-//        //"date","close","volume","open","high","low"
-//        while let row = csv.next() {
-//            if ( debug ) { print("\(row)") }
-//            let lastPriceObject = LastPrice()
-//
-//            lastPriceObject.ticker = ticker
-//
-//            let date = row[0]
-//            lastPriceObject.dateString = date
-//            lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
-//
-//            if let open = Double(row[3]) {
-//                lastPriceObject.open = open }
-//
-//            if let high = Double(row[4]){
-//                lastPriceObject.high = high }
-//
-//            if let low = Double(row[4]){
-//                lastPriceObject.low = low }
-//
-//            if let close = Double(row[1]){
-//                lastPriceObject.close = close }
-//
-//            //self.lastPrice.append(lastPriceObject)
-//        }
-//        //self.sortPrices(arrayToSort: self.lastPrice)
-//
-//        DispatchQueue.main.async {
-//            doneWork(true)
-//        }
-//
-//        // need to separate symbols
-//    }
-    
-    
-    
-    
-
-    
-//    func getLiveData() {
-//        for (index, symbol) in universe.enumerated() {
-//            // counter += 1
-//            //MARK: - TODO update the lable not working
-//            updateUI = "\nDownloading \(symbol) \(index)"
-//            self.updateLable.text = updateUI; print(updateUI)
-//            self.updateLable.text = updateUI
-//            self.dataFeed.getLastPrice(ticker: symbol, saveIt: false, debug: false){ ( doneWork ) in
-//                if doneWork {
-//                    self.updateUI = "Finished downloading \(index) symbols..."
-//                    self.updateLable.text = self.updateUI; print(self.updateUI)
-//                    if ( index == self.universe.count-1 ) {
-//                        self.finishedScanning()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    func fininsedCSVImport() {
-//        print("\n**********   All Symbols Imported fromCSV   **********r\n")
-//        activityIndicator.isHidden = true
-//        dataFeed.separateSymbols(debug: false)
-//        dataFeed.calcIndicators()
-//        dataFeed.debugAllSortedPrices(on: false)
-//        self.updateLable.text = "Downloaded \(self.dataFeed.symbolArray.count) Tickers..."
-//
-//        let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
-//        //myVC.dataFeed = dataFeed
-//        navigationController?.pushViewController(myVC, animated: true)
-//    }
-//
-//    func finishedScanning() {
-//
-//        print("\n**********   All Symbols downloaded   **********r\n")
-//        dataFeed.sortPrices(arrayToSort: dataFeed.lastPrice)
-//        //dataFeed.printThis(priceSeries: self.dataFeed.lastPrice)
-//        activityIndicator.isHidden = true
-//        dataFeed.separateSymbols(debug: false)
-//        dataFeed.calcIndicators()
-//        dataFeed.debugAllSortedPrices(on: true)
-//        self.updateLable.text = "Downloaded \(self.dataFeed.symbolArray.count) Tickers..."
-//
-//
-//    }
-//
-//    func segueToCandidatesVC() {
-//        let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
-//       // myVC.dataFeed = dataFeed
-//        navigationController?.pushViewController(myVC, animated: true)
-//    }
-    
 
 
