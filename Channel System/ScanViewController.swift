@@ -31,7 +31,7 @@ class ScanViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
-//RealmHelpers().deleteAll()
+RealmHelpers().deleteAll()
         //let realm = try! Realm()
         let priceCount = prices.allPricesCount()
 
@@ -44,31 +44,24 @@ class ScanViewController: UIViewController {
             RealmHelpers().deleteAll()
             getDataFromCSV(completion: self.csvBlock)
         }
-        
-        let newPriceCount = prices.allPricesCount()
-        print("\n-----> Check if cal indicators adds any prices <-----\nold count \(priceCount) new count \(newPriceCount)\n")
     }
     
+    //MARK: - TODO - Refactor SMA
+    //MARK: - TODO - Construct all indicators
+    
     func calcSMA(completion: @escaping () -> ()) {
-        self.updateLable(with: "Calulating Indicators...")
-        DispatchQueue.main.async {
-            self.activityIndicator.isHidden = false
-        }
+        self.updateUI(with: "Calulating Indicators...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateLable(with: "Starting Sma Clac for \(current) \(index+1) of \(self.universe.count)")
+                self.updateUI(with: "Starting Sma Clac for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
-                self.updateLable(with: "Finished Sma Clac for \(current)")
+                self.updateUI(with: "Finished Sma Clac for \(current)", spinIsOff: true)
             }
-            DispatchQueue.main.async {
-                self.activityIndicator.isHidden = true
-            }
-            print("Can I go to chart here in SMA after func call?")
             DispatchQueue.main.async {
                 completion()
-                self.updateLable(with: "Calulating Indicators Complete")
+                self.updateUI(with: "Calulating Indicators Complete", spinIsOff: true)
                 print("\nSegue to Charts\n")
                 self.selectedSymbol(ticker: self.universe[1])
             }
@@ -79,23 +72,23 @@ class ScanViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateLable(with: "Getting data for \(current) \(index+1) of \( self.universe.count)")
+                self.updateUI(with: "Getting data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
                 self.dataFeed.getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
             }
             DispatchQueue.main.async { self.activityIndicator.isHidden = true }
-            self.updateLable(with: "All tickers have been downloaded!")
+            self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
             self.calcSMA(completion: self.smaBlock2)
-            
         }
         DispatchQueue.main.async {
             completion()
         }
     }
     
-    func updateLable(with: String) {
+    func updateUI(with: String, spinIsOff: Bool) {
         DispatchQueue.main.async {
             print(with)
             self.updateLable?.text =  with
+            self.activityIndicator.isHidden = spinIsOff
         }
     }
 
