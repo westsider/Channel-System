@@ -46,28 +46,6 @@ RealmHelpers().deleteAll()
         }
     }
     
-    //MARK: - TODO - Refactor SMA
-    //MARK: - TODO - Construct all indicators
-    
-    func calcSMA(completion: @escaping () -> ()) {
-        self.updateUI(with: "Calulating Indicators...", spinIsOff: false)
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Starting Sma Clac for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
-                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
-                self.updateUI(with: "Finished Sma Clac for \(current)", spinIsOff: true)
-            }
-            DispatchQueue.main.async {
-                completion()
-                self.updateUI(with: "Calulating Indicators Complete", spinIsOff: true)
-                print("\nSegue to Charts\n")
-                self.selectedSymbol(ticker: self.universe[1])
-            }
-        }
-    }
-    
     func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
@@ -77,12 +55,52 @@ RealmHelpers().deleteAll()
             }
             DispatchQueue.main.async { self.activityIndicator.isHidden = true }
             self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
-            self.calcSMA(completion: self.smaBlock2)
+            self.calcSMA10(completion: self.smaBlock2)
         }
         DispatchQueue.main.async {
             completion()
         }
     }
+    //MARK: - TODO - Construct all indicators
+    func calcSMA10(completion: @escaping () -> ()) {
+        self.updateUI(with: "Calulating SMA(10)...", spinIsOff: false)
+        DispatchQueue.global(qos: .background).async {
+            for ( index, symbols ) in self.universe.enumerated() {
+                let current = symbols.replacingOccurrences(of: "2", with: "")
+                self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+                SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
+                self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
+            }
+            DispatchQueue.main.async {
+                completion()
+                self.updateUI(with: "Processing SMA(10) Complete", spinIsOff: true)
+                print("\nSegue to Charts\n")
+                self.calcSMA200(completion: self.smaBlock2)
+            }
+        }
+    }
+    
+    func calcSMA200(completion: @escaping () -> ()) {
+        self.updateUI(with: "Processing SMA(200)...", spinIsOff: false)
+        DispatchQueue.global(qos: .background).async {
+            for ( index, symbols ) in self.universe.enumerated() {
+                let current = symbols.replacingOccurrences(of: "2", with: "")
+                self.updateUI(with: "Processing SMA(200) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+                SMA().averageOf(period: 200, debug: false, prices: oneTicker, completion: self.smaBlock1)
+                self.updateUI(with: "Finished Processing SMA(200) for \(current)", spinIsOff: true)
+            }
+            DispatchQueue.main.async {
+                completion()
+                self.updateUI(with: "Processing SMA(200) Complete", spinIsOff: true)
+                print("\nSegue to Charts\n")
+                self.selectedSymbol(ticker: self.universe[0])
+            }
+        }
+    }
+    
+   
     
     func updateUI(with: String, spinIsOff: Bool) {
         DispatchQueue.main.async {

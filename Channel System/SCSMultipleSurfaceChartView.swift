@@ -142,7 +142,7 @@ class SCSSyncMultiChartView: UIViewController {
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         //addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
 //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
@@ -321,10 +321,10 @@ class SCSSyncMultiChartView: UIViewController {
     fileprivate func addSlowSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
         var lastValue = SCIGeneric(0.0)
-        let items = dataFeed.sortedPrices
-        for ( index, things) in items.enumerated() {
-            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200!))
-            lastValue = SCIGeneric(things.movAvg200!)
+        //let items = dataFeed.sortedPrices
+        for ( index, things) in oneTicker.enumerated() {
+            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200))
+            lastValue = SCIGeneric(things.movAvg200)
         }
         let renderSeries = SCIFastLineRenderableSeries()
         renderSeries.dataSeries = smaDataSeries
