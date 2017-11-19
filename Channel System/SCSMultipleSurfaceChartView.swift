@@ -13,15 +13,13 @@ import RealmSwift
 class SCSSyncMultiChartView: UIViewController {
     
     var dataFeed = DataFeed()
-    let prices = Prices()
-    var oneTicker: Results<Prices>!
+    //let prices = Prices()
+    var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
-
+    var ticker = ""
     var entriesR = Entries()
     
-    var indexSelected = Int()
-    var tickerSelected: String?
-    //var chartSelected = [LastPrice]()
+    var taskIdSelected = ""
     
     let axisY1Id = "Y1"
     let axisX1Id = "X1"
@@ -45,11 +43,9 @@ class SCSSyncMultiChartView: UIViewController {
     @IBOutlet weak var bottomView: UIView!
     
     override func viewDidLoad() {
-        print("\nCharts receiced: \(tickerSelected!)")
-        title = tickerSelected!
-        print("tickerSelected \(tickerSelected!)")
-        oneTicker = Prices().sortOneTicker(ticker: tickerSelected!, debug: false)
-        print("oneTicker count: \(oneTicker.count)")
+        oneTicker = Prices().getFrom(taskID: taskIdSelected)
+        ticker = (oneTicker.first?.ticker)!
+        title = ticker; print(ticker)
         completeConfiguration()
     }
 
@@ -91,7 +87,7 @@ class SCSSyncMultiChartView: UIViewController {
     }
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
-        if let ticker = dataFeed.allSortedPrices[indexSelected].last?.ticker!, let close = dataFeed.allSortedPrices[indexSelected].last?.close!  {
+        if let close = oneTicker.last?.close {
             let stopDistance = Double(close) * 0.03
             let stop = Double(close) - stopDistance
             let target = Double(close) + stopDistance
@@ -101,13 +97,13 @@ class SCSSyncMultiChartView: UIViewController {
             let shares = entriesR.calcShares(stopDist: stopDistance, risk: 100)
             let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"
             print(message)
-            let alert = UIAlertController(title: "\(ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "\(self.ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
             let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
                 let textField = alert.textFields![0] as UITextField
                 if let entryString = textField.text {
                    // self.portfolio.makeEntry(ticker: ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
                     
-                    self.entriesR.makeEntry(ticker: ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
+                    self.entriesR.makeEntry(ticker: self.ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
                     self.sequeToPortfolio()
                 }
             }
@@ -122,7 +118,7 @@ class SCSSyncMultiChartView: UIViewController {
             alert.addAction(action)
             present(alert, animated:true, completion: nil)
         } else {
-            print("Trouble with Ticker")
+            print("Trouble getting Ticker")
         }
     }
     
@@ -144,7 +140,7 @@ class SCSSyncMultiChartView: UIViewController {
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-//showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
     // MARK: Private Functions
@@ -243,11 +239,13 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
         
-        let items = dataFeed.sortedPrices
-         for ( index, things) in items.enumerated() {
-            if let signal = things.longEntry, let high = things.high , let low = things.low {
-                surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
-            }
+        //let items = dataFeed.sortedPrices
+         for ( index, things) in oneTicker.enumerated() {
+            let signal = things.longEntry
+            let high = things.high
+            let low = things.low
+            surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
+            
         }
     }
     

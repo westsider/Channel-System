@@ -44,6 +44,29 @@ class Prices: Object {
         }
         return sortedByDate
     }
+    
+    func sortEntries()-> Results<Prices> {
+        let realm = try! Realm()
+        let allEntries = realm.objects(Prices.self).filter("longEntry == %@", true)
+        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
+  
+        return sortedByDate
+    }
+    
+    func getFrom(taskID:String)-> Results<Prices> {
+        let realm = try! Realm()
+        let tickerID = realm.objects(Prices.self).filter("taskID == %@", taskID).first!
+        let aTicker = tickerID.ticker
+        let theTickerSeries = realm.objects(Prices.self).filter("ticker == %@", aTicker)
+        let sortedByDate = theTickerSeries.sorted(byKeyPath: "date", ascending: true)
+        return sortedByDate
+    }
+    
+    func getLastTaskID()-> String {
+        let realm = try! Realm()
+        let lastTicker = realm.objects(Prices.self).filter("taskID == %@", taskID).last!
+        return lastTicker.taskID
+    }
 }
 
 class RealmHelpers: Object {

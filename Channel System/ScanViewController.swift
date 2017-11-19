@@ -25,21 +25,21 @@ class ScanViewController: UIViewController {
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
     let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
-    
+    let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-//RealmHelpers().deleteAll()
+RealmHelpers().deleteAll()
         
         let priceCount = prices.allPricesCount()
 
         if ( priceCount > 0 ) {
             print("--> 1. <-- Have Prices = show chart")
-            // show chart
-            selectedSymbol(ticker: universe[1])
+            // show candidates vc
+            segueToCandidatesVC()
         } else {
             print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
             RealmHelpers().deleteAll()
@@ -96,7 +96,7 @@ class ScanViewController: UIViewController {
                 completion()
                 self.updateUI(with: "Processing SMA(200) Complete", spinIsOff: true)
                 print("\nSegue to Charts\n")
-                self.calcwPctR(completion: self.smaBlock2)
+                self.calcwPctR(completion: self.wPctRBlock)
             }
         }
     }
@@ -114,9 +114,27 @@ class ScanViewController: UIViewController {
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing SPctR Complete", spinIsOff: true)
+                self.calcEntries(completion: self.entryBlock)
+            }
+        }
+    }
+    
+    func calcEntries(completion: @escaping () -> ()) {
+        self.updateUI(with: "Processing Entries...", spinIsOff: false)
+        DispatchQueue.global(qos: .background).async {
+            for ( index, symbols ) in self.universe.enumerated() {
+                let current = symbols.replacingOccurrences(of: "2", with: "")
+                self.updateUI(with: "Processing Entries for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: true)
+                Entry().calcLong(debug: false, prices: oneTicker, completion: self.entryBlock)
+                self.updateUI(with: "Finished Processing Entries for \(current)", spinIsOff: true)
+            }
+            DispatchQueue.main.async {
+                completion()
+                self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
                 let tickerToSend = self.universe[1]
                 print("\nSegue to Charts with \(tickerToSend)\n")
-                self.selectedSymbol(ticker: tickerToSend)
+                self.segueToCandidatesVC()
             }
         }
     }
@@ -129,16 +147,14 @@ class ScanViewController: UIViewController {
         }
     }
 
-    func selectedSymbol(ticker: String) {
+    func segueToChart(ticker: String) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
-        //myVC.dataFeed = dataFeed
-        myVC.tickerSelected = ticker
+        myVC.taskIdSelected = Prices().getLastTaskID()
         navigationController?.pushViewController(myVC, animated: true)
     }
     
     func segueToCandidatesVC() {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
-       // myVC.dataFeed = dataFeed
         navigationController?.pushViewController(myVC, animated: true)
     }
 }

@@ -13,28 +13,13 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
 
     @IBOutlet weak var tableView: UITableView!
     
-    //var dataFeed = DataFeed()
-    
     let realm = try! Realm()
     
     var tasks: Results<Prices>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tasks = getEntriesFromRealm(debug: true)
-    }
-    
-    func getEntriesFromRealm(debug: Bool)-> Results<Prices> {
-        // get objects // filter onbjects
-        let id = true
-        let allEntries = realm.objects(Prices.self).filter("longEntry == %@", id)
-        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
-        if ( debug ) {
-            for entries in sortedByDate {
-                print("\(entries.ticker) \(entries.dateString)")
-            }
-        }
-        return sortedByDate
+        tasks = Prices().sortEntries()
     }
     
     @IBAction func clearRealmAction(_ sender: Any) {
@@ -66,7 +51,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     func selectedSymbol(index: Int) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         //myVC.dataFeed = dataFeed
-        myVC.indexSelected = index
+        myVC.taskIdSelected = tasks[index].taskID
         navigationController?.pushViewController(myVC, animated: true)
     }
 
