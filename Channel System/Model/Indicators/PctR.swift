@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import RealmSwift
 
 class PctR {
     
-    func williamsPctR(debug: Bool, prices: [LastPrice] )-> [LastPrice]  {
+    func williamsPctR(debug: Bool, prices: Results<Prices>, completion: @escaping () -> ()) {
         // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
         let sortedPrices = prices
         // need to find HH + LL of last N periods
@@ -19,8 +20,8 @@ class PctR {
         var highestHigh = [Double]()
         var lowestLow = [Double]()
         for each in sortedPrices {
-            highs.append(each.high!)
-            lows.append(each.low!)
+            highs.append(each.high)
+            lows.append(each.low)
         }
         
         // max high of last 10
@@ -46,7 +47,7 @@ class PctR {
         //(Highest High – Closing Price)
         var leftSideEquation = [Double]()
         for ( index, each ) in sortedPrices.enumerated() {
-            let answer = highestHigh[index] - each.close!
+            let answer = highestHigh[index] - each.close
             leftSideEquation.append(answer)
         }
         
@@ -58,20 +59,23 @@ class PctR {
         }
         
         // divide then multiply answer
-        for ( index, each ) in sortedPrices.enumerated() {
+        for ( index, _ ) in sortedPrices.enumerated() {
             var answer = leftSideEquation[index] / rightSideEquation[index]
             answer = answer * -100
-            each.wPctR = answer
-            if ( debug) {
-                print("\(each.ticker!) wPctR: \(answer)")
-                if ( answer > 300 || answer < -300) {
-                    print("\n----------> \(answer) is suspicious!\n")
-                    each.wPctR = 0.00
-                }
+ 
+            if ( answer > 300 || answer < -300) {
+                print("\n----------> \(answer) is suspicious!\n")
+                answer = 0.00
             }
+            let realm = try! Realm()
+            
+            try! realm.write {
+                sortedPrices[index].wPctR = answer
+            }
+            
             //print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100")
         }
-        if ( debug ) { print("\nFinished calc for wPctR for \(String(describing: prices.last!.ticker!))\n") }
-        return sortedPrices
+        if ( debug ) { print("\nFinished calc for wPctR for \(String(describing: prices.last!.ticker))\n") }
+       // return sortedPrices
     }
 }

@@ -45,6 +45,7 @@ class SCSSyncMultiChartView: UIViewController {
     @IBOutlet weak var bottomView: UIView!
     
     override func viewDidLoad() {
+        print("\nCharts receiced: \(tickerSelected!)")
         title = tickerSelected!
         print("tickerSelected \(tickerSelected!)")
         oneTicker = Prices().sortOneTicker(ticker: tickerSelected!, debug: false)
@@ -140,7 +141,7 @@ class SCSSyncMultiChartView: UIViewController {
         addModifiers()
         
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //addWPctRSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
 //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
@@ -265,11 +266,11 @@ class SCSSyncMultiChartView: UIViewController {
         if ( debug ) { print("getting wPctR render series\narray Size = \(items.count)") }
 
         var wPctR = 0.0
-        for ( index, things) in items.enumerated() {
+        for ( index, things) in oneTicker.enumerated() {
             
-            wPctR = things.wPctR!
+            wPctR = things.wPctR
             
-            if ( debug ) { print("c:\(things.close!) wPctR: \(wPctR)") }
+            if ( debug ) { print("c:\(things.close) wPctR: \(wPctR)") }
             indicatorDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(wPctR))
             triggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-20.0))
             sellTriggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-80.0))
