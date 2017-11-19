@@ -15,6 +15,8 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var updateLable: UILabel!
     
+    @IBOutlet weak var taskProgress: UIView!
+    
     let dataFeed = DataFeed()
     
     let prices = Prices()
@@ -26,13 +28,14 @@ class ScanViewController: UIViewController {
     let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
     let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-RealmHelpers().deleteAll()
+        //RealmHelpers().deleteAll()
         
         let priceCount = prices.allPricesCount()
 
@@ -46,7 +49,7 @@ RealmHelpers().deleteAll()
             getDataFromCSV(completion: self.csvBlock)
         }
     }
-    
+    //MARK: - Get Data From CSV
     func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
@@ -62,7 +65,8 @@ RealmHelpers().deleteAll()
             completion()
         }
     }
-    //MARK: - TODO - Construct all indicators
+    
+    //MARK: - SMA 10
     func calcSMA10(completion: @escaping () -> ()) {
         self.updateUI(with: "Calulating SMA(10)...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
@@ -81,7 +85,7 @@ RealmHelpers().deleteAll()
             }
         }
     }
-    
+    //MARK: - SMA 200
     func calcSMA200(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing SMA(200)...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
@@ -100,7 +104,7 @@ RealmHelpers().deleteAll()
             }
         }
     }
-    
+    //MARK: - wPctR
     func calcwPctR(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing PctR...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
@@ -118,7 +122,7 @@ RealmHelpers().deleteAll()
             }
         }
     }
-    
+    //MARK: - Entries
     func calcEntries(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing Entries...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {

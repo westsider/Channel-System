@@ -2,7 +2,7 @@
 //  SCSMultipleSurfaceChartView.swift
 //  SciChartSwiftDemo
 //
-//  Created by Mykola Hrybeniuk on 6/6/16.
+//  Created byaWArren Hansen on 6/6/16.
 //  Copyright © 2016 SciChart Ltd. All rights reserved.
 //
 
@@ -13,7 +13,6 @@ import RealmSwift
 class SCSSyncMultiChartView: UIViewController {
     
     var dataFeed = DataFeed()
-    //let prices = Prices()
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
     var ticker = ""
@@ -48,7 +47,7 @@ class SCSSyncMultiChartView: UIViewController {
         title = ticker; print(ticker)
         completeConfiguration()
     }
-
+    //MARK: - Get Candle Render Series
     fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
         
         print("\nPopulating candle series\n")
@@ -59,12 +58,7 @@ class SCSSyncMultiChartView: UIViewController {
         let ohlcDataSeries = SCIOhlcDataSeries(xType: .double, yType: .double)
         ohlcDataSeries.acceptUnsortedData = true
         
-        //let items = dataFeed.sortedPrices
-        //let oneTicker = prices.sortOneTicker(ticker: "SPY", debug: false)
-        //if ( debug ) { print("getting candle render series\narray Size = \(items.count)") }
-        
         for ( index, things) in oneTicker.enumerated() {
-            
             if ( debug ) { print("\(things.open) \(things.high) \(things.low) \(things.close)") }
             ohlcDataSeries.appendX(SCIGeneric(index),
                                    open: SCIGeneric(things.open),
@@ -85,6 +79,7 @@ class SCSSyncMultiChartView: UIViewController {
         
         return candleRendereSeries
     }
+    //MARK: - Add To Portfolio
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
         if let close = oneTicker.last?.close {
@@ -128,7 +123,7 @@ class SCSSyncMultiChartView: UIViewController {
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    // MARK: Internal Functions    
+    //MARK: - Complete Configuration
     func completeConfiguration() {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
 
@@ -142,8 +137,6 @@ class SCSSyncMultiChartView: UIViewController {
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
-    
-    // MARK: Private Functions
     
     fileprivate func configureChartSuraface() {
         sciChartView1 = SCIChartSurface(frame: self.topView.bounds)
@@ -159,9 +152,7 @@ class SCSSyncMultiChartView: UIViewController {
         
         sciChartView2.translatesAutoresizingMaskIntoConstraints = true
         self.bottomView.addSubview(sciChartView2)
-
     }
-    
     
     fileprivate func addAxis(BarsToShow: Int) {
         
@@ -204,7 +195,6 @@ class SCSSyncMultiChartView: UIViewController {
     }
     
     fileprivate func addModifiers() {
-        
         sizeAxisAreaSync.syncMode = .right
         sizeAxisAreaSync.attachSurface(sciChartView1)
         sizeAxisAreaSync.attachSurface(sciChartView2)
@@ -231,28 +221,21 @@ class SCSSyncMultiChartView: UIViewController {
         modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView2.chartModifiers = modifierGroup
     }
-    
+    //MARK: - Add Pices Series
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
-
         surface.renderableSeries.add(getCandleRenderSeries(debug: false, isReverse:false,  xID: xID, yID: yID))
     }
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
-        
-        //let items = dataFeed.sortedPrices
          for ( index, things) in oneTicker.enumerated() {
             let signal = things.longEntry
             let high = things.high
             let low = things.low
             surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
-            
         }
     }
-    
-
-    
+    //MARK: - pctR
     fileprivate func addWPctRSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
-        
         let indicatorDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
         indicatorDataSeries.acceptUnsortedData = true
         let triggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
@@ -265,9 +248,7 @@ class SCSSyncMultiChartView: UIViewController {
 
         var wPctR = 0.0
         for ( index, things) in oneTicker.enumerated() {
-            
             wPctR = things.wPctR
-            
             if ( debug ) { print("c:\(things.close) wPctR: \(wPctR)") }
             indicatorDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(wPctR))
             triggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-20.0))
@@ -296,7 +277,7 @@ class SCSSyncMultiChartView: UIViewController {
         sellTriggerRenderSeries.yAxisId = yID
         surface.renderableSeries.add(sellTriggerRenderSeries)
     }
-    
+    //MARK: - SMA 10
     fileprivate func addFastSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
         var lastValue = SCIGeneric(0.0)
@@ -316,7 +297,7 @@ class SCSSyncMultiChartView: UIViewController {
         surface.renderableSeries.add(renderSeries)
         addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: lastValue)
     }
-    
+    //MARK: - SMA 200
     fileprivate func addSlowSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
         var lastValue = SCIGeneric(0.0)
@@ -352,9 +333,6 @@ class SCSSyncMultiChartView: UIViewController {
         axisMarker.position = value;
         //print("SMA Anntation \(value.doubleData)")
         surface.annotations.add(axisMarker);
-    }
-    
-
-    
+    } 
 }
 

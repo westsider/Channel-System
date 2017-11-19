@@ -26,20 +26,27 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="uQc-2E-c5A">
                                 <rect key="frame" x="169" y="226" width="37" height="37"/>
                             </activityIndicatorView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-TH-pwu">
+                                <rect key="frame" x="97" y="306" width="181" height="2"/>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="uQc-2E-c5A" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="8" symbolic="YES" id="5rN-pz-ofr"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="MbQ-fW-ehq"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="133" id="VYo-dR-f5Q"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="97" id="Zcu-iW-kov"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="centerX" secondItem="uQc-2E-c5A" secondAttribute="centerX" id="jje-NP-vuN"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="7iW-TH-pwu" secondAttribute="leading" id="246-p7-ljH"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="uQc-2E-c5A" secondAttribute="bottom" constant="43" id="ACj-DZ-bEh"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="centerX" secondItem="uQc-2E-c5A" secondAttribute="centerX" id="Btl-IU-7HJ"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="trailing" secondItem="7iW-TH-pwu" secondAttribute="trailing" id="GFu-xQ-Oqp"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="97" id="P3X-iU-y4T"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="133" id="mCN-iI-Rm4"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qgr-g5-G6I"/>
+                            <constraint firstItem="uQc-2E-c5A" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="8" symbolic="YES" id="rlj-h5-TwX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="biD-pr-RAe"/>
                     <connections>
                         <outlet property="activityIndicator" destination="uQc-2E-c5A" id="SIX-H3-Xa7"/>
+                        <outlet property="taskProgress" destination="8bC-Xf-vdC" id="Ibl-Ia-jbw"/>
                         <outlet property="updateLable" destination="4fr-Wa-2ad" id="od2-3n-3nb"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>
                     </connections>

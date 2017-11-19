@@ -50,7 +50,6 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func selectedSymbol(index: Int) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
-        //myVC.dataFeed = dataFeed
         myVC.taskIdSelected = tasks[index].taskID
         navigationController?.pushViewController(myVC, animated: true)
     }
