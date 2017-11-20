@@ -41,6 +41,24 @@ class ScanViewController: UIViewController {
 
         if ( priceCount > 0 ) {
             print("--> 1. <-- Have Prices = show chart")
+            //MARK: - TODO - Get new prices from intrio
+           
+            // refactor in its own Trade Management VC not using alert
+            // title, messsage, func to calc
+            // 1. make entry
+            // 2. hit stop
+            // 3. hit target
+            
+            // search add alert vc from model
+//            let tasks = RealmHelpers().getOpenTrades()
+//            for trades in tasks {
+//                if trades.close < trades.stop {
+//                    // alert vc for stop hit
+//                    let newVC = PresentAlertVC().showIt(trades: trades)
+//                    present(newVC, animated:true, completion: nil)
+//                }
+//            }
+            
             // show candidates vc
             segueToCandidatesVC()
         } else {

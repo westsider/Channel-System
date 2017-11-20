@@ -16,8 +16,6 @@ class SCSSyncMultiChartView: UIViewController {
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
     var ticker = ""
-    var entriesR = Entries()
-    
     var taskIdSelected = ""
     
     let axisY1Id = "Y1"
@@ -87,18 +85,19 @@ class SCSSyncMultiChartView: UIViewController {
             let stop = Double(close) - stopDistance
             let target = Double(close) + stopDistance
             let stopString = String(format: "%.2f", stop)
-            
-            //MARK: - TODO - number of shares + risk
-            let shares = entriesR.calcShares(stopDist: stopDistance, risk: 100)
+            let risk = 50
+            let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: risk)
             let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"
-            print(message)
+            
+            print("\n\(message)")
+            print("Max Gain and Loss: \(stopDistance * Double(shares))\n")
+            
             let alert = UIAlertController(title: "\(self.ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
             let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
+                //MARK: - TODO make textField error proof
                 let textField = alert.textFields![0] as UITextField
                 if let entryString = textField.text {
-                   // self.portfolio.makeEntry(ticker: ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
-                    
-                    self.entriesR.makeEntry(ticker: self.ticker, entryString: entryString, shares: shares, target: target, stop: stop, debug: true)
+                    RealmHelpers().makeEntry(taskID: (self.oneTicker.last?.taskID)!, entry: Double(entryString)!, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
                     self.sequeToPortfolio()
                 }
             }

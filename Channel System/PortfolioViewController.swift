@@ -15,11 +15,12 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     let realm = try! Realm()
     
-    var tasks: Results<Entries>!
+    var tasks: Results<Prices>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tasks = realm.objects(Entries.self)
+        tasks = RealmHelpers().getOpenTrades()
+        TradeManage().printOpenTrades()
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -30,32 +31,19 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let task = "\(tasks[indexPath.row].ticker)"
         cell.textLabel?.text = task
-        
         let profit = tasks[indexPath.row].profit
         cell.detailTextLabel?.text = String(profit)
-  
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
-        //selectedSymbol()
+        selectedSymbol(index: indexPath.row)
     }
     
-//    func selectedSymbol() {
-//        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
-//        myVC.dataFeed = dataFeed
-//        navigationController?.pushViewController(myVC, animated: true)
-//    }
-    
-//    func debugDataSeries(on: Bool) {
-//        if ( !on ) { return }
-//        print("Price data loaded from Scan VC Total days: \(self.dataFeed.lastPrice .count)\n")
-//        for prices in self.dataFeed.sortedPrices {
-//            print("\(prices.date!)\t\(prices.ticker!)\to:\(prices.open!)\th:\(prices.high!)\tl:\(prices.low!)\tc:\(prices.close!) 10:\(prices.movAvg10!) %R:\(prices.wPctR!)")
-//        }
-//
-//    }
- 
+    func selectedSymbol(index: Int) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
+        myVC.taskIdSelected = tasks[index].taskID
+        navigationController?.pushViewController(myVC, animated: true)
+    }
 }

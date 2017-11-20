@@ -23,3 +23,4 @@ class LastPrice {
     var longEntry:Bool?
     var inRealm:Bool?
 }
+
