@@ -39,35 +39,49 @@ class ScanViewController: UIViewController {
         
         let priceCount = prices.allPricesCount()
 
+        //MARK: - Check for realm data
         if ( priceCount > 0 ) {
             print("--> 1. <-- Have Prices = show chart")
             //MARK: - TODO - Get new prices from intrio
            
-            // refactor in its own Trade Management VC not using alert
-            segueToManageVC()
-            // title, messsage, func to calc
-            // 1. make entry
-            // 2. hit stop
-            // 3. hit target
+            //MARK: - search for trade management scenario else segue to candidates
+            manageTradesOrShowEntries()
             
-            // search add alert vc from model
-//            let tasks = RealmHelpers().getOpenTrades()
-//            for trades in tasks {
-//                if trades.close < trades.stop {
-//                    // alert vc for stop hit
-//                    let newVC = PresentAlertVC().showIt(trades: trades)
-//                    present(newVC, animated:true, completion: nil)
-//                }
-//            }
-            
-            // show candidates vc
-            //segueToCandidatesVC()
         } else {
             print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
             RealmHelpers().deleteAll()
             getDataFromCSV(completion: self.csvBlock)
         }
     }
+    
+    //MARK: - Trade Management
+    func manageTradesOrShowEntries() {
+        // search for trade management scenario else segue to candidates
+        let tasks = RealmHelpers().getOpenTrades()
+        for trades in tasks {
+            if trades.close < trades.stop {
+                print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")
+                segueToManageVC(taskID: trades.taskID, action: "Stop")
+            }
+            if trades.close > trades.target {
+                print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")
+                segueToManageVC(taskID: trades.taskID, action: "Target")
+            }
+            if trades.wPctR > -30 {
+                print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")
+                segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
+            }
+            if trades.exitDate == Date() {
+                print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
+                segueToManageVC(taskID: trades.taskID, action: "Date Stop")
+            }
+            
+            // show candidates vc
+            //segueToCandidatesVC()
+        }
+    }
+    @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
+    
     //MARK: - Get Data From CSV
     func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
@@ -181,8 +195,10 @@ class ScanViewController: UIViewController {
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    func segueToManageVC() {
+    func segueToManageVC(taskID: String, action: String) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
+        myVC.taskID = taskID
+        myVC.action = action
         navigationController?.pushViewController(myVC, animated: true)
     }
 }

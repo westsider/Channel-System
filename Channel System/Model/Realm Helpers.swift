@@ -66,10 +66,18 @@ class RealmHelpers: Object {
     //MARK: - Sort Entries
     func getOpenTrades()-> Results<Prices> {
         let realm = try! Realm()
-        let allEntries = realm.objects(Prices.self).filter("inTrade == %@", true)
+        // get inTrade == true && exitrade == false
+        //filter("color = 'tan' AND name BEGINSWITH 'B'")
+        let allEntries = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false")
+        //let allEntries = realm.objects(Prices.self).filter("inTrade == %@", true)
         let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
         
         return sortedByDate
+    }
+    
+    func getEntryFor(taskID:String)-> Results<Prices> {
+        let realm = try! Realm()
+        return realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false AND taskID == %@", taskID)
     }
     //MARK: - Get Open Trades
 //    func getOpenTrades()-> Results<Prices> {
