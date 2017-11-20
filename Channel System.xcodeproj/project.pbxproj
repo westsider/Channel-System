@@ -24,6 +24,7 @@
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
 		0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */; };
 		0D771E0B1FAE627F006269DD /* EURUSD_Daily.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */; };
+		0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */; };
 		0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */; };
 		0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */; };
 		0D949CDD1FA3B7B600960BA2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CDB1FA3B7B600960BA2 /* Main.storyboard */; };
@@ -63,6 +64,7 @@
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
 		0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSMultipleSurfaceChartView.swift; sourceTree = "<group>"; };
 		0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EURUSD_Daily.txt; sourceTree = "<group>"; };
+		0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageViewController.swift; sourceTree = "<group>"; };
 		0D949CD41FA3B7B600960BA2 /* Channel System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channel System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */,
 				0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */,
 				0D5CEC751FB378A400762900 /* PortfolioViewController.swift */,
+				0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -344,6 +347,7 @@
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0DCAAFE21FBC419400095560 /* ProcessCSV.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
+				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
 				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,

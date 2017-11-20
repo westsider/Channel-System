@@ -44,6 +44,7 @@ class ScanViewController: UIViewController {
             //MARK: - TODO - Get new prices from intrio
            
             // refactor in its own Trade Management VC not using alert
+            segueToManageVC()
             // title, messsage, func to calc
             // 1. make entry
             // 2. hit stop
@@ -60,7 +61,7 @@ class ScanViewController: UIViewController {
 //            }
             
             // show candidates vc
-            segueToCandidatesVC()
+            //segueToCandidatesVC()
         } else {
             print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
             RealmHelpers().deleteAll()
@@ -177,6 +178,11 @@ class ScanViewController: UIViewController {
     
     func segueToCandidatesVC() {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    func segueToManageVC() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
 }
