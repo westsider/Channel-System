@@ -34,9 +34,18 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     var textEntered = "No Text"
     
+    // preserve calc of shares ect
+    var close = 0.0
+    var stopDistance = 0.0
+    var stop = 0.0
+    var target = 0.0
+    var stopString = " "
+    let risk = 50
+    var shares = 0
+    
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
-        populateLables()
+        populateLables(action: action)
     }
     
     override func viewDidLoad() {
@@ -52,17 +61,28 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     }
     // MARK: - Cancel
     @IBAction func cancelAction(_ sender: Any) {
-        print("Cancel: Unwind from Manage trades VC")
-        self.performSegue(withIdentifier: "unwindToScan", sender: self)
+        print("Cancel: Unwind charts VC")
+        if ( action == "Entry For") {
+            self.performSegue(withIdentifier: "unwindToCharts", sender: self)
+        } else {
+            print("Cancel: Unwind from Manage trades VC")
+            self.performSegue(withIdentifier: "unwindToScan", sender: self)
+        }
     }
     
-    // MARK: - Record Trade Exit
+    // MARK: - Record Trade Entry or Exit
     @IBAction func recordAction(_ sender: Any) {
         if (textInput.text! != "") {
             textEntered = textInput.text!
         }
         
         switch action {
+        case "Entry For":
+            //MARK: - TODO - make entry func
+            if let entryPrice = Double(textEntered) {
+                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
+                sequeToPortfolio()
+            }
         case "Target":
             let thisResult = calcGainOrLoss()
             print("\nclose the trade, add gain of \(thisResult) from Target at \(textEntered)\n")
@@ -106,55 +126,81 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         } else {
             return 0.00
         }
-        
     }
-    // fireplace, dog, lights
     
     func updateRealm(gain: Double, loss: Double) {
         // ok - you are updateing the right taskID
-        print("This is the taskID passes in to update realm \(thisTrade.taskID)")
+        print("This is the taskID passed in to update realm \(thisTrade.taskID)")
         let realm = try! Realm()
         try! realm.write {
-            print(Date())
             thisTrade.exitDate = Date()
-            print(gain)
             thisTrade.profit = gain
-            print(loss)
             thisTrade.loss = loss
-            print(true)
             thisTrade.exitedTrade = true
-            print(false)
             thisTrade.inTrade = false
         }
         proveUpdateTrade()
     }
     
     func proveUpdateTrade() {
-        print("Proving the trade has been updated for taskID \(taskID)")
+        print("Proof the trade has been updated for taskID \(taskID)")
         let checkTrades = RealmHelpers().checkExitedTrade(taskID: taskID)
-        print("\n//ok - lets figure out what this object is...")
+        print("\ndubug - checkTrades")
         debugPrint(checkTrades)
     }
     
     //MARK: - Populate Lables
-    func populateLables() {
-        thisTrade = RealmHelpers().getEntryFor(taskID: taskID).last!
-        print("\npopulate lables")
-        debugPrint(thisTrade)
-
-        textInput.text = String(thisTrade.close)
+    func populateLables(action: String) {
         
-        topLeft.text = action
-      
-        topRight.text = thisTrade.ticker
-   
-        midLeft.text = "Entry \(String(thisTrade.entry))"
-   
-        midRight.text = "\(String(thisTrade.shares)) Shares"
-  
-        bottomLeft.text = "Stop \(String(format: "%.2f", thisTrade.stop))"
-       
-        bottomRight.text = "Target \(String(format: "%.2f", thisTrade.target))"
+        print("\npopulate lables")
+        
+
+        if (action == "Entry For") {
+            print("\n calc trade entry, then populate lables\n")
+            thisTrade = Prices().getFrom(taskID: taskID).last!
+            debugPrint(thisTrade)
+            // calc target / stop
+            close = thisTrade.close
+            stopDistance = close * 0.03
+            stop = close - stopDistance
+            target = close + stopDistance
+            stopString = String(format: "%.2f", stop)
+            shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: risk)
+            let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
+            // populate lables
+            textInput.text = String(thisTrade.close)
+            
+            topLeft.text = action
+            
+            topRight.text = thisTrade.ticker
+            
+            midLeft.text = "Entry \(String(thisTrade.close))"
+            
+            midRight.text = "\(String(shares)) Shares"
+            
+            bottomLeft.text = "Stop \(String(format: "%.2f", stop))"
+            
+            bottomRight.text = "Target \(String(format: "%.2f", target))"
+            
+        } else {
+            print("\nJust poplulate lables")
+            thisTrade = RealmHelpers().getEntryFor(taskID: taskID).last!
+            debugPrint(thisTrade)
+            textInput.text = String(thisTrade.close)
+            
+            topLeft.text = action
+            
+            topRight.text = thisTrade.ticker
+            
+            midLeft.text = "Entry \(String(thisTrade.entry))"
+            
+            midRight.text = "\(String(thisTrade.shares)) Shares"
+            
+            bottomLeft.text = "Stop \(String(format: "%.2f", thisTrade.stop))"
+            
+            bottomRight.text = "Target \(String(format: "%.2f", thisTrade.target))"
+        }
+        
         
     }
     //MARK: - Keyboard behavior functions
@@ -164,6 +210,11 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textInput.resignFirstResponder()
         return true
+    }
+    
+    func sequeToPortfolio() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
+        navigationController?.pushViewController(myVC, animated: true)
     }
     
 }

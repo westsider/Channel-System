@@ -426,6 +426,7 @@
                         <outlet property="topLeft" destination="9c3-O5-4cj" id="OMD-mP-r9s"/>
                         <outlet property="topRight" destination="Nb9-ac-OjR" id="57n-b3-jgR"/>
                         <segue destination="tU1-8h-orj" kind="unwind" identifier="unwindToScan" unwindAction="unwindToMenuWithSegue:" id="2ZS-O3-zyr"/>
+                        <segue destination="tU1-8h-orj" kind="unwind" identifier="unwindToCharts" unwindAction="unwindToChartsWithSegue:" id="rqz-jo-3dl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVK-bp-Due" userLabel="First Responder" sceneMemberID="firstResponder"/>

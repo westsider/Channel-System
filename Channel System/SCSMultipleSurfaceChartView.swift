@@ -39,6 +39,8 @@ class SCSSyncMultiChartView: UIViewController {
     
     @IBOutlet weak var bottomView: UIView!
     
+    @IBAction func unwindToCharts(segue: UIStoryboardSegue) {}
+    
     override func viewDidLoad() {
         oneTicker = Prices().getFrom(taskID: taskIdSelected)
         ticker = (oneTicker.first?.ticker)!
@@ -80,45 +82,46 @@ class SCSSyncMultiChartView: UIViewController {
     //MARK: - Add To Portfolio
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
-        if let close = oneTicker.last?.close {
-            let stopDistance = Double(close) * 0.03
-            let stop = Double(close) - stopDistance
-            let target = Double(close) + stopDistance
-            let stopString = String(format: "%.2f", stop)
-            let risk = 50
-            let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: risk)
-            let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"
-            
-            print("\n\(message)")
-            print("Max Gain and Loss: \(stopDistance * Double(shares))\n")
-            
-            let alert = UIAlertController(title: "\(self.ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
-            let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
-                //MARK: - TODO make textField error proof
-                let textField = alert.textFields![0] as UITextField
-                if let entryString = textField.text {
-                    RealmHelpers().makeEntry(taskID: (self.oneTicker.last?.taskID)!, entry: Double(entryString)!, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
-                    self.sequeToPortfolio()
-                }
-            }
-            let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
-            }
-            alert.addTextField { (textField) in
-                textField.text = "\(close)"
-                textField.keyboardAppearance = .dark
-                textField.keyboardType = .decimalPad
-            }
-            alert.addAction(cancel)
-            alert.addAction(action)
-            present(alert, animated:true, completion: nil)
-        } else {
-            print("Trouble getting Ticker")
-        }
+        segueToManageVC(taskID: taskIdSelected, action: "Entry For")
+        
+//        if let close = oneTicker.last?.close {
+//            let stopDistance = Double(close) * 0.03
+//            let stop = Double(close) - stopDistance
+//            let target = Double(close) + stopDistance
+//            let stopString = String(format: "%.2f", stop)
+//            let risk = 50
+//            let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: risk)
+//            let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"
+//
+//            print("\n\(message)")
+//            print("Max Gain and Loss: \(stopDistance * Double(shares))\n")
+//
+//            let alert = UIAlertController(title: "\(self.ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
+//            let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
+//                //MARK: - TODO make textField error proof
+//                let textField = alert.textFields![0] as UITextField
+//                if let entryString = textField.text {
+//                    RealmHelpers().makeEntry(taskID: (self.oneTicker.last?.taskID)!, entry: Double(entryString)!, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
+//                    self.sequeToPortfolio()
+//                }
+//            }
+//            let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
+//            }
+//            alert.addTextField { (textField) in
+//                textField.text = "\(close)"
+//                textField.keyboardAppearance = .dark
+//                textField.keyboardType = .decimalPad
+//            }
+//            alert.addAction(cancel)
+//            alert.addAction(action)
+//            present(alert, animated:true, completion: nil)
+//        } else {
+//            print("Trouble getting Ticker")
+//        }
     }
     
     func sequeToPortfolio() {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
-        //myVC.portfolio = portfolio
         navigationController?.pushViewController(myVC, animated: true)
     }
     
@@ -332,6 +335,13 @@ class SCSSyncMultiChartView: UIViewController {
         axisMarker.position = value;
         //print("SMA Anntation \(value.doubleData)")
         surface.annotations.add(axisMarker);
-    } 
+    }
+    
+    func segueToManageVC(taskID: String, action: String) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
+        myVC.taskID = taskIdSelected
+        myVC.action = "Entry For"
+        navigationController?.pushViewController(myVC, animated: true)
+    }
 }
 
