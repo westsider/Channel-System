@@ -36,12 +36,13 @@ class ScanViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         //RealmHelpers().deleteAll()
+        //Prices().printAllPrices()
         
-        let priceCount = prices.allPricesCount()
+        let priceCount = Prices().allPricesCount()
 
         //MARK: - Check for realm data
         if ( priceCount > 0 ) {
-            print("--> 1. <-- Have Prices = show chart")
+            print("--> 1. <-- Have Prices \(priceCount) = show chart")
             //MARK: - TODO - Get new prices from intrio
            
             //MARK: - search for trade management scenario else segue to candidates
@@ -58,27 +59,35 @@ class ScanViewController: UIViewController {
     func manageTradesOrShowEntries() {
         // search for trade management scenario else segue to candidates
         let tasks = RealmHelpers().getOpenTrades()
-        for trades in tasks {
-            if trades.close < trades.stop {
-                print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")
-                segueToManageVC(taskID: trades.taskID, action: "Stop")
+print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an exit is triggered, so I need to write the reaminging exits")
+        if ( tasks.count > 0) {
+            for trades in tasks {
+                if trades.close < trades.stop {
+                    print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    segueToManageVC(taskID: trades.taskID, action: "Stop")
+                }
+//MARK: - TODO - Check if my spy trade should have exited here
+                if trades.close > trades.target {
+                    print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    segueToManageVC(taskID: trades.taskID, action: "Target")
+                }
+                if trades.wPctR > -30 {
+                    print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
+                }
+//MARK: - TODO - Set up exit date on entry
+                if trades.exitDate == Date() {
+                    print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    segueToManageVC(taskID: trades.taskID, action: "Date Stop")
+                }
+                // just exit if inTrade but no exits found
+                segueToCandidatesVC()
             }
-            if trades.close > trades.target {
-                print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")
-                segueToManageVC(taskID: trades.taskID, action: "Target")
-            }
-            if trades.wPctR > -30 {
-                print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")
-                segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
-            }
-            if trades.exitDate == Date() {
-                print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
-                segueToManageVC(taskID: trades.taskID, action: "Date Stop")
-            }
-            
-            // show candidates vc
-            //segueToCandidatesVC()
+        } else {
+            // exit here if no entries found
+            segueToCandidatesVC()
         }
+        
     }
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
     
@@ -170,7 +179,7 @@ class ScanViewController: UIViewController {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
                 let tickerToSend = self.universe[1]
-                print("\nSegue to Charts with \(tickerToSend)\n")
+                print("\nSegue to Candidates with \(tickerToSend)\n")
                 self.segueToCandidatesVC()
             }
         }

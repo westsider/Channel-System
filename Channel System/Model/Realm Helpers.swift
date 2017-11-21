@@ -26,6 +26,8 @@ class RealmHelpers: Object {
         price.movAvg200 = 0.00
         price.wPctR = 0.00
         price.longEntry = false
+        price.inTrade   = false
+        price.exitedTrade = false
         price.taskID = NSUUID().uuidString
         
         try! realm.write({
@@ -75,9 +77,24 @@ class RealmHelpers: Object {
         return sortedByDate
     }
     
+    func getCandidates()-> Results<Prices> {
+        let realm = try! Realm()
+        // get inTrade == true && exitrade == false
+        //filter("color = 'tan' AND name BEGINSWITH 'B'")
+        let allEntries = realm.objects(Prices.self).filter("inTrade == %@", true)
+        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
+        
+        return sortedByDate
+    }
+    
     func getEntryFor(taskID:String)-> Results<Prices> {
         let realm = try! Realm()
         return realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false AND taskID == %@", taskID)
+    }
+    
+    func checkExitedTrade(taskID:String)-> Results<Prices> {
+        let realm = try! Realm()
+        return realm.objects(Prices.self).filter("inTrade = false AND exitedTrade = true AND taskID == %@", taskID)
     }
     //MARK: - Get Open Trades
 //    func getOpenTrades()-> Results<Prices> {

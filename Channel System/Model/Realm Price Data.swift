@@ -40,6 +40,14 @@ class Prices: Object {
         let allPrices = realm.objects(Prices.self)
         return allPrices.count
     }
+    
+    func printAllPrices() {
+        let realm = try! Realm()
+        let allPrices = realm.objects(Prices.self)
+        for each in allPrices {
+            print("\(each.ticker) \(each.dateString)")
+        }
+    }
     //MARK: - Sort One Ticker
     func sortOneTicker(ticker:String, debug:Bool)-> Results<Prices> {
         let realm = try! Realm()
