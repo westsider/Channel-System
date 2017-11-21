@@ -15,11 +15,14 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var updateLable: UILabel!
     
-    @IBOutlet weak var taskProgress: UIView!
+    @IBOutlet weak var progressView: UIProgressView!
     
     let dataFeed = DataFeed()
     
     let prices = Prices()
+    
+    var updatedProgress: Float = 0
+    var incProgress: Float = 0
     
     let universe = ["SPY2", "QQQ2"] //, "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
     
@@ -31,11 +34,16 @@ class ScanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let count = Float(universe.count)
+        let indi = Float(4)
+        let divisor = Float(1)
+        incProgress = Float( divisor / (count + indi ) )
+        print("\nProgress inc = \(incProgress)\n")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-        //RealmHelpers().deleteAll()
+        RealmHelpers().deleteAll()
         //Prices().printAllPrices()
 //        let openTrades = RealmHelpers().getOpenTrades()
 //        for each in openTrades {
@@ -66,11 +74,12 @@ class ScanViewController: UIViewController {
 print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an exit is triggered, so I need to write the reaminging exits")
         if ( tasks.count > 0) {
             for trades in tasks {
+//MARK: - TODO - Check if stop
                 if trades.close < trades.stop {
                     print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Stop")
                 }
-//MARK: - TODO - Check if my spy trade should have exited here
+//MARK: - TODO - Check if target
                 if trades.close > trades.target {
                     print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Target")
@@ -84,8 +93,6 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                     print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Date Stop")
                 }
-                // just exit if inTrade but no exits found
-                segueToCandidatesVC()
             }
         } else {
             // exit here if no entries found
@@ -122,6 +129,7 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
+                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -141,6 +149,7 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 200, debug: false, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(200) for \(current)", spinIsOff: true)
+                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -160,6 +169,7 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 PctR().williamsPctR(debug: false, prices: oneTicker, completion: self.wPctRBlock)
                 self.updateUI(with: "Finished Processing PctR for \(current)", spinIsOff: true)
+                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -178,6 +188,7 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: true)
                 Entry().calcLong(debug: false, prices: oneTicker, completion: self.entryBlock)
                 self.updateUI(with: "Finished Processing Entries for \(current)", spinIsOff: true)
+                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -186,6 +197,13 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                 print("\nSegue to Candidates with \(tickerToSend)\n")
                 self.segueToCandidatesVC()
             }
+        }
+    }
+    
+    func updateProgressBar() {
+        DispatchQueue.main.async {
+            self.updatedProgress += self.incProgress
+            self.progressView.progress = self.updatedProgress
         }
     }
     

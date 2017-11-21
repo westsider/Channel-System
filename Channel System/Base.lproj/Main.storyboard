@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,32 +26,30 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-TH-pwu">
-                                <rect key="frame" x="97" y="306" width="181" height="2"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="y3B-tf-TfT"/>
-                                </constraints>
-                            </progressView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="uQc-2E-c5A">
                                 <rect key="frame" x="169" y="239" width="37" height="37"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="37" id="wpx-ee-3t0"/>
                                 </constraints>
                             </activityIndicatorView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.16666700000000001" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-TH-pwu">
+                                <rect key="frame" x="47" y="305" width="280" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="reF-R2-pVS"/>
+                                </constraints>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="uQc-2E-c5A" secondAttribute="bottom" constant="30" id="81h-Hg-nXe"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="7iW-TH-pwu" secondAttribute="trailing" constant="81" id="Bnk-c7-k9D"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="uQc-2E-c5A" secondAttribute="bottom" constant="29" id="ECa-3X-omE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="uQc-2E-c5A" secondAttribute="trailing" constant="169" id="EKF-Rl-Rpe"/>
                             <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="MGT-08-b6k"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7iW-TH-pwu" secondAttribute="bottom" constant="359" id="PO2-LC-7cE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4fr-Wa-2ad" secondAttribute="trailing" constant="16" id="Uib-M9-Dro"/>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="uQc-2E-c5A" secondAttribute="bottom" constant="30" id="cTd-1N-AOq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7iW-TH-pwu" secondAttribute="trailing" constant="48" id="h84-bf-6Z3"/>
                             <constraint firstItem="uQc-2E-c5A" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="21" id="mM3-16-hfP"/>
                             <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="133" id="mvc-CZ-aLF"/>
                             <constraint firstItem="uQc-2E-c5A" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="169" id="n0s-yy-dmz"/>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="81" id="r7P-go-QbS"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="47" id="rLA-rP-sT9"/>
                             <constraint firstItem="uQc-2E-c5A" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="21" id="z4w-ij-Cs5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -60,7 +57,7 @@
                     <navigationItem key="navigationItem" id="biD-pr-RAe"/>
                     <connections>
                         <outlet property="activityIndicator" destination="uQc-2E-c5A" id="SIX-H3-Xa7"/>
-                        <outlet property="taskProgress" destination="8bC-Xf-vdC" id="Ibl-Ia-jbw"/>
+                        <outlet property="progressView" destination="7iW-TH-pwu" id="rm4-ZJ-dqZ"/>
                         <outlet property="updateLable" destination="4fr-Wa-2ad" id="od2-3n-3nb"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>
                         <segue destination="KP2-Kg-sPN" kind="show" identifier="ScanToManage" id="kyU-xX-rPx"/>

@@ -75,9 +75,10 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         if (textInput.text! != "") {
             textEntered = textInput.text!
         }
-        
+// stupmed why jumping past this vc to Candidates when I have a trade to enter
         switch action {
         case "Entry For":
+            print("In Manage VC case Entry Triggered")
             //MARK: - TODO - make entry func
             if let entryPrice = Double(textEntered) {
                 RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
