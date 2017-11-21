@@ -37,6 +37,10 @@ class ScanViewController: UIViewController {
         
         //RealmHelpers().deleteAll()
         //Prices().printAllPrices()
+//        let openTrades = RealmHelpers().getOpenTrades()
+//        for each in openTrades {
+//            print("\(each.dateString)\(each.ticker)")
+//        }
         
         let priceCount = Prices().allPricesCount()
 

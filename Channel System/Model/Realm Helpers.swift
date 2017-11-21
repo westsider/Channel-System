@@ -37,7 +37,6 @@ class RealmHelpers: Object {
     //MARK: - Clear Realm
     func deleteAll() {
         let realm = try! Realm()
-        
         try! realm.write {
             realm.deleteAll()
         }
@@ -68,19 +67,13 @@ class RealmHelpers: Object {
     //MARK: - Sort Entries
     func getOpenTrades()-> Results<Prices> {
         let realm = try! Realm()
-        // get inTrade == true && exitrade == false
-        //filter("color = 'tan' AND name BEGINSWITH 'B'")
         let allEntries = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false")
-        //let allEntries = realm.objects(Prices.self).filter("inTrade == %@", true)
         let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
-        
         return sortedByDate
     }
     
     func getCandidates()-> Results<Prices> {
         let realm = try! Realm()
-        // get inTrade == true && exitrade == false
-        //filter("color = 'tan' AND name BEGINSWITH 'B'")
         let allEntries = realm.objects(Prices.self).filter("inTrade == %@", true)
         let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
         
@@ -96,16 +89,4 @@ class RealmHelpers: Object {
         let realm = try! Realm()
         return realm.objects(Prices.self).filter("inTrade = false AND exitedTrade = true AND taskID == %@", taskID)
     }
-    //MARK: - Get Open Trades
-//    func getOpenTrades()-> Results<Prices> {
-//        //MARK: - TODO - Filter for open trades
-//        let realm = try! Realm()
-//        let allEntries = realm.objects((Entries).self)
-//        let numEntries = allEntries.count
-//        for items in allEntries {
-//            print("\nshowOpenTrades() count is \(numEntries)")
-//            print("\(items.date!) \(String(describing: items.ticker)) shares:\(String(describing: items.shares)) entry:\(String(describing: items.entry)) stop:\(String(describing: items.stop)) target:\(String(describing: items.target))")
-//        }
-//        return allEntries
-//    }
 }
