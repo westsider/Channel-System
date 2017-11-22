@@ -10,8 +10,6 @@ import RealmSwift
 import UIKit
 
 class ScanViewController: UIViewController {
-
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var updateLable: UILabel!
     
@@ -24,7 +22,7 @@ class ScanViewController: UIViewController {
     var updatedProgress: Float = 0
     var incProgress: Float = 0
     
-    let universe = ["SPY2", "QQQ2"] //, "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
+    let universe = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -34,16 +32,21 @@ class ScanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let count = Float(universe.count)
-        let indi = Float(4)
+        initProgressBar()
+    }
+    
+    func initProgressBar() {
+        let tickerCount = Float(universe.count)
+        let processCount = Float(5)
         let divisor = Float(1)
-        incProgress = Float( divisor / (count + indi ) )
+        incProgress = Float( divisor / (tickerCount * processCount ) )
         print("\nProgress inc = \(incProgress)\n")
+        progressView.setProgress(incProgress, animated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-        initially(deleteAll: false, printPrices: false, printTrades: false)
+        initially(deleteAll: true, printPrices: false, printTrades: false)
 
         //MARK: - Check for realm data
         if ( Prices().allPricesCount() > 0 ) {
@@ -88,10 +91,11 @@ class ScanViewController: UIViewController {
                     segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
                 }
                 //MARK: - TODO - Set up exit date on entry
-                if trades.exitDate == Date() {
+                if Date() >= trades.exitDate {
                     print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Date Stop")
                 }
+                self.updateProgressBar()
             }
         } else {
             // exit here if no entries found
@@ -108,8 +112,8 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Getting data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
                 self.dataFeed.getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
+                self.updateProgressBar()
             }
-            DispatchQueue.main.async { self.activityIndicator.isHidden = true }
             self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
             self.calcSMA10(completion: self.smaBlock2)
         }
@@ -210,7 +214,6 @@ class ScanViewController: UIViewController {
         DispatchQueue.main.async {
             print(with)
             self.updateLable?.text =  with
-            self.activityIndicator.isHidden = spinIsOff
         }
     }
 
