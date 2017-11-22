@@ -23,4 +23,9 @@ class DateHelper {
         if ( debug ) { print("Convertion to Date: \(date)\n") }
         return date
     }
+    
+    func closeTradeIn(days: Int)-> Date {
+        let daysFromNow: Date = (Calendar.current as NSCalendar).date(byAdding: .day, value: days, to: Date(), options: [])!
+        return daysFromNow
+    }
 }

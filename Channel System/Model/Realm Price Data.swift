@@ -31,7 +31,7 @@ class Prices: Object {
     @objc dynamic var risk      = 0.00
     @objc dynamic var inTrade   = false
     @objc dynamic var exitedTrade   = false
-    @objc dynamic var exitDate:Date?
+    @objc dynamic var exitDate:Date = DateHelper().closeTradeIn(days: 7)
     @objc dynamic var profit    = 0.00
     @objc dynamic var loss      = 0.00
     //MARK: - Count Prices

@@ -44,12 +44,10 @@ class ScanViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         initially(deleteAll: false, printPrices: false, printTrades: false)
-        
-        let priceCount = Prices().allPricesCount()
 
         //MARK: - Check for realm data
-        if ( priceCount > 0 ) {
-            print("--> 1. <-- Have Prices \(priceCount) = show chart")
+        if ( Prices().allPricesCount() > 0 ) {
+            print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
             //MARK: - TODO - Get new prices from intrio
             //MARK: - TODO - check entry
             //MARK: - TODO - search for trade management scenario else segue to candidates
