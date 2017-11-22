@@ -72,6 +72,13 @@ class RealmHelpers: Object {
         return sortedByDate
     }
     
+    func printOpenTrades(){
+        let openTrades = getOpenTrades()
+        for each in openTrades {
+            print("\(each.dateString) \(each.ticker)")
+        }
+    }
+    
     func getCandidates()-> Results<Prices> {
         let realm = try! Realm()
         let allEntries = realm.objects(Prices.self).filter("inTrade == %@", true)

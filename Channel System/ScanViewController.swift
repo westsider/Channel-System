@@ -43,12 +43,7 @@ class ScanViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
-        RealmHelpers().deleteAll()
-        //Prices().printAllPrices()
-//        let openTrades = RealmHelpers().getOpenTrades()
-//        for each in openTrades {
-//            print("\(each.dateString)\(each.ticker)")
-//        }
+        initially(deleteAll: false, printPrices: false, printTrades: false)
         
         let priceCount = Prices().allPricesCount()
 
@@ -56,8 +51,8 @@ class ScanViewController: UIViewController {
         if ( priceCount > 0 ) {
             print("--> 1. <-- Have Prices \(priceCount) = show chart")
             //MARK: - TODO - Get new prices from intrio
-           
-            //MARK: - search for trade management scenario else segue to candidates
+            //MARK: - TODO - check entry
+            //MARK: - TODO - search for trade management scenario else segue to candidates
             manageTradesOrShowEntries()
             
         } else {
@@ -67,19 +62,25 @@ class ScanViewController: UIViewController {
         }
     }
     
+    func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
+        if ( deleteAll ) { RealmHelpers().deleteAll() }
+        if ( printPrices ) { Prices().printAllPrices() }
+        if ( printTrades ) { RealmHelpers().printOpenTrades() }
+    }
+    
     //MARK: - Trade Management
     func manageTradesOrShowEntries() {
         // search for trade management scenario else segue to candidates
         let tasks = RealmHelpers().getOpenTrades()
-print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an exit is triggered, so I need to write the reaminging exits")
+        print("Open trade count is \(tasks.count)")
         if ( tasks.count > 0) {
             for trades in tasks {
-//MARK: - TODO - Check if stop
+                //MARK: - TODO - Check if stop
                 if trades.close < trades.stop {
                     print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Stop")
                 }
-//MARK: - TODO - Check if target
+                //MARK: - TODO - Check if target
                 if trades.close > trades.target {
                     print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Target")
@@ -88,7 +89,7 @@ print("Long Spy count is \(tasks.count) but we are on spy and I dnnt think an ex
                     print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
                 }
-//MARK: - TODO - Set up exit date on entry
+                //MARK: - TODO - Set up exit date on entry
                 if trades.exitDate == Date() {
                     print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Date Stop")
