@@ -40,7 +40,7 @@
 		0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */; };
 		0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDF1FBC401600095560 /* Get CSV.swift */; };
 		0DCAAFE21FBC419400095560 /* ProcessCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFE11FBC419400095560 /* ProcessCSV.swift */; };
-		0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */; };
+		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
 		0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */; };
 		B08A1A7465CB3A9D1D46390C /* Pods_Channel_System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBA9CC47CBC145BD7F8FEE9 /* Pods_Channel_System.framework */; };
@@ -82,7 +82,7 @@
 		0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Long Entry.swift"; sourceTree = "<group>"; };
 		0DCAAFDF1FBC401600095560 /* Get CSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV.swift"; sourceTree = "<group>"; };
 		0DCAAFE11FBC419400095560 /* ProcessCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCSV.swift; sourceTree = "<group>"; };
-		0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsViewController.swift; sourceTree = "<group>"; };
+		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
 		0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart_iOS_v2.0.0.1640_SDK/SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		9E4281AC1113B753A726175B /* Pods-Channel System.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Channel System.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Channel System/Pods-Channel System.debug.xcconfig"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 			children = (
 				0D949CDB1FA3B7B600960BA2 /* Main.storyboard */,
 				0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */,
-				0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */,
+				0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */,
 				0D771E061FAE5C5E006269DD /* ChartViewController.swift */,
 				0D5CEC751FB378A400762900 /* PortfolioViewController.swift */,
 				0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */,
@@ -353,7 +353,7 @@
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
-				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,
+				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,

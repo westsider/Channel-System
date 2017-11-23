@@ -1,5 +1,5 @@
 //
-//  SymbolsViewController.swift
+//  CandidatesVC.swift
 //  Channel System
 //
 //  Created by Warren Hansen on 10/31/17.
@@ -19,7 +19,9 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tasks = Prices().sortEntries()
+        let days = 100
+        title = "last \(days) days"
+        tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
     
     @IBAction func clearRealmAction(_ sender: Any) {
