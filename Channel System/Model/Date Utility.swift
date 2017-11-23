@@ -28,4 +28,12 @@ class DateHelper {
         let daysFromNow: Date = (Calendar.current as NSCalendar).date(byAdding: .day, value: days, to: Date(), options: [])!
         return daysFromNow
     }
+    
+//    func isThis(date: Date, newer:Date)-> Bool {
+//        if newer > date {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
 }

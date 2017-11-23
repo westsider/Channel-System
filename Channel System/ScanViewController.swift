@@ -15,47 +15,45 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var progressView: UIProgressView!
     
-    let dataFeed = DataFeed()
-    
     let prices = Prices()
     
     var updatedProgress: Float = 0
+    
     var incProgress: Float = 0
     
-    let universe = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV", "AAPL"]
+    let universe = ["SPY", "QQQ"] //,"AAPL", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
     let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
     let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
+    let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
+    
+    var counter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initProgressBar()
     }
     
-    func initProgressBar() {
-        let tickerCount = Float(universe.count)
-        let processCount = Float(5)
-        let divisor = Float(1)
-        incProgress = Float( divisor / (tickerCount * processCount ) )
-        print("\nProgress inc = \(incProgress)\n")
-        progressView.setProgress(incProgress, animated: true)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         
-        initially(deleteAll: true, printPrices: false, printTrades: false)
+        //initially(deleteAll: true, printPrices: false, printTrades: false)
 
         //MARK: - Check for realm data
         if ( Prices().allPricesCount() > 0 ) {
             print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
-            //MARK: - TODO - Get new prices from intrio
-            //MARK: - TODO - check entry
-            //MARK: - TODO - search for trade management scenario else segue to candidates
-            manageTradesOrShowEntries()
-            
+
+            // check if today > newest dat in realm
+            if (Prices().checkIfNew(date: Date())) {
+                //MARK: - Get new prices from intrio
+                getDataFromDataFeed(completion: self.datafeedBlock)
+            } else {
+                //MARK: - search for trade management scenario else segue to candidates
+                manageTradesOrShowEntries()
+            }
+
         } else {
             print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
             RealmHelpers().deleteAll()
@@ -103,6 +101,7 @@ class ScanViewController: UIViewController {
         }
         
     }
+    
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
     
     //MARK: - Get Data From CSV
@@ -110,12 +109,35 @@ class ScanViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Getting data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
-                self.dataFeed.getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
+                self.updateUI(with: "Getting local data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
+                DataFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
                 self.updateProgressBar()
             }
             self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
             self.calcSMA10(completion: self.smaBlock2)
+        }
+        DispatchQueue.main.async {
+            completion()
+        }
+    }
+    
+    //MARK: - Get Data From Datafeed
+    func getDataFromDataFeed(completion: @escaping () -> ()) {
+        
+        DispatchQueue.global(qos: .background).async {
+            for ( index, symbols ) in self.universe.enumerated() {
+                let current = symbols.replacingOccurrences(of: "2", with: "")
+                self.updateUI(with: "Getting remote data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
+                DataFeed().getLastPrice(ticker: symbols, debug: false, completion: {
+                    self.counter += 1
+                    print("\n----> counter: \(self.counter) universe: \(self.universe.count) <----\n")
+                    if ( self.counter == self.universe.count ) {
+                        self.updateUI(with: "All remote data has been downloaded!\n", spinIsOff: true)
+                        self.calcSMA10(completion: self.smaBlock2)
+                    }
+                })
+                self.updateProgressBar()
+            }
         }
         DispatchQueue.main.async {
             completion()
@@ -130,7 +152,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 10, debug: true, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
@@ -188,7 +210,7 @@ class ScanViewController: UIViewController {
             for ( index, symbols ) in self.universe.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing Entries for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
-                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: true)
+                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 Entry().calcLong(debug: false, prices: oneTicker, completion: self.entryBlock)
                 self.updateUI(with: "Finished Processing Entries for \(current)", spinIsOff: true)
                 self.updateProgressBar()
@@ -196,8 +218,8 @@ class ScanViewController: UIViewController {
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
-                let tickerToSend = self.universe[1]
-                print("\nSegue to Candidates with \(tickerToSend)\n")
+                //let tickerToSend = self.universe[1]
+                //print("\nSegue to Candidates with \(tickerToSend)\n")
                 self.segueToCandidatesVC()
             }
         }
@@ -215,6 +237,15 @@ class ScanViewController: UIViewController {
             print(with)
             self.updateLable?.text =  with
         }
+    }
+    
+    func initProgressBar() {
+        let tickerCount = Float(universe.count)
+        let processCount = Float(5)
+        let divisor = Float(1)
+        incProgress = Float( divisor / (tickerCount * processCount ) )
+        print("\nProgress inc = \(incProgress)\n")
+        progressView.setProgress(incProgress, animated: true)
     }
 
     func segueToChart(ticker: String) {

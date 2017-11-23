@@ -14,14 +14,6 @@ import CSV
 
 class DataFeed {
     
-    var lastPrice = [LastPrice]()
-    
-    var sortedPrices = [LastPrice]()
-    
-    var allSortedPrices = [[LastPrice]]()
-    
-    var symbolArray = [String]()
-    
     func getPricesFromCSV(count: Int, ticker: String,debug: Bool, completion: @escaping () -> ()) {
         
         // the call to csv
@@ -55,90 +47,54 @@ class DataFeed {
     }
     
     /// Get realtime ohlc
-    func getLastPrice(ticker: String, saveIt: Bool, debug: Bool, doneWork: @escaping (Bool) -> Void ) {
-        var counter = 0
-        var rowCounter = 0
-        for page in 1...3 {
-            print("requesting JSON for \(ticker) page \(page)")
-            if ( debug ) {  print("looking for \(ticker)...") }
-            doneWork(false)
-            // get last price from intrio
-            var request = "https://api.intrinio.com/prices?ticker=\(ticker)"
-            if (page > 1) {
-                request = "https://api.intrinio.com/prices?identifier=\(ticker)&page_number=\(page)"
-                // https://api.intrinio.com/prices?identifier=AAPL&page_number=1
-            }
-            let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
-            let password = "e6cf8f921bb621f398240e315ab79068"
-        
-            Alamofire.request("\(request)")
-                .authenticate(user: user, password: password)
-                .responseJSON { response in
-                    switch response.result {
-                    case .success(let value):
-                        let json = JSON(value)
-                        if ( debug ) { print("JSON: \(json)") }
-                        
-                        for data in json["data"].arrayValue {
-                            rowCounter += 1
-                            if ( rowCounter == 1 ) { print("Parsing page \(page) row 1 for \(ticker)")}
-                            let lastPriceObject = LastPrice()
-                            
-                            lastPriceObject.ticker = ticker
-                            
-                            if let date = data["date"].string {
-                                lastPriceObject.dateString = date
-                                lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
-                            }
-                            
-                            if let open = data["open"].double {
-                                lastPriceObject.open = open
-                            }
-                            
-                            if let high = data["high"].double {
-                                lastPriceObject.high = high
-                            }
-                            if let low = data["low"].double {
-                                lastPriceObject.low = low
-                            }
-                            
-                            if let close = data["close"].double {
-                                lastPriceObject.close = close
-                            }
-                            self.lastPrice.append(lastPriceObject)
+    func getLastPrice(ticker: String, debug: Bool, completion: @escaping () -> ()) {
+        // get last price from intrio
+        print("Requesting remote data for \(ticker)")
+        let request = "https://api.intrinio.com/prices?ticker=\(ticker)"
+        let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
+        let password = "e6cf8f921bb621f398240e315ab79068"
+        var isNewDate = false
+        Alamofire.request("\(request)")
+            .authenticate(user: user, password: password)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    if ( debug ) { print("JSON: \(json)") }
+                    for data in json["data"].arrayValue {
+                        let prices = Prices()
+                        prices.ticker = ticker
+                        if let date = data["date"].string {
+                            //print("\nHere is the date to test \(date)")
+                            prices.dateString = date
+                            prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
+                            isNewDate = Prices().checkIfNew(date: prices.date!)
+                            //print("This is the date downloaded \(date) isNewDate = \(String(describing: isNewDate))")
+                        }
+    // check last date in realm and add if this date < return
+//                        if ( !isNewDate ) {
+//                            print("not adding \(prices.ticker) for \(prices.dateString) because we already have it\n)")
+//                        }
+                        if let close = data["close"].double { prices.close = close }
+                        if let volume = data["volume"].double { prices.volume = volume }
+                        if let open = data["open"].double { prices.open = open }
+                        if let high = data["high"].double { prices.high = high }
+                        if let low = data["low"].double { prices.low = low }
+                        if ( isNewDate ) {
+                            print("we are adding \(prices.dateString) to realm\n")
+                            RealmHelpers().saveSymbolsToRealm(each: prices)
+                        } else {
+                            print("we are NOT adding \(prices.dateString) to realm\n")
                         }
                         
-                        counter += 1
-                        if ( counter == 3 ) {
-                            
-                            print("\(ticker) request complete")
-                            //self.sortPrices(arrayToSort: self.lastPrice)
-                            
-                            doneWork(true)
-                        }
-                        rowCounter = 0
-                    case .failure(let error):
-                        debugPrint(error)
                     }
-            }
-         }
+                    DispatchQueue.main.async { completion() }
+                    print("\(ticker) request complete")
+                    
+                case .failure(let error):
+                    debugPrint(error)
+                }
+         } // json complete
         
       }
-    
-    
-//    func returnSortedSymbol()-> [LastPrice]{
-//        print("returnSortedSymbol")
-//        return self.sortedPrices
-//    }
-//
-//    func printThis(priceSeries: [LastPrice]) {
-//        print("\nprintThis")
-//        for item in priceSeries {
-//            print("\(item.ticker!) \(item.date!)")
-//        }
-//    }
-//
-//    func sortPrices(arrayToSort: [LastPrice]) {
-//        sortedPrices = arrayToSort.sorted(by: { $0.date?.compare($1.date!) == .orderedAscending })
-//    }
 }

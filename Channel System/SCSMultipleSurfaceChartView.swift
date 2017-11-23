@@ -244,10 +244,6 @@ class SCSSyncMultiChartView: UIViewController {
         triggerDataSeries.acceptUnsortedData = true
         let sellTriggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
         sellTriggerDataSeries.acceptUnsortedData = true
-        
-        let items = dataFeed.sortedPrices
-        if ( debug ) { print("getting wPctR render series\narray Size = \(items.count)") }
-
         var wPctR = 0.0
         for ( index, things) in oneTicker.enumerated() {
             wPctR = things.wPctR
