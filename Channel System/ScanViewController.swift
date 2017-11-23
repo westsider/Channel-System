@@ -21,7 +21,7 @@ class ScanViewController: UIViewController {
     
     var incProgress: Float = 0
     
-    let universe = ["SPY"] //, "QQQ","AAPL", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
+    let universe = ["SPY", "QQQ","AAPL", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -53,7 +53,7 @@ class ScanViewController: UIViewController {
             getDataFromCSV(completion: self.csvBlock)
         } else {
             lastDateInRealm = Prices().getLastDateInRealm(debug: false)
-            countRealm = Prices().allPricesCount()
+            countRealm = Prices().allPricesCount() / universe.count
             //MARK: - Check for realm data
             if ( countRealm > 0 ) {
                 print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
@@ -163,7 +163,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 10, debug: true, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
