@@ -1,8 +1,8 @@
 //
-//  SCSMultipleSurfaceChartView.swift
+//  ChartViewController.swift
 //  SciChartSwiftDemo
 //
-//  Created byaWArren Hansen on 6/6/16.
+//  Created by Warren Hansen on 6/6/16.
 //  Copyright © 2016 SciChart Ltd. All rights reserved.
 //
 

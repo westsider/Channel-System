@@ -32,6 +32,8 @@ class ScanViewController: UIViewController {
     
     var counter = 0
     
+    var lastDateInRealm:Date!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initProgressBar()
@@ -40,15 +42,17 @@ class ScanViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
     
         //initially(deleteAll: true, printPrices: false, printTrades: false)
+        //getDataFromCSV(completion: self.csvBlock)
         //self.segueToCandidatesVC()
         //Prices().printAllPrices()
-        
+        lastDateInRealm = Prices().getLastDateInRealm(debug: false)
+
         //MARK: - Check for realm data
         if ( Prices().allPricesCount() > 0 ) {
             print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
 
-            // check if today > newest dat in realm
-            if (Prices().checkIfNew(date: Date(), debug: false)) {
+            // check if today > newest date in realm
+            if (Prices().checkIfNew(date: Date(), realmDate: lastDateInRealm, debug: false)) {
                 //MARK: - Get new prices from intrio
                 getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
             } else {
@@ -124,12 +128,10 @@ class ScanViewController: UIViewController {
     
     //MARK: - Get Data From Datafeed
     func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
-        
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Getting remote data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
-                DataFeed().getLastPrice(ticker: symbols, debug: true, completion: {
+                self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.universe.count)", spinIsOff: false)
+                DataFeed().getLastPrice(ticker: symbols, lastInRealm: self.lastDateInRealm, debug: false, completion: {
                     self.counter += 1
                     if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.universe.count) <----\n") }
                     if ( self.counter == self.universe.count ) {

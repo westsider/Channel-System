@@ -47,7 +47,7 @@ class DataFeed {
     }
     
     /// Get realtime ohlc
-    func getLastPrice(ticker: String, debug: Bool, completion: @escaping () -> ()) {
+    func getLastPrice(ticker: String, lastInRealm: Date, debug: Bool, completion: @escaping () -> ()) {
         // get last price from intrio
         if ( debug ) { print("Requesting remote data for \(ticker)") }
         let request = "https://api.intrinio.com/prices?ticker=\(ticker)"
@@ -68,7 +68,7 @@ class DataFeed {
                             if ( debug ) {  print("\nHere is the date to test \(date)") }
                             prices.dateString = date
                             prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
-                            isNewDate = Prices().checkIfNew(date: prices.date!, debug: false)
+                            isNewDate = Prices().checkIfNew(date: prices.date!, realmDate: lastInRealm, debug: false)
                             if ( debug ) { print("This is the date downloaded \(date) isNewDate = \(String(describing: isNewDate))") }
                         }
                         if let close = data["close"].double { prices.close = close }

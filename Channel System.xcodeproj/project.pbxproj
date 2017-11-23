@@ -22,7 +22,7 @@
 		0D47FA951FC0DE9E00A1F123 /* QQQ2.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D47FA941FC0DE9E00A1F123 /* QQQ2.csv */; };
 		0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5CEC751FB378A400762900 /* PortfolioViewController.swift */; };
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
-		0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */; };
+		0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* ChartViewController.swift */; };
 		0D771E0B1FAE627F006269DD /* EURUSD_Daily.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */; };
 		0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */; };
 		0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */; };
@@ -62,7 +62,7 @@
 		0D47FA941FC0DE9E00A1F123 /* QQQ2.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = QQQ2.csv; sourceTree = "<group>"; };
 		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
-		0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCSMultipleSurfaceChartView.swift; sourceTree = "<group>"; };
+		0D771E061FAE5C5E006269DD /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		0D771E0A1FAE627F006269DD /* EURUSD_Daily.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EURUSD_Daily.txt; sourceTree = "<group>"; };
 		0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageViewController.swift; sourceTree = "<group>"; };
 		0D949CD41FA3B7B600960BA2 /* Channel System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channel System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,7 +148,7 @@
 				0D949CDB1FA3B7B600960BA2 /* Main.storyboard */,
 				0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */,
 				0DCF74E81FA90EAB00617803 /* SymbolsViewController.swift */,
-				0D771E061FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift */,
+				0D771E061FAE5C5E006269DD /* ChartViewController.swift */,
 				0D5CEC751FB378A400762900 /* PortfolioViewController.swift */,
 				0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
@@ -351,7 +351,7 @@
 				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,
-				0D771E071FAE5C5E006269DD /* SCSMultipleSurfaceChartView.swift in Sources */,
+				0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* SymbolsViewController.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
