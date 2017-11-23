@@ -11,9 +11,11 @@ import RealmSwift
 
 class SMA {
     
-    func averageOf(period:Int, debug: Bool, prices: Results<Prices>, completion: @escaping () -> ()) {
+    func averageOf(period:Int, debug: Bool, priorCount: Int, prices: Results<Prices>, completion: @escaping () -> ()) {
         
         let sortedPrices = prices
+        
+        // count objects in old realm = 300
         
         var closes = [Double]()
         
@@ -40,20 +42,32 @@ class SMA {
         if ( period == 10 ) {
             for (index, eachAverage) in averages.enumerated() {
                 
-                let realm = try! Realm()
+                // skip value already calculated
+                if ( index < priorCount ) {
+                    if ( debug ) { print("skip index \(index)") }
+                } else {
+                    if ( debug ) { print("calculating \(index)") }
                 
-                try! realm.write {
-                    sortedPrices[index].movAvg10 = eachAverage
+                    let realm = try! Realm()
+                    try! realm.write {
+                        sortedPrices[index].movAvg10 = eachAverage
+                    }
+                    if ( debug ) {print("\(sortedPrices[index].close) \(eachAverage)") }
                 }
-                //if ( debug ) {print("\(sortedPrices[index].close!) \(eachAverage)") }
             }
         } else {
             for (index, eachAverage) in averages.enumerated() {
                 
-                //if ( debug ) { print("\(sortedPrices[index].close!) \(eachAverage)") }
-                let realm = try! Realm()
-                try! realm.write {
-                    sortedPrices[index].movAvg200 = eachAverage
+                // skip value already calculated
+                if ( index < priorCount ) {
+                    if ( debug ) { print("skip index \(index)") }
+                } else {
+                    if ( debug ) { print("calculating \(index)") }
+                    let realm = try! Realm()
+                    try! realm.write {
+                        sortedPrices[index].movAvg200 = eachAverage
+                    }
+                    if ( debug ) { print("\(sortedPrices[index].close) \(eachAverage)") }
                 }
             }
         }

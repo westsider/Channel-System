@@ -34,6 +34,10 @@ class ScanViewController: UIViewController {
     
     var lastDateInRealm:Date!
     
+    var countRealm = 0
+    
+    let reset = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initProgressBar()
@@ -41,29 +45,33 @@ class ScanViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
     
-        //initially(deleteAll: true, printPrices: false, printTrades: false)
         //getDataFromCSV(completion: self.csvBlock)
         //self.segueToCandidatesVC()
         //Prices().printAllPrices()
-        lastDateInRealm = Prices().getLastDateInRealm(debug: false)
-
-        //MARK: - Check for realm data
-        if ( Prices().allPricesCount() > 0 ) {
-            print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
-
-            // check if today > newest date in realm
-            if (Prices().checkIfNew(date: Date(), realmDate: lastDateInRealm, debug: false)) {
-                //MARK: - Get new prices from intrio
-                getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
-            } else {
-                //MARK: - search for trade management scenario else segue to candidates
-                manageTradesOrShowEntries()
-            }
-
-        } else {
-            print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
-            RealmHelpers().deleteAll()
+        if ( reset ) {
+            initially(deleteAll: true, printPrices: false, printTrades: false)
             getDataFromCSV(completion: self.csvBlock)
+        } else {
+            lastDateInRealm = Prices().getLastDateInRealm(debug: false)
+            countRealm = Prices().allPricesCount()
+            //MARK: - Check for realm data
+            if ( countRealm > 0 ) {
+                print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
+
+                // check if today > newest date in realm
+                if (Prices().checkIfNew(date: Date(), realmDate: lastDateInRealm, debug: false)) {
+                    //MARK: - Get new prices from intrio
+                    getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+                } else {
+                    //MARK: - search for trade management scenario else segue to candidates
+                    manageTradesOrShowEntries()
+                }
+
+            } else {
+                print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
+                RealmHelpers().deleteAll()
+                getDataFromCSV(completion: self.csvBlock)
+            }
         }
     }
     
@@ -155,7 +163,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 10, debug: false, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
@@ -175,7 +183,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing SMA(200) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 200, debug: false, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 200, debug: false, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(200) for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
@@ -195,7 +203,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing PctR for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                PctR().williamsPctR(debug: false, prices: oneTicker, completion: self.wPctRBlock)
+                PctR().williamsPctR(priorCount: self.countRealm, debug: false, prices: oneTicker, completion: self.wPctRBlock)
                 self.updateUI(with: "Finished Processing PctR for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
@@ -214,7 +222,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing Entries for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                Entry().calcLong(debug: false, prices: oneTicker, completion: self.entryBlock)
+                Entry().calcLong(priorCount: self.countRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
                 self.updateUI(with: "Finished Processing Entries for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }

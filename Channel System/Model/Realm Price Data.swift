@@ -38,7 +38,12 @@ class Prices: Object {
     func allPricesCount()-> Int {
         let realm = try! Realm()
         let allPrices = realm.objects(Prices.self)
-        return allPrices.count
+        if ( allPrices.count == 0 ) {
+            return 0
+        } else {
+           return allPrices.count
+        }
+        
     }
     
     func printAllPrices() {
