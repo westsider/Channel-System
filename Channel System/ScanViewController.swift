@@ -21,7 +21,7 @@ class ScanViewController: UIViewController {
     
     var incProgress: Float = 0
     
-    let universe = ["SPY", "QQQ"] //,"AAPL", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
+    let universe = ["SPY"] //, "QQQ","AAPL", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -38,27 +38,29 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+    
         //initially(deleteAll: true, printPrices: false, printTrades: false)
-
-        //MARK: - Check for realm data
-        if ( Prices().allPricesCount() > 0 ) {
-            print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
-
-            // check if today > newest dat in realm
-            if (Prices().checkIfNew(date: Date())) {
-                //MARK: - Get new prices from intrio
-                getDataFromDataFeed(completion: self.datafeedBlock)
-            } else {
-                //MARK: - search for trade management scenario else segue to candidates
-                manageTradesOrShowEntries()
-            }
-
-        } else {
-            print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
-            RealmHelpers().deleteAll()
-            getDataFromCSV(completion: self.csvBlock)
-        }
+self.segueToCandidatesVC()
+        Prices().printAllPrices()
+        
+//        //MARK: - Check for realm data
+//        if ( Prices().allPricesCount() > 0 ) {
+//            print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
+//
+//            // check if today > newest dat in realm
+//            if (Prices().checkIfNew(date: Date())) {
+//                //MARK: - Get new prices from intrio
+//                getDataFromDataFeed(completion: self.datafeedBlock)
+//            } else {
+//                //MARK: - search for trade management scenario else segue to candidates
+//                manageTradesOrShowEntries()
+//            }
+//
+//        } else {
+//            print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
+//            RealmHelpers().deleteAll()
+//            getDataFromCSV(completion: self.csvBlock)
+//        }
     }
     
     func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
@@ -99,7 +101,6 @@ class ScanViewController: UIViewController {
             // exit here if no entries found
             segueToCandidatesVC()
         }
-        
     }
     
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
@@ -152,7 +153,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: true, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 10, debug: false, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }

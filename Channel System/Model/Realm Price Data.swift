@@ -45,7 +45,7 @@ class Prices: Object {
         let realm = try! Realm()
         let allPrices = realm.objects(Prices.self)
         for each in allPrices {
-            print("\(each.ticker) \(each.dateString)")
+            print("\(each.ticker) \(each.date!) \(each.close)")
         }
     }
     //MARK: - Sort One Ticker

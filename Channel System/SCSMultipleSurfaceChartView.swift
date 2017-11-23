@@ -47,6 +47,10 @@ class SCSSyncMultiChartView: UIViewController {
         title = ticker; print(ticker)
         completeConfiguration()
     }
+    //MARK: - Add Pices Series
+    fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
+        surface.renderableSeries.add(getCandleRenderSeries(debug: true, isReverse:false,  xID: xID, yID: yID))
+    }
     //MARK: - Get Candle Render Series
     fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
         
@@ -55,12 +59,12 @@ class SCSSyncMultiChartView: UIViewController {
         let downBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
         let upWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)
         let downWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
-        let ohlcDataSeries = SCIOhlcDataSeries(xType: .double, yType: .double)
+let ohlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
         ohlcDataSeries.acceptUnsortedData = true
         
-        for ( index, things) in oneTicker.enumerated() {
-            if ( debug ) { print("\(things.open) \(things.high) \(things.low) \(things.close)") }
-            ohlcDataSeries.appendX(SCIGeneric(index),
+        for things in oneTicker {
+            if ( debug ) { print("\(things.date!) \(things.open) \(things.high) \(things.low) \(things.close)") }
+            ohlcDataSeries.appendX(SCIGeneric(things.date!),
                                    open: SCIGeneric(things.open),
                                    high: SCIGeneric(things.high),
                                    low: SCIGeneric(things.low),
@@ -73,7 +77,6 @@ class SCSSyncMultiChartView: UIViewController {
         candleRendereSeries.fillDownBrushStyle = downBrush
         candleRendereSeries.strokeUpStyle = upWickPen
         candleRendereSeries.strokeDownStyle = downWickPen
-        
         candleRendereSeries.xAxisId = xID
         candleRendereSeries.yAxisId = yID
         
@@ -83,41 +86,6 @@ class SCSSyncMultiChartView: UIViewController {
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
         segueToManageVC(taskID: taskIdSelected, action: "Entry For")
-        
-//        if let close = oneTicker.last?.close {
-//            let stopDistance = Double(close) * 0.03
-//            let stop = Double(close) - stopDistance
-//            let target = Double(close) + stopDistance
-//            let stopString = String(format: "%.2f", stop)
-//            let risk = 50
-//            let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: risk)
-//            let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"
-//
-//            print("\n\(message)")
-//            print("Max Gain and Loss: \(stopDistance * Double(shares))\n")
-//
-//            let alert = UIAlertController(title: "\(self.ticker) Entry", message: message, preferredStyle: UIAlertControllerStyle.alert)
-//            let action = UIAlertAction(title: "Record", style: .default) { (alertAction) in
-//                //MARK: - TODO make textField error proof
-//                let textField = alert.textFields![0] as UITextField
-//                if let entryString = textField.text {
-//                    RealmHelpers().makeEntry(taskID: (self.oneTicker.last?.taskID)!, entry: Double(entryString)!, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
-//                    self.sequeToPortfolio()
-//                }
-//            }
-//            let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
-//            }
-//            alert.addTextField { (textField) in
-//                textField.text = "\(close)"
-//                textField.keyboardAppearance = .dark
-//                textField.keyboardType = .decimalPad
-//            }
-//            alert.addAction(cancel)
-//            alert.addAction(action)
-//            present(alert, animated:true, completion: nil)
-//        } else {
-//            print("Trouble getting Ticker")
-//        }
     }
     
     func sequeToPortfolio() {
@@ -128,16 +96,14 @@ class SCSSyncMultiChartView: UIViewController {
     //MARK: - Complete Configuration
     func completeConfiguration() {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
-
         configureChartSuraface()
         addAxis(BarsToShow: 75)
         addModifiers()
-        
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
     fileprivate func configureChartSuraface() {
@@ -161,7 +127,7 @@ class SCSSyncMultiChartView: UIViewController {
         let totalBars = oneTicker.count
         let rangeStart = totalBars - BarsToShow
         
-        let axisX1 = SCINumericAxis()
+        let axisX1 = SCICategoryDateTimeAxis()
         axisX1.axisId = axisX1Id
         rangeSync.attachAxis(axisX1)
         
@@ -179,7 +145,7 @@ class SCSSyncMultiChartView: UIViewController {
         axisY1.style.labelStyle.fontSize = 14
         sciChartView1.yAxes.add(axisY1)
         
-        let axisX2 = SCINumericAxis()
+        let axisX2 = SCICategoryDateTimeAxis()
         axisX2.axisId = axisX2Id
         rangeSync.attachAxis(axisX2)
         axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
@@ -223,10 +189,7 @@ class SCSSyncMultiChartView: UIViewController {
         modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView2.chartModifiers = modifierGroup
     }
-    //MARK: - Add Pices Series
-    fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
-        surface.renderableSeries.add(getCandleRenderSeries(debug: false, isReverse:false,  xID: xID, yID: yID))
-    }
+
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
          for ( index, things) in oneTicker.enumerated() {
@@ -238,19 +201,19 @@ class SCSSyncMultiChartView: UIViewController {
     }
     //MARK: - pctR
     fileprivate func addWPctRSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
-        let indicatorDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
+        let indicatorDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
         indicatorDataSeries.acceptUnsortedData = true
-        let triggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
+        let triggerDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
         triggerDataSeries.acceptUnsortedData = true
-        let sellTriggerDataSeries = SCIXyDataSeries(xType: .float, yType: .float)
+        let sellTriggerDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
         sellTriggerDataSeries.acceptUnsortedData = true
         var wPctR = 0.0
-        for ( index, things) in oneTicker.enumerated() {
+        for things in oneTicker {
             wPctR = things.wPctR
             if ( debug ) { print("c:\(things.close) wPctR: \(wPctR)") }
-            indicatorDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(wPctR))
-            triggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-20.0))
-            sellTriggerDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(-80.0))
+            indicatorDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(wPctR))
+            triggerDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(-20.0))
+            sellTriggerDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(-80.0))
         }
         
         let indicatorRenderSeries = SCIFastLineRenderableSeries()
@@ -277,11 +240,11 @@ class SCSSyncMultiChartView: UIViewController {
     }
     //MARK: - SMA 10
     fileprivate func addFastSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
-        let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let smaDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
         var lastValue = SCIGeneric(0.0)
         //let items = dataFeed.sortedPrices
-        for ( index, things) in oneTicker.enumerated() {
-            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg10))
+        for ( things) in oneTicker {
+            smaDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.movAvg10))
             lastValue = SCIGeneric(things.movAvg10)
         }
         
@@ -297,11 +260,11 @@ class SCSSyncMultiChartView: UIViewController {
     }
     //MARK: - SMA 200
     fileprivate func addSlowSmaSeries(surface:SCIChartSurface, xID:String, yID:String)  {
-        let smaDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let smaDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
         var lastValue = SCIGeneric(0.0)
         //let items = dataFeed.sortedPrices
-        for ( index, things) in oneTicker.enumerated() {
-            smaDataSeries.appendX(SCIGeneric(index), y: SCIGeneric(things.movAvg200))
+        for things in oneTicker {
+            smaDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.movAvg200))
             lastValue = SCIGeneric(things.movAvg200)
         }
         let renderSeries = SCIFastLineRenderableSeries()
