@@ -85,19 +85,21 @@ class Prices: Object {
         let lastTicker = realm.objects(Prices.self).filter("taskID == %@", taskID).last!
         return lastTicker.taskID
     }
-    func checkIfNew(date:Date)-> Bool {
+    func checkIfNew(date:Date, debug: Bool)-> Bool {
         var isNewer = false
         let realm = try! Realm()
         let lastTicker = realm.objects(Prices.self).first!
         let realmDate = lastTicker.date
-        //print("Last date in realm \(String(describing: realmDate!)) vs new date: \(date))")
+        if ( debug ) {print("Last date in realm \(String(describing: realmDate!)) vs new date: \(date))")}
         
         if date > realmDate! {
-//            print("New Date is greater then realm date")
-//            print("is a new date")
+            if ( debug ) {
+                print("New Date is greater then realm date")
+                print("is a new date")
+            }
             isNewer =  true
         } else {
-            //print("---->    is not a new date <---- ")
+            if ( debug ) { print("---->    is not a new date <---- ") }
             isNewer =  false
         }
         return isNewer

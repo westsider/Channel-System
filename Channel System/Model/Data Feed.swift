@@ -49,7 +49,7 @@ class DataFeed {
     /// Get realtime ohlc
     func getLastPrice(ticker: String, debug: Bool, completion: @escaping () -> ()) {
         // get last price from intrio
-        print("Requesting remote data for \(ticker)")
+        if ( debug ) { print("Requesting remote data for \(ticker)") }
         let request = "https://api.intrinio.com/prices?ticker=\(ticker)"
         let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
         let password = "e6cf8f921bb621f398240e315ab79068"
@@ -65,36 +65,30 @@ class DataFeed {
                         let prices = Prices()
                         prices.ticker = ticker
                         if let date = data["date"].string {
-                            //print("\nHere is the date to test \(date)")
+                            if ( debug ) {  print("\nHere is the date to test \(date)") }
                             prices.dateString = date
                             prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
-                            isNewDate = Prices().checkIfNew(date: prices.date!)
-                            //print("This is the date downloaded \(date) isNewDate = \(String(describing: isNewDate))")
+                            isNewDate = Prices().checkIfNew(date: prices.date!, debug: false)
+                            if ( debug ) { print("This is the date downloaded \(date) isNewDate = \(String(describing: isNewDate))") }
                         }
-    // check last date in realm and add if this date < return
-//                        if ( !isNewDate ) {
-//                            print("not adding \(prices.ticker) for \(prices.dateString) because we already have it\n)")
-//                        }
                         if let close = data["close"].double { prices.close = close }
                         if let volume = data["volume"].double { prices.volume = volume }
                         if let open = data["open"].double { prices.open = open }
                         if let high = data["high"].double { prices.high = high }
                         if let low = data["low"].double { prices.low = low }
                         if ( isNewDate ) {
-                            print("we are adding \(prices.dateString) to realm\n")
+                            if ( debug ) { print("we are adding \(prices.dateString) to realm\n") }
                             RealmHelpers().saveSymbolsToRealm(each: prices)
                         } else {
-                            print("we are NOT adding \(prices.dateString) to realm\n")
+                            if ( debug ) { print("we are NOT adding \(prices.dateString) to realm\n") }
                         }
-                        
                     }
                     DispatchQueue.main.async { completion() }
-                    print("\(ticker) request complete")
+                    if ( debug ) { print("\(ticker) request complete") }
                     
                 case .failure(let error):
                     debugPrint(error)
                 }
-         } // json complete
-        
+         }
       }
 }

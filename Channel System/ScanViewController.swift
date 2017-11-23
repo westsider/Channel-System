@@ -40,27 +40,27 @@ class ScanViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
     
         //initially(deleteAll: true, printPrices: false, printTrades: false)
-self.segueToCandidatesVC()
-        Prices().printAllPrices()
+        //self.segueToCandidatesVC()
+        //Prices().printAllPrices()
         
-//        //MARK: - Check for realm data
-//        if ( Prices().allPricesCount() > 0 ) {
-//            print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
-//
-//            // check if today > newest dat in realm
-//            if (Prices().checkIfNew(date: Date())) {
-//                //MARK: - Get new prices from intrio
-//                getDataFromDataFeed(completion: self.datafeedBlock)
-//            } else {
-//                //MARK: - search for trade management scenario else segue to candidates
-//                manageTradesOrShowEntries()
-//            }
-//
-//        } else {
-//            print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
-//            RealmHelpers().deleteAll()
-//            getDataFromCSV(completion: self.csvBlock)
-//        }
+        //MARK: - Check for realm data
+        if ( Prices().allPricesCount() > 0 ) {
+            print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
+
+            // check if today > newest dat in realm
+            if (Prices().checkIfNew(date: Date(), debug: false)) {
+                //MARK: - Get new prices from intrio
+                getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+            } else {
+                //MARK: - search for trade management scenario else segue to candidates
+                manageTradesOrShowEntries()
+            }
+
+        } else {
+            print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
+            RealmHelpers().deleteAll()
+            getDataFromCSV(completion: self.csvBlock)
+        }
     }
     
     func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
@@ -123,15 +123,15 @@ self.segueToCandidatesVC()
     }
     
     //MARK: - Get Data From Datafeed
-    func getDataFromDataFeed(completion: @escaping () -> ()) {
+    func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
         
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.universe.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Getting remote data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
-                DataFeed().getLastPrice(ticker: symbols, debug: false, completion: {
+                DataFeed().getLastPrice(ticker: symbols, debug: true, completion: {
                     self.counter += 1
-                    print("\n----> counter: \(self.counter) universe: \(self.universe.count) <----\n")
+                    if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.universe.count) <----\n") }
                     if ( self.counter == self.universe.count ) {
                         self.updateUI(with: "All remote data has been downloaded!\n", spinIsOff: true)
                         self.calcSMA10(completion: self.smaBlock2)

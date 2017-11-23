@@ -49,17 +49,17 @@ class SCSSyncMultiChartView: UIViewController {
     }
     //MARK: - Add Pices Series
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
-        surface.renderableSeries.add(getCandleRenderSeries(debug: true, isReverse:false,  xID: xID, yID: yID))
+        surface.renderableSeries.add(getCandleRenderSeries(debug: false, xID: xID, yID: yID))
     }
     //MARK: - Get Candle Render Series
-    fileprivate func getCandleRenderSeries(debug: false, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
+    fileprivate func getCandleRenderSeries(debug: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
         
         print("\nPopulating candle series\n")
         let upBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         let downBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
         let upWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), withThickness: 0.7)
         let downWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
-let ohlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
+        let ohlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
         ohlcDataSeries.acceptUnsortedData = true
         
         for things in oneTicker {
