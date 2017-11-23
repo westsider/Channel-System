@@ -52,7 +52,7 @@ class SCSSyncMultiChartView: UIViewController {
         surface.renderableSeries.add(getCandleRenderSeries(debug: true, isReverse:false,  xID: xID, yID: yID))
     }
     //MARK: - Get Candle Render Series
-    fileprivate func getCandleRenderSeries(debug: Bool, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
+    fileprivate func getCandleRenderSeries(debug: false, isReverse: Bool, xID:String, yID:String) -> SCIFastCandlestickRenderableSeries {
         
         print("\nPopulating candle series\n")
         let upBrush = SCISolidBrushStyle(color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
@@ -103,7 +103,7 @@ let ohlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
     }
     
     fileprivate func configureChartSuraface() {
