@@ -71,7 +71,7 @@ class Prices: Object {
     func sortEntriesBy(recent: Bool, days: Int)-> Results<Prices> {
         let realm = try! Realm()
         let allEntries = realm.objects(Prices.self).filter("longEntry == %@", true)
-        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
+        let sortDate = allEntries.sorted(byKeyPath: "date", ascending: false)
 
         if ( recent ) {
             let yesterday = Calendar.current.date(byAdding: .day, value: -days, to: Date())
@@ -79,13 +79,10 @@ class Prices: Object {
             // "inTrade = true AND exitedTrade = false AND taskID == %@"
             let predicate = NSPredicate(format: "longEntry = true AND date > %@", specificNSDate)
             let results = realm.objects(Prices.self).filter(predicate)
-            for price in results {
-                print("\(price.dateString)")
-            }
-            
-            return results
+            let resultsSortDate = results.sorted(byKeyPath: "date", ascending: false)
+            return resultsSortDate
         } else {
-             return sortedByDate
+             return sortDate
         }
     }
     //MARK: - Get Price From Task ID
