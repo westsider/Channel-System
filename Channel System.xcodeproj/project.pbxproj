@@ -31,7 +31,7 @@
 		0D949CDF1FA3B7B600960BA2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */; };
 		0D949CE21FA3B7B600960BA2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */; };
 		0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CE91FA3B82500960BA2 /* Data Feed.swift */; };
-		0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */; };
+		0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Prices.swift */; };
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
 		0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */; };
 		0DCAAFD71FBC37D200095560 /* Price Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFD61FBC37D200095560 /* Price Temp.swift */; };
@@ -73,7 +73,7 @@
 		0D949CE11FA3B7B600960BA2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0D949CE31FA3B7B600960BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D949CE91FA3B82500960BA2 /* Data Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Feed.swift"; sourceTree = "<group>"; };
-		0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Price Data.swift"; sourceTree = "<group>"; };
+		0D949CEB1FA3BD3000960BA2 /* Prices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prices.swift; sourceTree = "<group>"; };
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
 		0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Helpers.swift"; sourceTree = "<group>"; };
 		0DCAAFD61FBC37D200095560 /* Price Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Price Temp.swift"; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 				0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */,
 				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
-				0D949CEB1FA3BD3000960BA2 /* Realm Price Data.swift */,
+				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
 				0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */,
 				0DCAAFDE1FBC3EF600095560 /* Indicators */,
 				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
@@ -356,7 +356,7 @@
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
-				0D949CEC1FA3BD3000960BA2 /* Realm Price Data.swift in Sources */,
+				0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */,
 				0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */,
 				0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */,
 				0DCAAFDB1FBC3AF200095560 /* PctR.swift in Sources */,

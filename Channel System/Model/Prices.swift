@@ -1,5 +1,5 @@
 //
-//  Realm Price Data.swift
+//  Prices.swift
 //  Channel System
 //
 //  Created by Warren Hansen on 10/27/17.

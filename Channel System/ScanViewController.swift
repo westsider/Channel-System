@@ -38,9 +38,12 @@ class ScanViewController: UIViewController {
     
     let reset = false
     
+    var updateRealm = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initProgressBar()
+        updateRealm = DateHelper().realmNotCurrent(debug: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,8 +63,12 @@ class ScanViewController: UIViewController {
 
                 // check if today > newest date in realm
                 if (Prices().checkIfNew(date: Date(), realmDate: lastDateInRealm, debug: false)) {
-                    //MARK: - Get new prices from intrio
-                    getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+                    //MARK: - Get new prices from intrio if needed
+                    if ( updateRealm ) {
+                        getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+                    } else {
+                        segueToCandidatesVC()
+                    }
                 } else {
                     //MARK: - search for trade management scenario else segue to candidates
                     manageTradesOrShowEntries()
@@ -163,7 +170,7 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: true, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 10, debug: false, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
@@ -229,8 +236,6 @@ class ScanViewController: UIViewController {
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
-                //let tickerToSend = self.universe[1]
-                //print("\nSegue to Candidates with \(tickerToSend)\n")
                 self.segueToCandidatesVC()
             }
         }
