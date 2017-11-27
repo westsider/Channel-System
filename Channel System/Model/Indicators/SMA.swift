@@ -15,8 +15,6 @@ class SMA {
         
         let sortedPrices = prices
         
-        // count objects in old realm = 300
-        
         var closes = [Double]()
         
         for eachClose in sortedPrices {
@@ -37,49 +35,34 @@ class SMA {
                 averages.append(close)
             }
         }
-        
+       
         if ( debug ) { print("\nFinished calc for\(period) SMA for \(String(describing: sortedPrices.last!.ticker))\n") }
         if ( period == 10 ) {
+            print("\n---> num of 10 SMA \(averages.count) prior count \(priorCount) closes = \(closes.count) <---\n")
             for (index, eachAverage) in averages.enumerated() {
-                
-                // skip value already calculated
-                if ( index < priorCount ) {
-                    if ( debug ) { print("skip index \(index)") }
-                } else {
-                    if ( debug ) { print("calculating \(index)") }
-                
+                // add indicator if none exists
+                if ( sortedPrices[index].movAvg10 == 0.0 ) {
+                    if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
                     let realm = try! Realm()
                     try! realm.write {
                         sortedPrices[index].movAvg10 = eachAverage
                     }
-                    if ( debug ) {print("\(sortedPrices[index].close) \(eachAverage)") }
                 }
             }
         } else {
             for (index, eachAverage) in averages.enumerated() {
                 
-                // skip value already calculated
-                if ( index < priorCount ) {
-                    if ( debug ) { print("skip index \(index)") }
-                } else {
-                    if ( debug ) { print("calculating \(index)") }
+                // add indicator if none exists
+                if ( sortedPrices[index].movAvg200 == 0.0 ) {
+                    if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
                     let realm = try! Realm()
                     try! realm.write {
                         sortedPrices[index].movAvg200 = eachAverage
                     }
-                    if ( debug ) { print("\(sortedPrices[index].close) \(eachAverage)") }
                 }
             }
         }
-        if (debug) {
-            // show SMA 10 on Spy
-            let smaTicker = Prices().sortOneTicker(ticker: "SPY", debug: false)
-            // Print results
-            for each in smaTicker {
-                
-                print("\(each.ticker) \(each.dateString) c:\(String(format: "%.02f", each.close)) 10:\(String(format: "%.02f",each.movAvg10))")
-            }
-        }
+
         DispatchQueue.main.async {
             completion()
         }

@@ -65,18 +65,16 @@ class PctR {
  
             if ( answer > 300 || answer < -300) {
                 print("\n----------> \(answer) is suspicious!\n")
-                answer = 0.00
+                answer = 0.01
             }
-            // skip value already calculated
-            if ( index < priorCount ) {
-                if ( debug ) { print("skip index \(index)") }
-            } else {
+            if ( sortedPrices[index].wPctR == 0.0 ) {
+                if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
                 let realm = try! Realm()
                 try! realm.write {
                     sortedPrices[index].wPctR = answer
                 }
+              
             }
-            
             //print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100")
         }
         if ( debug ) { print("\nFinished calc for wPctR for \(String(describing: prices.last!.ticker))\n") }

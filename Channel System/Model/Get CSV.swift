@@ -54,6 +54,25 @@ class GetCSV {
         return getCsvData
     }
     
+    func areTickersValid(megaSymbols: [String]) {
+        var counter = 0
+        let bundle = Bundle(for: ScanViewController.self)
+        let fileManager : FileManager   = FileManager.default
+        
+        for symbol in megaSymbols {
+            //print("\(symbol)")
+            if let filePath = bundle.path(forResource: symbol, ofType: "csv") {
+                if fileManager.fileExists(atPath: filePath) {
+                    // print("\(symbol) found")
+                }
+            } else {
+                counter += 1
+                print("\(symbol) not found #\(counter)")
+            }
+        }
+        print("All symbols found in csv database.")
+    }
+    
 //    func getCsvData(ticker: String, debug: Bool)-> [LastPrice]  {
 //
 //        var prices = [LastPrice]()

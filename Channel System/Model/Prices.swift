@@ -30,7 +30,7 @@ class Prices: Object {
     @objc dynamic var shares    = 0
     @objc dynamic var risk      = 0.00
     @objc dynamic var inTrade   = false
-    @objc dynamic var exitedTrade   = false
+    @objc dynamic var exitedTrade = false
     @objc dynamic var exitDate:Date = DateHelper().closeTradeIn(days: 7)
     @objc dynamic var profit    = 0.00
     @objc dynamic var loss      = 0.00
@@ -43,14 +43,18 @@ class Prices: Object {
         } else {
            return allPrices.count
         }
-        
     }
     
-    func printAllPrices() {
-        let realm = try! Realm()
-        let allPrices = realm.objects(Prices.self)
-        for each in allPrices {
-            print("\(each.ticker) \(each.date!) \(each.close)")
+    func printLastPrices(symbols: [String], last: Int) {
+        
+        for ticker in symbols {
+            let oneTicker = sortOneTicker(ticker: ticker, debug: false)
+            let totalCount = oneTicker.count
+            for (index, each )  in oneTicker.enumerated() {
+                if (index > totalCount-last) {
+                    print("\(each.ticker) \(each.dateString) c\(each.close) 10:\(each.movAvg10) 200:\(each.movAvg200)")
+                }
+            }
         }
     }
     //MARK: - Sort One Ticker

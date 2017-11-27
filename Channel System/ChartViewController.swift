@@ -97,7 +97,7 @@ class SCSSyncMultiChartView: UIViewController {
     func completeConfiguration() {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
         configureChartSuraface()
-        addAxis(BarsToShow: 75)
+        addAxis(BarsToShow: 20)
         addModifiers()
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)

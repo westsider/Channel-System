@@ -21,8 +21,6 @@ class ScanViewController: UIViewController {
     
     var incProgress: Float = 0
     
-    let universe = ["SPY", "QQQ","AAPL", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
-    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
     let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
@@ -32,59 +30,67 @@ class ScanViewController: UIViewController {
     
     var counter = 0
     
-    var lastDateInRealm:Date!
-    
-    var countRealm = 0
-    
-    let reset = false
-    
     var updateRealm = false
+    
+    var lastDateInRealm:Date!
+   
+    var megaSymbols = [String]()
+    
+    let resetAll = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initProgressBar()
-        updateRealm = DateHelper().realmNotCurrent(debug: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-    
-        //getDataFromCSV(completion: self.csvBlock)
-        //self.segueToCandidatesVC()
-        //Prices().printAllPrices()
-        if ( reset ) {
-            initially(deleteAll: true, printPrices: false, printTrades: false)
-            getDataFromCSV(completion: self.csvBlock)
-        } else {
-            lastDateInRealm = Prices().getLastDateInRealm(debug: false)
-            countRealm = Prices().allPricesCount() / universe.count
-            //MARK: - Check for realm data
-            if ( countRealm > 0 ) {
-                print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = show chart")
 
-                // check if today > newest date in realm
-                if (Prices().checkIfNew(date: Date(), realmDate: lastDateInRealm, debug: false)) {
-                    //MARK: - Get new prices from intrio if needed
-                    if ( updateRealm ) {
-                        getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
-                    } else {
-                        segueToCandidatesVC()
-                    }
+        // write an entry to test exits
+        // write a data cleaner no dates before 11/2014, no duplicate dates
+        // fix progress bar
+        
+        //MARK: - reset
+        if ( resetAll ) {
+            print("--> 0. <-- we are resetting")
+            initially(deleteAll: true, printPrices: true, printTrades: false)
+            megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
+            GetCSV().areTickersValid(megaSymbols: megaSymbols)
+            getDataFromCSV(completion: self.csvBlock)
+        }
+        //MARK: - dont reset
+        if ( !resetAll ) {
+            let allCountRealm = Prices().allPricesCount()
+            if ( allCountRealm  > 0 ) {
+                print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = check for new data")
+                updateRealm = DateHelper().realmNotCurrent(debug: true)
+                lastDateInRealm = Prices().getLastDateInRealm(debug: true) //- why do this twice?
+                megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
+                // not a good idea priorRealmCount = Prices().allPricesCount() / megaSymbols.count
+        
+            //MARK: - database not current - get new data
+                if ( updateRealm ) {
+                    getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+            //MARK: - Prices current check for candidates
                 } else {
                     //MARK: - search for trade management scenario else segue to candidates
                     manageTradesOrShowEntries()
                 }
 
             } else {
-                print("--> 2. <-- No Prices, get csv, calc SMA, segue to chart")
-                RealmHelpers().deleteAll()
+            //MARK: - First run
+                print("--> 2. <-- First Run, No Prices, get csv, calc SMA, segue to chart")
+                initially(deleteAll: true, printPrices: false, printTrades: false)
+                megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
+                GetCSV().areTickersValid(megaSymbols: megaSymbols)
                 getDataFromCSV(completion: self.csvBlock)
             }
         }
+
     }
     
     func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
         if ( deleteAll ) { RealmHelpers().deleteAll() }
-        if ( printPrices ) { Prices().printAllPrices() }
+        if ( printPrices ) { Prices().printLastPrices(symbols: megaSymbols, last: 4) }
         if ( printTrades ) { RealmHelpers().printOpenTrades() }
     }
     
@@ -127,9 +133,9 @@ class ScanViewController: UIViewController {
     //MARK: - Get Data From CSV
     func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
+            for ( index, symbols ) in self.megaSymbols.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Getting local data for \(current) \(index+1) of \( self.universe.count)", spinIsOff: false)
+                self.updateUI(with: "Getting local data for \(current) \(index+1) of \( self.megaSymbols.count)", spinIsOff: false)
                 DataFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
                 self.updateProgressBar()
             }
@@ -144,12 +150,12 @@ class ScanViewController: UIViewController {
     //MARK: - Get Data From Datafeed
     func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
-                self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.universe.count)", spinIsOff: false)
+            for ( index, symbols ) in self.megaSymbols.enumerated() {
+                self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.megaSymbols.count)", spinIsOff: false)
                 DataFeed().getLastPrice(ticker: symbols, lastInRealm: self.lastDateInRealm, debug: false, completion: {
                     self.counter += 1
-                    if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.universe.count) <----\n") }
-                    if ( self.counter == self.universe.count ) {
+                    if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.megaSymbols.count) <----\n") }
+                    if ( self.counter == self.megaSymbols.count ) {
                         self.updateUI(with: "All remote data has been downloaded!\n", spinIsOff: true)
                         self.calcSMA10(completion: self.smaBlock2)
                     }
@@ -166,12 +172,11 @@ class ScanViewController: UIViewController {
     func calcSMA10(completion: @escaping () -> ()) {
         self.updateUI(with: "Calulating SMA(10)...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Processing SMA(10) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+            for ( index, symbols ) in self.megaSymbols.enumerated() {
+                self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
-                self.updateUI(with: "Finished Processing SMA(10) for \(current)", spinIsOff: true)
+                SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, completion: self.smaBlock1)
+                self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
             }
             DispatchQueue.main.async {
@@ -186,12 +191,11 @@ class ScanViewController: UIViewController {
     func calcSMA200(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing SMA(200)...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Processing SMA(200) for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+            for ( index, symbols ) in self.megaSymbols.enumerated() {
+                self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 200, debug: false, priorCount: self.countRealm, prices: oneTicker, completion: self.smaBlock1)
-                self.updateUI(with: "Finished Processing SMA(200) for \(current)", spinIsOff: true)
+                SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, completion: self.smaBlock1)
+                self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
             }
             DispatchQueue.main.async {
@@ -206,11 +210,11 @@ class ScanViewController: UIViewController {
     func calcwPctR(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing PctR...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
+            for ( index, symbols ) in self.megaSymbols.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Processing PctR for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+                self.updateUI(with: "Processing PctR for \(current) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                PctR().williamsPctR(priorCount: self.countRealm, debug: false, prices: oneTicker, completion: self.wPctRBlock)
+                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, completion: self.wPctRBlock)
                 self.updateUI(with: "Finished Processing PctR for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
@@ -225,18 +229,21 @@ class ScanViewController: UIViewController {
     func calcEntries(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing Entries...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.universe.enumerated() {
+            for ( index, symbols ) in self.megaSymbols.enumerated() {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Processing Entries for \(current) \(index+1) of \(self.universe.count)", spinIsOff: false)
+                self.updateUI(with: "Processing Entries for \(current) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                Entry().calcLong(priorCount: self.countRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
+                Entry().calcLong(priorCount: oneTicker.count, debug: false, prices: oneTicker, completion: self.entryBlock)
                 self.updateUI(with: "Finished Processing Entries for \(current)", spinIsOff: true)
                 self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
-                self.segueToCandidatesVC()
+                print("\n-------> Now printing database <--------\n")
+                Prices().printLastPrices(symbols: self.megaSymbols, last: 4)
+                //self.segueToCandidatesVC()
+                self.manageTradesOrShowEntries()
             }
         }
     }
@@ -256,12 +263,13 @@ class ScanViewController: UIViewController {
     }
     
     func initProgressBar() {
-        let tickerCount = Float(universe.count)
+        let tickerCount = Float(megaSymbols.count)
         let processCount = Float(5)
         let divisor = Float(1)
         incProgress = Float( divisor / (tickerCount * processCount ) )
         print("\nProgress inc = \(incProgress)\n")
         progressView.setProgress(incProgress, animated: true)
+        progressView.isHidden = false
     }
 
     func segueToChart(ticker: String) {

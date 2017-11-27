@@ -19,7 +19,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let days = 10
+        let days = 100
         title = "last \(days) days"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
