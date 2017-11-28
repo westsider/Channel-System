@@ -24,7 +24,7 @@ class SymbolLists {
     
     let allSymbols = Symbols().indexes + Symbols().DOW30 + Symbols().ETF200
     
-    func uniqueElementsFrom(test3: Bool) -> [String] {
+    func uniqueElementsFrom(testTenOnly: Bool) -> [String] {
         var set = Set<String>()
         let result = allSymbols.filter {
             guard !set.contains($0) else {
@@ -33,7 +33,7 @@ class SymbolLists {
             set.insert($0)
             return true
         }
-        if ( test3 ) {
+        if ( testTenOnly ) {
             return Array(result.prefix(10))
         } else {
             return result

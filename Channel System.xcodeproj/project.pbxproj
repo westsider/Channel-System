@@ -272,7 +272,6 @@
 		0DCAAFDB1FBC3AF200095560 /* PctR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDA1FBC3AF200095560 /* PctR.swift */; };
 		0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */; };
 		0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDF1FBC401600095560 /* Get CSV.swift */; };
-		0DCAAFE21FBC419400095560 /* ProcessCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFE11FBC419400095560 /* ProcessCSV.swift */; };
 		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
 		0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */; };
@@ -547,7 +546,6 @@
 		0DCAAFDA1FBC3AF200095560 /* PctR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PctR.swift; sourceTree = "<group>"; };
 		0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Long Entry.swift"; sourceTree = "<group>"; };
 		0DCAAFDF1FBC401600095560 /* Get CSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV.swift"; sourceTree = "<group>"; };
-		0DCAAFE11FBC419400095560 /* ProcessCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCSV.swift; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
 		0DEFBCC21FA922F700C156B9 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart_iOS_v2.0.0.1640_SDK/SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
@@ -874,7 +872,6 @@
 				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
 				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
 				0DCAAFDF1FBC401600095560 /* Get CSV.swift */,
-				0DCAAFE11FBC419400095560 /* ProcessCSV.swift */,
 				0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */,
 				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
@@ -1277,7 +1274,6 @@
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
-				0DCAAFE21FBC419400095560 /* ProcessCSV.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
 				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
