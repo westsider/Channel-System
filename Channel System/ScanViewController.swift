@@ -41,7 +41,7 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     func checkDuplicates() {
         megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
         for ticker in megaSymbols {
@@ -76,7 +76,7 @@ class ScanViewController: UIViewController {
             if ( allCountRealm  > 0 ) {
                 print("--> 1. <--  check realm status first")
                 updateRealm = DateHelper().realmNotCurrent(debug: true)
-                lastDateInRealm = Prices().getLastDateInRealm(debug: true) //- why do this twice?
+// if check entries then make updateRealm = false manually
                 megaSymbols = SymbolLists().uniqueElementsFrom(test3: false)
                 
                 //MARK: - database not current - get new data
@@ -99,7 +99,39 @@ class ScanViewController: UIViewController {
                 getDataFromCSV(completion: self.csvBlock)
             }
         }
+        simPastEntries()
 
+    }
+    
+    func simPastEntries() {
+        // MSFT 2017/11/20 82.53
+        // DIA 2017/11/15 232.96
+        // IWM 2017/11/08  147.2
+        getRealmFrom(ticker: "MSFT", DateString: "2017/11/20")
+        getRealmFrom(ticker: "DIA", DateString: "2017/11/15")
+        getRealmFrom(ticker: "IWM", DateString: "2017/11/08")
+    }
+    
+    func getRealmFrom(ticker: String, DateString: String) {
+        let specificNSDate = DateHelper().convertToDateFrom(string: DateString, debug: false)
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "date == %@", specificNSDate as CVarArg)
+        let results = realm.objects(Prices.self).filter(predicate)
+        print("/nEntries to make:")
+        for each in results {
+            if ( each.ticker == ticker)  {
+                print("\(each.ticker) \(each.dateString) \(each.close)  \(each.taskID)")
+                
+                let close = each.close
+                let stopDistance = close * 0.03
+                let stop = close - stopDistance
+                let target = close + stopDistance
+                let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: 50)
+                let stopString = String(format: "%.2f", stop)
+                let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
+                //RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false)
+            }
+        }
     }
     
     func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
