@@ -871,14 +871,14 @@
 		0DEFBCBF1FA912BC00C156B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
+				0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */,
 				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
 				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
 				0DCAAFDF1FBC401600095560 /* Get CSV.swift */,
 				0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */,
 				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
-				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
-				0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */,
 				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
 				0D3108481FC8968D00E93CB3 /* constants.swift */,
 				0DCAAFDE1FBC3EF600095560 /* Indicators */,

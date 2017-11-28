@@ -28,6 +28,12 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         RealmHelpers().deleteAll()
     }
     
+    @IBAction func showIndexAction(_ sender: Any) {
+        
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
+        myVC.taskIdSelected = Prices().getLastTaskIDfrom(ticker: "SPY")
+        navigationController?.pushViewController(myVC, animated: true)
+    }
     // NOW Sugue to Portfolio
     @IBAction func readRealmContents(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController

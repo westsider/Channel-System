@@ -116,6 +116,13 @@ class Prices: Object {
         return sortedByDate
     }
     
+    func getLastTaskIDfrom(ticker:String)-> String {
+        
+        let realm = try! Realm()
+         let theIndex = realm.objects(Prices.self).filter("ticker == %@", ticker)
+        return theIndex.last!.taskID
+    }
+    
     func getLastTaskID()-> String {
         let realm = try! Realm()
         let lastTicker = realm.objects(Prices.self).filter("taskID == %@", taskID).last!
