@@ -60,7 +60,6 @@ class Prices: Object {
     //MARK: - Sort One Ticker
     func sortOneTicker(ticker:String, debug:Bool)-> Results<Prices> {
         let realm = try! Realm()
-        //let allPrices = realm.objects(Prices.self)
         let id = ticker
         let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
         let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
@@ -71,6 +70,24 @@ class Prices: Object {
         }
         return sortedByDate
     }
+    
+    func findDuplicates(ticker:String, debug:Bool){
+        let realm = try! Realm()
+        let id = ticker
+        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
+        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
+        var lastDate:Date?
+
+        for each in sortedByDate {
+            //print("\(String(describing: each.date )) \(String(describing: lastDate))")
+            if (each.date == lastDate ) {
+                print("\n====> Found Duplicate date \(each.dateString) <======\n")
+            }
+            lastDate = each.date
+        }
+        
+    }
+    
     //MARK: - Sort Entries
     func sortEntriesBy(recent: Bool, days: Int)-> Results<Prices> {
         let realm = try! Realm()

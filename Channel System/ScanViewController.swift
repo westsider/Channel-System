@@ -36,24 +36,36 @@ class ScanViewController: UIViewController {
    
     var megaSymbols = [String]()
     
-    let resetAll = false
+    let resetAll = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initProgressBar()
     }
     
+    func checkDuplicates() {
+        megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
+        for ticker in megaSymbols {
+            Prices().findDuplicates(ticker: ticker, debug: true)
+        }
+    }
+    
+    func checkEarlyDates() {
+        megaSymbols = SymbolLists().uniqueElementsFrom(test3: false)
+        for ticker in megaSymbols {
+            GetCSV().removeEarlyDates(ticker: ticker)
+        }
+    }
     override func viewDidAppear(_ animated: Bool) {
-
+                        //checkDuplicates()
+                        //checkEarlyDates()
         // write an entry to test exits
-        // write a data cleaner no dates before 11/2014, no duplicate dates
-        // fix progress bar
         
         //MARK: - reset
         if ( resetAll ) {
             print("--> 0. <-- we are resetting")
             initially(deleteAll: true, printPrices: true, printTrades: false)
-            megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
+            megaSymbols = SymbolLists().uniqueElementsFrom(test3: false)
+            initProgressBar()
             GetCSV().areTickersValid(megaSymbols: megaSymbols)
             getDataFromCSV(completion: self.csvBlock)
         }
@@ -64,7 +76,7 @@ class ScanViewController: UIViewController {
                 print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = check for new data")
                 updateRealm = DateHelper().realmNotCurrent(debug: true)
                 lastDateInRealm = Prices().getLastDateInRealm(debug: true) //- why do this twice?
-                megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
+                megaSymbols = SymbolLists().uniqueElementsFrom(test3: false)
                 // not a good idea priorRealmCount = Prices().allPricesCount() / megaSymbols.count
         
             //MARK: - database not current - get new data
@@ -263,9 +275,10 @@ class ScanViewController: UIViewController {
     }
     
     func initProgressBar() {
-        let tickerCount = Float(megaSymbols.count)
-        let processCount = Float(5)
-        let divisor = Float(1)
+        let tickerCount = Double(megaSymbols.count)
+        let processCount = Double(5)
+        let divisor = Double(1)
+        print("tickerCount \(tickerCount), processCount \(processCount), divisor \(divisor),")
         incProgress = Float( divisor / (tickerCount * processCount ) )
         print("\nProgress inc = \(incProgress)\n")
         progressView.setProgress(incProgress, animated: true)

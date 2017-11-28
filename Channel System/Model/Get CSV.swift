@@ -73,6 +73,29 @@ class GetCSV {
         print("All symbols found in csv database.")
     }
     
+    func removeEarlyDates(ticker:String) {
+        let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
+        let stream = InputStream(fileAtPath: filleURLProject!)!
+        let csv = try! CSVReader(stream: stream)
+        //"date","close","volume","open","high","low"
+        while let row = csv.next() {
+            //if ( debug ) { print("\(row)") }
+            let lastPriceObject = LastPrice()
+            
+            lastPriceObject.ticker = ticker
+            print("Loaded ticker \(ticker)")
+            let date = row[0]
+            lastPriceObject.dateString = date
+            let dateInRow  = DateHelper().convertToDateFrom(string: date, debug: false)
+            let test  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false) // "yyyy/MM/dd" 2014-11-25
+            if (test > dateInRow) {
+                print("\n-----> Found Early date for \(ticker) on \(date)\n")
+            }
+            
+            
+        }
+    }
+    
 //    func getCsvData(ticker: String, debug: Bool)-> [LastPrice]  {
 //
 //        var prices = [LastPrice]()
