@@ -36,7 +36,7 @@ class ScanViewController: UIViewController {
    
     var megaSymbols = [String]()
     
-    let resetAll = true
+    let resetAll = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,39 +58,41 @@ class ScanViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
                         //checkDuplicates()
                         //checkEarlyDates()
+        
         // write an entry to test exits
         
         //MARK: - reset
         if ( resetAll ) {
-            print("--> 0. <-- we are resetting")
+            print("--> 0. <-- we are resetting csv")
             initially(deleteAll: true, printPrices: true, printTrades: false)
             megaSymbols = SymbolLists().uniqueElementsFrom(test3: false)
             initProgressBar()
             GetCSV().areTickersValid(megaSymbols: megaSymbols)
             getDataFromCSV(completion: self.csvBlock)
         }
-        //MARK: - dont reset
+        //MARK: - dont reset get csv or datafeed
         if ( !resetAll ) {
             let allCountRealm = Prices().allPricesCount()
             if ( allCountRealm  > 0 ) {
-                print("--> 1. <-- Have Prices \(Prices().allPricesCount()) = check for new data")
+                print("--> 1. <--  check realm status first")
                 updateRealm = DateHelper().realmNotCurrent(debug: true)
                 lastDateInRealm = Prices().getLastDateInRealm(debug: true) //- why do this twice?
                 megaSymbols = SymbolLists().uniqueElementsFrom(test3: false)
-                // not a good idea priorRealmCount = Prices().allPricesCount() / megaSymbols.count
-        
-            //MARK: - database not current - get new data
+                
+                //MARK: - database not current - get new data
                 if ( updateRealm ) {
+                    print("--> 2. <-- database not current - get new data")
                     getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
-            //MARK: - Prices current check for candidates
+                //MARK: - Prices current check for candidates
                 } else {
+                    print("--> 3. <-- database is current - manage trades / show entries")
                     //MARK: - search for trade management scenario else segue to candidates
                     manageTradesOrShowEntries()
                 }
 
             } else {
-            //MARK: - First run
-                print("--> 2. <-- First Run, No Prices, get csv, calc SMA, segue to chart")
+            //MARK: - First run - this needs work, how can I get csv then datafeed?
+                print("--> 0.1 <-- First Run, No Prices, get csv, calc SMA, get new data")
                 initially(deleteAll: true, printPrices: false, printTrades: false)
                 megaSymbols = SymbolLists().uniqueElementsFrom(test3: true)
                 GetCSV().areTickersValid(megaSymbols: megaSymbols)
@@ -223,11 +225,10 @@ class ScanViewController: UIViewController {
         self.updateUI(with: "Processing PctR...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.megaSymbols.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Processing PctR for \(current) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
+                self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, completion: self.wPctRBlock)
-                self.updateUI(with: "Finished Processing PctR for \(current)", spinIsOff: true)
+                self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
             }
             DispatchQueue.main.async {
@@ -242,11 +243,10 @@ class ScanViewController: UIViewController {
         self.updateUI(with: "Processing Entries...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.megaSymbols.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Processing Entries for \(current) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
+                self.updateUI(with: "Processing Entries for \(symbols) \(index+1) of \(self.megaSymbols.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                Entry().calcLong(priorCount: oneTicker.count, debug: false, prices: oneTicker, completion: self.entryBlock)
-                self.updateUI(with: "Finished Processing Entries for \(current)", spinIsOff: true)
+                Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
+                self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
             }
             DispatchQueue.main.async {

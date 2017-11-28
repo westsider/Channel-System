@@ -44,7 +44,7 @@ class SCSSyncMultiChartView: UIViewController {
     override func viewDidLoad() {
         oneTicker = Prices().getFrom(taskID: taskIdSelected)
         ticker = (oneTicker.first?.ticker)!
-        title = ticker; print(ticker)
+        title = ticker
         completeConfiguration()
     }
     //MARK: - Add Pices Series
@@ -97,7 +97,7 @@ class SCSSyncMultiChartView: UIViewController {
     func completeConfiguration() {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
         configureChartSuraface()
-        addAxis(BarsToShow: 20)
+        addAxis(BarsToShow: 40)
         addModifiers()
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)

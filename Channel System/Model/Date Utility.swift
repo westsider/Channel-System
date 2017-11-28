@@ -30,10 +30,13 @@ class DateHelper {
     }
     
     func lastUpdateWasToday(debug: Bool)-> (Bool, Date ) {
+        let calendar = NSCalendar.current
         let lastUpdate = Prices().getLastDateInRealm(debug: false)
         if ( debug) { print("The last update was \(lastUpdate)") }
-        if ( today == lastUpdate ) {
-            return ( true, lastUpdate )
+        if ( debug ) { print("today \(today) lastUpdate \(lastUpdate)") }
+        if (calendar.isDateInToday(lastUpdate) )
+        {
+           return ( true, lastUpdate )
         } else {
             return ( false, lastUpdate )
         }
@@ -49,8 +52,9 @@ class DateHelper {
             second: 0,
             of: today)!
         
+        if ( debug ) { print("End Today: \(end_today)") }
         if ( lastUpdate >= end_today ) {
-            print("The time is after \(close[0]):\(close[1])")
+            if ( debug ) { print("The time is after \(close[0]):\(close[1])") }
             isMakretHours = true
             if ( debug ) { isMakretHours = true }
         } else {
@@ -61,15 +65,15 @@ class DateHelper {
     }
     
     func realmNotCurrent(debug: Bool)-> Bool {
-        let lastUpdateToday = lastUpdateWasToday(debug: false)
+        let lastUpdateToday = lastUpdateWasToday(debug: debug)
         
-        let yesLastPrint = wasLastPrint(close: [6,0], lastUpdate: lastUpdateToday.1, debug: debug)
+        let yesLastPrint = wasLastPrint(close: [0,0], lastUpdate: lastUpdateToday.1, debug: debug)
         if ( debug ) { print("lastUpdateToday: \(lastUpdateToday.0) \(lastUpdateToday.1) yesLastPrint: \(yesLastPrint)") }
         if(lastUpdateToday.0 && yesLastPrint) {
-            print("realm is current")
+            print("\nrealm is current!\n")
             return false
         } else {
-            print("realm is not current")
+            print("\nrealm is NOT current!\n")
             return true
             
         }
