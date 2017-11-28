@@ -36,59 +36,60 @@ class ScanViewController: UIViewController {
    
     var galaxie = [String]()
     
-    let resetAll = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-                        //checkDuplicates()
-                        //checkEarlyDates()
-        
-        //MARK: - reset
-        if ( resetAll ) {
-            print("--> 0. <-- we are resetting csv")
-            initially(deleteAll: true, printPrices: true, printTrades: false)
-            galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-            initProgressBar()
-            GetCSV().areTickersValid(megaSymbols: galaxie)
-            getDataFromCSV(completion: self.csvBlock)
-        }
-        //MARK: - dont reset get csv or datafeed
-        if ( !resetAll ) {
-            let allCountRealm = Prices().allPricesCount()
-            if ( allCountRealm  > 0 ) {
-                print("--> 1. <--  check realm status first")
-// if check entries then make updateRealm = false manually also - DONT GET NEW DATA UNTIL 2PM
-                updateRealm = DateHelper().realmNotCurrent(debug: true)
-                updateRealm = false
-                lastDateInRealm = Prices().getLastDateInRealm(debug: true)
-                galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-                
-                //MARK: - database not current - get new data
-                if ( updateRealm ) {
-                    print("--> 2. <-- database not current - get new data")
-                    getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
-                //MARK: - Prices current check for candidates
-                } else {
-                    print("--> 3. <-- database is current - manage trades / show entries")
-                    //MARK: - search for trade management scenario else segue to candidates
-                    manageTradesOrShowEntries()
-                }
-
-            } else {
-            //MARK: - First run - this needs work, how can I get csv then datafeed?
-                print("--> 0.1 <-- First Run, No Prices, get csv, calc SMA, get new data")
-                initially(deleteAll: true, printPrices: false, printTrades: false)
-                galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: true)
-                GetCSV().areTickersValid(megaSymbols: galaxie)
-                getDataFromCSV(completion: self.csvBlock)
-            }
-        }
-        //simPastEntries()
+        subsequentRuns()
+        //        if  UserDefaults.standard.object(forKey: "FirstRun") == nil || resetAll {
+        //            firstRun()
+        //        } else {
+        //            subsequentRuns()
+        //        }
     }
     
+    func subsequentRuns() {
+        print("\nThis is NOT the first run.\n")
+        updateRealm = DateHelper().realmNotCurrent(debug: true)
+        lastDateInRealm = Prices().getLastDateInRealm(debug: true)
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        
+        //MARK: - TODO - label - show last update time and date, updates today remaining
+        self.updateUI(with: LastUpdate().checkUpate(), spinIsOff: true)
+        
+        let realm = try! Realm()
+        let getDate = realm.objects(LastUpdate.self)
+        
+        for each in getDate {
+            debugPrint(each)
+        }
+    }
+    
+    func firstRun() {
+        print("\nThis was first run so I will load CSV historical data\n")
+        initially(deleteAll: true, printPrices: false, printTrades: false)
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        initProgressBar()
+        checkCSVEarlyDates()
+        GetCSV().areTickersValid(megaSymbols: galaxie)
+        getDataFromCSV(completion: self.csvBlock)
+        checkDuplicates()
+        // update nsuserdefaults
+        UserDefaults.standard.set(false, forKey: "FirstRun")
+    }
+    
+    @IBAction func getNewDataAction(_ sender: Any) {
+        //MARK: - get new data
+        LastUpdate().incUpdate()
+        getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+    }
+    
+    @IBAction func manageTradesAction(_ sender: Any) {
+        //MARK: - segue to candidates
+        manageTradesOrShowEntries()
+    }
+
     func simPastEntries() {
         getRealmFrom(ticker: "INTC", DateString: "2017/10/20") // exit after 7 days  Target Hit for INTC from 2017-11-28
         getRealmFrom(ticker: "EWD", DateString: "2017/10/17")  // stop hit   wPctR Hit for EWD from 2017-11-28
@@ -284,7 +285,7 @@ class ScanViewController: UIViewController {
     
     func updateUI(with: String, spinIsOff: Bool) {
         DispatchQueue.main.async {
-            print(with)
+            //print(with)
             self.updateLable?.text =  with
             self.updateProgressBar()
         }
@@ -294,21 +295,22 @@ class ScanViewController: UIViewController {
         let tickerCount = Double(galaxie.count)
         let processCount = Double(5)
         let divisor = Double(1)
-        print("tickerCount \(tickerCount), processCount \(processCount), divisor \(divisor),")
+        //print("tickerCount \(tickerCount), processCount \(processCount), divisor \(divisor),")
         incProgress = Float( divisor / (tickerCount * processCount ) )
-        print("\nProgress inc = \(incProgress)\n")
+        //print("\nProgress inc = \(incProgress)\n")
         progressView.setProgress(incProgress, animated: true)
         progressView.isHidden = false
     }
     
     func checkDuplicates() {
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: true)
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         for ticker in galaxie {
             Prices().findDuplicates(ticker: ticker, debug: true)
         }
+        print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
     }
     
-    func checkEarlyDates() {
+    func checkCSVEarlyDates() {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         for ticker in galaxie {
             GetCSV().removeEarlyDates(ticker: ticker)

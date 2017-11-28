@@ -24,6 +24,13 @@ class DateHelper {
         return date
     }
     
+    func convertToStringFrom(date: Date)-> String {
+        //let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy HH:mm"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter.string(from: date)
+    }
+    
     func closeTradeIn(days: Int)-> Date {
         let daysFromNow: Date = (Calendar.current as NSCalendar).date(byAdding: .day, value: days, to: Date(), options: [])!
         return daysFromNow

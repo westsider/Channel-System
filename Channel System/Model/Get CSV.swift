@@ -90,9 +90,9 @@ class GetCSV {
             let test  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false) // "yyyy/MM/dd" 2014-11-25
             if (test > dateInRow) {
                 print("\n-----> Found Early date for \(ticker) on \(date)\n")
+                
+               // MARK:- TODO - delete this row from csv
             }
-            
-            
         }
     }
 }

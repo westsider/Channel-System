@@ -20,26 +20,58 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scanning Markets..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="4fr-Wa-2ad">
                                 <rect key="frame" x="16" y="197" width="343" height="21.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21.5" id="bap-Ve-SIL"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.16666700000000001" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-TH-pwu">
-                                <rect key="frame" x="16" y="232.5" width="343" height="5"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="5" id="hpC-kY-gQ2"/>
-                                </constraints>
+                                <rect key="frame" x="16" y="232.5" width="343" height="2"/>
                             </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8N-0N-Aed">
+                                <rect key="frame" x="16" y="587" width="343" height="30"/>
+                                <color key="backgroundColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Manage Trades">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="manageTradesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fRS-MX-05C"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gtg-gI-fW5">
+                                <rect key="frame" x="16" y="102" width="343" height="30"/>
+                                <color key="backgroundColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="byy-bh-j01"/>
+                                </constraints>
+                                <state key="normal" title="Get New Price Data">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="getNewDataAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JTQ-S9-gBM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="AjV-BB-fyF"/>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="14" id="CJA-be-vKz"/>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="CaS-Bl-bv3"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4fr-Wa-2ad" secondAttribute="trailing" constant="16" id="JAY-xL-qO5"/>
-                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="14" id="fum-Rl-kEa"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="iSQ-Ec-ls3"/>
-                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="133" id="mmb-bF-R03"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4fr-Wa-2ad" secondAttribute="trailing" constant="16" id="34G-nM-dHW"/>
+                            <constraint firstItem="x8N-0N-Aed" firstAttribute="top" secondItem="7iW-TH-pwu" secondAttribute="bottom" constant="352.5" id="6C8-Em-P2L"/>
+                            <constraint firstItem="x8N-0N-Aed" firstAttribute="top" secondItem="7iW-TH-pwu" secondAttribute="bottom" constant="352.5" id="AOc-dq-rZx"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="Gtg-gI-fW5" secondAttribute="bottom" constant="65" id="KLe-MN-4Ak"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="top" secondItem="Gtg-gI-fW5" secondAttribute="bottom" constant="65" id="POc-tf-4XD"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Gtg-gI-fW5" secondAttribute="trailing" constant="16" id="Rxc-3e-Glh"/>
+                            <constraint firstItem="Gtg-gI-fW5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="38" id="bZR-sm-Hcg"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="x8N-0N-Aed" secondAttribute="bottom" constant="50" id="ckR-vM-mdC"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="dyr-s4-9xl"/>
+                            <constraint firstItem="4fr-Wa-2ad" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="dzP-bR-liR"/>
+                            <constraint firstItem="x8N-0N-Aed" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="fyB-K4-qcb"/>
+                            <constraint firstItem="Gtg-gI-fW5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="nea-hg-tTz"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="14" id="pt2-ZX-1U3"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="top" secondItem="4fr-Wa-2ad" secondAttribute="bottom" constant="14" id="qmr-Ke-R4r"/>
+                            <constraint firstItem="7iW-TH-pwu" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="sDc-wT-iKm"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="x8N-0N-Aed" secondAttribute="trailing" constant="16" id="yLt-LZ-5py"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

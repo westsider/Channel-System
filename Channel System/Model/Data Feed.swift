@@ -49,8 +49,10 @@ class DataFeed {
                 if (low == 0.00 ) { print("\n========================     low was 0 for \(ticker)     ===========================\n") }
             }
             
+            if (prices.close != 0.00 && prices.open != 0.00  && prices.high != 0.00 && prices.low != 0.00 ) {
+                RealmHelpers().saveSymbolsToRealm(each: prices)
+            }
             
-            RealmHelpers().saveSymbolsToRealm(each: prices)
         }
         // update  UI on completion
         DispatchQueue.main.async {
