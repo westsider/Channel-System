@@ -41,20 +41,6 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-
-    func checkDuplicates() {
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: true)
-        for ticker in galaxie {
-            Prices().findDuplicates(ticker: ticker, debug: true)
-        }
-    }
-    
-    func checkEarlyDates() {
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        for ticker in galaxie {
-            GetCSV().removeEarlyDates(ticker: ticker)
-        }
-    }
     
     override func viewDidAppear(_ animated: Bool) {
                         //checkDuplicates()
@@ -76,7 +62,7 @@ class ScanViewController: UIViewController {
                 print("--> 1. <--  check realm status first")
 // if check entries then make updateRealm = false manually also - DONT GET NEW DATA UNTIL 2PM
                 updateRealm = DateHelper().realmNotCurrent(debug: true)
-                //updateRealm = false
+                updateRealm = false
                 lastDateInRealm = Prices().getLastDateInRealm(debug: true)
                 galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
                 
@@ -101,16 +87,12 @@ class ScanViewController: UIViewController {
             }
         }
         //simPastEntries()
-
     }
     
     func simPastEntries() {
-        // MSFT 2017/11/20 82.53
-        // DIA 2017/11/15 232.96
-        // IWM 2017/11/08  147.2
-        getRealmFrom(ticker: "MSFT", DateString: "2017/11/20")
-        getRealmFrom(ticker: "DIA", DateString: "2017/11/15")
-        getRealmFrom(ticker: "IWM", DateString: "2017/11/08")
+        getRealmFrom(ticker: "INTC", DateString: "2017/10/20") // exit after 7 days  Target Hit for INTC from 2017-11-28
+        getRealmFrom(ticker: "EWD", DateString: "2017/10/17")  // stop hit   wPctR Hit for EWD from 2017-11-28
+        getRealmFrom(ticker: "JNJ", DateString: "2017/11/22")  // target hit  wPctR Hit for JNJ from 2017-11-28
     }
     
     func getRealmFrom(ticker: String, DateString: String) {
@@ -130,7 +112,7 @@ class ScanViewController: UIViewController {
                 let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: 50)
                 let stopString = String(format: "%.2f", stop)
                 let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
-                //RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false)
+                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false)
             }
         }
     }
@@ -304,6 +286,7 @@ class ScanViewController: UIViewController {
         DispatchQueue.main.async {
             print(with)
             self.updateLable?.text =  with
+            self.updateProgressBar()
         }
     }
     
@@ -317,7 +300,21 @@ class ScanViewController: UIViewController {
         progressView.setProgress(incProgress, animated: true)
         progressView.isHidden = false
     }
-
+    
+    func checkDuplicates() {
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: true)
+        for ticker in galaxie {
+            Prices().findDuplicates(ticker: ticker, debug: true)
+        }
+    }
+    
+    func checkEarlyDates() {
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        for ticker in galaxie {
+            GetCSV().removeEarlyDates(ticker: ticker)
+        }
+    }
+    
     func segueToChart(ticker: String) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = Prices().getLastTaskID()

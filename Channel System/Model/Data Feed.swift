@@ -29,15 +29,27 @@ class DataFeed {
             prices.dateString = date
             prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
             if let close = Double(row[1]){
-                prices.close = close }
+                prices.close = close
+                if (close == 0.00 ) { print("\n========================     Close was 0 for \(ticker)     ===========================\n") }
+            }
             if let volume = Double(row[2]){
-                prices.volume = volume }
+                prices.volume = volume
+                if (volume == 0.00 ) { print("\n=======================     volume was 0 for \(ticker)     ===========================\n") }
+            }
             if let open = Double(row[3]) {
-                prices.open = open }
+                prices.open = open
+                if (open == 0.00 ) { print("\n========================     open was 0 for \(ticker)     ===========================\n") }
+            }
             if let high = Double(row[4]){
-                prices.high = high }
+                prices.high = high
+                if (high == 0.00 ) { print("\n========================     high was 0 for \(ticker)     ===========================\n") }
+            }
             if let low = Double(row[5]){
-                prices.low = low }
+                prices.low = low
+                if (low == 0.00 ) { print("\n========================     low was 0 for \(ticker)     ===========================\n") }
+            }
+            
+            
             RealmHelpers().saveSymbolsToRealm(each: prices)
         }
         // update  UI on completion
