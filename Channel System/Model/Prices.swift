@@ -34,6 +34,8 @@ class Prices: Object {
     @objc dynamic var exitDate:Date = DateHelper().closeTradeIn(days: 7)
     @objc dynamic var profit    = 0.00
     @objc dynamic var loss      = 0.00
+    @objc dynamic var account   = ""
+    
     //MARK: - Count Prices
     func allPricesCount()-> Int {
         let realm = try! Realm()

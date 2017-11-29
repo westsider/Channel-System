@@ -41,12 +41,12 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        subsequentRuns()
-        //        if  UserDefaults.standard.object(forKey: "FirstRun") == nil || resetAll {
-        //            firstRun()
-        //        } else {
-        //            subsequentRuns()
-        //        }
+        //subsequentRuns()
+        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+            firstRun()
+        } else {
+            subsequentRuns()
+        }
     }
     
     func subsequentRuns() {
@@ -71,9 +71,10 @@ class ScanViewController: UIViewController {
         initially(deleteAll: true, printPrices: false, printTrades: false)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         initProgressBar()
+        self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
         checkCSVEarlyDates()
         GetCSV().areTickersValid(megaSymbols: galaxie)
-        getDataFromCSV(completion: self.csvBlock)
+        getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
         // update nsuserdefaults
         UserDefaults.standard.set(false, forKey: "FirstRun")
@@ -261,7 +262,8 @@ class ScanViewController: UIViewController {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
+                if ( self.lastDateInRealm != nil ) {
+                    Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock) }
                 self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
             }

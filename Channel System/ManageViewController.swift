@@ -26,6 +26,8 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var textInput: UITextField!
     
+    @IBOutlet weak var accountSwitch: UISegmentedControl!
+    
     var taskID = ""
     
     var action = ""
@@ -42,6 +44,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var stopString = " "
     let risk = 50
     var shares = 0
+    var account = "TDA"
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
@@ -52,6 +55,18 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         title = "Manage Trade"
     }
+    
+    @IBAction func accountSwitchAction(_ sender: UISegmentedControl) {
+        
+        switch accountSwitch.selectedSegmentIndex {
+        case 0: account = "TDA";
+        case 1: account = "E*Trade";
+        case 2: account = "IB";
+        default: break;
+        }
+    }
+    
+    
     
     @IBAction func inputTextAction(_ sender: Any) {
         if let thisText = textInput.text {
@@ -139,6 +154,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             thisTrade.loss = loss
             thisTrade.exitedTrade = true
             thisTrade.inTrade = false
+            thisTrade.account = account
         }
         proveUpdateTrade()
     }
@@ -184,6 +200,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             bottomRight.text = "Target \(String(format: "%.2f", target))"
             
         } else {
+            
             print("\nJust poplulate lables")
             thisTrade = RealmHelpers().getEntryFor(taskID: taskID).last!
             debugPrint(thisTrade)
@@ -200,6 +217,17 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             bottomLeft.text = "Stop \(String(format: "%.2f", thisTrade.stop))"
             
             bottomRight.text = "Target \(String(format: "%.2f", thisTrade.target))"
+
+            switch thisTrade.account {
+                case "TDA" :
+                    accountSwitch.selectedSegmentIndex = 0
+                case "E*Trade" :
+                    accountSwitch.selectedSegmentIndex = 1
+                case "IB" :
+                    accountSwitch.selectedSegmentIndex = 2
+                default:
+                    accountSwitch.selectedSegmentIndex = 0
+            }
         }
         
         
