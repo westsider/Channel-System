@@ -29,6 +29,7 @@ class RealmHelpers: Object {
         price.inTrade   = false
         price.exitedTrade = false
         price.taskID = NSUUID().uuidString
+        price.account = each.account
         
         try! realm.write({
             realm.add(price)
@@ -48,7 +49,7 @@ class RealmHelpers: Object {
         return Int( shares )
     }
     //MARK: - Make Entry
-    func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool) {
+    func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String) {
         //print("You entered \(entryString)")
         let realm = try! Realm()
         let ticker = Prices().getFrom(taskID: taskID).last!
@@ -60,6 +61,7 @@ class RealmHelpers: Object {
             ticker.shares    = shares
             ticker.risk      = risk
             ticker.inTrade   = true
+            ticker.account   = account
         }
         
         if ( debug ) { _ = self.getOpenTrades() }

@@ -57,7 +57,7 @@ class LastUpdate: Object {
         } else {
             try! realm.write({
                 let this = LastUpdate()
-                this.lastUpdate = now
+                this.lastUpdate = DateHelper().convertUTCtoLocal(debug: false, UTC: now)
                 this.lastUpdateString = DateHelper().convertToStringFrom(date:now)
                 this.updates += 1
             })

@@ -31,6 +31,19 @@ class DateHelper {
         return formatter.string(from: date)
     }
     
+    // convert UTC to local
+    func convertUTCtoLocal(debug: Bool, UTC: Date)-> Date {
+        
+        if ( debug ) { print("convertUTCtoLocal\nUTC:       \(today)") }
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss +0000"
+        let todayString = formatter.string(from: Date())
+        if ( debug ) { print("Local str: \(todayString)") }
+        formatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+        let local = formatter.date(from: todayString)
+        if ( debug ) { print("local date \(local!)") }
+        return local!
+    }
+    
     func closeTradeIn(days: Int)-> Date {
         let daysFromNow: Date = (Calendar.current as NSCalendar).date(byAdding: .day, value: days, to: Date(), options: [])!
         return daysFromNow

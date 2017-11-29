@@ -72,7 +72,6 @@ class ScanViewController: UIViewController {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         initProgressBar()
         self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
-        checkCSVEarlyDates()
         GetCSV().areTickersValid(megaSymbols: galaxie)
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
@@ -114,7 +113,7 @@ class ScanViewController: UIViewController {
                 let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: 50)
                 let stopString = String(format: "%.2f", stop)
                 let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
-                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false)
+                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false, account: "Test Account")
             }
         }
     }
@@ -310,13 +309,6 @@ class ScanViewController: UIViewController {
             Prices().findDuplicates(ticker: ticker, debug: true)
         }
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
-    }
-    
-    func checkCSVEarlyDates() {
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        for ticker in galaxie {
-            GetCSV().removeEarlyDates(ticker: ticker)
-        }
     }
     
     func segueToChart(ticker: String) {

@@ -17,7 +17,7 @@ class GetCSV {
         func getCsvData()-> [LastPrice]  {
             
             var prices = [LastPrice]()
-            
+            let test  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false)
             let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
             let stream = InputStream(fileAtPath: filleURLProject!)!
             let csv = try! CSVReader(stream: stream)
@@ -46,8 +46,10 @@ class GetCSV {
                 
                 if let volume = Double(row[2]){
                     lastPriceObject.volume = volume }
-                
-                prices.append(lastPriceObject)
+                // save only days after 2014/11/25
+                if (test < lastPriceObject.date!) {
+                    prices.append(lastPriceObject)
+                }
             }
             return prices
         }

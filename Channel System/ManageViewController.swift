@@ -59,9 +59,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     @IBAction func accountSwitchAction(_ sender: UISegmentedControl) {
         
         switch accountSwitch.selectedSegmentIndex {
-        case 0: account = "TDA";
-        case 1: account = "E*Trade";
-        case 2: account = "IB";
+        case 0: account = "TDA"; print("account: \(account)");
+        case 1: account = "E*Trade"; print("account: \(account)");
+        case 2: account = "IB"; print("account: \(account)");
         default: break;
         }
     }
@@ -96,7 +96,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             print("In Manage VC case Entry Triggered")
             //MARK: - TODO - make entry func
             if let entryPrice = Double(textEntered) {
-                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false)
+                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false, account: account)
                 sequeToPortfolio()
             }
         case "Target":
