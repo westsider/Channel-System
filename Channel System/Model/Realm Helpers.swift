@@ -43,13 +43,9 @@ class RealmHelpers: Object {
         }
         print("\nRealm \tCleared!\n")
     }
-    //MARK: - Calc Shares
-    func calcShares(stopDist:Double, risk:Int)-> Int {
-        let shares = Double(risk) / stopDist
-        return Int( shares )
-    }
+
     //MARK: - Make Entry
-    func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String) {
+    func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String, capital: Double) {
         //print("You entered \(entryString)")
         let realm = try! Realm()
         let ticker = Prices().getFrom(taskID: taskID).last!
@@ -62,6 +58,7 @@ class RealmHelpers: Object {
             ticker.risk      = risk
             ticker.inTrade   = true
             ticker.account   = account
+            ticker.capitalReq = capital
         }
         
         if ( debug ) { _ = self.getOpenTrades() }

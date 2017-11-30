@@ -28,6 +28,8 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var accountSwitch: UISegmentedControl!
     
+    @IBOutlet weak var capitalReq: UILabel!
+    
     var taskID = ""
     
     var action = ""
@@ -45,6 +47,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     let risk = 50
     var shares = 0
     var account = "TDA"
+    var capReq = 0.0
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
@@ -65,8 +68,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         default: break;
         }
     }
-    
-    
     
     @IBAction func inputTextAction(_ sender: Any) {
         if let thisText = textInput.text {
@@ -90,13 +91,13 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         if (textInput.text! != "") {
             textEntered = textInput.text!
         }
-// stupmed why jumping past this vc to Candidates when I have a trade to enter
+
         switch action {
         case "Entry For":
             print("In Manage VC case Entry Triggered")
             //MARK: - TODO - make entry func
             if let entryPrice = Double(textEntered) {
-                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false, account: account)
+                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false, account: account, capital: capReq)
                 sequeToPortfolio()
             }
         case "Target":
@@ -165,12 +166,12 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         print("\ndubug - checkTrades")
         debugPrint(checkTrades)
     }
+
     
     //MARK: - Populate Lables
     func populateLables(action: String) {
         
         print("\npopulate lables")
-        
 
         if (action == "Entry For") {
             print("\n calc trade entry, then populate lables\n")
@@ -178,11 +179,11 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             debugPrint(thisTrade)
             // calc target / stop
             close = thisTrade.close
-            stopDistance = close * 0.03
-            stop = close - stopDistance
-            target = close + stopDistance
-            stopString = String(format: "%.2f", stop)
-            shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: risk)
+            stop = TradeHelpers().calcStopTarget(close: close).0
+            target = TradeHelpers().calcStopTarget(close: close).1
+            stopDistance = TradeHelpers().calcStopTarget(close: close).2
+            stopString = TradeHelpers().stopString(stop: stop)
+            shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: risk)
             let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
             // populate lables
             textInput.text = String(thisTrade.close)
@@ -198,6 +199,10 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             bottomLeft.text = "Stop \(String(format: "%.2f", stop))"
             
             bottomRight.text = "Target \(String(format: "%.2f", target))"
+            
+            capReq = TradeHelpers().capitalRequired(close: close, shares: shares)
+            
+            capitalReq.text = String(format: "%.2f", capReq)
             
         } else {
             

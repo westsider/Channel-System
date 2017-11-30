@@ -15,18 +15,18 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var progressView: UIProgressView!
     
-    let prices = Prices()
-    
-    var updatedProgress: Float = 0
-    
-    var incProgress: Float = 0
-    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
     let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
     let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
+    
+    let prices = Prices()
+    
+    var updatedProgress: Float = 0
+    
+    var incProgress: Float = 0
     
     var counter = 0
     
@@ -49,6 +49,19 @@ class ScanViewController: UIViewController {
         }
     }
     
+    func firstRun() {
+        print("\nThis was first run so I will load CSV historical data\n")
+        initially(deleteAll: true, printPrices: false, printTrades: false)
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        initProgressBar()
+        self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
+        GetCSV().areTickersValid(megaSymbols: galaxie)
+        getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
+        checkDuplicates()
+        // update nsuserdefaults
+        UserDefaults.standard.set(false, forKey: "FirstRun")
+    }
+    
     func subsequentRuns() {
         print("\nThis is NOT the first run.\n")
         updateRealm = DateHelper().realmNotCurrent(debug: true)
@@ -65,20 +78,7 @@ class ScanViewController: UIViewController {
             debugPrint(each)
         }
     }
-    
-    func firstRun() {
-        print("\nThis was first run so I will load CSV historical data\n")
-        initially(deleteAll: true, printPrices: false, printTrades: false)
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        initProgressBar()
-        self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
-        GetCSV().areTickersValid(megaSymbols: galaxie)
-        getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
-        checkDuplicates()
-        // update nsuserdefaults
-        UserDefaults.standard.set(false, forKey: "FirstRun")
-    }
-    
+
     @IBAction func getNewDataAction(_ sender: Any) {
         //MARK: - get new data
         LastUpdate().incUpdate()
@@ -87,7 +87,7 @@ class ScanViewController: UIViewController {
     
     @IBAction func manageTradesAction(_ sender: Any) {
         //MARK: - segue to candidates
-        manageTradesOrShowEntries()
+        segueToCandidatesVC()
     }
 
     func simPastEntries() {
@@ -105,15 +105,15 @@ class ScanViewController: UIViewController {
         for each in results {
             if ( each.ticker == ticker)  {
                 print("\(each.ticker) \(each.dateString) \(each.close)  \(each.taskID)")
-                
                 let close = each.close
-                let stopDistance = close * 0.03
-                let stop = close - stopDistance
-                let target = close + stopDistance
-                let shares = RealmHelpers().calcShares(stopDist: stopDistance, risk: 50)
-                let stopString = String(format: "%.2f", stop)
+                let stop = TradeHelpers().calcStopTarget(close: close).0
+                let target = TradeHelpers().calcStopTarget(close: close).1
+                let stopDistance = TradeHelpers().calcStopTarget(close: close).2
+                let shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: 50)
+                let stopString = TradeHelpers().stopString(stop: stop)
+                let capReq = TradeHelpers().capitalRequired(close: close, shares: shares)
                 let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
-                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false, account: "Test Account")
+                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false, account: "Test Account", capital: capReq)
             }
         }
     }
