@@ -19,7 +19,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let days = 3
+        let days = 100
         title = "last \(days) days"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
@@ -37,6 +37,12 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     // NOW Sugue to Portfolio
     @IBAction func readRealmContents(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    
+    @IBAction func showStats(_ sender: Any) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "StatsVC") as! StatsViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
     

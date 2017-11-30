@@ -139,9 +139,9 @@
                                 <rect key="frame" x="16" y="632" width="341" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCC-xV-E7u">
-                                        <rect key="frame" x="0.0" y="0.0" width="103.5" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="74" height="30"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Clear Realm">
+                                        <state key="normal" title="Clear">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -149,7 +149,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gF-fg-mbq">
-                                        <rect key="frame" x="118.5" y="0.0" width="104" height="30"/>
+                                        <rect key="frame" x="89" y="0.0" width="74" height="30"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="Index">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -159,13 +159,23 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VJE-NN-i7A">
-                                        <rect key="frame" x="237.5" y="0.0" width="103.5" height="30"/>
+                                        <rect key="frame" x="178" y="0.0" width="74" height="30"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="Portfolio">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="readRealmContents:" destination="rsc-Si-hcx" eventType="touchUpInside" id="gzI-nx-icD"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nx3-2J-xOE">
+                                        <rect key="frame" x="267" y="0.0" width="74" height="30"/>
+                                        <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Stats">
+                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="showStats:" destination="rsc-Si-hcx" eventType="touchUpInside" id="Sz3-7U-O6T"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -303,6 +313,39 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="awq-di-R2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1422" y="824"/>
+        </scene>
+        <!--Stats-->
+        <scene sceneID="1ja-Hw-86N">
+            <objects>
+                <viewController storyboardIdentifier="StatsVC" title="Stats" id="5QM-vx-0EQ" customClass="StatsViewController" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="prr-RG-Pk2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jGh-B3-M6v">
+                                <rect key="frame" x="110" y="607" width="155" height="30"/>
+                                <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Run Backtest">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="runBackTestAction:" destination="5QM-vx-0EQ" eventType="touchUpInside" id="GUz-3a-PNa"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="O9x-aY-9e8" firstAttribute="bottom" secondItem="jGh-B3-M6v" secondAttribute="bottom" constant="30" id="6uw-Z2-qNv"/>
+                            <constraint firstItem="O9x-aY-9e8" firstAttribute="trailing" secondItem="jGh-B3-M6v" secondAttribute="trailing" constant="110" id="Jj9-30-Qtn"/>
+                            <constraint firstItem="jGh-B3-M6v" firstAttribute="leading" secondItem="O9x-aY-9e8" secondAttribute="leading" constant="110" id="RNU-pe-iJd"/>
+                            <constraint firstItem="jGh-B3-M6v" firstAttribute="top" secondItem="O9x-aY-9e8" secondAttribute="top" constant="587" id="a78-yP-Nja"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="O9x-aY-9e8"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="77X-Kh-uDL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2109.5999999999999" y="824.43778110944538"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VeR-NG-g8r">
@@ -508,7 +551,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVK-bp-Due" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="tU1-8h-orj" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2293.5999999999999" y="115.59220389805098"/>
+            <point key="canvasLocation" x="2105" y="116"/>
         </scene>
     </scenes>
 </document>

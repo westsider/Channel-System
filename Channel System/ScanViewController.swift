@@ -41,7 +41,7 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //subsequentRuns()
+ 
         if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
             firstRun()
         } else {
@@ -262,15 +262,18 @@ class ScanViewController: UIViewController {
                 self.updateUI(with: "Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 if ( self.lastDateInRealm != nil ) {
-                    Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock) }
+                    Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
+                } else { // if first run when lastDateInRealm == nil and i need to load all symbols
+                    Entry().calcLong(lastDate: Date(), debug: false, prices: oneTicker, completion: self.entryBlock)
+                }
                 self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
-                print("\n-------> Now printing database <--------\n")
-                Prices().printLastPrices(symbols: self.galaxie, last: 4)
+                //print("\n-------> Now printing database <--------\n")
+                //Prices().printLastPrices(symbols: self.galaxie, last: 4)
                 //self.segueToCandidatesVC()
                 self.manageTradesOrShowEntries()
             }

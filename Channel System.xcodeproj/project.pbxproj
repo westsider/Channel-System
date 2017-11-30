@@ -15,6 +15,7 @@
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
 		0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* ChartViewController.swift */; };
 		0D77DDCE1FCF705C007573C3 /* Trade Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */; };
+		0D77DDD01FCF8E1B007573C3 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D77DDCF1FCF8E1B007573C3 /* StatsViewController.swift */; };
 		0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */; };
 		0D809B1F1FC8D2F300CE476D /* FXD.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809A2C1FC8D2A900CE476D /* FXD.csv */; };
 		0D809B201FC8D2F300CE476D /* KO.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809A2D1FC8D2A900CE476D /* KO.csv */; };
@@ -290,6 +291,7 @@
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
 		0D771E061FAE5C5E006269DD /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Helpers.swift"; sourceTree = "<group>"; };
+		0D77DDCF1FCF8E1B007573C3 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageViewController.swift; sourceTree = "<group>"; };
 		0D809A2C1FC8D2A900CE476D /* FXD.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FXD.csv; sourceTree = "<group>"; };
 		0D809A2D1FC8D2A900CE476D /* KO.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KO.csv; sourceTree = "<group>"; };
@@ -853,6 +855,7 @@
 				0D771E061FAE5C5E006269DD /* ChartViewController.swift */,
 				0D5CEC751FB378A400762900 /* PortfolioViewController.swift */,
 				0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */,
+				0D77DDCF1FCF8E1B007573C3 /* StatsViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -1285,6 +1288,7 @@
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
+				0D77DDD01FCF8E1B007573C3 /* StatsViewController.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
 				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
