@@ -5,10 +5,38 @@
 //  Created by Warren Hansen on 10/27/17.
 //  Copyright © 2017 Warren Hansen. All rights reserved.
 //
-
+/*
+ Need to migrate realm?
+ 
+ class WorkoutSet: Object {
+     // Schema 0
+     dynamic var exerciseName: String = ""
+     dynamic var reps: Int = 0
+     // Schema 0 + 1
+     dynamic var setCount: Int = 0
+ }
+ 
+ let config = Realm.Configuration(
+     // Set the new schema version. This must be greater than the previously used
+     // version (if you've never set a schema version before, the version is 0).
+     schemaVersion: 1,
+ 
+     // Set the block which will be called automatically when opening a Realm with
+     // a schema version lower than the one set above
+     migrationBlock: { migration, oldSchemaVersion in
+ 
+        if oldSchemaVersion < 1 {
+            migration.enumerate(WorkoutSet.className()) { oldObject, newObject in
+            newObject?["setCount"] = setCount
+            }
+        }
+    }
+ )
+ Realm.Configuration.defaultConfiguration = config
+ */
 import UIKit
 import SciChart
-//import RealmSwift
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,22 +46,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-//        let config = Realm.Configuration(
-//            // Set the new schema version. This must be greater than the previously used
-//            // version (if you've never set a schema version before, the version is 0).
-//            schemaVersion: 1,
-//
-//            // Set the block which will be called automatically when opening a Realm with
-//            // a schema version lower than the one set above
-//            migrationBlock: { migration, oldSchemaVersion in
-//                // We haven’t migrated anything yet, so oldSchemaVersion == 0
-//                if (oldSchemaVersion < 1) {
-//                    // Nothing to do!
-//                    // Realm will automatically detect new properties and removed properties
-//                    // And will update the schema on disk automatically
-//                }
-//        })
-//        Realm.Configuration.defaultConfiguration = config
+        let config = Realm.Configuration(
+            // Set the new schema version. This must be greater than the previously used
+            // version (if you've never set a schema version before, the version is 0).
+            schemaVersion: 1,
+
+            // Set the block which will be called automatically when opening a Realm with
+            // a schema version lower than the one set above
+            migrationBlock: { migration, oldSchemaVersion in
+                // We haven’t migrated anything yet, so oldSchemaVersion == 0
+                if (oldSchemaVersion < 1) {
+                    // Nothing to do!
+                    // Realm will automatically detect new properties and removed properties
+                    // And will update the schema on disk automatically
+                }
+        })
+        Realm.Configuration.defaultConfiguration = config
         
         // License Contract
         let licencing:String = "<LicenseContract>" +
