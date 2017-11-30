@@ -156,6 +156,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             thisTrade.exitedTrade = true
             thisTrade.inTrade = false
             thisTrade.account = account
+            thisTrade.capitalReq = capReq
         }
         proveUpdateTrade()
     }
@@ -202,7 +203,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             
             capReq = TradeHelpers().capitalRequired(close: close, shares: shares)
             
-            capitalReq.text = String(format: "%.2f", capReq)
+            let capReqd =  String(format: "%.2f", capReq)
+            
+            capitalReq.text = "Capital Required \t\t$\(capReqd)"
             
         } else {
             

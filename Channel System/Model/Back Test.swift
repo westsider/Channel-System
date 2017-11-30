@@ -80,10 +80,9 @@ class BackTest {
         print("winPct \(winPct) = winCount \(winCount) / tradeCount \(tradeCount)")
         return ( grossProfit, annualRoi, winPct )
     }
-    //MARK: - TODO - create basic stats vc with backtest button
-    // do a print of this
-    //MARK: - TODO - rank tickers ( score 50% each for  roi > 10% = 50% < 5% = 0, winPct literal ) = 80% = 4 stars, 100% = 5 stars
-    // unsure how to annualize roi, i gues total Roi / 3 (years)
+    //MARK: - TODO - rank tickers
+    // ( score 50% each for  roi > 10% = 50% < 5% = 0, winPct literal ) = 80% = 4 stars, 100% = 5 stars
+    // largest win, largest loss
     //MARK: - TODO - save to realm STATS object
     //MARK: - TODO - load with candidates tableview | SPY 70% $11,021 18.7% ROI ⭐️⭐️⭐️⭐️⭐️ |
     //MARK: - TODO - add STATS to PRICES object when loadDataFeed
