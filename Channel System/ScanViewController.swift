@@ -115,9 +115,9 @@ class ScanViewController: UIViewController {
             if ( each.ticker == ticker)  {
                 print("\(each.ticker) \(each.dateString) \(each.close)  \(each.taskID)")
                 let close = each.close
-                let stop = TradeHelpers().calcStopTarget(close: close).0
-                let target = TradeHelpers().calcStopTarget(close: close).1
-                let stopDistance = TradeHelpers().calcStopTarget(close: close).2
+                let stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close).0
+                let target = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close).1
+                let stopDistance = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close).2
                 let shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: 50)
                 let stopString = TradeHelpers().stopString(stop: stop)
                 let capReq = TradeHelpers().capitalRequired(close: close, shares: shares)

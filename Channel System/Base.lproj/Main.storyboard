@@ -566,11 +566,17 @@
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="n2j-zQ-13r" userLabel="Capitol">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="n2j-zQ-13r" userLabel="Capitol">
                                                 <rect key="frame" x="0.0" y="142" width="303" height="21"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Capitol Req." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7MZ-1R-pZr">
-                                                        <rect key="frame" x="0.0" y="0.0" width="303" height="21"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Capitol Req." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7MZ-1R-pZr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="151.5" height="21"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="stopSize" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jWn-72-yWG">
+                                                        <rect key="frame" x="151.5" y="0.0" width="151.5" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -642,6 +648,7 @@
                         <outlet property="capitalReq" destination="7MZ-1R-pZr" id="mlh-Pn-6qp"/>
                         <outlet property="midLeft" destination="3Fo-Jk-d5b" id="tH4-kR-I2j"/>
                         <outlet property="midRight" destination="KAv-LJ-bZv" id="H3l-dZ-qjI"/>
+                        <outlet property="stopSizeLable" destination="jWn-72-yWG" id="3d3-DP-huc"/>
                         <outlet property="textInput" destination="zbP-uf-5Cv" id="dXM-wa-UxW"/>
                         <outlet property="topLeft" destination="9c3-O5-4cj" id="OMD-mP-r9s"/>
                         <outlet property="topRight" destination="Nb9-ac-OjR" id="57n-b3-jgR"/>

@@ -30,6 +30,8 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var capitalReq: UILabel!
     
+    @IBOutlet weak var stopSizeLable: UILabel!
+    
     var taskID = ""
     
     var action = ""
@@ -51,6 +53,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
+        accountSwitch.selectedSegmentIndex = 2
         populateLables(action: action)
     }
     
@@ -180,9 +183,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             debugPrint(thisTrade)
             // calc target / stop
             close = thisTrade.close
-            stop = TradeHelpers().calcStopTarget(close: close).0
-            target = TradeHelpers().calcStopTarget(close: close).1
-            stopDistance = TradeHelpers().calcStopTarget(close: close).2
+            stop = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close).0
+            target = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close).1
+            stopDistance = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close).2
             stopString = TradeHelpers().stopString(stop: stop)
             shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: risk)
             let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
@@ -205,7 +208,11 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             
             let capReqd =  String(format: "%.2f", capReq)
             
-            capitalReq.text = "Capital Required \t\t$\(capReqd)"
+            capitalReq.text = "Cost $\(capReqd)"
+            
+            let stopSize = CompanyData().getExchangeFrom(ticker: thisTrade.ticker, debug: false)
+            
+            stopSizeLable.text = "Stop Size \(stopSize.stopSize)%"
             
         } else {
             
