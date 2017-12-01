@@ -285,7 +285,7 @@
 /* Begin PBXFileReference section */
 		0D129D501FBB4D1D003C6E5E /* MDY.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MDY.csv; sourceTree = "<group>"; };
 		0D129D521FBB4D1D003C6E5E /* IWM.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWM.csv; sourceTree = "<group>"; };
-		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = constants.swift; path = Indicators/constants.swift; sourceTree = "<group>"; };
+		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
 		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
@@ -865,6 +865,45 @@
 			path = "Channel System";
 			sourceTree = "<group>";
 		};
+		0DA11AE21FD07B620074BAD7 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				0DB6B1021FCE9A71009F6BEB /* Back Test.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		0DA11AE31FD07B920074BAD7 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				0D3108481FC8968D00E93CB3 /* constants.swift */,
+				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
+				0DCAAFDF1FBC401600095560 /* Get CSV.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		0DA11AE41FD07BCB0074BAD7 /* Trades */ = {
+			isa = PBXGroup;
+			children = (
+				0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */,
+				0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */,
+				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
+			);
+			path = Trades;
+			sourceTree = "<group>";
+		};
+		0DA11AE51FD07C140074BAD7 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
+				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
+				0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */,
+				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
 		0DCAAFDE1FBC3EF600095560 /* Indicators */ = {
 			isa = PBXGroup;
 			children = (
@@ -878,18 +917,11 @@
 		0DEFBCBF1FA912BC00C156B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */,
-				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
-				0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */,
-				0DB6B1021FCE9A71009F6BEB /* Back Test.swift */,
-				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
-				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
-				0DCAAFDF1FBC401600095560 /* Get CSV.swift */,
-				0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */,
-				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
+				0DA11AE51FD07C140074BAD7 /* Realm */,
+				0DA11AE21FD07B620074BAD7 /* Stats */,
+				0DA11AE31FD07B920074BAD7 /* Data */,
+				0DA11AE41FD07BCB0074BAD7 /* Trades */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
-				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
-				0D3108481FC8968D00E93CB3 /* constants.swift */,
 				0DCAAFDE1FBC3EF600095560 /* Indicators */,
 				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
 			);
