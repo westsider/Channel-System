@@ -16,6 +16,7 @@ class ScanViewController: UIViewController {
     @IBOutlet weak var progressView: UIProgressView!
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
+    let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
     let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
@@ -41,9 +42,7 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
- 
-        //initially(deleteAll: true, printPrices: false, printTrades: false)
-        
+
         if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
             firstRun()
         } else {
@@ -51,15 +50,23 @@ class ScanViewController: UIViewController {
         }
     }
     
+    func saveCompanyInfoToRealm() {
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        for ticker in galaxie {
+            CompanyData().getInfoFor(ticker: ticker, debug: true, completion: self.infoBlock)
+        }
+    }
+    
     func firstRun() {
         print("\nThis was first run so I will load CSV historical data\n")
         initially(deleteAll: true, printPrices: false, printTrades: false)
-        galaxie = ["SPY"] // SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         initProgressBar()
         self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
         GetCSV().areTickersValid(megaSymbols: galaxie)
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
+        saveCompanyInfoToRealm()
         // update nsuserdefaults
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
@@ -68,7 +75,7 @@ class ScanViewController: UIViewController {
         print("\nThis is NOT the first run.\n")
         updateRealm = DateHelper().realmNotCurrent(debug: true)
         lastDateInRealm = Prices().getLastDateInRealm(debug: true)
-        galaxie =  ["SPY"] // SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         
         //MARK: - TODO - label - show last update time and date, updates today remaining
         self.updateUI(with: LastUpdate().checkUpate(), spinIsOff: true)

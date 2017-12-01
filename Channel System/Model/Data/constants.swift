@@ -11,6 +11,8 @@ import UIKit
 
 class Symbols {
     
+    let international = ["QQQ", "EFA", "ILF", "EEM", "EPP","IEV"] // 5% stop
+    
     let indexes = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
     
     let DOW30 = ["AAPL","AXP","BA","CAT","CSCO","CVX","DD","DIS","GE","GS","HD","IBM","INTC","JNJ","JPM","KO","MCD","MMM","MRK","MSFT","NKE","PFE","PG","TRV","UNH","UTX","V","VZ","WMT","XOM"]

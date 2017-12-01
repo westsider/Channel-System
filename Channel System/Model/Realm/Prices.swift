@@ -37,6 +37,8 @@ class Prices: Object {
     @objc dynamic var account   = ""
     @objc dynamic var capitalReq = 0.00
     
+    // roi, win%, stars, profit,
+    
     //MARK: - Count Prices
     func allPricesCount()-> Int {
         let realm = try! Realm()

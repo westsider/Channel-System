@@ -260,6 +260,7 @@
 		0D809C391FC9387B00CE476D /* IWN.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C381FC9387B00CE476D /* IWN.csv */; };
 		0D809C3B1FC9389500CE476D /* IWP.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C3A1FC9389400CE476D /* IWP.csv */; };
 		0D809C3D1FC938CA00CE476D /* IXC.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C3C1FC938CA00CE476D /* IXC.csv */; };
+		0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D941BA51FD1A91D007335E6 /* Company Feed.swift */; };
 		0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */; };
 		0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */; };
 		0D949CDD1FA3B7B600960BA2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949CDB1FA3B7B600960BA2 /* Main.storyboard */; };
@@ -536,6 +537,7 @@
 		0D809C381FC9387B00CE476D /* IWN.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWN.csv; sourceTree = "<group>"; };
 		0D809C3A1FC9389400CE476D /* IWP.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWP.csv; sourceTree = "<group>"; };
 		0D809C3C1FC938CA00CE476D /* IXC.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IXC.csv; sourceTree = "<group>"; };
+		0D941BA51FD1A91D007335E6 /* Company Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company Feed.swift"; sourceTree = "<group>"; };
 		0D949CD41FA3B7B600960BA2 /* Channel System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channel System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
@@ -878,6 +880,7 @@
 			children = (
 				0D3108481FC8968D00E93CB3 /* constants.swift */,
 				0D949CE91FA3B82500960BA2 /* Data Feed.swift */,
+				0D941BA51FD1A91D007335E6 /* Company Feed.swift */,
 				0DCAAFDF1FBC401600095560 /* Get CSV.swift */,
 			);
 			path = Data;
@@ -1330,6 +1333,7 @@
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
 				0DB6B1031FCE9A71009F6BEB /* Back Test.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
+				0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */,
 				0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */,
