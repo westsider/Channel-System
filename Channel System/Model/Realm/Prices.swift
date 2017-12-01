@@ -144,7 +144,7 @@ class Prices: Object {
         // this is not getting the last price.. sort it
         //let lastTicker = sortEntries().first!
         //let realmDate = getLastDateInRealm(debug: false)
-        if ( debug ) {print("Last date in realm \(String(describing: realmDate)) vs new date: \(date))")}
+        if ( debug ) { print("Last date in realm \(String(describing: realmDate)) vs new date: \(date))")}
         
         if date > realmDate {
             if ( debug ) {

@@ -42,6 +42,8 @@ class ScanViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
  
+        //initially(deleteAll: true, printPrices: false, printTrades: false)
+        
         if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
             firstRun()
         } else {
@@ -52,7 +54,7 @@ class ScanViewController: UIViewController {
     func firstRun() {
         print("\nThis was first run so I will load CSV historical data\n")
         initially(deleteAll: true, printPrices: false, printTrades: false)
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        galaxie = ["SPY"] // SymbolLists().uniqueElementsFrom(testTenOnly: false)
         initProgressBar()
         self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
         GetCSV().areTickersValid(megaSymbols: galaxie)
@@ -66,7 +68,7 @@ class ScanViewController: UIViewController {
         print("\nThis is NOT the first run.\n")
         updateRealm = DateHelper().realmNotCurrent(debug: true)
         lastDateInRealm = Prices().getLastDateInRealm(debug: true)
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        galaxie =  ["SPY"] // SymbolLists().uniqueElementsFrom(testTenOnly: false)
         
         //MARK: - TODO - label - show last update time and date, updates today remaining
         self.updateUI(with: LastUpdate().checkUpate(), spinIsOff: true)
@@ -263,8 +265,11 @@ class ScanViewController: UIViewController {
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 if ( self.lastDateInRealm != nil ) {
                     Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
-                } else { // if first run when lastDateInRealm == nil and i need to load all symbols
-                    Entry().calcLong(lastDate: Date(), debug: false, prices: oneTicker, completion: self.entryBlock)
+                } else {
+                    // if first run when lastDateInRealm == nil and i need to load all symbols
+                    // so i will pass in the first date in the CSV
+                    let firstDate  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false)
+                    Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
                 }
                 self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
                 self.updateProgressBar()
