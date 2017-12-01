@@ -10,6 +10,19 @@ import UIKit
 
 class StatsViewController: UIViewController {
 
+    @IBOutlet weak var topLeft: UILabel!
+    
+    @IBOutlet weak var topRight: UILabel!
+    
+    @IBOutlet weak var midLeft: UILabel!
+    
+    @IBOutlet weak var midRight: UILabel!
+    
+    @IBOutlet weak var bottomLeft: UILabel!
+    
+    @IBOutlet weak var bottomRight: UILabel!
+    
+    
     var galaxie = [String]()
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
@@ -20,10 +33,10 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        calcStats()
     }
 
-    @IBAction func runBackTestAction(_ sender: Any) {
-
+    func calcStats() {
         for each in galaxie {
             let report = BackTest().performanceString(ticker: each, debug: false)
             print(report)
@@ -32,9 +45,9 @@ class StatsViewController: UIViewController {
             totalProfit.append(result.0)
             // calc performance on winners
             //if result.3 > 0 { I use this to find avg stars of winners
-                averagePctWin.append(result.4)
-                totalROI.append(result.3)
-                averageStars.append(Double(stars))
+            averagePctWin.append(result.4)
+            totalROI.append(result.3)
+            averageStars.append(Double(stars))
             //}
             
         }
@@ -44,6 +57,15 @@ class StatsViewController: UIViewController {
         let aPctWin = averagePctWin.reduce(0, +) / Double( averagePctWin.count )
         let avgStars = averageStars.reduce(0, +) / Double( averageStars.count )
         print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))")
+        
+        topLeft.text = "Total Profit \(String(format: "%.0f", grossProfit))"
+        topRight.text = "Avg Pct Win \(String(format: "%.2f", aPctWin))"
+        midLeft.text = "Avg ROI \(String(format: "%.2f", avgROI))"
+        
+        midRight.text = "Total ROI \(String(format: "%.2f", grossROI))"
+        bottomLeft.text = "Avg Stars \(String(format: "%.2f", avgStars))"
+        bottomRight.text = "This is open"
+        
     }
     
     //MARK: - TODO - Stats VC scrollview of: stats as lables at top, graph p&L, sorted tableview,
