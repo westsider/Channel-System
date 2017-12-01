@@ -107,12 +107,13 @@ class BackTest {
     }
     //MARK: - TODO - rank tickers
     // ( score 50% each for  , winPct literal ) = 80% = 4 stars, 100% = 5 stars
-    func calcStars(grossProfit:Double, annualRoi: Double, winPct:Double, debug:Bool)-> Int {
+    func calcStars(grossProfit:Double, annualRoi: Double, winPct:Double, debug:Bool)-> (Int, String) {
         var totalPercent = 0.0
         var stars = 0
+        var starIcon = "★"
         
         if grossProfit <= 0 {
-            return 1
+            return (1, starIcon )
         }
     
         switch annualRoi {
@@ -159,19 +160,51 @@ class BackTest {
             stars = 1
         }
         if debug { print("\(stars) Stars") }
-        return stars
+        
+        // ⭐️⭐️⭐️⭐️⭐️
+        if stars == 2 {
+            starIcon = "★★"
+        } else if stars == 3 {
+            starIcon = "★★★"
+        } else if stars == 4 {
+            starIcon = "★★★★"
+        } else if stars == 5 {
+            starIcon = "★★★★★"
+        }
+
+        return (stars, starIcon )
     }
     
     func performanceString(ticker:String, debug: Bool)->String {
         let result = BackTest().getResults(ticker: ticker, debug: debug)
-        // ( grossProfit,largestWin, largestLoser, annualRoi, winPct )
         let profit = String(format: "%.0f", result.0)
         let LW = String(format: "%.0f", result.1)
         let LL = String(format: "%.0f", result.2)
         let roi = String(format: "%.2f", result.3)
         let winPct = String(format: "%.2f", result.4)
         let star = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
-        let answer = "\(ticker)\tProfit $\(profit),  LW/LL \(LW)/\(LL), \tROI \(roi)%, \t\(winPct)% Win, \t\(star) stars"
+        let answer = "\(ticker)\tProfit \t$\(profit),  LW/LL \(LW)/\(LL), \tROI \(roi)%, \t\(winPct)% Win, \t\(star) stars"
         return answer  //LW \(String(format: "%.2f", largestWin)), LL\(String(format: "%.2f", largestLoser)
     }
+    
+    func tableViewString(ticker:String)->String {
+        let result = BackTest().getResults(ticker: ticker, debug: false)
+        let profit = String(format: "%.0f", result.0)
+        let roi = String(format: "%.1f", result.3)
+        let winPct = String(format: "%.1f", result.4)
+        let star = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
+        return "\(ticker) $\(profit) \(roi)% \(winPct)% \t\(star.1)"
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

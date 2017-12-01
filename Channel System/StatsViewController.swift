@@ -47,7 +47,7 @@ class StatsViewController: UIViewController {
             //if result.3 > 0 { I use this to find avg stars of winners
             averagePctWin.append(result.4)
             totalROI.append(result.3)
-            averageStars.append(Double(stars))
+            averageStars.append(Double(stars.0))
             //}
             
         }

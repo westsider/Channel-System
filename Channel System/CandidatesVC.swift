@@ -52,8 +52,14 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = tasks[indexPath.row].ticker
-        cell.detailTextLabel?.text = tasks[indexPath.row].dateString
+        let ticker = tasks[indexPath.row].ticker
+        cell.textLabel?.text = BackTest().tableViewString(ticker: ticker)
+        
+        let longDate: String = tasks[indexPath.row].dateString
+        let date = String(longDate.dropFirst(5))
+        let slash = date.replacingOccurrences(of: "-", with: "/")
+        
+        cell.detailTextLabel?.text = slash
         return cell
     }
     
