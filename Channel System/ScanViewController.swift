@@ -15,6 +15,8 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var currentProcessLable: UILabel!
     
+    @IBOutlet weak var acticity: UIActivityIndicatorView!
+    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -83,6 +85,7 @@ class ScanViewController: UIViewController {
         
         currentProcessLable.text = LastUpdate().checkUpate()
 // spinner off
+        acticity.stopAnimating()
         let realm = try! Realm()
         let getDate = realm.objects(LastUpdate.self)
         
@@ -307,8 +310,16 @@ class ScanViewController: UIViewController {
         DispatchQueue.main.async {
             //print(with)
             self.lastUpdateLable.text =  with
+            
+            if spinIsOff {
+                self.acticity.stopAnimating()
+                
+            } else {
+                self.acticity.startAnimating()
+            }
         }
     }
+    
     
     func initProgressBar() {
         let tickerCount = Double(galaxie.count)
