@@ -11,10 +11,6 @@ import UIKit
 
 class ScanViewController: UIViewController {
     
-    @IBOutlet weak var updateLable: UILabel!
-    
-    @IBOutlet weak var progressView: UIProgressView!
-    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -39,6 +35,7 @@ class ScanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Finance"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -93,6 +90,8 @@ class ScanViewController: UIViewController {
         LastUpdate().incUpdate()
         getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
     }
+    
+    
     
     @IBAction func manageTradesAction(_ sender: Any) {
         //MARK: - segue to candidates
@@ -295,15 +294,13 @@ class ScanViewController: UIViewController {
     func updateProgressBar() {
         DispatchQueue.main.async {
             self.updatedProgress += self.incProgress
-            self.progressView.progress = self.updatedProgress
         }
     }
     
     func updateUI(with: String, spinIsOff: Bool) {
         DispatchQueue.main.async {
             //print(with)
-            self.updateLable?.text =  with
-            self.updateProgressBar()
+            //self.updateLable?.text =  with
         }
     }
     
@@ -314,8 +311,6 @@ class ScanViewController: UIViewController {
         //print("tickerCount \(tickerCount), processCount \(processCount), divisor \(divisor),")
         incProgress = Float( divisor / (tickerCount * processCount ) )
         //print("\nProgress inc = \(incProgress)\n")
-        progressView.setProgress(incProgress, animated: true)
-        progressView.isHidden = false
     }
     
     func checkDuplicates() {

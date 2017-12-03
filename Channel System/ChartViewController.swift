@@ -104,6 +104,7 @@ class SCSSyncMultiChartView: UIViewController {
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        setupAnnotations()
     }
     
     fileprivate func configureChartSuraface() {
@@ -122,6 +123,35 @@ class SCSSyncMultiChartView: UIViewController {
         self.bottomView.addSubview(sciChartView2)
     }
     
+    fileprivate func setupAnnotations() {
+        let textStyle = SCITextFormattingStyle()
+        textStyle.fontSize = 20
+        
+        buildTextAnnotation(x:10, y:10.5,
+                            horizontalAnchorPoint: .left,
+                            verticalAnchorPoint: .bottom,  
+                            textStyle: textStyle,
+                            coordMode: .absolute,
+                            text: "Buy!",color: 0xFFFFFFFF)
+    }
+    
+    private func buildTextAnnotation(x:Double, y:Double, horizontalAnchorPoint:SCIHorizontalAnchorPoint, verticalAnchorPoint:SCIVerticalAnchorPoint, textStyle:SCITextFormattingStyle, coordMode:SCIAnnotationCoordinateMode, text:String, color:uint){
+        
+        let textAnnotation = SCITextAnnotation()
+        textAnnotation.coordinateMode = coordMode;
+        textAnnotation.xAxisId = axisX1Id
+        textAnnotation.yAxisId = axisY1Id
+        textAnnotation.x1 = SCIGeneric(x);
+        textAnnotation.y1 = SCIGeneric(y);
+        textAnnotation.horizontalAnchorPoint = horizontalAnchorPoint;
+        textAnnotation.verticalAnchorPoint = verticalAnchorPoint;
+        textAnnotation.text = text;
+        textAnnotation.style.textStyle = textStyle;
+        textAnnotation.style.textColor = UIColor.fromARGBColorCode(color);
+        textAnnotation.style.backgroundColor = UIColor.clear
+        textAnnotation.isEditable = false
+        sciChartView1.annotations.add(textAnnotation);
+    }
     fileprivate func addAxis(BarsToShow: Int) {
         
         let totalBars = oneTicker.count
