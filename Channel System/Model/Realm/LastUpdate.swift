@@ -35,9 +35,7 @@ class LastUpdate: Object {
             let lastUpdate = getRealm.last?.lastUpdateString
             //todo: add count
             let count = getRealm.last?.updates
-            let totalAccess = 20
-            let countRemaining = totalAccess - count!
-            return "Last update: \(lastUpdate!), You have \(String(describing: countRemaining)) left"
+            return "Last update: \(lastUpdate!), \(String(describing: count!)) updates today"
         }
     }
     

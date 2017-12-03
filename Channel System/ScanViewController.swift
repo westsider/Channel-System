@@ -11,6 +11,10 @@ import UIKit
 
 class ScanViewController: UIViewController {
     
+    @IBOutlet weak var lastUpdateLable: UILabel!
+    
+    @IBOutlet weak var currentProcessLable: UILabel!
+    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -55,6 +59,7 @@ class ScanViewController: UIViewController {
     }
     
     func firstRun() {
+        lastUpdateLable.text = "First run of app."
         print("\nThis was first run so I will load CSV historical data\n")
         initially(deleteAll: true, printPrices: false, printTrades: false)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
@@ -70,13 +75,14 @@ class ScanViewController: UIViewController {
     
     func subsequentRuns() {
         print("\nThis is NOT the first run.\n")
+// spinner on
         updateRealm = DateHelper().realmNotCurrent(debug: true)
         lastDateInRealm = Prices().getLastDateInRealm(debug: true)
+        
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         
-        //MARK: - TODO - label - show last update time and date, updates today remaining
-        self.updateUI(with: LastUpdate().checkUpate(), spinIsOff: true)
-        
+        currentProcessLable.text = LastUpdate().checkUpate()
+// spinner off
         let realm = try! Realm()
         let getDate = realm.objects(LastUpdate.self)
         
@@ -300,7 +306,7 @@ class ScanViewController: UIViewController {
     func updateUI(with: String, spinIsOff: Bool) {
         DispatchQueue.main.async {
             //print(with)
-            //self.updateLable?.text =  with
+            self.lastUpdateLable.text =  with
         }
     }
     
