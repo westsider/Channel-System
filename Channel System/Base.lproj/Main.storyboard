@@ -24,7 +24,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="Eq7-ZG-xqk">
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="Eq7-ZG-xqk">
                                 <rect key="frame" x="102" y="93" width="170" height="170"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Eq7-ZG-xqk" secondAttribute="height" multiplier="1:1" id="7Sm-dw-7ys"/>
@@ -51,7 +51,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pjh-GY-89w">
                                 <rect key="frame" x="16" y="293" width="343" height="100"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wsiting to update or trade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hQG-0g-wbn">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting to update or trade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hQG-0g-wbn">
                                         <rect key="frame" x="8" y="38.5" width="327" height="24"/>
                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -123,6 +123,7 @@
                     <navigationItem key="navigationItem" id="biD-pr-RAe"/>
                     <connections>
                         <outlet property="acticity" destination="0yM-3j-dra" id="r2b-JR-ZAa"/>
+                        <outlet property="circleImage" destination="Eq7-ZG-xqk" id="d1v-dn-gBk"/>
                         <outlet property="currentProcessLable" destination="lIN-xi-Yu4" id="vSU-cH-Eiw"/>
                         <outlet property="lastUpdateLable" destination="hQG-0g-wbn" id="1IB-IW-pEN"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>

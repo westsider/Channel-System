@@ -17,6 +17,8 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var acticity: UIActivityIndicatorView!
     
+    @IBOutlet weak var circleImage: UIImageView!
+    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -77,14 +79,10 @@ class ScanViewController: UIViewController {
     
     func subsequentRuns() {
         print("\nThis is NOT the first run.\n")
-// spinner on
         updateRealm = DateHelper().realmNotCurrent(debug: true)
         lastDateInRealm = Prices().getLastDateInRealm(debug: true)
-        
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        
         currentProcessLable.text = LastUpdate().checkUpate()
-// spinner off
         acticity.stopAnimating()
         let realm = try! Realm()
         let getDate = realm.objects(LastUpdate.self)
