@@ -499,6 +499,7 @@
                         <outlet property="activityIndicator" destination="GY3-YP-2fw" id="d68-9n-ov9"/>
                         <outlet property="bottomLeft" destination="SPT-jl-tNV" id="Xcf-9X-nC7"/>
                         <outlet property="bottomRight" destination="Tay-vL-i2o" id="jKO-m9-6ZX"/>
+                        <outlet property="chartView" destination="ccl-Df-KON" id="TeF-pJ-ELh"/>
                         <outlet property="midLeft" destination="Fdl-Hk-vp9" id="Lt0-dB-Odd"/>
                         <outlet property="midRight" destination="mI0-zv-mLu" id="tUp-yC-SQZ"/>
                         <outlet property="topLeft" destination="SMx-1W-QQF" id="uhK-Ut-Wse"/>

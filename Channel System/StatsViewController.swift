@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SciChart
 
 class StatsViewController: UIViewController {
 
@@ -24,6 +25,8 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var chartView: UIView!
+    
     var galaxie = [String]()
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
@@ -34,12 +37,13 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        
     }
 
     override func viewDidAppear(_ animated: Bool) {
         calcStats()
+        makeChart()
     }
+    
     func calcStats() {
         for each in galaxie {
             let report = BackTest().performanceString(ticker: each, debug: false)
@@ -72,14 +76,54 @@ class StatsViewController: UIViewController {
         activityIndicator.stopAnimating()
     }
     
-    //MARK: - TODO - Stats VC scrollview of: stats as lables at top, graph p&L, sorted tableview,
-    /*
-     Total Profit 100627,   Avg Pct Win 65.94,
-     Avg ROI 2.78,          Total ROI 513.61,
-     Avg Stars 3.31
-     */
-    //MARK: - TODO - save to realm STATS object
-    //MARK: - TODO - load with candidates tableview | SPY 70% $11,021 18.7% ROI ⭐️⭐️⭐️⭐️⭐️ |
-    //MARK: - TODO - add STATS to PRICES object when loadDataFeed
+    func makeChart() {
+        completeConfiguration()
+    }
+
+     var sciChartView1 = SCIChartSurface()
+    
+    // MARK: initialize surface
+    fileprivate func addSurface() {
+        sciChartView1 = SCIChartSurface(frame: self.chartView.bounds)
+        sciChartView1.frame = self.chartView.bounds
+        sciChartView1.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        sciChartView1.translatesAutoresizingMaskIntoConstraints = true
+        self.chartView.addSubview(sciChartView1)
+    }
+    
+    // MARK: Overrided Functions
+    func completeConfiguration() {
+        addSurface()
+        SCIUpdateSuspender.usingWithSuspendable(sciChartView1) {[unowned self] in
+            self.addAxes()
+            self.addSeries()
+        }
+    }
+    
+    // MARK: Private Functions
+    fileprivate func addAxes() {
+        let xAxis = SCINumericAxis()
+        xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        //xAxis.visibleRange = SCIDoubleRange(min:SCIGeneric(1.1), max: SCIGeneric(2.7))
+        let yAxis = SCINumericAxis()
+        yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        sciChartView1.xAxes.add(xAxis)
+        sciChartView1.yAxes.add(yAxis)
+    }
+    
+    fileprivate func addSeries() {
+        let lineDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
+        let fakeSeries = [1.0, 2.1, 3.2, 4.5, 7.0, 5.5, 4.0, 7.5, 10.0]
+        var counter = 0.0
+        for things in fakeSeries {
+            lineDataSeries.appendX(SCIGeneric(counter), y: SCIGeneric(things))
+            counter += 1
+        }
+        
+        let lineRenderSeries = SCIFastLineRenderableSeries()
+        lineRenderSeries.dataSeries = lineDataSeries
+        lineRenderSeries.strokeStyle = SCISolidPenStyle(colorCode: 0xFF279B27, withThickness: 1.0)
+        sciChartView1.renderableSeries.add(lineRenderSeries)
+    }
     
 }
