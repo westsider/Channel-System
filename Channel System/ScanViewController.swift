@@ -321,7 +321,6 @@ class ScanViewController: UIViewController {
         }
     }
     
-    
     func initProgressBar() {
         let tickerCount = Double(galaxie.count)
         let processCount = Double(5)
