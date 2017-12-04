@@ -17,13 +17,13 @@ class SCSSyncMultiChartView: UIViewController {
     let showTrades = ShowTrades()
     var ticker = ""
     var taskIdSelected = ""
-    
+    var rangeStart:Int = 0
     let axisY1Id = "Y1"
     let axisX1Id = "X1"
-    
+    var highestPrice:Double = 0.00
     let axisY2Id = "Y2"
     let axisX2Id = "X2"
-    
+    let maxBarsOnChart = 75
     var sciChartView1 = SCIChartSurface()
     var sciChartView2 = SCIChartSurface()
     
@@ -61,14 +61,21 @@ class SCSSyncMultiChartView: UIViewController {
         let downWickPen = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
         let ohlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
         ohlcDataSeries.acceptUnsortedData = true
+        let startBar = oneTicker.count - maxBarsOnChart
         
-        for things in oneTicker {
+        for ( index, things ) in oneTicker.enumerated() {
             if ( debug ) { print("\(things.date!) \(things.open) \(things.high) \(things.low) \(things.close)") }
             ohlcDataSeries.appendX(SCIGeneric(things.date!),
                                    open: SCIGeneric(things.open),
                                    high: SCIGeneric(things.high),
                                    low: SCIGeneric(things.low),
                                    close: SCIGeneric(things.close))
+            
+            if index >= startBar {
+                if things.high > highestPrice {
+                    highestPrice = things.high
+                }
+            }
         }
         
         let candleRendereSeries = SCIFastCandlestickRenderableSeries()
@@ -97,14 +104,18 @@ class SCSSyncMultiChartView: UIViewController {
     func completeConfiguration() {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
         configureChartSuraface()
-        addAxis(BarsToShow: 75)
+        addAxis(BarsToShow: maxBarsOnChart)
         addModifiers()
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        setupAnnotations()
+        
+        let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
+        let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id,
+                                           date: Double(rangeStart), price: highestPrice, text: statsText)
+        sciChartView1.annotations.add(stats)
     }
     
     fileprivate func configureChartSuraface() {
@@ -123,39 +134,12 @@ class SCSSyncMultiChartView: UIViewController {
         self.bottomView.addSubview(sciChartView2)
     }
     
-    fileprivate func setupAnnotations() {
-        let textStyle = SCITextFormattingStyle()
-        textStyle.fontSize = 20
-        
-        buildTextAnnotation(x:10, y:10.5,
-                            horizontalAnchorPoint: .left,
-                            verticalAnchorPoint: .bottom,  
-                            textStyle: textStyle,
-                            coordMode: .absolute,
-                            text: "Buy!",color: 0xFFFFFFFF)
-    }
     
-    private func buildTextAnnotation(x:Double, y:Double, horizontalAnchorPoint:SCIHorizontalAnchorPoint, verticalAnchorPoint:SCIVerticalAnchorPoint, textStyle:SCITextFormattingStyle, coordMode:SCIAnnotationCoordinateMode, text:String, color:uint){
-        
-        let textAnnotation = SCITextAnnotation()
-        textAnnotation.coordinateMode = coordMode;
-        textAnnotation.xAxisId = axisX1Id
-        textAnnotation.yAxisId = axisY1Id
-        textAnnotation.x1 = SCIGeneric(x);
-        textAnnotation.y1 = SCIGeneric(y);
-        textAnnotation.horizontalAnchorPoint = horizontalAnchorPoint;
-        textAnnotation.verticalAnchorPoint = verticalAnchorPoint;
-        textAnnotation.text = text;
-        textAnnotation.style.textStyle = textStyle;
-        textAnnotation.style.textColor = UIColor.fromARGBColorCode(color);
-        textAnnotation.style.backgroundColor = UIColor.clear
-        textAnnotation.isEditable = false
-        sciChartView1.annotations.add(textAnnotation);
-    }
+    
     fileprivate func addAxis(BarsToShow: Int) {
         
         let totalBars = oneTicker.count
-        let rangeStart = totalBars - BarsToShow
+        rangeStart = totalBars - BarsToShow
         
         let axisX1 = SCICategoryDateTimeAxis()
         axisX1.axisId = axisX1Id
@@ -219,7 +203,6 @@ class SCSSyncMultiChartView: UIViewController {
         modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView2.chartModifiers = modifierGroup
     }
-
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
          for ( index, things) in oneTicker.enumerated() {

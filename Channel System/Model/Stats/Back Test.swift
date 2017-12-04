@@ -195,6 +195,15 @@ class BackTest {
         let star = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
         return "\(ticker) $\(profit) \(roi)% \(winPct)% \t\(star.1)"
     }
+    
+    func chartString(ticker:String)->String {
+        let result = BackTest().getResults(ticker: ticker, debug: false)
+        let profit = String(format: "%.0f", result.0)
+        let roi = String(format: "%.1f", result.3)
+        let winPct = String(format: "%.1f", result.4)
+        let star = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
+        return "$\(profit)\n\(roi)%  ROI\n\(winPct)%  Win\n\(star.1)"
+    }
 }
 
 

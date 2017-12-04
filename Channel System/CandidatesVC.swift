@@ -24,8 +24,9 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
     
+    // Now settings for risk
     @IBAction func clearRealmAction(_ sender: Any) {
-        RealmHelpers().deleteAll()
+        //MARK: - TODO - mae alert view or side menue\
     }
     
     @IBAction func showIndexAction(_ sender: Any) {
