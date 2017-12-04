@@ -15,9 +15,13 @@ class ScanViewController: UIViewController {
     
     @IBOutlet weak var currentProcessLable: UILabel!
     
-    @IBOutlet weak var acticity: UIActivityIndicatorView!
+    @IBOutlet weak var activity: UIActivityIndicatorView!
     
     @IBOutlet weak var circleImage: UIImageView!
+    
+    @IBOutlet weak var updateButton: UIButton!
+    
+    @IBOutlet weak var tradeButton: UIButton!
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
@@ -44,10 +48,11 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
+        tradeBotton(isOn: false)
+        updateButton(isOn: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-
         if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
             firstRun()
         } else {
@@ -83,13 +88,9 @@ class ScanViewController: UIViewController {
         lastDateInRealm = Prices().getLastDateInRealm(debug: true)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         currentProcessLable.text = LastUpdate().checkUpate()
-        acticity.stopAnimating()
-        let realm = try! Realm()
-        let getDate = realm.objects(LastUpdate.self)
-        
-        for each in getDate {
-            debugPrint(each)
-        }
+        activity.stopAnimating()
+        tradeBotton(isOn: true)
+        updateButton(isOn: true)
     }
 
     @IBAction func getNewDataAction(_ sender: Any) {
@@ -102,6 +103,8 @@ class ScanViewController: UIViewController {
     
     @IBAction func manageTradesAction(_ sender: Any) {
         //MARK: - segue to candidates
+        //activity.startAnimating() = true
+        updateUI(with: "Calculating Performance", spinIsOff: false)
         segueToCandidatesVC()
     }
 
@@ -310,10 +313,10 @@ class ScanViewController: UIViewController {
             self.lastUpdateLable.text =  with
             
             if spinIsOff {
-                self.acticity.stopAnimating()
+                self.activity.stopAnimating()
                 
             } else {
-                self.acticity.startAnimating()
+                self.activity.startAnimating()
             }
         }
     }
@@ -334,6 +337,26 @@ class ScanViewController: UIViewController {
             Prices().findDuplicates(ticker: ticker, debug: true)
         }
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
+    }
+    
+    func tradeBotton(isOn:Bool) {
+        if isOn {
+            tradeButton.isEnabled = true
+            tradeButton.alpha = 1.0
+        } else {
+            tradeButton.isEnabled = false
+            tradeButton.alpha = 0.4
+        }
+    }
+    
+    func updateButton(isOn:Bool){
+        if isOn {
+            updateButton.isEnabled = true
+            updateButton.alpha = 1.0
+        } else {
+            updateButton.isEnabled = false
+            updateButton.alpha = 0.4
+        }
     }
     
     func segueToChart(ticker: String) {

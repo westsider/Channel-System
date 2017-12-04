@@ -122,10 +122,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="biD-pr-RAe"/>
                     <connections>
-                        <outlet property="acticity" destination="0yM-3j-dra" id="r2b-JR-ZAa"/>
+                        <outlet property="activity" destination="0yM-3j-dra" id="r2b-JR-ZAa"/>
                         <outlet property="circleImage" destination="Eq7-ZG-xqk" id="d1v-dn-gBk"/>
                         <outlet property="currentProcessLable" destination="lIN-xi-Yu4" id="vSU-cH-Eiw"/>
                         <outlet property="lastUpdateLable" destination="hQG-0g-wbn" id="1IB-IW-pEN"/>
+                        <outlet property="tradeButton" destination="x8N-0N-Aed" id="ddf-ar-VLP"/>
+                        <outlet property="updateButton" destination="Gtg-gI-fW5" id="TBC-09-I4B"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>
                         <segue destination="KP2-Kg-sPN" kind="show" identifier="ScanToManage" id="kyU-xX-rPx"/>
                     </connections>
