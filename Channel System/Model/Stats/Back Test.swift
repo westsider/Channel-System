@@ -184,7 +184,7 @@ class BackTest {
         let winPct = String(format: "%.2f", result.4)
         let star = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
         let answer = "\(ticker)\tProfit \t$\(profit),  LW/LL \(LW)/\(LL), \tROI \(roi)%, \t\(winPct)% Win, \t\(star) stars"
-        return answer  //LW \(String(format: "%.2f", largestWin)), LL\(String(format: "%.2f", largestLoser)
+        return answer
     }
     
     func tableViewString(ticker:String)->String {
@@ -198,7 +198,7 @@ class BackTest {
     
     func chartString(ticker:String)->String {
         let result = BackTest().getResults(ticker: ticker, debug: false)
-        let profit = String(format: "%.0f", result.0)
+        let profit = String(format: "%.2f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)
         let star = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)

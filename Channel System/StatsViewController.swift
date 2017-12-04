@@ -22,6 +22,7 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var bottomRight: UILabel!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var galaxie = [String]()
     var totalProfit = [Double]()
@@ -33,9 +34,12 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        calcStats()
+        
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        calcStats()
+    }
     func calcStats() {
         for each in galaxie {
             let report = BackTest().performanceString(ticker: each, debug: false)
@@ -58,14 +62,14 @@ class StatsViewController: UIViewController {
         let avgStars = averageStars.reduce(0, +) / Double( averageStars.count )
         print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))")
         
-        topLeft.text = "Total Profit \(String(format: "%.0f", grossProfit))"
-        topRight.text = "Avg Pct Win \(String(format: "%.2f", aPctWin))"
-        midLeft.text = "Avg ROI \(String(format: "%.2f", avgROI))"
+        topLeft.text = "$\(String(format: "%.0f", grossProfit)) Profit"
+        topRight.text = "\(String(format: "%.0f", aPctWin))% Wins"
+        midLeft.text = "\(String(format: "%.1f", avgROI))% Avg Roi "
         
-        midRight.text = "Total ROI \(String(format: "%.2f", grossROI))"
-        bottomLeft.text = "Avg Stars \(String(format: "%.2f", avgStars))"
+        midRight.text = "\(String(format: "%.0f", grossROI))% Gross Roi"
+        bottomLeft.text = "\(String(format: "%.2f", avgStars)) Avg Stars"
         bottomRight.text = "This is open"
-        
+        activityIndicator.stopAnimating()
     }
     
     //MARK: - TODO - Stats VC scrollview of: stats as lables at top, graph p&L, sorted tableview,
