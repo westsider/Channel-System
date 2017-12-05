@@ -53,12 +53,12 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        CumBackTest().makeMaster()
-//        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-//            firstRun()
-//        } else {
-//            subsequentRuns()
-//        }
+        
+        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+            firstRun()
+        } else {
+            subsequentRuns()
+        }
     }
     
     func saveCompanyInfoToRealm() {

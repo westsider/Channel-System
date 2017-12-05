@@ -32,11 +32,17 @@ class StatsViewController: UIViewController {
     var averagePctWin = [Double]()
     var totalROI = [Double]()
     var averageStars = [Double]()
+    let backTest = CumBackTest()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        backTest.makeMaster(debug: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -100,7 +106,7 @@ class StatsViewController: UIViewController {
     
     // MARK: Private Functions
     fileprivate func addAxes() {
-        let xAxis = SCINumericAxis()
+        let xAxis = SCICategoryDateTimeAxis()
         xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         let yAxis = SCINumericAxis()
         yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
@@ -109,12 +115,13 @@ class StatsViewController: UIViewController {
     }
     
     fileprivate func addSeries() {
-        let lineDataSeries = SCIXyDataSeries(xType: .double, yType: .double)
-        let fakeSeries = [1.0, 2.1, 3.2, 4.5, 7.0, 5.5, 4.0, 7.5, 10.0]
-        var counter = 0.0
-        for things in fakeSeries {
-            lineDataSeries.appendX(SCIGeneric(counter), y: SCIGeneric(things))
-            counter += 1
+        let lineDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
+        //let fakeSeries = [1.0, 2.1, 3.2, 4.5, 7.0, 5.5, 4.0, 7.5, 10.0]
+        lineDataSeries.acceptUnsortedData = true
+        //var counter = 0.0
+        for things in backTest.cumProfitWeelky {
+            lineDataSeries.appendX(SCIGeneric(things.date), y: SCIGeneric(things.profit))
+            //counter += 1
         }
         
         let lineRenderSeries = SCIFastLineRenderableSeries()

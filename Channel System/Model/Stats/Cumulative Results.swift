@@ -10,8 +10,15 @@ import Foundation
 import RealmSwift
 
 class CumBackTest {
-    func makeMaster() {
-        var master: [(date: Date, profit: Double)] = []
+    
+    var master: [(date: Date, profit: Double)] = []
+    
+    var cumProfit: [(date: Date, profit: Double)] = []
+    
+    var cumProfitWeelky: [(date: Date, profit: Double)] = []
+    
+    func makeMaster(debug:Bool) {
+        
         let realm = try! Realm()
         let dateArray = realm.objects(Prices.self).sorted(byKeyPath: "date", ascending: true)
         var counter = 0
@@ -23,7 +30,7 @@ class CumBackTest {
                 if today.date == lastDate  {
                     todaysProfit.append(today.backTestProfit)
                     sumOfToday = todaysProfit.reduce(0, +)
-                    print(today.dateString, today.ticker, String(format: "%.2f", today.backTestProfit) , String(format: "%.2f", sumOfToday!))
+                    if debug { print(today.dateString, today.ticker, String(format: "%.2f", today.backTestProfit) , String(format: "%.2f", sumOfToday!)) }
                 } else {
                     // new date so save last date and total for the day
                     if sumOfToday != nil {
@@ -32,12 +39,61 @@ class CumBackTest {
                         // start adding new date
                         todaysProfit.append(today.backTestProfit)
                         sumOfToday = todaysProfit.reduce(0, +)
-                        print("new date!\n", today.dateString, today.ticker, String(format: "%.2f", today.backTestProfit) , String(format: "%.2f", sumOfToday!))
+                        if debug { print("new date!\n", today.dateString, today.ticker, String(format: "%.2f", today.backTestProfit) , String(format: "%.2f", sumOfToday!)) }
                     }
                 }
                 counter += 1
                 lastDate = today.date!
             }
         }
+        dailyProfit(debug: false)
+    }
+    
+    func dailyProfit(debug: Bool) {
+        cumProfit = master
+        var runOfProfit:Double = 0.00
+        
+        for (index, today) in master.enumerated() {
+            runOfProfit += today.profit
+            cumProfit[index].profit = runOfProfit
+        }
+        
+        if debug {
+            for today in cumProfit {
+                print(today.date, String(format: "%.2f", today.profit))
+            }
+        }
+        _ = weeklyProfit(debug: true)
+    }
+    
+     func weeklyProfit(debug: Bool)-> [(date: Date, profit: Double)]  {
+        for today in cumProfit.enumerated() {
+            // if today is friday
+            if isFriday(date: today.element.date) {
+                //print("Hello Friday")
+                cumProfitWeelky.append((date: today.element.date, profit: today.element.profit))
+            }
+            if debug {
+                for today in cumProfitWeelky {
+                    print(today.date, String(format: "%.2f", today.profit))
+                }
+            }
+        }
+        return cumProfitWeelky
+    }
+    
+    func isFriday(date:Date) -> Bool {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)
+        let components = calendar!.components([.weekday], from: date as Date)
+        
+        if components.weekday == 6 {
+            return true
+        } else {
+            return false
+        }
     }
 }
+
+
+
+
