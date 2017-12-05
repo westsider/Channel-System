@@ -95,6 +95,13 @@ class SCSSyncMultiChartView: UIViewController {
         segueToManageVC(taskID: taskIdSelected, action: "Entry For")
     }
     
+    @IBAction func managePortfolioAction(_ sender: Any) {
+        print("tapped edit")
+        segueToManageVC(taskID: taskIdSelected, action: "Manage")
+        
+    }
+    
+    
     func sequeToPortfolio() {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
         navigationController?.pushViewController(myVC, animated: true)

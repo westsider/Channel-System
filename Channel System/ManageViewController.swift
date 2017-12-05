@@ -38,7 +38,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     var thisTrade = Prices()
     
-    var textEntered = "No Text"
+    var textEntered = "No Text"  // Entry For || Manage
     
     // preserve calc of shares ect
     var close = 0.0

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="utR-kH-12Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="utR-kH-12Z">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -287,11 +288,18 @@
                         <barButtonItem title="Item" id="LVd-d1-LWB"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="BXZ-W2-m9r">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="J9V-Si-h9t">
-                            <connections>
-                                <action selector="addToPortfolioAction:" destination="x0Q-wm-iek" id="hHb-rz-xrd"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="J9V-Si-h9t">
+                                <connections>
+                                    <action selector="addToPortfolioAction:" destination="x0Q-wm-iek" id="hHb-rz-xrd"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="edit" id="Ey2-nD-OyU">
+                                <connections>
+                                    <action selector="managePortfolioAction:" destination="x0Q-wm-iek" id="dT4-k8-gg6"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -556,7 +564,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="1W8-aQ-1Zh">
-                                <rect key="frame" x="16" y="94" width="343" height="311"/>
+                                <rect key="frame" x="16" y="94" width="343" height="395"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gmm-gm-fNe" userLabel="Inset View">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="259"/>
@@ -702,18 +710,46 @@
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aub-o9-ljb" userLabel="HiddenSwitch Stack">
+                                        <rect key="frame" x="0.0" y="327" width="343" height="68"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3g-XR-opa">
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="68"/>
+                                                <subviews>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iZy-yg-CQW">
+                                                        <rect key="frame" x="20" y="20" width="303" height="29"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <segments>
+                                                            <segment title="Target"/>
+                                                            <segment title="Stop"/>
+                                                            <segment title="Time"/>
+                                                        </segments>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </segmentedControl>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            </view>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="d3g-XR-opa" secondAttribute="bottom" id="4lc-KV-EVy"/>
+                                            <constraint firstItem="d3g-XR-opa" firstAttribute="top" secondItem="aub-o9-ljb" secondAttribute="top" id="CFI-0F-MfN"/>
+                                            <constraint firstItem="d3g-XR-opa" firstAttribute="leading" secondItem="aub-o9-ljb" secondAttribute="leading" id="iwS-CW-ERs"/>
+                                            <constraint firstAttribute="trailing" secondItem="d3g-XR-opa" secondAttribute="trailing" id="sjM-vQ-TD0"/>
+                                        </constraints>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="zjm-qq-0wa" secondAttribute="bottom" id="6M6-DU-rgM"/>
                                     <constraint firstItem="Gmm-gm-fNe" firstAttribute="trailing" secondItem="zjm-qq-0wa" secondAttribute="trailing" id="Eve-Mf-wEE"/>
                                     <constraint firstItem="zjm-qq-0wa" firstAttribute="top" secondItem="Gmm-gm-fNe" secondAttribute="bottom" constant="16" id="Oxs-ic-7fB"/>
                                     <constraint firstAttribute="trailing" secondItem="zjm-qq-0wa" secondAttribute="trailing" id="WOE-TB-hDv"/>
                                     <constraint firstItem="zjm-qq-0wa" firstAttribute="leading" secondItem="1W8-aQ-1Zh" secondAttribute="leading" id="wPL-1o-Oin"/>
+                                    <constraint firstItem="aub-o9-ljb" firstAttribute="trailing" secondItem="zjm-qq-0wa" secondAttribute="trailing" id="why-YH-hol"/>
                                 </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="Dgc-j9-3tY" firstAttribute="bottom" secondItem="1W8-aQ-1Zh" secondAttribute="bottom" constant="178" id="D42-u8-Nrf"/>
                             <constraint firstItem="1W8-aQ-1Zh" firstAttribute="top" secondItem="Dgc-j9-3tY" secondAttribute="top" constant="30" id="F9D-eE-xrX"/>
                             <constraint firstItem="1W8-aQ-1Zh" firstAttribute="trailing" secondItem="Egc-F0-qZD" secondAttribute="trailingMargin" id="Kj9-Ax-9ZZ"/>
                             <constraint firstItem="1W8-aQ-1Zh" firstAttribute="leading" secondItem="Egc-F0-qZD" secondAttribute="leadingMargin" id="L4M-bN-Ig0"/>
