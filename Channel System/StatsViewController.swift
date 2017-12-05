@@ -40,15 +40,13 @@ class StatsViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        calcStats()
+        calcStats(debug: false)
         makeChart()
     }
     
-    func calcStats() {
+    func calcStats(debug:Bool) {
         for each in galaxie {
-            let report = BackTest().performanceString(ticker: each, debug: false)
-            print(report)
-            let result = BackTest().getResults(ticker: each, debug: false)
+            let result = BackTest().getResults(ticker: each, debug: false, updateRealm: false)
             let stars = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
             totalProfit.append(result.0)
             // calc performance on winners
@@ -64,7 +62,7 @@ class StatsViewController: UIViewController {
         let avgROI = grossROI / Double( totalROI.count )
         let aPctWin = averagePctWin.reduce(0, +) / Double( averagePctWin.count )
         let avgStars = averageStars.reduce(0, +) / Double( averageStars.count )
-        print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))")
+        if debug {print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))") }
         
         topLeft.text = "$\(String(format: "%.0f", grossProfit)) Profit"
         topRight.text = "\(String(format: "%.0f", aPctWin))% Wins"
@@ -104,7 +102,6 @@ class StatsViewController: UIViewController {
     fileprivate func addAxes() {
         let xAxis = SCINumericAxis()
         xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
-        //xAxis.visibleRange = SCIDoubleRange(min:SCIGeneric(1.1), max: SCIGeneric(2.7))
         let yAxis = SCINumericAxis()
         yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         sciChartView1.xAxes.add(xAxis)

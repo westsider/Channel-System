@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 class BackTest {
     /**
@@ -16,7 +17,7 @@ class BackTest {
      ### Declare As:
      let result = BackTest().getResults(ticker: "INTC")
      */
-    func getResults(ticker: String, debug:Bool)->(Double, Double, Double, Double, Double) {
+    func getResults(ticker: String, debug:Bool, updateRealm: Bool)->(Double, Double, Double, Double, Double) {
     
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         
@@ -37,8 +38,8 @@ class BackTest {
         var allTrades = [Double]()
         
         for each in prices {
-            // enter trade
-            // print("\(each.dateString) \(each.close) \(each.ticker)")
+            
+          
             if flat && each.longEntry {
                 flat = false
                 entryPrice = each.close
@@ -56,12 +57,28 @@ class BackTest {
                 if !flat && each.wPctR > -30 {
                     flat = true
                     tradeGain = (each.close - entryPrice) * shares
+                    
+                    if updateRealm {
+                        let realm = try! Realm()
+                        try! realm.write {
+                            each.backTestProfit = tradeGain
+                        }
+                    }
+
                     if  tradeGain > largestWin { largestWin = tradeGain }
                     if debug { print("wPctR(\(String(format: "%.1f", each.wPctR)) exit on \(each.dateString) Win \(String(format: "%.1f", tradeGain))") }
                     allTrades.append(tradeGain)
                 } else if !flat && daysInTrade == 7 {
                     flat = true
                     tradeGain = (each.close - entryPrice) * shares
+                    
+                    if updateRealm {
+                        let realm = try! Realm()
+                        try! realm.write {
+                            each.backTestProfit = tradeGain
+                        }
+                    }
+
                     allTrades.append(tradeGain)
                     if (( each.close - entryPrice ) >=  0 ) {
                         if  tradeGain > largestWin { largestWin = tradeGain }
@@ -76,6 +93,14 @@ class BackTest {
                     if  thisLoss < largestLoser { largestLoser = thisLoss }
                     if debug { print("Stop hit on \(each.dateString) Loss is \(String(format: "%.1f", thisLoss)) ") }
                     tradeGain = tradeGain + thisLoss
+                    
+                    if updateRealm {
+                        let realm = try! Realm()
+                        try! realm.write {
+                            each.backTestProfit = tradeGain
+                        }
+                    }
+
                     if debug { print("tradeGain \(String(format: "%.1f", tradeGain)) = tradeGain \(String(format: "%.1f", tradeGain)) + thisLoss \(String(format: "%.1f", thisLoss)) ") }
                 }
                
@@ -105,6 +130,7 @@ class BackTest {
         
         return ( grossProfit,largestWin, largestLoser, annualRoi, winPct )
     }
+
     //MARK: - TODO - rank tickers
     // ( score 50% each for  , winPct literal ) = 80% = 4 stars, 100% = 5 stars
     func calcStars(grossProfit:Double, annualRoi: Double, winPct:Double, debug:Bool)-> (Int, String) {
@@ -175,8 +201,8 @@ class BackTest {
         return (stars, starIcon )
     }
     
-    func performanceString(ticker:String, debug: Bool)->String {
-        let result = BackTest().getResults(ticker: ticker, debug: debug)
+    func performanceString(ticker:String, updateRealm:Bool, debug: Bool)->String {
+        let result = BackTest().getResults(ticker: ticker, debug: debug, updateRealm: updateRealm)
         let profit = String(format: "%.0f", result.0)
         let LW = String(format: "%.0f", result.1)
         let LL = String(format: "%.0f", result.2)
@@ -188,7 +214,7 @@ class BackTest {
     }
     
     func tableViewString(ticker:String)->String {
-        let result = BackTest().getResults(ticker: ticker, debug: false)
+        let result = BackTest().getResults(ticker: ticker, debug: false, updateRealm: false)
         let profit = String(format: "%.0f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)
@@ -197,7 +223,7 @@ class BackTest {
     }
     
     func chartString(ticker:String)->String {
-        let result = BackTest().getResults(ticker: ticker, debug: false)
+        let result = BackTest().getResults(ticker: ticker, debug: false, updateRealm: false)
         let profit = String(format: "%.2f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)

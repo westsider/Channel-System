@@ -36,8 +36,7 @@ class Prices: Object {
     @objc dynamic var loss      = 0.00
     @objc dynamic var account   = ""
     @objc dynamic var capitalReq = 0.00
-    
-    // roi, win%, stars, profit,
+    @objc dynamic var backTestProfit:Double = 0.00
     
     //MARK: - Count Prices
     func allPricesCount()-> Int {

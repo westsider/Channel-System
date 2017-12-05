@@ -53,17 +53,18 @@ class ScanViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-            firstRun()
-        } else {
-            subsequentRuns()
-        }
+        CumBackTest().makeMaster()
+//        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+//            firstRun()
+//        } else {
+//            subsequentRuns()
+//        }
     }
     
     func saveCompanyInfoToRealm() {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         for ticker in galaxie {
-            CompanyData().getInfoFor(ticker: ticker, debug: true, completion: self.infoBlock)
+            CompanyData().getInfoFor(ticker: ticker, debug: false, completion: self.infoBlock)
         }
     }
     
@@ -77,7 +78,7 @@ class ScanViewController: UIViewController {
         GetCSV().areTickersValid(megaSymbols: galaxie)
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
-        saveCompanyInfoToRealm()
+        //saveCompanyInfoToRealm()
         // update nsuserdefaults
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
