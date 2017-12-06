@@ -13,7 +13,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     @IBOutlet weak var tableView: UITableView!
     
-    let realm = try! Realm()
+    let realm:Realm = try! Realm()
     
     var tasks: Results<Prices>!
     
@@ -28,10 +28,10 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let task = "\(tasks[indexPath.row].ticker)"
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let task:String = "\(tasks[indexPath.row].ticker)"
         cell.textLabel?.text = task
-        let profit = tasks[indexPath.row].profit
+        let profit:Double = tasks[indexPath.row].profit
         cell.detailTextLabel?.text = String(profit)
         return cell
     }
@@ -42,7 +42,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func selectedSymbol(index: Int) {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
+        let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = tasks[index].taskID
         navigationController?.pushViewController(myVC, animated: true)
     }

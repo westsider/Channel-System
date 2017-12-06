@@ -32,24 +32,21 @@ class BackTest {
         var stop = 0.00
         var winPct = 0.00
         var cost = 0.00
-        
         var largestWin = 0.0
         var largestLoser = 0.0
         var allTrades = [Double]()
         
         for each in prices {
-            
-          
             if flat && each.longEntry {
                 flat = false
                 entryPrice = each.close
                 daysInTrade = 0
                 tradeCount += 1
                 if debug { print("Entry on \(each.dateString) Trade count \(tradeCount) and wPctR is \(String(format: "%.1f", each.wPctR))") }
-                let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice).2
-                shares = Double( TradeHelpers().calcShares(stopDist: stopDist, risk: 250))
-                stop =  TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice).0
-                cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
+                let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).2
+shares = Double( TradeHelpers().calcShares(stopDist: stopDist, risk: 250))
+stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).0
+cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
             }
             // manage trade
             if !flat {
@@ -103,7 +100,6 @@ class BackTest {
 
                     if debug { print("tradeGain \(String(format: "%.1f", tradeGain)) = tradeGain \(String(format: "%.1f", tradeGain)) + thisLoss \(String(format: "%.1f", thisLoss)) ") }
                 }
-               
             }
         }
         if debug {  print("All Trades: \(allTrades)") }

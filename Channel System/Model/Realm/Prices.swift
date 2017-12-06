@@ -101,7 +101,6 @@ class Prices: Object {
         if ( recent ) {
             let yesterday = Calendar.current.date(byAdding: .day, value: -days, to: Date())
             let specificNSDate:NSDate = yesterday! as NSDate
-            // "inTrade = true AND exitedTrade = false AND taskID == %@"
             let predicate = NSPredicate(format: "longEntry = true AND date > %@", specificNSDate)
             let results = realm.objects(Prices.self).filter(predicate)
             let resultsSortDate = results.sorted(byKeyPath: "date", ascending: false)

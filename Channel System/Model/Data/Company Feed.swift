@@ -38,7 +38,6 @@ class CompanyData: Object {
         let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
         let password = "e6cf8f921bb621f398240e315ab79068"
 
-        
         Alamofire.request("\(request)")
             .authenticate(user: user, password: password)
             .responseJSON { response in
@@ -114,3 +113,5 @@ class CompanyData: Object {
         }
     }
 }
+
+

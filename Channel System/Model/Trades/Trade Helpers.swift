@@ -17,10 +17,10 @@ class TradeHelpers {
      ### Declare As:
     let stop = TradeHelpers().calcStopTarget(close: close).0
      */
-    func calcStopTarget(ticker: String, close: Double)->(Double,Double, Double) {
+    func calcStopTarget(ticker: String, close: Double, debug: Bool)->(Double,Double, Double) {
         
         let thisTicker = CompanyData().getExchangeFrom(ticker: ticker, debug: false)
-        print("\(thisTicker.ticker) \(thisTicker.name) \(thisTicker.stockExchange)")
+        if debug { print("\(thisTicker.ticker) \(thisTicker.name) \(thisTicker.stockExchange)") }
         let thisTickersStop = Double(thisTicker.stopSize) * 0.01
         let stopDistance = close * thisTickersStop
         let stop = close - stopDistance

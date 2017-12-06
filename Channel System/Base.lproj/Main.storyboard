@@ -725,6 +725,9 @@
                                                             <segment title="Time"/>
                                                         </segments>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <connections>
+                                                            <action selector="exitSwitchAction:" destination="KP2-Kg-sPN" eventType="valueChanged" id="Rab-tX-Knd"/>
+                                                        </connections>
                                                     </segmentedControl>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -761,6 +764,7 @@
                         <outlet property="bottomLeft" destination="t7G-y2-Jge" id="hMp-7D-BXA"/>
                         <outlet property="bottomRight" destination="7zt-UG-T4X" id="xln-Cb-eMp"/>
                         <outlet property="capitalReq" destination="7MZ-1R-pZr" id="mlh-Pn-6qp"/>
+                        <outlet property="exitSwitch" destination="iZy-yg-CQW" id="Kfy-fK-3SY"/>
                         <outlet property="midLeft" destination="3Fo-Jk-d5b" id="tH4-kR-I2j"/>
                         <outlet property="midRight" destination="KAv-LJ-bZv" id="H3l-dZ-qjI"/>
                         <outlet property="stopSizeLable" destination="jWn-72-yWG" id="3d3-DP-huc"/>

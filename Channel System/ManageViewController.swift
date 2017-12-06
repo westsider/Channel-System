@@ -31,30 +31,36 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var capitalReq: UILabel!
     
     @IBOutlet weak var stopSizeLable: UILabel!
+
+    @IBOutlet weak var exitSwitch: UISegmentedControl!
     
-    var taskID = ""
+    var taskID:String = ""
     
-    var action = ""
+    var action:String = "" // Entry For || Manage
     
     var thisTrade = Prices()
     
-    var textEntered = "No Text"  // Entry For || Manage
+    var textEntered:String = "No Text"
     
     // preserve calc of shares ect
-    var close = 0.0
-    var stopDistance = 0.0
-    var stop = 0.0
-    var target = 0.0
-    var stopString = " "
-    let risk = 50
-    var shares = 0
-    var account = "TDA"
-    var capReq = 0.0
+    var close:Double = 0.0
+    var stopDistance:Double = 0.0
+    var stop:Double = 0.0
+    var target:Double = 0.0
+    var stopString:String = " "
+    let risk:Int = 50
+    var shares:Int = 0
+    var account:String = "TDA"
+    var capReq:Double = 0.0
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
         accountSwitch.selectedSegmentIndex = 2
-        populateLables(action: action)
+        populateLables(action: action, debug: false)
+        if action == "Entry for" {
+            exitSwitch.isEnabled = false
+            exitSwitch.alpha = 0.5
+        }
     }
     
     override func viewDidLoad() {
@@ -71,6 +77,11 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         default: break;
         }
     }
+    //MARK: - popululste lables from exit
+    @IBAction func exitSwitchAction(_ sender: UISegmentedControl) {
+        
+    }
+    
     
     @IBAction func inputTextAction(_ sender: Any) {
         if let thisText = textInput.text {
@@ -132,9 +143,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         
         if let exitPrice = Double(textEntered) {
             print("\n-----> We have  if let exitPrice of \(exitPrice)<------\n")
-            let entryPrice = thisTrade.entry
-            let shares = thisTrade.shares
-            let result = (exitPrice - entryPrice) * Double(shares)
+            let entryPrice:Double = thisTrade.entry
+            let shares:Int = thisTrade.shares
+            let result:Double = (exitPrice - entryPrice) * Double(shares)
             if ( result >= 0 ) {
                 print("\nCalc gain of \(result)")
                 updateRealm(gain: result, loss: 0.0)
@@ -166,29 +177,31 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     func proveUpdateTrade() {
         print("Proof the trade has been updated for taskID \(taskID)")
-        let checkTrades = RealmHelpers().checkExitedTrade(taskID: taskID)
+        let checkTrades:Results<Prices> = RealmHelpers().checkExitedTrade(taskID: taskID)
         print("\ndubug - checkTrades")
         debugPrint(checkTrades)
     }
 
     
     //MARK: - Populate Lables
-    func populateLables(action: String) {
+    func populateLables(action: String, debug: Bool) {
         
-        print("\npopulate lables")
+        if debug { print("\npopulate lables") }
 
         if (action == "Entry For") {
             print("\n calc trade entry, then populate lables\n")
             thisTrade = Prices().getFrom(taskID: taskID).last!
-            debugPrint(thisTrade)
+            if debug { debugPrint(thisTrade) }
             // calc target / stop
             close = thisTrade.close
-            stop = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close).0
-            target = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close).1
-            stopDistance = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close).2
+            stop = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close, debug: false).0
+            target = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close, debug: false).1
+            stopDistance = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close, debug: false).2
             stopString = TradeHelpers().stopString(stop: stop)
             shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: risk)
-            let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
+            if debug {
+                let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
+            }
             // populate lables
             textInput.text = String(thisTrade.close)
             
@@ -206,19 +219,24 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             
             capReq = TradeHelpers().capitalRequired(close: close, shares: shares)
             
-            let capReqd =  String(format: "%.2f", capReq)
+            let capReqd:String =  String(format: "%.2f", capReq)
             
             capitalReq.text = "Cost $\(capReqd)"
             
-            let stopSize = CompanyData().getExchangeFrom(ticker: thisTrade.ticker, debug: false)
+            let stopSize:CompanyData = CompanyData().getExchangeFrom(ticker: thisTrade.ticker, debug: false)
             
             stopSizeLable.text = "Stop Size \(stopSize.stopSize)%"
             
+        } else if (action == "Manage") {
+            //MARK: - TODO - set up lables
+            //MARK: - TODO - record trade profit 
+            
+            
         } else {
             
-            print("\nJust poplulate lables")
+            //print("\nJust poplulate lables")
             thisTrade = RealmHelpers().getEntryFor(taskID: taskID).last!
-            debugPrint(thisTrade)
+            //debugPrint(thisTrade)
             textInput.text = String(thisTrade.close)
             
             topLeft.text = action
@@ -257,7 +275,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     }
     
     func sequeToPortfolio() {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
+        let myVC:PortfolioViewController = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
     

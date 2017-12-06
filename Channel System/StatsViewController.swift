@@ -38,22 +38,23 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        backTest.makeMaster(debug: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         calcStats(debug: false)
-        makeChart()
+        backTest.getdataforChart {
+            self.makeChart()
+            self.activityIndicator.stopAnimating()
+        }
     }
     
     func calcStats(debug:Bool) {
         for each in galaxie {
-            let result = BackTest().getResults(ticker: each, debug: false, updateRealm: false)
-            let stars = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
+            let result:(Double, Double, Double, Double, Double) = BackTest().getResults(ticker: each, debug: false, updateRealm: false)
+            let stars:(Int,String) = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
             totalProfit.append(result.0)
             // calc performance on winners
             //if result.3 > 0 { I use this to find avg stars of winners
@@ -63,7 +64,7 @@ class StatsViewController: UIViewController {
             //}
             
         }
-        let grossProfit = totalProfit.reduce(0, +)
+        let grossProfit:Double = totalProfit.reduce(0, +)
         let grossROI = totalROI.reduce(0, +)
         let avgROI = grossROI / Double( totalROI.count )
         let aPctWin = averagePctWin.reduce(0, +) / Double( averagePctWin.count )
@@ -77,7 +78,7 @@ class StatsViewController: UIViewController {
         midRight.text = "\(String(format: "%.0f", grossROI))% Gross Roi"
         bottomLeft.text = "\(String(format: "%.2f", avgStars)) Avg Stars"
         bottomRight.text = "This is open"
-        activityIndicator.stopAnimating()
+        
     }
     
     func makeChart() {
@@ -116,12 +117,9 @@ class StatsViewController: UIViewController {
     
     fileprivate func addSeries() {
         let lineDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
-        //let fakeSeries = [1.0, 2.1, 3.2, 4.5, 7.0, 5.5, 4.0, 7.5, 10.0]
         lineDataSeries.acceptUnsortedData = true
-        //var counter = 0.0
         for things in backTest.cumProfitWeelky {
             lineDataSeries.appendX(SCIGeneric(things.date), y: SCIGeneric(things.profit))
-            //counter += 1
         }
         
         let lineRenderSeries = SCIFastLineRenderableSeries()

@@ -37,9 +37,9 @@ class ScanViewController: UIViewController {
     
     var incProgress: Float = 0
     
-    var counter = 0
+    var counter:Int = 0
     
-    var updateRealm = false
+    var updateRealm:Bool = false
     
     var lastDateInRealm:Date!
    
@@ -48,7 +48,7 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        tradeBotton(isOn: false)
+        tradeButton(isOn: false)
         updateButton(isOn: false)
     }
     
@@ -78,19 +78,19 @@ class ScanViewController: UIViewController {
         GetCSV().areTickersValid(megaSymbols: galaxie)
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
-        saveCompanyInfoToRealm()
+saveCompanyInfoToRealm()
         // update nsuserdefaults
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
     
     func subsequentRuns() {
         print("\nThis is NOT the first run.\n")
-        updateRealm = DateHelper().realmNotCurrent(debug: true)
-        lastDateInRealm = Prices().getLastDateInRealm(debug: true)
+        updateRealm = DateHelper().realmNotCurrent(debug: false)
+        lastDateInRealm = Prices().getLastDateInRealm(debug: false)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         currentProcessLable.text = LastUpdate().checkUpate()
         activity.stopAnimating()
-        tradeBotton(isOn: true)
+        tradeButton(isOn: true)
         updateButton(isOn: true)
     }
 
@@ -100,11 +100,7 @@ class ScanViewController: UIViewController {
         getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
     }
     
-    
-    
     @IBAction func manageTradesAction(_ sender: Any) {
-        //MARK: - segue to candidates
-        //activity.startAnimating() = true
         updateUI(with: "Calculating Performance", spinIsOff: false)
         segueToCandidatesVC()
     }
@@ -124,14 +120,14 @@ class ScanViewController: UIViewController {
         for each in results {
             if ( each.ticker == ticker)  {
                 print("\(each.ticker) \(each.dateString) \(each.close)  \(each.taskID)")
-                let close = each.close
-                let stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close).0
-                let target = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close).1
-                let stopDistance = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close).2
-                let shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: 50)
-                let stopString = TradeHelpers().stopString(stop: stop)
-                let capReq = TradeHelpers().capitalRequired(close: close, shares: shares)
-                let message = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
+                let close:Double = each.close
+                let stop:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).0
+                let target:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).1
+                let stopDistance:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).2
+                let shares:Int = TradeHelpers().calcShares(stopDist: stopDistance, risk: 50)
+                let stopString:String = TradeHelpers().stopString(stop: stop)
+                let capReq:Double = TradeHelpers().capitalRequired(close: close, shares: shares)
+                let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
                 RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false, account: "Test Account", capital: capReq)
             }
         }
@@ -169,7 +165,6 @@ class ScanViewController: UIViewController {
                     print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
                     segueToManageVC(taskID: trades.taskID, action: "Date Stop")
                 }
-                self.updateProgressBar()
             }
         } else {
             // exit here if no entries found
@@ -186,7 +181,6 @@ class ScanViewController: UIViewController {
                 let current = symbols.replacingOccurrences(of: "2", with: "")
                 self.updateUI(with: "Getting local data for \(current) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
                 DataFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
-                self.updateProgressBar()
             }
             self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
             self.calcSMA10(completion: self.smaBlock2)
@@ -208,7 +202,6 @@ class ScanViewController: UIViewController {
                         self.updateUI(with: "All remote data has been downloaded!\n", spinIsOff: true)
                         self.calcSMA10(completion: self.smaBlock2)
                     }
-                    self.updateProgressBar()
                 })
             }
         }
@@ -226,7 +219,6 @@ class ScanViewController: UIViewController {
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
-                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -245,7 +237,6 @@ class ScanViewController: UIViewController {
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
-                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -264,7 +255,6 @@ class ScanViewController: UIViewController {
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, completion: self.wPctRBlock)
                 self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
-                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
@@ -289,22 +279,12 @@ class ScanViewController: UIViewController {
                     Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
                 }
                 self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
-                self.updateProgressBar()
             }
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
-                //print("\n-------> Now printing database <--------\n")
-                //Prices().printLastPrices(symbols: self.galaxie, last: 4)
-                //self.segueToCandidatesVC()
                 self.manageTradesOrShowEntries()
             }
-        }
-    }
-    
-    func updateProgressBar() {
-        DispatchQueue.main.async {
-            self.updatedProgress += self.incProgress
         }
     }
     
@@ -323,9 +303,9 @@ class ScanViewController: UIViewController {
     }
     
     func initProgressBar() {
-        let tickerCount = Double(galaxie.count)
-        let processCount = Double(5)
-        let divisor = Double(1)
+        let tickerCount:Double = Double(galaxie.count)
+        let processCount:Double = Double(5)
+        let divisor:Double = Double(1)
         //print("tickerCount \(tickerCount), processCount \(processCount), divisor \(divisor),")
         incProgress = Float( divisor / (tickerCount * processCount ) )
         //print("\nProgress inc = \(incProgress)\n")
@@ -339,7 +319,7 @@ class ScanViewController: UIViewController {
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
     }
     
-    func tradeBotton(isOn:Bool) {
+    func tradeButton(isOn:Bool) {
         if isOn {
             tradeButton.isEnabled = true
             tradeButton.alpha = 1.0
@@ -360,18 +340,18 @@ class ScanViewController: UIViewController {
     }
     
     func segueToChart(ticker: String) {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
+        let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = Prices().getLastTaskID()
         navigationController?.pushViewController(myVC, animated: true)
     }
     
     func segueToCandidatesVC() {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
+        let myVC:SymbolsViewController = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
     
     func segueToManageVC(taskID: String, action: String) {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
+        let myVC:ManageViewController = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
         myVC.taskID = taskID
         myVC.action = action
         navigationController?.pushViewController(myVC, animated: true)

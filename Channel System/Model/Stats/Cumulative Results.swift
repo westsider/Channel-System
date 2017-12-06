@@ -17,6 +17,22 @@ class CumBackTest {
     
     var cumProfitWeelky: [(date: Date, profit: Double)] = []
     
+    var finishedWeekly:Bool = false
+    
+    func getdataforChart( completion: @escaping () -> ()) {
+        
+        makeMaster(debug:false)
+        
+        DispatchQueue.main.async {
+            if self.finishedWeekly  {
+                for each in self.cumProfitWeelky {
+                    print(each.date)
+                }
+                completion()
+            }
+        }
+    }
+    
     func makeMaster(debug:Bool) {
         
         let realm = try! Realm()
@@ -79,6 +95,7 @@ class CumBackTest {
                 }
             }
         }
+        finishedWeekly = true
         return cumProfitWeelky
     }
     
