@@ -39,8 +39,6 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        //let thisStuff = UserDefaults.standard.object(forKey: "StatsUpdate")
-        //print("\(String(describing: thisStuff!))")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +46,6 @@ class StatsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         getStatsfromRealm()
-        
     }
     
     func ActivityOne(isOn:Bool) {
@@ -71,22 +68,22 @@ class StatsViewController: UIViewController {
         let realm = try! Realm()
         let weeklyStats = realm.objects(WklyStats.self)
         let sortedByDate = weeklyStats.sorted(byKeyPath: "date", ascending: true)
-        if sortedByDate.count <= 1 {
-            print("We have weekly stats")
+        if sortedByDate.count >  1 {
             results = sortedByDate
-            print("now reading from realm")
+            print("We have  have weekly stats count > 1")
+            print("now reading from realm count: \(sortedByDate.count)")
             for each in results! {
                 print(each.date!, each.profit)
             }
             completeConfiguration()
         } else {
-            print("weekly stats now calulating")
+            print("count <= 1 weekly stats now calculating weekly stats")
             CumBackTest().weeklyProfit(debug: false)
             let loadWeekly = realm.objects(WklyStats.self)
             let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
             results = sortedByDate
             
-            print("now reading from realm")
+            print("now reading from realm count: \(sortedByDate.count)")
             for each in results! {
                 print(each.date!, each.profit)
             }
@@ -94,7 +91,6 @@ class StatsViewController: UIViewController {
         }
     }
 
-    
     func getStatsfromRealm() {
         let realm = try! Realm()
         if let updateStats = realm.objects(Stats.self).last {
@@ -151,8 +147,6 @@ class StatsViewController: UIViewController {
             }
         }
     }
-
-
 
     var sciChartView1 = SCIChartSurface()
     
