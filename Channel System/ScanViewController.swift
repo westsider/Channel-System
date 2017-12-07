@@ -50,6 +50,7 @@ class ScanViewController: UIViewController {
         title = "Finance"
         tradeButton(isOn: false)
         updateButton(isOn: false)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -78,7 +79,7 @@ class ScanViewController: UIViewController {
         GetCSV().areTickersValid(megaSymbols: galaxie)
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
-saveCompanyInfoToRealm()
+        saveCompanyInfoToRealm()
         // update nsuserdefaults
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }

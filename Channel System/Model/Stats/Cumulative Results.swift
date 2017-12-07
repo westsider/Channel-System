@@ -11,37 +11,22 @@ import RealmSwift
 
 class CumBackTest {
     
-    var master: [(date: Date, profit: Double)] = []
-    
-    var cumProfit: [(date: Date, profit: Double)] = []
-    
-    var cumProfitWeelky: [(date: Date, profit: Double)] = []
-    
-    var finishedWeekly:Bool = false
-    
-    func getdataforChart( completion: @escaping () -> ()) {
+    // get every date in Prices. if backTestProfit -> master: [(date: Date, profit: Double)]
+    func makeMaster(debug:Bool)-> [(date: Date, profit: Double)]  {
         
-        makeMaster(debug:false)
-        
-        DispatchQueue.main.async {
-            if self.finishedWeekly  {
-                for each in self.cumProfitWeelky {
-                    print(each.date)
-                }
-                completion()
-            }
-        }
-    }
-    
-    func makeMaster(debug:Bool) {
-        
+        print("inside makeMaster()")
+        var master: [(date: Date, profit: Double)] = []
         let realm = try! Realm()
         let dateArray = realm.objects(Prices.self).sorted(byKeyPath: "date", ascending: true)
         var counter = 0
         var lastDate = Date()
         var todaysProfit = [Double]()
         var sumOfToday:Double?
+        
+        print("we have a dateArray of \(dateArray.count)")
+        
         for today in dateArray {
+            if debug { print(today.backTestProfit) }
             if today.backTestProfit != 0.00 {
                 if today.date == lastDate  {
                     todaysProfit.append(today.backTestProfit)
@@ -62,11 +47,12 @@ class CumBackTest {
                 lastDate = today.date!
             }
         }
-        dailyProfit(debug: false)
+        return master
     }
-    
-    func dailyProfit(debug: Bool) {
-        cumProfit = master
+    // get master: [(date: Date, profit: Double)] ->  cumulative daily profit
+    func dailyProfit(debug: Bool)-> [(date: Date, profit: Double)]  {
+        let master = makeMaster(debug: debug)
+        var cumProfit = master
         var runOfProfit:Double = 0.00
         
         for (index, today) in master.enumerated() {
@@ -79,24 +65,34 @@ class CumBackTest {
                 print(today.date, String(format: "%.2f", today.profit))
             }
         }
-        _ = weeklyProfit(debug: true)
+        
+        return cumProfit
     }
     
-     func weeklyProfit(debug: Bool)-> [(date: Date, profit: Double)]  {
+    // get cumulative daily profit save weekly cumulative profit to realm
+     func weeklyProfit(debug: Bool)  {
+        let cumProfit = dailyProfit(debug: debug)
+        var cumProfitWeelky: [(date: Date, profit: Double)] = []
+        // delete old stas in realm
+        let realm = try! Realm()
+        let oldData = realm.objects(WklyStats.self)
+        try! realm.write {
+            realm.delete(oldData)
+        }
+        //let thisWeek = WklyStats()
         for today in cumProfit.enumerated() {
             // if today is friday
             if isFriday(date: today.element.date) {
                 //print("Hello Friday")
                 cumProfitWeelky.append((date: today.element.date, profit: today.element.profit))
-            }
-            if debug {
-                for today in cumProfitWeelky {
-                    print(today.date, String(format: "%.2f", today.profit))
-                }
+                WklyStats().updateStats(date: today.element.date, profit: today.element.profit)
             }
         }
-        finishedWeekly = true
-        return cumProfitWeelky
+        
+        for today in cumProfitWeelky {
+            
+            if debug {print(today.date, String(format: "%.2f", today.profit)) }
+        }
     }
     
     func isFriday(date:Date) -> Bool {

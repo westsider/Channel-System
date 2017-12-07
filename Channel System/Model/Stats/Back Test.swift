@@ -44,9 +44,9 @@ class BackTest {
                 tradeCount += 1
                 if debug { print("Entry on \(each.dateString) Trade count \(tradeCount) and wPctR is \(String(format: "%.1f", each.wPctR))") }
                 let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).2
-shares = Double( TradeHelpers().calcShares(stopDist: stopDist, risk: 250))
-stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).0
-cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
+                shares = Double( TradeHelpers().calcShares(stopDist: stopDist, risk: 250))
+                stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).0
+                cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
             }
             // manage trade
             if !flat {
@@ -100,6 +100,7 @@ cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
 
                     if debug { print("tradeGain \(String(format: "%.1f", tradeGain)) = tradeGain \(String(format: "%.1f", tradeGain)) + thisLoss \(String(format: "%.1f", thisLoss)) ") }
                 }
+                UserDefaults.standard.set(each.date, forKey: "StatsUpdate")
             }
         }
         if debug {  print("All Trades: \(allTrades)") }
