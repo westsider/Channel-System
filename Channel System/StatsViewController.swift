@@ -78,7 +78,7 @@ class StatsViewController: UIViewController {
             completeConfiguration()
         } else {
             print("count <= 1 weekly stats now calculating weekly stats")
-            CumBackTest().weeklyProfit(debug: false)
+            CumulativeProfit().weeklyProfit(debug: false)
             let loadWeekly = realm.objects(WklyStats.self)
             let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
             results = sortedByDate
@@ -114,7 +114,7 @@ class StatsViewController: UIViewController {
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for each in self.galaxie {
-                let result:(Double, Double, Double, Double, Double) = BackTest().getResults(ticker: each, debug: false, updateRealm: false)
+                let result:(Double, Double, Double, Double, Double) = BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: false)
                 let stars:(Int,String) = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
                 self.totalProfit.append(result.0)
                 // calc performance on winners
@@ -139,7 +139,7 @@ class StatsViewController: UIViewController {
                 self.bottomLeft.text = "\(String(format: "%.2f", avgStars)) Avg Stars"
                 self.bottomRight.text = "This is open"
                 //MARK: - Save stats to realm
-                Stats().updateStats(grossProfit: grossProfit, avgPctWin: aPctWin, avgROI: avgROI, grossROI: grossROI, avgStars: avgStars)
+                Stats().updateFinalTotal(grossProfit: grossProfit, avgPctWin: aPctWin, avgROI: avgROI, grossROI: grossROI, avgStars: avgStars)
                 self.ActivityOne(isOn: false)
             }
             DispatchQueue.main.async {

@@ -1,5 +1,5 @@
 //
-//  Back Test.swift
+//  BackTest.swift
 //  Channel System
 //
 //  Created by Warren Hansen on 11/29/17.
@@ -15,9 +15,9 @@ class BackTest {
      - ticker: String - a symbol to retrieve a record
      - returns: grossProfit,largestWin, largestLoser, annualRoi, winPct
      ### Declare As:
-     let result = BackTest().getResults(ticker: "INTC")
+     let result = BackTest().calcPastTradesForEach(ticker: "INTC")
      */
-    func getResults(ticker: String, debug:Bool, updateRealm: Bool)->(Double, Double, Double, Double, Double) {
+    func calcPastTradesForEach(ticker: String, debug:Bool, updateRealm: Bool)->(Double, Double, Double, Double, Double) {
     
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         
@@ -199,7 +199,7 @@ class BackTest {
     }
     
     func performanceString(ticker:String, updateRealm:Bool, debug: Bool)->String {
-        let result = BackTest().getResults(ticker: ticker, debug: debug, updateRealm: updateRealm)
+        let result = BackTest().calcPastTradesForEach(ticker: ticker, debug: debug, updateRealm: updateRealm)
         let profit = String(format: "%.0f", result.0)
         let LW = String(format: "%.0f", result.1)
         let LL = String(format: "%.0f", result.2)
@@ -211,7 +211,7 @@ class BackTest {
     }
     
     func tableViewString(ticker:String)->String {
-        let result = BackTest().getResults(ticker: ticker, debug: false, updateRealm: false)
+        let result = BackTest().calcPastTradesForEach(ticker: ticker, debug: false, updateRealm: false)
         let profit = String(format: "%.0f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)
@@ -220,7 +220,7 @@ class BackTest {
     }
     
     func chartString(ticker:String)->String {
-        let result = BackTest().getResults(ticker: ticker, debug: false, updateRealm: false)
+        let result = BackTest().calcPastTradesForEach(ticker: ticker, debug: false, updateRealm: false)
         let profit = String(format: "%.2f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)

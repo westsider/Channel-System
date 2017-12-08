@@ -9,10 +9,10 @@
 import Foundation
 import RealmSwift
 
-class CumBackTest {
+class CumulativeProfit {
     
     // get every date in Prices. if backTestProfit -> master: [(date: Date, profit: Double)]
-    func makeMaster(debug:Bool)-> [(date: Date, profit: Double)]  {
+    func calcAllTickers(debug:Bool)-> [(date: Date, profit: Double)]  {
         
         print("inside makeMaster()")
         var master: [(date: Date, profit: Double)] = []
@@ -51,7 +51,7 @@ class CumBackTest {
     }
     // get master: [(date: Date, profit: Double)] ->  cumulative daily profit
     func dailyProfit(debug: Bool)-> [(date: Date, profit: Double)]  {
-        let master = makeMaster(debug: debug)
+        let master = calcAllTickers(debug: debug)
         var cumProfit = master
         var runOfProfit:Double = 0.00
         
@@ -85,7 +85,7 @@ class CumBackTest {
             if isFriday(date: today.element.date) {
                 //print("Hello Friday")
                 cumProfitWeelky.append((date: today.element.date, profit: today.element.profit))
-                WklyStats().updateStats(date: today.element.date, profit: today.element.profit)
+                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit)
             }
         }
         

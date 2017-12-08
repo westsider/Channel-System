@@ -15,13 +15,10 @@ class WklyStats: Object {
     @objc dynamic var profit    = 0.00
     @objc dynamic var taskID     = NSUUID().uuidString
     
-    func updateStats(date: Date, profit: Double) {
+    func updateCumulativeProfit(date: Date, profit: Double) {
         
         let realm = try! Realm()
-        
         let thisWeek = WklyStats()
-       
-        
         thisWeek.date = date
         thisWeek.profit = profit
         
