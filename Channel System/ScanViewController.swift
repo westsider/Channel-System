@@ -77,7 +77,7 @@ class ScanViewController: UIViewController {
         initProgressBar()
         self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
         GetCSV().areTickersValid(megaSymbols: galaxie)
-        getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
+getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
         saveCompanyInfoToRealm()
         // update nsuserdefaults

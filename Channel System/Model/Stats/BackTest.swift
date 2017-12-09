@@ -103,7 +103,7 @@ class BackTest {
                 UserDefaults.standard.set(each.date, forKey: "StatsUpdate")
             }
         }
-        if debug {  print("All Trades: \(allTrades)") }
+        //if debug {  print("All Trades: \(allTrades)") }
         grossProfit = allTrades.reduce(0, +)
         if debug { print("Sum: \(grossProfit)") }
         

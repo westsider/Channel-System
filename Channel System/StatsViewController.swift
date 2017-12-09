@@ -9,6 +9,7 @@
 import UIKit
 import SciChart
 import RealmSwift
+
 class StatsViewController: UIViewController {
 
     @IBOutlet weak var topLeft: UILabel!
@@ -21,11 +22,13 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var bottomLeft: UILabel!
     
-    @IBOutlet weak var bottomRight: UILabel!
-    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var chartView: UIView!
+    
+    @IBOutlet weak var backtestButton: UIButton!
+    
+    @IBOutlet weak var graphButton: UIButton!
     
     var galaxie = [String]()
     var totalProfit = [Double]()
@@ -40,20 +43,86 @@ class StatsViewController: UIViewController {
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-    }
 
     override func viewDidAppear(_ animated: Bool) {
         getStatsfromRealm()
     }
     
+    // need completion handler for this
+    @IBAction func runNewBacktestAction(_ sender: Any) {
+        self.topLeft.textAlignment = .right
+        calcPastTrades {
+            print("\n calling calcPastTrades() \n")
+        }
+        
+    }
+    
+    func calcPastTrades(completion: @escaping () -> ()) {
+        
+        ActivityOne(isOn:true)
+        var counter = 0
+        let symbolCount = galaxie.count
+        //print("\nStart Func count is \(symbolCount)\n")
+        DispatchQueue.global(qos: .background).async {
+            for each in self.galaxie {
+                _ = BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: true)
+                counter += 1
+                self.showCounter(count: counter, max: symbolCount)
+                //print("counter: \(counter)")
+                if counter == symbolCount {
+                    DispatchQueue.main.async {
+                        completion()
+                        self.ActivityOne(isOn:false)
+                        //print("\nEnd Func\n")
+                        self.getStatsfromRealm()
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBAction func runNewChartCalc(_ sender: Any) {
+        ActivityOne(isOn:true)
+        //textAlpha(isNow: 0.1)
+        DispatchQueue.global(qos: .background).async {
+            self.reCalcWeeklyCumProfit(onlyFriday: false)
+        }
+        self.completeConfiguration()
+        //textAlpha(isNow: 1.0)
+        ActivityOne(isOn:false)
+    }
+    
+    func showCounter(count:Int,max:Int) {
+        DispatchQueue.main.async {
+            //self.topLeft.textAlignment = .right
+            self.topLeft.text = "Calculating \(count)"
+            self.topRight.text = "of \(max)"
+        }
+    }
+    
+    func textAlpha(isNow:CGFloat){
+        DispatchQueue.main.async {
+            //self.topLeft.alpha = isNow
+            //self.topRight.alpha = isNow
+            self.midLeft.alpha = isNow
+            self.midRight.alpha = isNow
+            self.bottomLeft.alpha = isNow
+        }
+    }
+    
+    
     func ActivityOne(isOn:Bool) {
         DispatchQueue.main.async {
             if isOn {
                 self.activityIndicator.startAnimating()
+                self.textAlpha(isNow: 0.1)
+                self.backtestButton.alpha = 0.2
+                self.graphButton.alpha = 0.2
             } else {
                 self.activityIndicator.stopAnimating()
+                self.textAlpha(isNow: 1.0)
+                self.backtestButton.alpha = 1.0
+                self.graphButton.alpha = 1.0
             }
         }
     }
@@ -77,12 +146,7 @@ class StatsViewController: UIViewController {
             }
             completeConfiguration()
         } else {
-            print("count <= 1 weekly stats now calculating weekly stats")
-            CumulativeProfit().weeklyProfit(debug: false)
-            let loadWeekly = realm.objects(WklyStats.self)
-            let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
-            results = sortedByDate
-            
+            reCalcWeeklyCumProfit(onlyFriday: true)
             print("now reading from realm count: \(sortedByDate.count)")
             for each in results! {
                 print(each.date!, each.profit)
@@ -90,18 +154,27 @@ class StatsViewController: UIViewController {
             completeConfiguration()
         }
     }
+    
+    func reCalcWeeklyCumProfit(onlyFriday:Bool) {
+        let realm = try! Realm()
+        print("count <= 1 weekly stats now calculating weekly stats")
+        CumulativeProfit().weeklyProfit(debug: false)
+        let loadWeekly = realm.objects(WklyStats.self)
+        let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
+        results = sortedByDate
+    }
 
     func getStatsfromRealm() {
         let realm = try! Realm()
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
             DispatchQueue.main.async {
+                self.topLeft.textAlignment = .left
                 self.topLeft.text = "$\(String(format: "%.0f", updateStats.grossProfit)) Profit"
                 self.topRight.text = "\(String(format: "%.0f", updateStats.avgPctWin))% Wins"
                 self.midLeft.text = "\(String(format: "%.1f", updateStats.avgROI))% Avg Roi "
                 self.midRight.text = "\(String(format: "%.0f", updateStats.grossROI))% Gross Roi"
                 self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
-                self.bottomRight.text = "This is open"
                 self.ActivityOne(isOn: false)
                 self.callChart()
             }
@@ -137,7 +210,6 @@ class StatsViewController: UIViewController {
                 self.midLeft.text = "\(String(format: "%.1f", avgROI))% Avg Roi "
                 self.midRight.text = "\(String(format: "%.0f", grossROI))% Gross Roi"
                 self.bottomLeft.text = "\(String(format: "%.2f", avgStars)) Avg Stars"
-                self.bottomRight.text = "This is open"
                 //MARK: - Save stats to realm
                 Stats().updateFinalTotal(grossProfit: grossProfit, avgPctWin: aPctWin, avgROI: avgROI, grossROI: grossROI, avgStars: avgStars)
                 self.ActivityOne(isOn: false)

@@ -413,13 +413,16 @@
                                                         <rect key="frame" x="0.0" y="61.5" width="319" height="55"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Avg ROI ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdl-Hk-vp9">
-                                                                <rect key="frame" x="0.0" y="0.0" width="155.5" height="55"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="101" height="55"/>
                                                                 <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
+                                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="GY3-YP-2fw">
+                                                                <rect key="frame" x="109" y="0.0" width="101" height="55"/>
+                                                            </activityIndicatorView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gross ROI ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mI0-zv-mLu">
-                                                                <rect key="frame" x="163.5" y="0.0" width="155.5" height="55"/>
+                                                                <rect key="frame" x="218" y="0.0" width="101" height="55"/>
                                                                 <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -435,12 +438,33 @@
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All Tickers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tay-vL-i2o">
+                                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="IOb-h9-K6g">
                                                                 <rect key="frame" x="163.5" y="0.0" width="155.5" height="55.5"/>
-                                                                <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FwS-Rg-Gkp">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="55.5"/>
+                                                                        <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="14"/>
+                                                                        <state key="normal" title="Backtest">
+                                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="runNewBacktestAction:" destination="5QM-vx-0EQ" eventType="touchUpInside" id="MBW-vU-BtE"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sq9-LA-55H">
+                                                                        <rect key="frame" x="81" y="0.0" width="74.5" height="55.5"/>
+                                                                        <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="14"/>
+                                                                        <state key="normal" title="Graph">
+                                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="runNewChartCalc:" destination="5QM-vx-0EQ" eventType="touchUpInside" id="sSN-Z6-Vwl"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                            </stackView>
                                                         </subviews>
                                                     </stackView>
                                                 </subviews>
@@ -457,16 +481,9 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ccl-Df-KON" userLabel="Chart View">
                                         <rect key="frame" x="8" y="213" width="359" height="198"/>
-                                        <subviews>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="GY3-YP-2fw">
-                                                <rect key="frame" x="161" y="81" width="37" height="37"/>
-                                            </activityIndicatorView>
-                                        </subviews>
                                         <color key="backgroundColor" red="0.33765226599999998" green="0.34825241569999998" blue="0.40001255270000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
-                                            <constraint firstItem="GY3-YP-2fw" firstAttribute="centerY" secondItem="ccl-Df-KON" secondAttribute="centerY" id="8of-es-gzb"/>
                                             <constraint firstAttribute="height" constant="198" id="F9s-1P-A0v"/>
-                                            <constraint firstItem="GY3-YP-2fw" firstAttribute="centerX" secondItem="ccl-Df-KON" secondAttribute="centerX" id="zXC-4K-gka"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f8J-GJ-Ag2" userLabel="Placeholder Tableview">
@@ -505,9 +522,10 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="GY3-YP-2fw" id="d68-9n-ov9"/>
+                        <outlet property="backtestButton" destination="FwS-Rg-Gkp" id="Co4-IK-a3a"/>
                         <outlet property="bottomLeft" destination="SPT-jl-tNV" id="Xcf-9X-nC7"/>
-                        <outlet property="bottomRight" destination="Tay-vL-i2o" id="jKO-m9-6ZX"/>
                         <outlet property="chartView" destination="ccl-Df-KON" id="TeF-pJ-ELh"/>
+                        <outlet property="graphButton" destination="sq9-LA-55H" id="iV5-p6-XHv"/>
                         <outlet property="midLeft" destination="Fdl-Hk-vp9" id="Lt0-dB-Odd"/>
                         <outlet property="midRight" destination="mI0-zv-mLu" id="tUp-yC-SQZ"/>
                         <outlet property="topLeft" destination="SMx-1W-QQF" id="uhK-Ut-Wse"/>
