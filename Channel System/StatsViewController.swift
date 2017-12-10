@@ -146,6 +146,7 @@ class StatsViewController: UIViewController {
     }
     
     func getWeeklyFromRealm() {
+        print("\n inside getWeeklyFromRealm()\n")
         let realm = try! Realm()
         let weeklyStats = realm.objects(WklyStats.self)
         let sortedByDate = weeklyStats.sorted(byKeyPath: "date", ascending: true)
@@ -158,16 +159,21 @@ class StatsViewController: UIViewController {
             }
             completeConfiguration()
         } else {
-            reCalcWeeklyCumProfit(onlyFriday: true)
-            print("now reading from realm count: \(sortedByDate.count)")
-            for each in results! {
-                print(each.date!, each.profit)
-            }
-            completeConfiguration()
+            //reCalcWeeklyCumProfit(onlyFriday: true)
+            calcStats(debug: false, completion: callChart)
+            
+            
+//            print("now reading from realm count: \(sortedByDate.count)")
+//// crsh here on ipad dat = 2001 profit = 0 try an if let
+//            for each in results! {
+//                print(each.date!, each.profit)
+//            }
+            
         }
     }
     
     func reCalcWeeklyCumProfit(onlyFriday:Bool) {
+         print("\n inside reCalcWeeklyCumProfit\n")
         let realm = try! Realm()
         print("count <= 1 weekly stats now calculating weekly stats")
         CumulativeProfit().weeklyProfit(debug: true) {
@@ -177,6 +183,8 @@ class StatsViewController: UIViewController {
                     let loadWeekly = realm.objects(WklyStats.self)
                     let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
                     self.results = sortedByDate
+//self.getStatsfromRealm()
+                    self.completeConfiguration()
                 }
             }
         }

@@ -10,6 +10,7 @@
 		0D129D5B1FBB4D1F003C6E5E /* MDY.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D501FBB4D1D003C6E5E /* MDY.csv */; };
 		0D129D5D1FBB4D1F003C6E5E /* IWM.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D521FBB4D1D003C6E5E /* IWM.csv */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
+		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
 		0D4A01881FC8C5CF00C53E2F /* AGG.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A01871FC8C5CF00C53E2F /* AGG.csv */; };
 		0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5CEC751FB378A400762900 /* PortfolioViewController.swift */; };
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
@@ -290,6 +291,7 @@
 		0D129D501FBB4D1D003C6E5E /* MDY.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MDY.csv; sourceTree = "<group>"; };
 		0D129D521FBB4D1D003C6E5E /* IWM.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWM.csv; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
+		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
 		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
@@ -864,6 +866,7 @@
 				0D5CEC751FB378A400762900 /* PortfolioViewController.swift */,
 				0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */,
 				0D77DDCF1FCF8E1B007573C3 /* StatsViewController.swift */,
+				0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -1329,6 +1332,7 @@
 				0DCAAFD71FBC37D200095560 /* Price Temp.swift in Sources */,
 				0D77DDCE1FCF705C007573C3 /* Trade Helpers.swift in Sources */,
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
+				0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
