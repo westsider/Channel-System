@@ -26,7 +26,8 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Now settings for risk
     @IBAction func clearRealmAction(_ sender: Any) {
-        //MARK: - TODO - mae alert view or side menue
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
+        navigationController?.pushViewController(myVC, animated: true)
     }
     
     @IBAction func showIndexAction(_ sender: Any) {
