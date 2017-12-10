@@ -70,7 +70,7 @@ class CumulativeProfit {
     }
     
     // get cumulative daily profit save weekly cumulative profit to realm
-     func weeklyProfit(debug: Bool)  {
+    func weeklyProfit(debug: Bool, completion:  (_ result:Bool) ->Void) {
         let cumProfit = dailyProfit(debug: debug)
         var cumProfitWeelky: [(date: Date, profit: Double)] = []
         // delete old stas in realm
@@ -79,7 +79,10 @@ class CumulativeProfit {
         try! realm.write {
             realm.delete(oldData)
         }
-        //let thisWeek = WklyStats()
+        
+        var counter = 0
+        let maxCount = cumProfit.count
+        
         for today in cumProfit.enumerated() {
             // if today is friday
             if isFriday(date: today.element.date) {
@@ -87,12 +90,19 @@ class CumulativeProfit {
                 cumProfitWeelky.append((date: today.element.date, profit: today.element.profit))
                 WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit)
             }
+            
+            counter += 1
+            if counter == maxCount {
+                completion(true)
+            }
         }
         
         for today in cumProfitWeelky {
             
             if debug {print(today.date, String(format: "%.2f", today.profit)) }
         }
+        
+        
     }
     
     func isFriday(date:Date) -> Bool {

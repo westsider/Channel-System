@@ -24,6 +24,8 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var activityIndicatorTwo: UIActivityIndicatorView!
+    
     @IBOutlet weak var chartView: UIView!
     
     @IBOutlet weak var backtestButton: UIButton!
@@ -54,7 +56,6 @@ class StatsViewController: UIViewController {
         calcPastTrades {
             print("\n calling calcPastTrades() \n")
         }
-        
     }
     
     func calcPastTrades(completion: @escaping () -> ()) {
@@ -62,18 +63,15 @@ class StatsViewController: UIViewController {
         ActivityOne(isOn:true)
         var counter = 0
         let symbolCount = galaxie.count
-        //print("\nStart Func count is \(symbolCount)\n")
         DispatchQueue.global(qos: .background).async {
             for each in self.galaxie {
                 _ = BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: true)
                 counter += 1
                 self.showCounter(count: counter, max: symbolCount)
-                //print("counter: \(counter)")
                 if counter == symbolCount {
                     DispatchQueue.main.async {
                         completion()
                         self.ActivityOne(isOn:false)
-                        //print("\nEnd Func\n")
                         self.getStatsfromRealm()
                     }
                 }
@@ -82,14 +80,28 @@ class StatsViewController: UIViewController {
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
+        self.topLeft.alpha = 0.1
+        self.topRight.alpha = 0.1
+        self.backtestButton.alpha = 0.2
+        self.graphButton.alpha = 0.2
         ActivityOne(isOn:true)
-        //textAlpha(isNow: 0.1)
+        textAlpha(isNow: 0.1)
         DispatchQueue.global(qos: .background).async {
-            self.reCalcWeeklyCumProfit(onlyFriday: false)
+            CumulativeProfit().weeklyProfit(debug: true) {
+                (result: Bool) in
+                if result {
+                    DispatchQueue.main.async {
+                        self.callChart()
+                        self.ActivityOne(isOn:false)
+                        self.textAlpha(isNow: 1.0)
+                        self.topLeft.alpha = 1.0
+                        self.topRight.alpha = 1.0
+                        self.backtestButton.alpha = 1.0
+                        self.graphButton.alpha = 1.0
+                    }
+                }
+            }
         }
-        self.completeConfiguration()
-        //textAlpha(isNow: 1.0)
-        ActivityOne(isOn:false)
     }
     
     func showCounter(count:Int,max:Int) {
@@ -158,10 +170,17 @@ class StatsViewController: UIViewController {
     func reCalcWeeklyCumProfit(onlyFriday:Bool) {
         let realm = try! Realm()
         print("count <= 1 weekly stats now calculating weekly stats")
-        CumulativeProfit().weeklyProfit(debug: false)
-        let loadWeekly = realm.objects(WklyStats.self)
-        let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
-        results = sortedByDate
+        CumulativeProfit().weeklyProfit(debug: true) {
+            (result: Bool) in
+            if result {
+                DispatchQueue.main.async {
+                    let loadWeekly = realm.objects(WklyStats.self)
+                    let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
+                    self.results = sortedByDate
+                }
+            }
+        }
+        
     }
 
     func getStatsfromRealm() {
