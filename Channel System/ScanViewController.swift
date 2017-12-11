@@ -50,20 +50,7 @@ class ScanViewController: UIViewController {
         title = "Finance"
         tradeButton(isOn: false)
         updateButton(isOn: false)
-        
-        
-        
-        
-        
-        
-        // ****************************************************
-        // ***** I need this # for ipad real and 7 sim   ******
-        // ****************************************************
-        print("\n****************************************************\n****** All Prices() count = \(Prices().allPricesCount()) ******\n****************************************************\n")
         // iphone 7+ Sim is  192397
-        // iPad(2) actual is 192638 + 241
-        // iPhone actual is  192397
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,14 +62,14 @@ class ScanViewController: UIViewController {
         }
     }
     
-    func saveCompanyInfoToRealm() {
+    private func saveCompanyInfoToRealm() {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         for ticker in galaxie {
             CompanyData().getInfoFor(ticker: ticker, debug: false, completion: self.infoBlock)
         }
     }
     
-    func firstRun() {
+    private func firstRun() {
         lastUpdateLable.text = "First run of app."
         print("\nThis was first run so I will load CSV historical data\n")
         initially(deleteAll: true, printPrices: false, printTrades: false)
@@ -90,14 +77,13 @@ class ScanViewController: UIViewController {
         initProgressBar()
         self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
         GetCSV().areTickersValid(megaSymbols: galaxie)
-getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
+        getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
         saveCompanyInfoToRealm()
-        // update nsuserdefaults
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
     
-    func subsequentRuns() {
+    private func subsequentRuns() {
         print("\nThis is NOT the first run.\n")
         updateRealm = DateHelper().realmNotCurrent(debug: false)
         lastDateInRealm = Prices().getLastDateInRealm(debug: false)
@@ -119,13 +105,13 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         segueToCandidatesVC()
     }
 
-    func simPastEntries() {
+    private func simPastEntries() {
         getRealmFrom(ticker: "INTC", DateString: "2017/10/20") // exit after 7 days  Target Hit for INTC from 2017-11-28
         getRealmFrom(ticker: "EWD", DateString: "2017/10/17")  // stop hit   wPctR Hit for EWD from 2017-11-28
         getRealmFrom(ticker: "JNJ", DateString: "2017/11/22")  // target hit  wPctR Hit for JNJ from 2017-11-28
     }
     
-    func getRealmFrom(ticker: String, DateString: String) {
+    private func getRealmFrom(ticker: String, DateString: String) {
         let specificNSDate = DateHelper().convertToDateFrom(string: DateString, debug: false)
         let realm = try! Realm()
         let predicate = NSPredicate(format: "date == %@", specificNSDate as CVarArg)
@@ -147,14 +133,14 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     
-    func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
+    private func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
         if ( deleteAll ) { RealmHelpers().deleteAll() }
         if ( printPrices ) { Prices().printLastPrices(symbols: galaxie, last: 4) }
         if ( printTrades ) { RealmHelpers().printOpenTrades() }
     }
     
     //MARK: - Trade Management
-    func manageTradesOrShowEntries() {
+    private func manageTradesOrShowEntries(debug:Bool) {
         // search for trade management scenario else segue to candidates
         let tasks = RealmHelpers().getOpenTrades()
         print("Open trade count is \(tasks.count)")
@@ -162,21 +148,21 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
             for trades in tasks {
                 //MARK: - TODO - Check if stop
                 if trades.close < trades.stop {
-                    print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    if debug { print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Stop")
                 }
                 //MARK: - TODO - Check if target
                 if trades.close > trades.target {
-                    print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    if debug { print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Target")
                 }
                 if trades.wPctR > -30 {
-                    print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    if debug { print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
                 }
                 //MARK: - TODO - Set up exit date on entry
                 if Date() >= trades.exitDate {
-                    print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")
+                    if debug { print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Date Stop")
                 }
             }
@@ -189,7 +175,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
     
     //MARK: - Get Data From CSV
-    func getDataFromCSV(completion: @escaping () -> ()) {
+    private func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Getting local data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
@@ -204,7 +190,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
     }
     
     //MARK: - Get Data From Datafeed
-    func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
+    private func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
@@ -224,7 +210,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
     }
     
     //MARK: - SMA 10
-    func calcSMA10(completion: @escaping () -> ()) {
+    private func calcSMA10(completion: @escaping () -> ()) {
         self.updateUI(with: "Calulating SMA(10)...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -242,7 +228,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     //MARK: - SMA 200
-    func calcSMA200(completion: @escaping () -> ()) {
+    private func calcSMA200(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing SMA(200)...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -260,7 +246,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     //MARK: - wPctR
-    func calcwPctR(completion: @escaping () -> ()) {
+    private func calcwPctR(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing PctR...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -277,7 +263,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     //MARK: - Entries
-    func calcEntries(completion: @escaping () -> ()) {
+    private func calcEntries(completion: @escaping () -> ()) {
         self.updateUI(with: "Processing Entries...", spinIsOff: false)
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -296,12 +282,12 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
             DispatchQueue.main.async {
                 completion()
                 self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
-                self.manageTradesOrShowEntries()
+                self.manageTradesOrShowEntries(debug: false)
             }
         }
     }
     
-    func updateUI(with: String, spinIsOff: Bool) {
+    private func updateUI(with: String, spinIsOff: Bool) {
         DispatchQueue.main.async {
             //print(with)
             self.lastUpdateLable.text =  with
@@ -315,7 +301,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     
-    func initProgressBar() {
+    private func initProgressBar() {
         let tickerCount:Double = Double(galaxie.count)
         let processCount:Double = Double(5)
         let divisor:Double = Double(1)
@@ -324,7 +310,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         //print("\nProgress inc = \(incProgress)\n")
     }
     
-    func checkDuplicates() {
+    private func checkDuplicates() {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         for ticker in galaxie {
             Prices().findDuplicates(ticker: ticker, debug: true)
@@ -332,7 +318,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
     }
     
-    func tradeButton(isOn:Bool) {
+    private func tradeButton(isOn:Bool) {
         if isOn {
             tradeButton.isEnabled = true
             tradeButton.alpha = 1.0
@@ -342,7 +328,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     
-    func updateButton(isOn:Bool){
+    private func updateButton(isOn:Bool){
         if isOn {
             updateButton.isEnabled = true
             updateButton.alpha = 1.0
@@ -352,18 +338,18 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
         }
     }
     
-    func segueToChart(ticker: String) {
+    private func segueToChart(ticker: String) {
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = Prices().getLastTaskID()
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    func segueToCandidatesVC() {
+    private func segueToCandidatesVC() {
         let myVC:SymbolsViewController = storyboard?.instantiateViewController(withIdentifier: "SymbolsVC") as! SymbolsViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    func segueToManageVC(taskID: String, action: String) {
+    private func segueToManageVC(taskID: String, action: String) {
         let myVC:ManageViewController = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
         myVC.taskID = taskID
         myVC.action = action

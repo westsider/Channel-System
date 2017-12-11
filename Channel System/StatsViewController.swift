@@ -296,7 +296,7 @@ class StatsViewController: UIViewController {
         
         let lineRenderSeries = SCIFastLineRenderableSeries()
         lineRenderSeries.dataSeries = lineDataSeries
-        lineRenderSeries.strokeStyle = SCISolidPenStyle(colorCode: 0xFF279B27, withThickness: 1.0)
+        lineRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
         sciChartView1.renderableSeries.add(lineRenderSeries)
     }
     
