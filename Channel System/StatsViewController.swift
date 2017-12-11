@@ -122,7 +122,6 @@ class StatsViewController: UIViewController {
         }
     }
     
-    
     func ActivityOne(isOn:Bool) {
         DispatchQueue.main.async {
             if isOn {
