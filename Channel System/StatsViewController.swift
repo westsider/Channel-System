@@ -65,7 +65,7 @@ class StatsViewController: UIViewController {
         let symbolCount = galaxie.count
         DispatchQueue.global(qos: .background).async {
             for each in self.galaxie {
-                _ = BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: true)
+                _ = BackTest().calcPastTradesForEach(ticker: each, debug: true, updateRealm: true)
                 counter += 1
                 self.showCounter(count: counter, max: symbolCount)
                 if counter == symbolCount {
@@ -270,8 +270,12 @@ class StatsViewController: UIViewController {
     fileprivate func addAxes() {
         let xAxis = SCICategoryDateTimeAxis()
         xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        xAxis.style.labelStyle.fontName = "Helvetica"
+        xAxis.style.labelStyle.fontSize = 14
         let yAxis = SCINumericAxis()
         yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        yAxis.style.labelStyle.fontName = "Helvetica"
+        yAxis.style.labelStyle.fontSize = 14
         sciChartView1.xAxes.add(xAxis)
         sciChartView1.yAxes.add(yAxis)
     }

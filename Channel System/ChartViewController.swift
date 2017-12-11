@@ -101,7 +101,6 @@ class SCSSyncMultiChartView: UIViewController {
         
     }
     
-    
     func sequeToPortfolio() {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
         navigationController?.pushViewController(myVC, animated: true)

@@ -51,6 +51,19 @@ class ScanViewController: UIViewController {
         tradeButton(isOn: false)
         updateButton(isOn: false)
         
+        
+        
+        
+        
+        
+        // ****************************************************
+        // ***** I need this # for ipad real and 7 sim   ******
+        // ****************************************************
+        print("\n****************************************************\n****** All Prices() count = \(Prices().allPricesCount()) ******\n****************************************************\n")
+        // iphone 7+ Sim is  192397
+        // iPad(2) actual is 192638 + 241
+        // iPhone actual is  192397
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
