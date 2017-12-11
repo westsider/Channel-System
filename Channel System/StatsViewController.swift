@@ -40,6 +40,8 @@ class StatsViewController: UIViewController {
     
     var results: Results<WklyStats>?
     
+    let barsToShow:Int = 100
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Stats"
@@ -261,21 +263,26 @@ class StatsViewController: UIViewController {
     func completeConfiguration() {
         addSurface()
         SCIUpdateSuspender.usingWithSuspendable(sciChartView1) {[unowned self] in
-            self.addAxes()
+            self.addAxes(BarsToShow: self.barsToShow)
             self.addSeries()
         }
     }
     
     // MARK: Private Functions
-    fileprivate func addAxes() {
+    fileprivate func addAxes(BarsToShow:Int) {
+        
+        let totalBars:Int = results!.count
+        let rangeStart:Int = totalBars - BarsToShow
+        
         let xAxis = SCICategoryDateTimeAxis()
         xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        xAxis.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         xAxis.style.labelStyle.fontName = "Helvetica"
-        xAxis.style.labelStyle.fontSize = 14
+        xAxis.style.labelStyle.fontSize = 12
         let yAxis = SCINumericAxis()
         yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         yAxis.style.labelStyle.fontName = "Helvetica"
-        yAxis.style.labelStyle.fontSize = 14
+        yAxis.style.labelStyle.fontSize = 7
         sciChartView1.xAxes.add(xAxis)
         sciChartView1.yAxes.add(yAxis)
     }

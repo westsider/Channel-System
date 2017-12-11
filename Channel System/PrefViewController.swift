@@ -148,7 +148,7 @@ class PrefViewController: UIViewController {
     
     @IBAction func entriesAction(_ sender: Any) {
         activityDial.startAnimating()
-        var count = 1
+        var count = 0
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 DispatchQueue.main.async {
@@ -158,9 +158,10 @@ class PrefViewController: UIViewController {
                 let firstDate  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false)
                 Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
                 count = index
+                print("\(count) of \(self.symbolCount)")
             }
             DispatchQueue.main.async {
-                if count == self.symbolCount {
+                if count == self.symbolCount-1 {
                     self.activityDial.stopAnimating()
                     self.entriesLabel.text = "Updated"
                 }
