@@ -11,7 +11,7 @@ import RealmSwift
 
 class SMA {
     
-    func averageOf(period:Int, debug: Bool, priorCount: Int, prices: Results<Prices>, completion: @escaping () -> ()) {
+    func averageOf(period:Int, debug: Bool, priorCount: Int, prices: Results<Prices>, redoAll: Bool, completion: @escaping () -> ()) {
         
         let sortedPrices = prices
         
@@ -41,19 +41,32 @@ class SMA {
             print("\n---> num of 10 SMA \(averages.count) prior count \(priorCount) closes = \(closes.count) <---\n")
             for (index, eachAverage) in averages.enumerated() {
                 // add indicator if none exists
-                if ( sortedPrices[index].movAvg10 == 0.0 ) {
+                
+                if ( redoAll ) {
+                    if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
+                    let realm = try! Realm()
+                    try! realm.write {
+                        sortedPrices[index].movAvg10 = eachAverage
+                    }
+                } else if ( sortedPrices[index].movAvg10 == 0.0 ) {
                     if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
                     let realm = try! Realm()
                     try! realm.write {
                         sortedPrices[index].movAvg10 = eachAverage
                     }
                 }
+                
             }
         } else {
             for (index, eachAverage) in averages.enumerated() {
-                
-                // add indicator if none exists
-                if ( sortedPrices[index].movAvg200 == 0.0 ) {
+
+                if ( redoAll ) {
+                    if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
+                    let realm = try! Realm()
+                    try! realm.write {
+                        sortedPrices[index].movAvg200 = eachAverage
+                    }
+                } else if ( sortedPrices[index].movAvg200 == 0.0 ) {
                     if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
                     let realm = try! Realm()
                     try! realm.write {

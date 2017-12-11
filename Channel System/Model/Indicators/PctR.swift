@@ -11,7 +11,7 @@ import RealmSwift
 
 class PctR {
     
-    func williamsPctR(priorCount: Int, debug: Bool, prices: Results<Prices>, completion: @escaping () -> ()) {
+    func williamsPctR(priorCount: Int, debug: Bool, prices: Results<Prices>, redoAll: Bool, completion: @escaping () -> ()) {
         // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
         let sortedPrices = prices
         // need to find HH + LL of last N periods
@@ -67,13 +67,18 @@ class PctR {
                 print("\n----------> \(answer) is suspicious!\n")
                 answer = 0.01
             }
-            if ( sortedPrices[index].wPctR == 0.0 ) {
+            if ( redoAll) {
                 if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
                 let realm = try! Realm()
                 try! realm.write {
                     sortedPrices[index].wPctR = answer
                 }
-              
+            } else if ( sortedPrices[index].wPctR == 0.0 ) {
+                if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
+                let realm = try! Realm()
+                try! realm.write {
+                    sortedPrices[index].wPctR = answer
+                }
             }
             //print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100")
         }

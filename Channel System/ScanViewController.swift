@@ -179,8 +179,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
     func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                let current = symbols.replacingOccurrences(of: "2", with: "")
-                self.updateUI(with: "Getting local data for \(current) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
+                self.updateUI(with: "Getting local data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
                 DataFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
             }
             self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
@@ -218,7 +217,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
@@ -236,7 +235,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, completion: self.smaBlock1)
+                SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
                 self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
@@ -254,7 +253,7 @@ getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, las
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, completion: self.wPctRBlock)
+                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: false, completion: self.wPctRBlock)
                 self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
