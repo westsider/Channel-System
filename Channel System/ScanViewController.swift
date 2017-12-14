@@ -51,32 +51,17 @@ class ScanViewController: UIViewController {
         tradeButton(isOn: false)
         updateButton(isOn: false)
         //ManualTrades().showProfit()
-        
         // iphone 7+ Sim is  192397
-        
         //CumulativeProfit().portfolioCapital()
         
-        //let ticker = "EWY"
-        //Entry().resetEntryFor(ticker: ticker, reset: true)
-        //Entry().calcLongForOnly(ticker: ticker, deBug:true)
-        //_ = EntryAndExit().doItAll(ticker: ticker, debug: true, updateRealm: true)
-        //CumulativeProfit().confirmExitOn(ticker: "BIL")
+
         /*
-         [ X] loop through tickers to clear
-         [ X] loop through tickers to calc long
-         [ X] loop through tickers to entry and exit
-         [ X] find a permanent place to put:
-             _ = EntryAndExit().doItAll(ticker: ticker, debug: true, updateRealm: true)
-         
-         [ ] redo calc profit on the stats vc to:
-             just look for each.capitalReq & backTestProfit to get a running total P&L and rolling capital used
-             change chart to plot these 2 and makr off max capital
+         [ ] redo calc chart button on the stats vc to:
+             just look for each.capitalReq & backTestProfit to get a running daily total P&L and rolling capital used
+             change chart to plot these 2 and mark off max capital
+         [ ] globally bump up risk to 250
         */
-        
- //       galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-//        for ticker in galaxie {
-//            _ = EntryAndExit().doItAll(ticker: ticker, debug: true, updateRealm: true)
-//        }
+
         
     }
     

@@ -124,4 +124,14 @@ class DateHelper {
         }
         return isMakretHours
     }
+    
+    func dollarStr(largeNumber:Double )->String {
+        var formattedNumber:String = "nil"
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = NumberFormatter.Style.decimal
+        formattedNumber = numberFormatter.string(from: NSNumber(value:Int(largeNumber)))!
+        //print("total Profit ", formattedNumber!)
+        return formattedNumber
+    }
+
 }
