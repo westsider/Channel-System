@@ -50,35 +50,14 @@ class StatsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         getStatsfromRealm()
+        //calcStats(debug: false, completion: callChart)
     }
     
     // need completion handler for this
     @IBAction func runNewBacktestAction(_ sender: Any) {
         self.topLeft.textAlignment = .right
-        calcPastTrades {
-            print("\n calling calcPastTrades() \n")
-        }
-    }
-    
-    func calcPastTrades(completion: @escaping () -> ()) {
-        
         ActivityOne(isOn:true)
-        var counter = 0
-        let symbolCount = galaxie.count
-        DispatchQueue.global(qos: .background).async {
-            for each in self.galaxie {
-                _ = BackTest().calcPastTradesForEach(ticker: each, debug: true, updateRealm: true)
-                counter += 1
-                self.showCounter(count: counter, max: symbolCount)
-                if counter == symbolCount {
-                    DispatchQueue.main.async {
-                        completion()
-                        self.ActivityOne(isOn:false)
-                        self.getStatsfromRealm()
-                    }
-                }
-            }
-        }
+        calcStats(debug: false, completion: callChart)
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
@@ -160,45 +139,22 @@ class StatsViewController: UIViewController {
             }
             completeConfiguration()
         } else {
-            //reCalcWeeklyCumProfit(onlyFriday: true)
             calcStats(debug: false, completion: callChart)
-            
-            
-//            print("now reading from realm count: \(sortedByDate.count)")
-//// crsh here on ipad dat = 2001 profit = 0 try an if let
-//            for each in results! {
-//                print(each.date!, each.profit)
-//            }
-            
         }
-    }
-    
-    func reCalcWeeklyCumProfit(onlyFriday:Bool) {
-         print("\n inside reCalcWeeklyCumProfit\n")
-        let realm = try! Realm()
-        print("count <= 1 weekly stats now calculating weekly stats")
-        CumulativeProfit().weeklyProfit(debug: true) {
-            (result: Bool) in
-            if result {
-                DispatchQueue.main.async {
-                    let loadWeekly = realm.objects(WklyStats.self)
-                    let sortedByDate = loadWeekly.sorted(byKeyPath: "date", ascending: true)
-                    self.results = sortedByDate
-//self.getStatsfromRealm()
-                    self.completeConfiguration()
-                }
-            }
-        }
-        
     }
 
     func getStatsfromRealm() {
         let realm = try! Realm()
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
+            let largeNumber = Int(updateStats.grossProfit)
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = NumberFormatter.Style.decimal
+            let formattedNumber:String = numberFormatter.string(from: NSNumber(value:largeNumber))!
+            print("\nHere is the large Number", formattedNumber)
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
-                self.topLeft.text = "$\(String(format: "%.0f", updateStats.grossProfit)) Profit"
+                self.topLeft.text = "$\(formattedNumber) Profit"
                 self.topRight.text = "\(String(format: "%.0f", updateStats.avgPctWin))% Wins"
                 self.midLeft.text = "\(String(format: "%.1f", updateStats.avgROI))% Avg Roi "
                 self.midRight.text = "\(String(format: "%.0f", updateStats.grossROI))% Gross Roi"
@@ -214,8 +170,9 @@ class StatsViewController: UIViewController {
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
+            var counter = 0
             for each in self.galaxie {
-                let result:(Double, Double, Double, Double, Double) = BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: false)
+                let result:(Double, Double, Double, Double, Double) = EntryAndExit().doItAll(ticker: each, debug: false, updateRealm: true) //BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: false)
                 let stars:(Int,String) = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
                 self.totalProfit.append(result.0)
                 // calc performance on winners
@@ -224,7 +181,8 @@ class StatsViewController: UIViewController {
                 self.totalROI.append(result.3)
                 self.averageStars.append(Double(stars.0))
                 //}
-               
+                counter += 1
+                self.showCounter(count: counter, max: self.galaxie.count)
             }
             let grossProfit:Double = self.totalProfit.reduce(0, +)
             let grossROI = self.totalROI.reduce(0, +)
@@ -233,7 +191,7 @@ class StatsViewController: UIViewController {
             let avgStars = self.self.averageStars.reduce(0, +) / Double( self.averageStars.count )
             if debug {print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))") }
             DispatchQueue.main.async {
-                self.topLeft.text = "$\(String(format: "%.0f", grossProfit)) Profit"
+                self.topLeft.text = "$\(self.dollarStr(largeNumber: grossProfit)) Profit"
                 self.topRight.text = "\(String(format: "%.0f", aPctWin))% Wins"
                 self.midLeft.text = "\(String(format: "%.1f", avgROI))% Avg Roi "
                 self.midRight.text = "\(String(format: "%.0f", grossROI))% Gross Roi"
@@ -244,10 +202,19 @@ class StatsViewController: UIViewController {
             }
             DispatchQueue.main.async {
                 completion()
+                self.ActivityOne(isOn:false)
             }
         }
     }
 
+    func dollarStr(largeNumber:Double )->String {
+        var formattedNumber:String = "nil"
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = NumberFormatter.Style.decimal
+        formattedNumber = numberFormatter.string(from: NSNumber(value:Int(largeNumber)))!
+        //print("total Profit ", formattedNumber!)
+        return formattedNumber
+    }
     var sciChartView1 = SCIChartSurface()
     
     // MARK: initialize surface

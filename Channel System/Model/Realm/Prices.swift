@@ -69,7 +69,7 @@ class Prices: Object {
         let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
         if ( debug ) {
             for each in sortedByDate {
-                print("\(each.ticker) \(each.dateString)")
+                print("\(each.ticker) \(each.dateString) o\(each.open) h\(each.high) l\(each.low) c\(each.close)  --> t\(each.movAvg10) lth\(each.movAvg200) w\(each.wPctR)")
             }
         }
         return sortedByDate

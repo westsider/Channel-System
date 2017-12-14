@@ -36,7 +36,11 @@ class BackTest {
         var largestLoser = 0.0
         var allTrades = [Double]()
         
+       
+        
         for each in prices {
+            
+            //MARK: - Entry
             if flat && each.longEntry {
                 flat = false
                 entryPrice = each.close
@@ -48,10 +52,12 @@ class BackTest {
                 stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).0
                 cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
             }
-            // manage trade
+
+            //MARK: - manage trade
             if !flat {
                 daysInTrade += 1
-                if !flat && each.wPctR > -30 {
+                //MARK: - target
+                if each.wPctR > -30 {
                     flat = true
                     tradeGain = (each.close - entryPrice) * shares
                     
@@ -65,7 +71,11 @@ class BackTest {
                     if  tradeGain > largestWin { largestWin = tradeGain }
                     if debug { print("wPctR(\(String(format: "%.1f", each.wPctR)) exit on \(each.dateString) Win \(String(format: "%.1f", tradeGain))") }
                     allTrades.append(tradeGain)
-                } else if !flat && daysInTrade == 7 {
+
+                }
+                //MARK: - time stop
+                if daysInTrade >= 7 {
+                    if debug { print("\nTime exit fot \(each.ticker)\n") }
                     flat = true
                     tradeGain = (each.close - entryPrice) * shares
                     
@@ -83,7 +93,9 @@ class BackTest {
                     } else {
                        if debug { print("Time stop on \(each.dateString) after \(daysInTrade) days with loss of \(String(format: "%.1f", tradeGain))") }
                     }
-                } else if !flat && each.low <= stop {
+                }
+                //MARK: - stop
+                if !flat && each.low <= stop {
                     flat = true
                     let thisLoss = ( each.low - entryPrice ) * shares
                     allTrades.append(thisLoss)
@@ -99,6 +111,7 @@ class BackTest {
                     }
 
                     if debug { print("tradeGain \(String(format: "%.1f", tradeGain)) = tradeGain \(String(format: "%.1f", tradeGain)) + thisLoss \(String(format: "%.1f", thisLoss)) ") }
+
                 }
                 UserDefaults.standard.set(each.date, forKey: "StatsUpdate")
             }
