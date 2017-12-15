@@ -35,7 +35,7 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "DJP", date: "12/01", entry: 23.91, exit: 23.05, shares: 100.00) )
         trades.append( MyPrice().profit(ticker: "EWH", date: "12/01", entry: 25.57, exit: 25.35, shares: 65.00) )
         trades.append( MyPrice().profit(ticker: "V", date: "12/05", entry: 108.64, exit: 111.99, shares: 15.00) )
-        trades.append( MyPrice().profit(ticker: "SMH", date: "12/05", entry: 97.4, exit: 0.00, shares: 17.00) )
+        trades.append( MyPrice().profit(ticker: "SMH", date: "12/05", entry: 97.4, exit: 97.8, shares: 17.00) )
         trades.append( MyPrice().profit(ticker: "EWT", date: "12/06", entry: 35.98, exit: 0.00, shares: 46.00) )
         trades.append( MyPrice().profit(ticker: "EFA", date: "12/06", entry: 69.28, exit: 70.28, shares: 14.00) )
         trades.append( MyPrice().profit(ticker: "SOXX", date: "12/06", entry: 167.38, exit: 0.00, shares: 5.00) )

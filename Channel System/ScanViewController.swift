@@ -50,9 +50,9 @@ class ScanViewController: UIViewController {
         title = "Finance"
         tradeButton(isOn: false)
         updateButton(isOn: false)
-        //ManualTrades().showProfit()
+        ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
-        //CumulativeProfit().portfolioCapital()
+    
         
 
         /*

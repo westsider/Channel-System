@@ -68,7 +68,7 @@ class StatsViewController: UIViewController {
         ActivityOne(isOn:true)
         textAlpha(isNow: 0.1)
         DispatchQueue.global(qos: .background).async {
-            CumulativeProfit().weeklyProfit(debug: true) {
+            CumulativeProfit().weeklyProfit(debug: false) {
                 (result: Bool) in
                 if result {
                     DispatchQueue.main.async {
@@ -191,7 +191,7 @@ class StatsViewController: UIViewController {
             let avgStars = self.self.averageStars.reduce(0, +) / Double( self.averageStars.count )
             if debug {print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))") }
             DispatchQueue.main.async {
-                self.topLeft.text = "$\(self.dollarStr(largeNumber: grossProfit)) Profit"
+                self.topLeft.text = "$\(DateHelper().dollarStr(largeNumber: grossProfit)) Profit"
                 self.topRight.text = "\(String(format: "%.0f", aPctWin))% Wins"
                 self.midLeft.text = "\(String(format: "%.1f", avgROI))% Avg Roi "
                 self.midRight.text = "\(String(format: "%.0f", grossROI))% Gross Roi"
@@ -207,14 +207,6 @@ class StatsViewController: UIViewController {
         }
     }
 
-    func dollarStr(largeNumber:Double )->String {
-        var formattedNumber:String = "nil"
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = NumberFormatter.Style.decimal
-        formattedNumber = numberFormatter.string(from: NSNumber(value:Int(largeNumber)))!
-        //print("total Profit ", formattedNumber!)
-        return formattedNumber
-    }
     var sciChartView1 = SCIChartSurface()
     
     // MARK: initialize surface
@@ -245,11 +237,11 @@ class StatsViewController: UIViewController {
         xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         xAxis.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         xAxis.style.labelStyle.fontName = "Helvetica"
-        xAxis.style.labelStyle.fontSize = 12
+        xAxis.style.labelStyle.fontSize = 7
         let yAxis = SCINumericAxis()
         yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         yAxis.style.labelStyle.fontName = "Helvetica"
-        yAxis.style.labelStyle.fontSize = 7
+        yAxis.style.labelStyle.fontSize = 14
         sciChartView1.xAxes.add(xAxis)
         sciChartView1.yAxes.add(yAxis)
     }
