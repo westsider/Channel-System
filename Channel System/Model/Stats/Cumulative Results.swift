@@ -11,6 +11,113 @@ import RealmSwift
 
 class CumulativeProfit {
     
+    
+    func dailyProcess(debug:Bool)-> [(date: Date, profit: Double, cost: Double, positions: Int)]  {
+
+        var dailyPortfolioRecord: [(date: Date, profit: Double, cost: Double, positions: Int)] = []
+        let realm = try! Realm()
+        let dateArray = realm.objects(Prices.self).sorted(byKeyPath: "date", ascending: true)
+        var lastDate = Date()
+        var todaysProfit:Double = 0.00
+        var portfolioDict: [String: Double] = [:]
+        var maxCost:Double = 0.00
+        var totalGain:Double = 0.00
+        for (fileIndex, today) in dateArray.enumerated() {
+            if fileIndex < 25306 { continue }
+            // daily process
+            // if buy then buy and record ticker and cost
+            if portfolioDict.count < 20 {
+                if today.capitalReq != 0.00 {
+                    // only buy if I dont own it
+                    if portfolioDict[today.ticker] == nil {
+                    portfolioDict[today.ticker] = today.capitalReq
+                    print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(DateHelper().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)")
+                    }
+                }
+            }
+            // if sell then reord profitToday and remove ticker
+            if today.backTestProfit != 0.00 {
+                // if this sell matches one of my tickers
+                if portfolioDict[today.ticker] != nil {
+                    todaysProfit += today.backTestProfit
+                    portfolioDict.removeValue(forKey: today.ticker)
+                    print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(DateHelper().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")
+                }
+            }
+            //on a new day
+            if today.date != lastDate {
+                // sum all of todays cost
+                var dailyCostSum:Double = 0.00
+                for each in portfolioDict {
+                    dailyCostSum += each.value
+                }
+                // record date profit, cost, numPositions
+                dailyPortfolioRecord.append((date: lastDate , profit: todaysProfit, cost: dailyCostSum, positions: portfolioDict.count))
+                // check max cost and gain
+                if dailyCostSum > maxCost {
+                    maxCost = dailyCostSum
+                }
+                totalGain += todaysProfit
+                // print the record
+                print("\(fileIndex) New day, summing daily cost and adding a portfolio daily record")
+                print("\(fileIndex) Todays Record: ", lastDate, "Profit: ", DateHelper().dollarStr(largeNumber:todaysProfit), "Cost: ",DateHelper().dollarStr(largeNumber:dailyCostSum), "Positions: ", portfolioDict.count)
+                // clear todays profit
+                todaysProfit = 0
+                // incrementDate
+                lastDate = today.date!
+                print("\(fileIndex) clearing todays profit, new date is \(lastDate)")
+                // repeat daily process
+                // daily process
+                // if buy then buy and record ticker and cost
+                if portfolioDict.count < 20 {
+                    if today.capitalReq != 0.00 {
+                        // only buy if I dont own it
+                        if portfolioDict[today.ticker] == nil {
+                            portfolioDict[today.ticker] = today.capitalReq
+                            print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(DateHelper().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)")
+                        }
+                    }
+                }
+                // if sell then reord profitToday and remove ticker
+                if today.backTestProfit != 0.00 {
+                    // if this sell matches one of my tickers
+                    if portfolioDict[today.ticker] != nil {
+                        todaysProfit += today.backTestProfit
+                        portfolioDict.removeValue(forKey: today.ticker)
+                        print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(DateHelper().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")
+                    }
+                }
+            }
+        }
+        let roi = totalGain / maxCost
+        let roiString = String(format: "%.2f", roi)
+        print("Max cost: \(DateHelper().dollarStr(largeNumber: maxCost) ) Total gain: \(DateHelper().dollarStr(largeNumber: totalGain)) ROI: \(roiString)")
+        let totalPortfolio = 850000.00
+        let endGame = totalPortfolio * roi
+        let annual = endGame / 2
+        print("Big Portfolio \(DateHelper().dollarStr(largeNumber: endGame)) annual: \(DateHelper().dollarStr(largeNumber: annual))")
+        return dailyPortfolioRecord
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     var maxCost:Double = 0.00
 
     // get every date in Prices. if backTestProfit -> master: [(date: Date, profit: Double)]
