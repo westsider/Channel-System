@@ -52,20 +52,6 @@ class ScanViewController: UIViewController {
         updateButton(isOn: false)
         ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
-        /*
-         [ ] redo calc chart button on the stats vc to:
-         [X] just look for each.capitalReq & backTestProfit to get a running daily total P&L and rolling capital used
-             change chart to plot these 2 and mark off max capital
-         [ ] globally bump up risk to 250
-         [X] roi
-         [X] win %
-         [X] send to stats
-         [ ] plot on chart
-         [X] broken constraints
-         [ ] rolling csapital plot?
-        */
-
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {

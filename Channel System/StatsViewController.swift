@@ -38,7 +38,7 @@ class StatsViewController: UIViewController {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    let barsToShow:Int = 100
+    let barsToShow:Int = 125
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,7 +166,7 @@ class StatsViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.ActivityOne(isOn:true)
             
-            _ = CumulativeProfit().fullBacktestWithCost(debug: false, saveToRealm: true)
+            _ = CumulativeProfit().allTickerBacktestWithCost(debug: true, saveToRealm: true)
            
             DispatchQueue.main.async {
                 completion()
