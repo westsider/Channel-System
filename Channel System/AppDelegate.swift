@@ -43,22 +43,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 3,
+            schemaVersion: 4,
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
             migrationBlock: { migration, oldSchemaVersion in
                 // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 3) {
-                    migration.enumerateObjects(ofType: WklyStats.className()) { oldObject, newObject in
-                        let cost = 0.00
-                        newObject?["cost"] = cost
+                if (oldSchemaVersion < 4) {
+                    migration.enumerateObjects(ofType: Stats.className()) { oldObject, newObject in
+                        let largestWinner = 0.00
+                        newObject?["largestWinner"] = largestWinner
+                        let largestLoser = 0.00
+                        newObject?["largestLoser"] = largestLoser
                         let maxCost = 0.00
                         newObject?["maxCost"] = maxCost
                 }

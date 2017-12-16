@@ -26,12 +26,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="Eq7-ZG-xqk">
-                                <rect key="frame" x="102" y="93" width="170" height="170"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Eq7-ZG-xqk" secondAttribute="height" multiplier="1:1" id="7Sm-dw-7ys"/>
-                                </constraints>
-                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5g-HL-Lw5">
                                 <rect key="frame" x="16" y="411" width="343" height="100"/>
                                 <subviews>
@@ -98,34 +92,28 @@
                                     <constraint firstAttribute="width" secondItem="wG0-AO-Vih" secondAttribute="height" multiplier="91:30" id="c7b-aa-YQ0"/>
                                 </constraints>
                             </stackView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0yM-3j-dra">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0yM-3j-dra">
                                 <rect key="frame" x="168.5" y="159.5" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.19245842099189758" green="0.20357471704483032" blue="0.22745734453201294" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pjh-GY-89w" secondAttribute="trailing" constant="16" id="ADG-GJ-iQh"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Eq7-ZG-xqk" secondAttribute="trailing" constant="103" id="ALB-vF-k4a"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="top" secondItem="Pjh-GY-89w" secondAttribute="bottom" constant="18" id="ArK-jY-dM7"/>
-                            <constraint firstItem="Eq7-ZG-xqk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="102" id="HqG-uP-oQD"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wG0-AO-Vih" secondAttribute="bottom" constant="24" id="IPt-23-nlC"/>
                             <constraint firstItem="Gtg-gI-fW5" firstAttribute="top" secondItem="o5g-HL-Lw5" secondAttribute="bottom" constant="19" id="PYF-Nw-pab"/>
                             <constraint firstItem="wG0-AO-Vih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Pcf-4A-Pfm"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wG0-AO-Vih" secondAttribute="trailing" constant="16" id="W9E-96-tJe"/>
-                            <constraint firstItem="0yM-3j-dra" firstAttribute="centerY" secondItem="Eq7-ZG-xqk" secondAttribute="centerY" id="bji-0W-vD4"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="eDE-aj-5rv"/>
-                            <constraint firstItem="0yM-3j-dra" firstAttribute="centerX" secondItem="Eq7-ZG-xqk" secondAttribute="centerX" id="eeo-qS-CRE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-HL-Lw5" secondAttribute="trailing" constant="16" id="lSs-zr-yTD"/>
                             <constraint firstItem="Pjh-GY-89w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="qj9-TZ-W41"/>
-                            <constraint firstItem="Eq7-ZG-xqk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="29" id="uXP-oY-6HI"/>
-                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="Eq7-ZG-xqk" secondAttribute="bottom" constant="30" id="x2e-rR-18v"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="biD-pr-RAe"/>
                     <connections>
                         <outlet property="activity" destination="0yM-3j-dra" id="r2b-JR-ZAa"/>
-                        <outlet property="circleImage" destination="Eq7-ZG-xqk" id="d1v-dn-gBk"/>
                         <outlet property="currentProcessLable" destination="lIN-xi-Yu4" id="vSU-cH-Eiw"/>
                         <outlet property="lastUpdateLable" destination="hQG-0g-wbn" id="1IB-IW-pEN"/>
                         <outlet property="tradeButton" destination="x8N-0N-Aed" id="ddf-ar-VLP"/>
@@ -1071,7 +1059,4 @@
             <point key="canvasLocation" x="2104.8000000000002" y="115.59220389805098"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="circle" width="201" height="172"/>
-    </resources>
 </document>

@@ -11,8 +11,9 @@ import RealmSwift
 
 class CumulativeProfit {
     
+    var maxCosts:Double = 0.00
     
-    func dailyProcess(debug:Bool)-> [(date: Date, profit: Double, cost: Double, positions: Int)]  {
+    func fullBacktestWithCost(debug:Bool, saveToRealm:Bool)-> [(date: Date, profit: Double, cost: Double, positions: Int)]  {
 
         var dailyPortfolioRecord: [(date: Date, profit: Double, cost: Double, positions: Int)] = []
         let realm = try! Realm()
@@ -105,33 +106,14 @@ class CumulativeProfit {
         let totalPortfolio = 850000.00
         let endGame = totalPortfolio * roi
         let annual = endGame / 2
+        if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: 1.0, maxCost: maxCost) }
         print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(DateHelper().dollarStr(largeNumber: maxCost) ), Total gain: \(DateHelper().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(DateHelper().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(DateHelper().dollarStr(largeNumber: endGame)), Annual Return: \(DateHelper().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n")
         return dailyPortfolioRecord
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    var maxCost:Double = 0.00
 
     // get every date in Prices. if backTestProfit -> master: [(date: Date, profit: Double)]
     func calcAllTickers(debug:Bool)-> [(date: Date, profit: Double, cost: Double, positions: Int)]  {
+        
         
         print("inside makeMaster()")
         var allDatesAllTickers: [(date: Date, profit: Double, cost: Double, positions: Int)] = []
@@ -168,8 +150,6 @@ class CumulativeProfit {
                         sumOfToday = todaysProfit.reduce(0, +)
                     }
                 }
-
-                
                 if debug { print(today.dateString, today.ticker, String(format: "%.2f", today.backTestProfit) , String(format: "%.2f", sumOfToday)) }
             } else {
                 // new date so save last date and total for the day
@@ -205,8 +185,8 @@ class CumulativeProfit {
             runOfProfit += today.profit
             cumProfit[index].profit = runOfProfit
             cumProfit[index].cost = today.cost
-            if today.cost > maxCost {
-                maxCost = today.cost
+            if today.cost > maxCosts {
+                maxCosts = today.cost
             }
         }
         /*
@@ -216,7 +196,7 @@ class CumulativeProfit {
         
         if debug {
             for today in cumProfit {
-                print(today.date, "profit ", DateHelper().dollarStr(largeNumber: today.profit),"\tcost ", DateHelper().dollarStr(largeNumber: today.cost),"\tmax ", DateHelper().dollarStr(largeNumber: maxCost), "\tPositions: ", today.positions)
+                print(today.date, "profit ", DateHelper().dollarStr(largeNumber: today.profit),"\tcost ", DateHelper().dollarStr(largeNumber: today.cost),"\tmax ", DateHelper().dollarStr(largeNumber: maxCosts), "\tPositions: ", today.positions)
             }
         }
         
@@ -242,7 +222,7 @@ class CumulativeProfit {
             if isFriday(date: today.element.date) {
                 //print("Hello Friday")
                 cumProfitWeelky.append((date: today.element.date, profit: today.element.profit, cost: today.element.cost))
-                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit, cost: today.element.cost, maxCost: maxCost)
+                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit, cost: today.element.cost, maxCost: maxCosts)
             }
             
             counter += 1

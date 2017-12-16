@@ -37,9 +37,7 @@ class StatsViewController: UIViewController {
     var averagePctWin = [Double]()
     var totalROI = [Double]()
     var averageStars = [Double]()
-    
     var results: Results<WklyStats>?
-    
     let barsToShow:Int = 100
     
     override func viewDidLoad() {
@@ -50,7 +48,6 @@ class StatsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         getStatsfromRealm()
-        //calcStats(debug: false, completion: callChart)
     }
     
     // need completion handler for this
@@ -147,17 +144,14 @@ class StatsViewController: UIViewController {
         let realm = try! Realm()
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
-            let largeNumber = Int(updateStats.grossProfit)
-            let numberFormatter = NumberFormatter()
-            numberFormatter.numberStyle = NumberFormatter.Style.decimal
-            let formattedNumber:String = numberFormatter.string(from: NSNumber(value:largeNumber))!
-            print("\nHere is the large Number", formattedNumber)
+            let gross = DateHelper().dollarStr(largeNumber: updateStats.grossProfit)
+            let cost = DateHelper().dollarStr(largeNumber: updateStats.maxCost)
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
-                self.topLeft.text = "$\(formattedNumber) Profit"
+                self.topLeft.text = "$\(gross) Profit"
                 self.topRight.text = "\(String(format: "%.0f", updateStats.avgPctWin))% Wins"
-                self.midLeft.text = "\(String(format: "%.1f", updateStats.avgROI))% Avg Roi "
-                self.midRight.text = "\(String(format: "%.0f", updateStats.grossROI))% Gross Roi"
+                self.midLeft.text = "\(String(format: "%.3f", updateStats.avgROI))  Roi "
+                self.midRight.text = "$\(cost) Cost"
                 self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
                 self.ActivityOne(isOn: false)
                 self.callChart()
@@ -170,38 +164,13 @@ class StatsViewController: UIViewController {
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
-            var counter = 0
-            for each in self.galaxie {
-                let result:(Double, Double, Double, Double, Double) = EntryAndExit().doItAll(ticker: each, debug: false, updateRealm: true) //BackTest().calcPastTradesForEach(ticker: each, debug: false, updateRealm: false)
-                let stars:(Int,String) = BackTest().calcStars(grossProfit: result.0, annualRoi: result.3, winPct: result.4, debug: false)
-                self.totalProfit.append(result.0)
-                // calc performance on winners
-                //if result.3 > 0 { I use this to find avg stars of winners
-                self.self.averagePctWin.append(result.4)
-                self.totalROI.append(result.3)
-                self.averageStars.append(Double(stars.0))
-                //}
-                counter += 1
-                self.showCounter(count: counter, max: self.galaxie.count)
-            }
-            let grossProfit:Double = self.totalProfit.reduce(0, +)
-            let grossROI = self.totalROI.reduce(0, +)
-            let avgROI = grossROI / Double( self.totalROI.count )
-            let aPctWin = self.self.averagePctWin.reduce(0, +) / Double( self.averagePctWin.count )
-            let avgStars = self.self.averageStars.reduce(0, +) / Double( self.averageStars.count )
-            if debug {print("\nTotal Profit \(String(format: "%.0f", grossProfit)), Avg Pct Win \(String(format: "%.2f", aPctWin)), Avg ROI \(String(format: "%.2f", avgROI)), Total ROI \(String(format: "%.2f", grossROI)), Avg Stars \(String(format: "%.2f", avgStars))") }
-            DispatchQueue.main.async {
-                self.topLeft.text = "$\(DateHelper().dollarStr(largeNumber: grossProfit)) Profit"
-                self.topRight.text = "\(String(format: "%.0f", aPctWin))% Wins"
-                self.midLeft.text = "\(String(format: "%.1f", avgROI))% Avg Roi "
-                self.midRight.text = "\(String(format: "%.0f", grossROI))% Gross Roi"
-                self.bottomLeft.text = "\(String(format: "%.2f", avgStars)) Avg Stars"
-                //MARK: - Save stats to realm
-                Stats().updateFinalTotal(grossProfit: grossProfit, avgPctWin: aPctWin, avgROI: avgROI, grossROI: grossROI, avgStars: avgStars)
-                self.ActivityOne(isOn: false)
-            }
+            self.ActivityOne(isOn:true)
+            
+            _ = CumulativeProfit().fullBacktestWithCost(debug: false, saveToRealm: true)
+           
             DispatchQueue.main.async {
                 completion()
+                self.getStatsfromRealm()
                 self.ActivityOne(isOn:false)
             }
         }

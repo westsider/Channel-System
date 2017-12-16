@@ -945,9 +945,9 @@
 				0DA11AE21FD07B620074BAD7 /* Stats */,
 				0DA11AE31FD07B920074BAD7 /* Data */,
 				0DA11AE41FD07BCB0074BAD7 /* Trades */,
-				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 				0DCAAFDE1FBC3EF600095560 /* Indicators */,
 				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
+				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
