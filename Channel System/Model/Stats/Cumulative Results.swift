@@ -22,6 +22,8 @@ class CumulativeProfit {
         var portfolioDict: [String: Double] = [:]
         var maxCost:Double = 0.00
         var totalGain:Double = 0.00
+        var winCount:Int = 0
+        var tradeCount:Int = 0
         for (fileIndex, today) in dateArray.enumerated() {
             if fileIndex < 25306 { continue }
             // daily process
@@ -30,8 +32,8 @@ class CumulativeProfit {
                 if today.capitalReq != 0.00 {
                     // only buy if I dont own it
                     if portfolioDict[today.ticker] == nil {
-                    portfolioDict[today.ticker] = today.capitalReq
-                    print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(DateHelper().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)")
+                        portfolioDict[today.ticker] = today.capitalReq
+                        if debug { print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(DateHelper().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)") }
                     }
                 }
             }
@@ -41,7 +43,11 @@ class CumulativeProfit {
                 if portfolioDict[today.ticker] != nil {
                     todaysProfit += today.backTestProfit
                     portfolioDict.removeValue(forKey: today.ticker)
-                    print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(DateHelper().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")
+                    tradeCount += 1
+                    if today.backTestProfit >= 0 {
+                        winCount += 1
+                    }
+                    if debug { print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(DateHelper().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")}
                 }
             }
             //on a new day
@@ -59,13 +65,13 @@ class CumulativeProfit {
                 }
                 totalGain += todaysProfit
                 // print the record
-                print("\(fileIndex) New day, summing daily cost and adding a portfolio daily record")
-                print("\(fileIndex) Todays Record: ", lastDate, "Profit: ", DateHelper().dollarStr(largeNumber:todaysProfit), "Cost: ",DateHelper().dollarStr(largeNumber:dailyCostSum), "Positions: ", portfolioDict.count)
+                if debug { print("\(fileIndex) New day, summing daily cost and adding a portfolio daily record")
+                    print("\(fileIndex) Todays Record: ", lastDate, "Profit: ", DateHelper().dollarStr(largeNumber:todaysProfit), "Cost: ",DateHelper().dollarStr(largeNumber:dailyCostSum), "Positions: ", portfolioDict.count) }
                 // clear todays profit
                 todaysProfit = 0
                 // incrementDate
                 lastDate = today.date!
-                print("\(fileIndex) clearing todays profit, new date is \(lastDate)")
+                if debug { print("\(fileIndex) clearing todays profit, new date is \(lastDate)") }
                 // repeat daily process
                 // daily process
                 // if buy then buy and record ticker and cost
@@ -74,7 +80,7 @@ class CumulativeProfit {
                         // only buy if I dont own it
                         if portfolioDict[today.ticker] == nil {
                             portfolioDict[today.ticker] = today.capitalReq
-                            print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(DateHelper().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)")
+                            if debug { print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(DateHelper().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)") }
                         }
                     }
                 }
@@ -84,18 +90,22 @@ class CumulativeProfit {
                     if portfolioDict[today.ticker] != nil {
                         todaysProfit += today.backTestProfit
                         portfolioDict.removeValue(forKey: today.ticker)
-                        print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(DateHelper().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")
+                        tradeCount += 1
+                        if today.backTestProfit >= 0 {
+                            winCount += 1
+                        }
+                        if debug { print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(DateHelper().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)") }
                     }
                 }
             }
         }
         let roi = totalGain / maxCost
         let roiString = String(format: "%.2f", roi)
-        print("Max cost: \(DateHelper().dollarStr(largeNumber: maxCost) ) Total gain: \(DateHelper().dollarStr(largeNumber: totalGain)) ROI: \(roiString)")
+        let winPct = ( Double( winCount ) / Double(tradeCount) ) * 100
         let totalPortfolio = 850000.00
         let endGame = totalPortfolio * roi
         let annual = endGame / 2
-        print("Big Portfolio \(DateHelper().dollarStr(largeNumber: endGame)) annual: \(DateHelper().dollarStr(largeNumber: annual))")
+        print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(DateHelper().dollarStr(largeNumber: maxCost) ), Total gain: \(DateHelper().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(DateHelper().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(DateHelper().dollarStr(largeNumber: endGame)), Annual Return: \(DateHelper().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n")
         return dailyPortfolioRecord
     }
     

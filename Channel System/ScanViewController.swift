@@ -53,22 +53,23 @@ class ScanViewController: UIViewController {
         //ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
         let masterFile = CumulativeProfit().dailyProcess(debug: false)
-        var profit:Double = 0.00
-        for each in masterFile {
-            //print(each.date, DateHelper().dollarStr(largeNumber: each.cost) ,"\t",DateHelper().dollarStr(largeNumber: each.profit), "\t", each.positions)
-            profit += each.profit
-            print(each.cost)
-        }
-        print("\n\(DateHelper().dollarStr(largeNumber: profit))\n")
+//        var profit:Double = 0.00
+//        for each in masterFile {
+//            //print(each.date, DateHelper().dollarStr(largeNumber: each.cost) ,"\t",DateHelper().dollarStr(largeNumber: each.profit), "\t", each.positions)
+//            profit += each.profit
+//            //print(each.cost)
+//        }
+//        print("\nTotal Gain\(DateHelper().dollarStr(largeNumber: profit))\n")
         /*
          [ ] redo calc chart button on the stats vc to:
          [X] just look for each.capitalReq & backTestProfit to get a running daily total P&L and rolling capital used
              change chart to plot these 2 and mark off max capital
          [ ] globally bump up risk to 250
          [X] roi
-         [ ] win %
+         [X] win %
          [ ] send to stats
          [ ] plot on chart
+         [ ] broken constraints
         */
 
         

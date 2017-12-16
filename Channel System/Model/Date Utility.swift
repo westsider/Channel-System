@@ -134,4 +134,7 @@ class DateHelper {
         return formattedNumber
     }
 
+    func decimalStr(input:Double, Decimals:Int)->String {
+        return String(format: "%.\(Decimals)f", input)
+    }
 }
