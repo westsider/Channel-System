@@ -146,12 +146,14 @@ class StatsViewController: UIViewController {
             print("getting saved stats from realm")
             let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
             let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
+            let thisRisk = Account().currentRisk()
+            let roi = updateStats.avgROI * 100
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
                 self.topLeft.text = "$\(gross) Profit"
                 self.topRight.text = "\(String(format: "%.0f", updateStats.avgPctWin))% Wins"
-                self.midLeft.text = "\(String(format: "%.3f", updateStats.avgROI))  Roi "
-                self.midRight.text = "$\(cost) Cost"
+                self.midLeft.text = "\(String(format: "%.2f", roi))%  Roi "
+                self.midRight.text = "$\(cost) Cost, \(thisRisk) Risk"
                 self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
                 self.ActivityOne(isOn: false)
                 self.callChart()
@@ -166,7 +168,7 @@ class StatsViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.ActivityOne(isOn:true)
             
-            _ = CumulativeProfit().allTickerBacktestWithCost(debug: true, saveToRealm: true)
+            _ = CumulativeProfit().allTickerBacktestWithCost(debug: false, saveToRealm: true)
            
             DispatchQueue.main.async {
                 completion()

@@ -17,8 +17,16 @@ class Account:Object {
     @objc dynamic var risk = 50
     @objc dynamic var taskID = "03"
     
+    func currentRisk()->Int {
+        let id = "03"
+        let realm = try! Realm()
+        let acct = realm.objects(Account.self).filter("taskID == %@", id)
+        let thisRisk = acct.first?.risk
+        return thisRisk!
+    }
+    //let currentRisk = Account().currentRisk()
+    
     func textValueFor(account: String)-> String{
-        
         let realm = try! Realm()
         let id = "03"
         let currentAcct = realm.objects(Account.self).filter("taskID == %@", id).first
@@ -26,16 +34,16 @@ class Account:Object {
         
         switch account {
         case "IB":
-            answer =  (String(format: "%.0f", (currentAcct?.ib)!))
+            answer =  Utilities().dollarStr(largeNumber: (currentAcct?.ib)!) 
             print("string value for IB account is \(answer)")
         case "TDA":
-            answer =  (String(format: "%.0f", (currentAcct?.tda)!))
+            answer =  Utilities().dollarStr(largeNumber: (currentAcct?.tda)!)
             print("string value for TDA account is \(answer)")
         case "E*Trade":
-            answer =  (String(format: "%.0f", (currentAcct?.eTrade)!))
+            answer =  Utilities().dollarStr(largeNumber: (currentAcct?.eTrade)!) 
             print("string value for  E*Trade account is \(answer)")
         case "Risk":
-            answer =  (String(format: "%.0f", (currentAcct?.risk)!))
+            answer =  Utilities().dollarStr(largeNumber: Double((currentAcct?.risk)!)) 
             print("string value for Risk account is \(answer)")
         default:
             print("No account founbd")
@@ -90,7 +98,7 @@ class Account:Object {
             }
         }
     }
-    
+
     func updateRisk(risk:Int){
         let realm = try! Realm()
         let id = "03"
@@ -105,5 +113,12 @@ class Account:Object {
                 realm.add(newAcct)
             }
         }
+    }
+    
+    func debugAccount() {
+        let id = "03"
+        let realm = try! Realm()
+        let updateAcct = realm.objects(Account.self).filter("taskID == %@", id)
+        debugPrint(updateAcct)
     }
 }

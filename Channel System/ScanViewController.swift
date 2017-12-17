@@ -134,11 +134,12 @@ class ScanViewController: UIViewController {
                 let stop:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).0
                 let target:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).1
                 let stopDistance:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).2
-                let shares:Int = TradeHelpers().calcShares(stopDist: stopDistance, risk: 50)
+                let currentRisk = Account().currentRisk()
+                let shares:Int = TradeHelpers().calcShares(stopDist: stopDistance, risk: currentRisk)
                 let stopString:String = TradeHelpers().stopString(stop: stop)
                 let capReq:Double = TradeHelpers().capitalRequired(close: close, shares: shares)
                 let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
-                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(50), debug: false, account: "Test Account", capital: capReq)
+                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(currentRisk), debug: false, account: "Test Account", capital: capReq)
             }
         }
     }

@@ -22,7 +22,7 @@ class EntryAndExit {
      run the func below and test
      */
     
-    let risk = 50
+    //let risk = 50
     
     func doItAll(ticker:String, debug:Bool, updateRealm:Bool)->(Double, Double, Double, Double, Double) {
         
@@ -42,14 +42,14 @@ class EntryAndExit {
         var largestWin:Double = 0.0
         var largestLoser:Double = 0.0
         var allTrades = [Double]()
-        
+        let currentRisk = Account().currentRisk()
         for each in prices {
             //MARK: - Entry
             if ( flat && each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
                 
                 try! realm.write {
                     let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
-                    shares = Double(TradeHelpers().calcShares(stopDist: stopDist.2, risk: risk))
+                    shares = Double(TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk))
                     each.longEntry = true
                     each.shares = Int(shares)
                     each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: Int(shares))

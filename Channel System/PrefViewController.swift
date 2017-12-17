@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class PrefViewController: UIViewController {
+class PrefViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var activityDial: UIActivityIndicatorView!
     
@@ -44,17 +44,43 @@ class PrefViewController: UIViewController {
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
     
     var symbolCount = 0
+    var textEntered:String = "No Text"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Account().debugAccount()
         title = "Preferences"
+        populateLables()
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         symbolCount = galaxie.count
         activityDial.stopAnimating()
     }
     
+    func populateLables() {
+        let riskRecd = Account().currentRisk()
+        print("Loading risk of \(riskRecd)")
+        //riskLabel.text = "\(riskRecd)"
+        riskLabel.text = Account().textValueFor(account: "Risk")
+        ibLabel.text = Account().textValueFor(account:"IB" )
+        tdaLabel.text = Account().textValueFor(account:"TDA" )
+        etradeLabel.text = Account().textValueFor(account:"E*Trade" )
+    }
+    
     //MARK: - TODO - need to make an account realm object to track account size and risk
     @IBAction func riskAction(_ sender: Any) {
+        if (riskLabel.text! != "") {
+            textEntered = riskLabel.text!
+            // convert text entered to double
+            if let numberRisk = Int(textEntered) {
+                // safely get number from risk
+                Account().updateRisk(risk: numberRisk )
+                print("\n-------> Saved new Risk of \(numberRisk) <------\n")
+            } else {
+                print("\n-------> ERROR unwrapping Risk <------\n")
+            }
+        } else {
+            print("\n-------> ERROR reading Risk String <------\n")
+        }
     }
     
     @IBAction func ibAction(_ sender: Any) {
@@ -191,17 +217,28 @@ class PrefViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.backTestLabel.text = "star calc \(count) of \(tickerStar.count)"
                 }
-                let stars = BackTest().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: true)
+                let stars = BackTest().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: false)
                 Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: true)
-                count += 1
             }
             
             DispatchQueue.main.async {
-                if count == tickerStar.count-1 {
+                if count == tickerStar.count-2 {
                     self.activityDial.stopAnimating()
                     self.backTestLabel.text = "Updated"
                 }
             }
         }
+    }
+    
+    //MARK: - Keyboard behavior functions
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        riskLabel.resignFirstResponder()
+        ibLabel.resignFirstResponder()
+        tdaLabel.resignFirstResponder()
+        etradeLabel.resignFirstResponder()
+        return true
     }
 }

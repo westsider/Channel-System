@@ -23,8 +23,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         title = "last \(days) day(s)"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
-    
-    // Now settings for risk
+
     @IBAction func clearRealmAction(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
         navigationController?.pushViewController(myVC, animated: true)

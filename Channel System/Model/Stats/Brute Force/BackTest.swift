@@ -46,7 +46,8 @@ class BackTest {
                 tradeCount += 1
                 if debug { print("Entry on \(each.dateString) Trade count \(tradeCount) and wPctR is \(String(format: "%.1f", each.wPctR))") }
                 let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).2
-                shares = Double( TradeHelpers().calcShares(stopDist: stopDist, risk: 250))
+                let currentRisk = Account().currentRisk()
+                shares = Double( TradeHelpers().calcShares(stopDist: stopDist, risk: currentRisk))
                 stop = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).0
                 cost = TradeHelpers().capitalRequired(close: entryPrice, shares: Int(shares))
             }

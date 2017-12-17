@@ -48,13 +48,15 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var stop:Double = 0.0
     var target:Double = 0.0
     var stopString:String = " "
-    let risk:Int = 50
+   // let risk:Int = 50
+    var currentRisk:Int = 0
     var shares:Int = 0
     var account:String = "TDA"
     var capReq:Double = 0.0
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
+        currentRisk = Account().currentRisk()
         accountSwitch.selectedSegmentIndex = 2
         populateLables(action: action, debug: false)
         if action == "Entry for" {
@@ -111,7 +113,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             print("In Manage VC case Entry Triggered")
             //MARK: - TODO - make entry func
             if let entryPrice = Double(textEntered) {
-                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(risk), debug: false, account: account, capital: capReq)
+                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(currentRisk), debug: false, account: account, capital: capReq)
                 sequeToPortfolio()
             }
         case "Target":
@@ -198,7 +200,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             target = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close, debug: false).1
             stopDistance = TradeHelpers().calcStopTarget(ticker: thisTrade.ticker, close: close, debug: false).2
             stopString = TradeHelpers().stopString(stop: stop)
-            shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: risk)
+            shares = TradeHelpers().calcShares(stopDist: stopDistance, risk: currentRisk)
             if debug {
                 let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
             }
