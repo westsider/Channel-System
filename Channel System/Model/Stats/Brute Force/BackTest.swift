@@ -17,7 +17,7 @@ class BackTest {
      ### Declare As:
      let result = BackTest().calcPastTradesForEach(ticker: "INTC")
      */
-    func calcPastTradesForEach(ticker: String, debug:Bool, updateRealm: Bool)->(Double, Double, Double, Double, Double) {
+    func bruteForceTradesForEach(ticker: String, debug:Bool, updateRealm: Bool)->(Double, Double, Double, Double, Double) {
     
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         
@@ -35,8 +35,6 @@ class BackTest {
         var largestWin = 0.0
         var largestLoser = 0.0
         var allTrades = [Double]()
-        
-       
         
         for each in prices {
             
@@ -113,6 +111,7 @@ class BackTest {
                     if debug { print("tradeGain \(String(format: "%.1f", tradeGain)) = tradeGain \(String(format: "%.1f", tradeGain)) + thisLoss \(String(format: "%.1f", thisLoss)) ") }
 
                 }
+                
                 UserDefaults.standard.set(each.date, forKey: "StatsUpdate")
             }
         }
@@ -137,13 +136,13 @@ class BackTest {
         if debug { print("winPct \(String(format: "%.1f", winPct)) = winCount \(winCount) / tradeCount \(tradeCount)")
             
             print("\n--- inside func ----\nTicker \(ticker), Profit $\(String(format: "%.0f", grossProfit)), LW/LL \(String(format: "%.0f", largestWin))/\(String(format: "%.0f", largestLoser)), ROI \(String(format: "%.2f", annualRoi))%, \(String(format: "%.2f", winPct))% Win\n") }
-        
+       
         return ( grossProfit,largestWin, largestLoser, annualRoi, winPct )
     }
 
     //MARK: - TODO - rank tickers
     // ( score 50% each for  , winPct literal ) = 80% = 4 stars, 100% = 5 stars
-    func calcStars(grossProfit:Double, annualRoi: Double, winPct:Double, debug:Bool)-> (Int, String) {
+    func calcStars(grossProfit:Double, annualRoi: Double, winPct:Double, debug:Bool)-> (stars:Int, starIcon:String) {
         var totalPercent = 0.0
         var stars = 0
         var starIcon = "★"
@@ -179,7 +178,7 @@ class BackTest {
         default:
             totalPercent += 0.0
         }
-        if debug { print("Total Percent = \(totalPercent)") }
+        
         // assign stars 1 - 5
         switch totalPercent {
         case 0..<40:
@@ -190,12 +189,12 @@ class BackTest {
             stars = 3
         case 120..<160:
             stars = 4
-        case 160...200:
+        case 160...400:
             stars = 5
         default:
             stars = 1
         }
-        if debug { print("\(stars) Stars") }
+        if debug { print("Total Percent: \(totalPercent) = \(stars) Stars") }
         
         // ⭐️⭐️⭐️⭐️⭐️
         if stars == 2 {
@@ -207,12 +206,11 @@ class BackTest {
         } else if stars == 5 {
             starIcon = "★★★★★"
         }
-
         return (stars, starIcon )
     }
     
     func performanceString(ticker:String, updateRealm:Bool, debug: Bool)->String {
-        let result = BackTest().calcPastTradesForEach(ticker: ticker, debug: debug, updateRealm: updateRealm)
+        let result = BackTest().bruteForceTradesForEach(ticker: ticker, debug: debug, updateRealm: updateRealm)
         let profit = String(format: "%.0f", result.0)
         let LW = String(format: "%.0f", result.1)
         let LL = String(format: "%.0f", result.2)
@@ -224,7 +222,7 @@ class BackTest {
     }
     
     func tableViewString(ticker:String)->String {
-        let result = BackTest().calcPastTradesForEach(ticker: ticker, debug: false, updateRealm: false)
+        let result = BackTest().bruteForceTradesForEach(ticker: ticker, debug: false, updateRealm: false)
         let profit = String(format: "%.0f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)
@@ -233,7 +231,7 @@ class BackTest {
     }
     
     func chartString(ticker:String)->String {
-        let result = BackTest().calcPastTradesForEach(ticker: ticker, debug: false, updateRealm: false)
+        let result = BackTest().bruteForceTradesForEach(ticker: ticker, debug: false, updateRealm: false)
         let profit = String(format: "%.2f", result.0)
         let roi = String(format: "%.1f", result.3)
         let winPct = String(format: "%.1f", result.4)

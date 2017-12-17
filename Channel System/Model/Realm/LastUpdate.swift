@@ -46,7 +46,7 @@ class LastUpdate: Object {
         if checkData.last?.lastUpdate == nil {
             let this = LastUpdate()
             this.lastUpdate = now
-            this.lastUpdateString = DateHelper().convertToStringFrom(date:now)
+            this.lastUpdateString = Utilities().convertToStringFrom(date:now)
             this.updates += 1
             
             try! realm.write({
@@ -55,8 +55,8 @@ class LastUpdate: Object {
         } else {
             try! realm.write({
                 let this = LastUpdate()
-                this.lastUpdate = DateHelper().convertUTCtoLocal(debug: false, UTC: now)
-                this.lastUpdateString = DateHelper().convertToStringFrom(date:now)
+                this.lastUpdate = Utilities().convertUTCtoLocal(debug: false, UTC: now)
+                this.lastUpdateString = Utilities().convertToStringFrom(date:now)
                 this.updates += 1
             })
         }

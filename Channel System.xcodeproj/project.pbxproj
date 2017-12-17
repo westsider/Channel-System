@@ -843,6 +843,23 @@
 			path = "Historical Data";
 			sourceTree = "<group>";
 		};
+		0D14D0031FE5AB2D000BA6D5 /* Brute Force */ = {
+			isa = PBXGroup;
+			children = (
+				0DB6B1021FCE9A71009F6BEB /* BackTest.swift */,
+			);
+			path = "Brute Force";
+			sourceTree = "<group>";
+		};
+		0D14D0041FE5AB56000BA6D5 /* Optimized */ = {
+			isa = PBXGroup;
+			children = (
+				0DC70C6D1FE1BFEF00DC58BF /* EntryAndExits.swift */,
+				0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */,
+			);
+			path = Optimized;
+			sourceTree = "<group>";
+		};
 		0D949CCB1FA3B7B600960BA2 = {
 			isa = PBXGroup;
 			children = (
@@ -885,9 +902,8 @@
 		0DA11AE21FD07B620074BAD7 /* Stats */ = {
 			isa = PBXGroup;
 			children = (
-				0DC70C6D1FE1BFEF00DC58BF /* EntryAndExits.swift */,
-				0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */,
-				0DB6B1021FCE9A71009F6BEB /* BackTest.swift */,
+				0D14D0041FE5AB56000BA6D5 /* Optimized */,
+				0D14D0031FE5AB2D000BA6D5 /* Brute Force */,
 				0DE78F541FD888B400915777 /* Stats Object.swift */,
 				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 			);

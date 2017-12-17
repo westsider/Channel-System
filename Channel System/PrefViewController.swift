@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class PrefViewController: UIViewController {
 
@@ -29,6 +30,8 @@ class PrefViewController: UIViewController {
     @IBOutlet weak var williamsPctLabel: UILabel!
     
     @IBOutlet weak var entriesLabel: UILabel!
+    
+    @IBOutlet weak var backTestLabel: UILabel!
     
     var galaxie = [String]()
     
@@ -155,7 +158,7 @@ class PrefViewController: UIViewController {
                     self.entriesLabel.text = "Loading \(index) of \(self.symbolCount)"
                 }
                 let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false)
-                let firstDate  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false)
+                let firstDate  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false)
                 Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
                 count = index
                 print("\(count) of \(self.symbolCount)")
@@ -164,6 +167,39 @@ class PrefViewController: UIViewController {
                 if count == self.symbolCount-1 {
                     self.activityDial.stopAnimating()
                     self.entriesLabel.text = "Updated"
+                }
+            }
+        }
+    }
+    
+    @IBAction func backtestAction(_ sender: Any) {
+        activityDial.startAnimating()
+        var count = 0
+        var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
+        DispatchQueue.global(qos: .background).async {
+            for ( symC, symbols) in self.galaxie.enumerated() {
+                DispatchQueue.main.async {
+                    self.backTestLabel.text = "profit \(symC) of \(self.galaxie.count)"
+                }
+                let results =   BackTest().bruteForceTradesForEach(ticker: symbols, debug: false, updateRealm: true)
+                tickerStar.append((ticker: symbols, grossProfit: results.0, Roi: results.3, WinPct: results.4))
+                print("\(symC) of \(self.symbolCount)")
+            }
+            // loop through array and update stars
+            for (index, each) in tickerStar.enumerated() {
+                count = index
+                DispatchQueue.main.async {
+                    self.backTestLabel.text = "star calc \(count) of \(tickerStar.count)"
+                }
+                let stars = BackTest().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: true)
+                Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: true)
+                count += 1
+            }
+            
+            DispatchQueue.main.async {
+                if count == tickerStar.count-1 {
+                    self.activityDial.stopAnimating()
+                    self.backTestLabel.text = "Updated"
                 }
             }
         }

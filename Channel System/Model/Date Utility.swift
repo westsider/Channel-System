@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class DateHelper {
+class Utilities {
     
     let formatter = DateFormatter()
     let today = Date()
@@ -19,13 +19,11 @@ class DateHelper {
         let dateS    = string
         formatter.dateFormat = "yyyy/MM/dd"
         let date:Date = formatter.date(from: dateS)!
-        
         if ( debug ) { print("Convertion to Date: \(date)\n") }
         return date
     }
     
     func convertToStringFrom(date: Date)-> String {
-        //let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy HH:mm"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
@@ -33,7 +31,6 @@ class DateHelper {
     
     // convert UTC to local
     func convertUTCtoLocal(debug: Bool, UTC: Date)-> Date {
-        
         if ( debug ) { print("convertUTCtoLocal\nUTC:       \(today)") }
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss +0000"
         let todayString = formatter.string(from: Date())
@@ -54,15 +51,11 @@ class DateHelper {
         let lastUpdate = Prices().getLastDateInRealm(debug: false)
         if ( debug) { print("The last update was \(lastUpdate)") }
         if ( debug ) { print("today \(today) lastUpdate \(lastUpdate)") }
-        if (calendar.isDateInToday(lastUpdate) )
-        {
-           return ( true, lastUpdate )
-        } else {
-            return ( false, lastUpdate )
-        }
+        if (calendar.isDateInToday(lastUpdate)) {
+            return ( true, lastUpdate )
+        } else { return ( false, lastUpdate )}
     }
 
-    
     func wasLastPrint(close: [Int], lastUpdate: Date, debug: Bool ) -> Bool {
         let calendar = Calendar.current
         var isMakretHours:Bool
@@ -71,7 +64,6 @@ class DateHelper {
             minute: close[1],
             second: 0,
             of: today)!
-        
         if ( debug ) { print("End Today: \(end_today)") }
         if ( lastUpdate >= end_today ) {
             if ( debug ) { print("The time is after \(close[0]):\(close[1])") }
@@ -86,7 +78,6 @@ class DateHelper {
     
     func realmNotCurrent(debug: Bool)-> Bool {
         let lastUpdateToday = lastUpdateWasToday(debug: debug)
-        
         let yesLastPrint = wasLastPrint(close: [0,0], lastUpdate: lastUpdateToday.1, debug: debug)
         if ( debug ) { print("lastUpdateToday: \(lastUpdateToday.0) \(lastUpdateToday.1) yesLastPrint: \(yesLastPrint)") }
         if(lastUpdateToday.0 && yesLastPrint) {
@@ -95,7 +86,6 @@ class DateHelper {
         } else {
             print("\nrealm is NOT current!\n")
             return true
-            
         }
     }
     
@@ -126,12 +116,9 @@ class DateHelper {
     }
     
     func dollarStr(largeNumber:Double )->String {
-        var formattedNumber:String = "nil"
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = NumberFormatter.Style.decimal
-        formattedNumber = numberFormatter.string(from: NSNumber(value:Int(largeNumber)))!
-        //print("total Profit ", formattedNumber!)
-        return formattedNumber
+        return numberFormatter.string(from: NSNumber(value:Int(largeNumber)))!
     }
 
     func decimalStr(input:Double, Decimals:Int)->String {

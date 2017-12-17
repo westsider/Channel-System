@@ -31,12 +31,13 @@ class Prices: Object {
     @objc dynamic var risk      = 0.00
     @objc dynamic var inTrade   = false
     @objc dynamic var exitedTrade = false
-    @objc dynamic var exitDate:Date = DateHelper().closeTradeIn(days: 7)
+    @objc dynamic var exitDate:Date = Utilities().closeTradeIn(days: 7)
     @objc dynamic var profit    = 0.00
     @objc dynamic var loss      = 0.00
     @objc dynamic var account   = ""
     @objc dynamic var capitalReq = 0.00
     @objc dynamic var backTestProfit:Double = 0.00
+    @objc dynamic var stars:Int = 0
     
     //MARK: - Count Prices
     func allPricesCount()-> Int {
@@ -75,6 +76,20 @@ class Prices: Object {
         return sortedByDate
     }
     
+    //MARK: - add star rating to each price in a ticker
+    func addStarToTicker(ticker:String, stars:Int, debug:Bool) {
+        let realm = try! Realm()
+        let id = ticker
+        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
+        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
+        if ( debug ) {
+            for each in sortedByDate {
+                try! realm.write {
+                    each.stars = stars
+                }
+            }
+        }
+    }
     func findDuplicates(ticker:String, debug:Bool){
         let realm = try! Realm()
         let id = ticker

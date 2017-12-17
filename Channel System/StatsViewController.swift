@@ -144,8 +144,8 @@ class StatsViewController: UIViewController {
         let realm = try! Realm()
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
-            let gross = DateHelper().dollarStr(largeNumber: updateStats.grossProfit)
-            let cost = DateHelper().dollarStr(largeNumber: updateStats.maxCost)
+            let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
+            let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
                 self.topLeft.text = "$\(gross) Profit"

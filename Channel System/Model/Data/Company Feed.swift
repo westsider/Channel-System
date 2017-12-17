@@ -31,6 +31,11 @@ class CompanyData: Object {
         return symbol
     }
     
+    func getLocalCompanyInfo(ticker:String){
+        
+        
+    }
+    
     func getInfoFor(ticker: String, debug: Bool, completion: @escaping () -> ()) {
         // get last price from intrio
         if ( debug ) { print("Requesting company data for \(ticker)") }

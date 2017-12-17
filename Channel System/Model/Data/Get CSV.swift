@@ -17,7 +17,7 @@ class GetCSV {
         func getCsvData()-> [LastPrice]  {
             
             var prices = [LastPrice]()
-            let test  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false)
+            let test  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false)
             let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
             let stream = InputStream(fileAtPath: filleURLProject!)!
             let csv = try! CSVReader(stream: stream)
@@ -30,7 +30,7 @@ class GetCSV {
                 
                 let date = row[0]
                 lastPriceObject.dateString = date
-                lastPriceObject.date = DateHelper().convertToDateFrom(string: date, debug: false)
+                lastPriceObject.date = Utilities().convertToDateFrom(string: date, debug: false)
                 
                 if let open = Double(row[3]) {
                     lastPriceObject.open = open }
@@ -88,8 +88,8 @@ class GetCSV {
             print("Loaded ticker \(ticker)")
             let date = row[0]
             lastPriceObject.dateString = date
-            let dateInRow  = DateHelper().convertToDateFrom(string: date, debug: false)
-            let test  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false) // "yyyy/MM/dd" 2014-11-25
+            let dateInRow  = Utilities().convertToDateFrom(string: date, debug: false)
+            let test  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false) // "yyyy/MM/dd" 2014-11-25
             if (test > dateInRow) {
                 print("\n-----> Found Early date for \(ticker) on \(date)\n")
                 

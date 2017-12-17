@@ -27,7 +27,7 @@ class DataFeed {
             prices.ticker = ticker
             let date = row[0]
             prices.dateString = date
-            prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
+            prices.date = Utilities().convertToDateFrom(string: date, debug: false)
             if let close = Double(row[1]){
                 prices.close = close
                 if (close == 0.00 ) { print("\n========================     Close was 0 for \(ticker)     ===========================\n") }
@@ -81,7 +81,7 @@ class DataFeed {
                         if let date = data["date"].string {
                             if ( debug ) {  print("\nHere is the date to test \(date)") }
                             prices.dateString = date
-                            prices.date = DateHelper().convertToDateFrom(string: date, debug: false)
+                            prices.date = Utilities().convertToDateFrom(string: date, debug: false)
                             isNewDate = Prices().checkIfNew(date: prices.date!, realmDate: lastInRealm, debug: false)
                             if ( debug ) { print("This is the date downloaded \(date) isNewDate = \(String(describing: isNewDate))") }
                         }

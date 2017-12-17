@@ -52,6 +52,15 @@ class ScanViewController: UIViewController {
         updateButton(isOn: false)
         ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
+        
+//        let prices = Prices().sortOneTicker(ticker: "KO", debug: false)
+//        
+//        for each in prices {
+//            print("\(each.dateString) S:\(each.stars)")
+//            if each.stars > 1 {
+//                print("--------------> got a star!")
+//            }
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -86,7 +95,7 @@ class ScanViewController: UIViewController {
     
     private func subsequentRuns() {
         print("\nThis is NOT the first run.\n")
-        updateRealm = DateHelper().realmNotCurrent(debug: false)
+        updateRealm = Utilities().realmNotCurrent(debug: false)
         lastDateInRealm = Prices().getLastDateInRealm(debug: false)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         currentProcessLable.text = LastUpdate().checkUpate()
@@ -113,7 +122,7 @@ class ScanViewController: UIViewController {
     }
     
     private func getRealmFrom(ticker: String, DateString: String) {
-        let specificNSDate = DateHelper().convertToDateFrom(string: DateString, debug: false)
+        let specificNSDate = Utilities().convertToDateFrom(string: DateString, debug: false)
         let realm = try! Realm()
         let predicate = NSPredicate(format: "date == %@", specificNSDate as CVarArg)
         let results = realm.objects(Prices.self).filter(predicate)
@@ -275,7 +284,7 @@ class ScanViewController: UIViewController {
                 } else {
                     // if first run when lastDateInRealm == nil and i need to load all symbols
                     // so i will pass in the first date in the CSV
-                    let firstDate  = DateHelper().convertToDateFrom(string: "2014/11/25", debug: false)
+                    let firstDate  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false)
                     Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
                 }
                 self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
