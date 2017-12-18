@@ -52,15 +52,6 @@ class ScanViewController: UIViewController {
         updateButton(isOn: false)
         ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
-        
-//        let prices = Prices().sortOneTicker(ticker: "KO", debug: false)
-//        
-//        for each in prices {
-//            print("\(each.dateString) S:\(each.stars)")
-//            if each.stars > 1 {
-//                print("--------------> got a star!")
-//            }
-//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -113,12 +104,6 @@ class ScanViewController: UIViewController {
     @IBAction func manageTradesAction(_ sender: Any) {
         updateUI(with: "Calculating Performance", spinIsOff: false)
         segueToCandidatesVC()
-    }
-
-    private func simPastEntries() {
-        getRealmFrom(ticker: "INTC", DateString: "2017/10/20") // exit after 7 days  Target Hit for INTC from 2017-11-28
-        getRealmFrom(ticker: "EWD", DateString: "2017/10/17")  // stop hit   wPctR Hit for EWD from 2017-11-28
-        getRealmFrom(ticker: "JNJ", DateString: "2017/11/22")  // target hit  wPctR Hit for JNJ from 2017-11-28
     }
     
     private func getRealmFrom(ticker: String, DateString: String) {
@@ -316,9 +301,7 @@ class ScanViewController: UIViewController {
         let tickerCount:Double = Double(galaxie.count)
         let processCount:Double = Double(5)
         let divisor:Double = Double(1)
-        //print("tickerCount \(tickerCount), processCount \(processCount), divisor \(divisor),")
         incProgress = Float( divisor / (tickerCount * processCount ) )
-        //print("\nProgress inc = \(incProgress)\n")
     }
     
     private func checkDuplicates() {

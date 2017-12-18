@@ -10,7 +10,20 @@ import UIKit
 import RealmSwift
 
 class PrefViewController: UIViewController, UITextViewDelegate {
+    
+    //all buttons
+    @IBOutlet weak var riskBttn: UIButton!
+    @IBOutlet weak var ibBttn: UIButton!
+    @IBOutlet weak var tdaBttn: UIButton!
+    @IBOutlet weak var etradeBttn: UIButton!
+    @IBOutlet weak var csvBttn: UIButton!
+    @IBOutlet weak var sma10Bttn: UIButton!
+    @IBOutlet weak var sma200Bttn: UIButton!
+    @IBOutlet weak var wPctRbttn: UIButton!
+    @IBOutlet weak var entriesBttn: UIButton!
+    @IBOutlet weak var backtestBttn: UIButton!
 
+    // all labels
     @IBOutlet weak var activityDial: UIActivityIndicatorView!
     
     @IBOutlet weak var riskLabel: UITextField!
@@ -42,6 +55,8 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
     let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
+    let backtestBlock = { print( "\nBackTest finished  <----------\n" ) }
+    let calcStatsBlock = { print( "\nCalc Stats finished  <----------\n" ) }
     
     var symbolCount = 0
     var textEntered:String = "No Text"
@@ -81,6 +96,83 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         } else {
             print("\n-------> ERROR reading Risk String <------\n")
         }
+        
+        //MARK: - call entries then backtest
+        entriesWithCompletion(completion: entryBlock)
+  
+        // put backtest inside entries completion block
+        //   put calcStats inside entries backtest block
+        //      put segue to stats inside backtest block
+    }
+    
+    func calcStats(debug:Bool, completion: @escaping () -> ()) {
+        DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
+                self.activityDial.startAnimating()
+                self.buttonsAre(on: false)
+                self.backTestLabel.text = "saving to realm"
+            }
+            _ = CumulativeProfit().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+            
+            DispatchQueue.main.async {
+                self.activityDial.stopAnimating()
+                self.buttonsAre(on: true)
+                self.backTestLabel.text = "realm save done"
+                completion()
+                // segue to stats
+                self.segueToStats()
+            }
+        }
+    }
+    
+    func segueToStats() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "StatsVC") as! StatsViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    func buttonsAre(on:Bool){
+        if on {
+            riskBttn.isEnabled = true
+            ibBttn.isEnabled = true
+            tdaBttn.isEnabled = true
+            etradeBttn.isEnabled = true
+            csvBttn.isEnabled = true // nil
+            sma10Bttn.isEnabled = true
+            sma200Bttn.isEnabled = true
+            wPctRbttn.isEnabled = true
+            entriesBttn.isEnabled = true
+            backtestBttn.isEnabled = true
+            riskBttn.alpha = 1.0
+            ibBttn.alpha = 1.0
+            tdaBttn.alpha = 1.0
+            etradeBttn.alpha = 1.0
+            csvBttn.alpha = 1.0
+            sma10Bttn.alpha = 1.0
+            sma200Bttn.alpha = 1.0
+            wPctRbttn.alpha = 1.0
+            entriesBttn.alpha = 1.0
+            backtestBttn.alpha = 1.0
+        } else {
+            ibBttn.isEnabled = false
+            tdaBttn.isEnabled = false
+            etradeBttn.isEnabled = false
+            csvBttn.isEnabled = false
+            sma10Bttn.isEnabled = false
+            sma200Bttn.isEnabled = false
+            wPctRbttn.isEnabled = false
+            entriesBttn.isEnabled = false
+            backtestBttn.isEnabled = false
+            riskBttn.alpha = 0.2
+            ibBttn.alpha = 0.2
+            tdaBttn.alpha = 0.2
+            etradeBttn.alpha = 0.2
+            csvBttn.alpha = 0.2
+            sma10Bttn.alpha = 0.2
+            sma200Bttn.alpha = 0.2
+            wPctRbttn.alpha = 0.2
+            entriesBttn.alpha = 0.2
+            backtestBttn.alpha = 0.2
+        }
     }
     
     @IBAction func ibAction(_ sender: Any) {
@@ -94,6 +186,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func csvAction(_ sender: Any) {
         activityDial.startAnimating()
+        self.buttonsAre(on: false)
         var count = 0
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -108,12 +201,14 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             if count == self.symbolCount-1 {
                 self.activityDial.stopAnimating()
                 self.csvLabel.text = "Updated"
+                self.buttonsAre(on: true)
             }
         }
     }
     
     @IBAction func smaTenAction(_ sender: Any) {
         activityDial.startAnimating()
+        self.buttonsAre(on: false)
         var count = 0
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -128,6 +223,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 if count == self.symbolCount-1 {
                     self.activityDial.stopAnimating()
                     self.smaLabel.text = "Updated"
+                    self.buttonsAre(on: true)
                 }
             }
         }
@@ -135,6 +231,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func smaTwoHundrd(_ sender: Any) {
         activityDial.startAnimating()
+        self.buttonsAre(on: false)
         var count = 0
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -149,6 +246,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 if count == self.symbolCount-1 {
                     self.activityDial.stopAnimating()
                     self.smaTwoHundoLabel.text = "Updated"
+                    self.buttonsAre(on: true)
                 }
             }
         }
@@ -156,6 +254,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func williamsPctAction(_ sender: Any) {
         activityDial.startAnimating()
+        self.buttonsAre(on: false)
         var count = 0
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -170,13 +269,19 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 if count == self.symbolCount-1 {
                     self.activityDial.stopAnimating()
                     self.williamsPctLabel.text = "Updated"
+                    self.buttonsAre(on: true)
                 }
             }
         }
     }
     
     @IBAction func entriesAction(_ sender: Any) {
+        entriesWithCompletion(completion: entryBlock)
+    }
+    
+    func entriesWithCompletion(completion: @escaping () -> ()) {
         activityDial.startAnimating()
+        self.buttonsAre(on: false)
         var count = 0
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
@@ -193,13 +298,21 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 if count == self.symbolCount-1 {
                     self.activityDial.stopAnimating()
                     self.entriesLabel.text = "Updated"
+                    self.buttonsAre(on: true)
+                    completion()
+                    self.backtest(completion: self.backtestBlock)
                 }
             }
         }
     }
     
     @IBAction func backtestAction(_ sender: Any) {
+        backtest(completion: backtestBlock)
+    }
+    
+    func backtest(completion: @escaping () -> ()) {
         activityDial.startAnimating()
+        self.buttonsAre(on: true)
         var count = 0
         var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
         DispatchQueue.global(qos: .background).async {
@@ -219,17 +332,20 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 }
                 let stars = BackTest().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: false)
                 Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: true)
+                count += 1
             }
-            
+            print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
             DispatchQueue.main.async {
-                if count == tickerStar.count-2 {
+                if count == tickerStar.count {
                     self.activityDial.stopAnimating()
                     self.backTestLabel.text = "Updated"
+                    completion()
+                    self.buttonsAre(on: false)
+                    self.calcStats(debug: false, completion: self.calcStatsBlock)
                 }
             }
         }
     }
-    
     //MARK: - Keyboard behavior functions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)

@@ -92,19 +92,22 @@
                                     <constraint firstAttribute="width" secondItem="wG0-AO-Vih" secondAttribute="height" multiplier="91:30" id="c7b-aa-YQ0"/>
                                 </constraints>
                             </stackView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0yM-3j-dra">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0yM-3j-dra">
                                 <rect key="frame" x="168.5" y="159.5" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.19245842099189758" green="0.20357471704483032" blue="0.22745734453201294" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pjh-GY-89w" secondAttribute="trailing" constant="16" id="ADG-GJ-iQh"/>
+                            <constraint firstItem="0yM-3j-dra" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="95.5" id="ANp-vR-Sk3"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="top" secondItem="Pjh-GY-89w" secondAttribute="bottom" constant="18" id="ArK-jY-dM7"/>
+                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="0yM-3j-dra" secondAttribute="bottom" constant="96.5" id="DSa-FS-Vsl"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wG0-AO-Vih" secondAttribute="bottom" constant="24" id="IPt-23-nlC"/>
                             <constraint firstItem="Gtg-gI-fW5" firstAttribute="top" secondItem="o5g-HL-Lw5" secondAttribute="bottom" constant="19" id="PYF-Nw-pab"/>
                             <constraint firstItem="wG0-AO-Vih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Pcf-4A-Pfm"/>
+                            <constraint firstItem="0yM-3j-dra" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="168.5" id="QHE-pX-qbJ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wG0-AO-Vih" secondAttribute="trailing" constant="16" id="W9E-96-tJe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0yM-3j-dra" secondAttribute="trailing" constant="169.5" id="bjl-DA-TAd"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="eDE-aj-5rv"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-HL-Lw5" secondAttribute="trailing" constant="16" id="lSs-zr-yTD"/>
                             <constraint firstItem="Pjh-GY-89w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="qj9-TZ-W41"/>
@@ -832,14 +835,24 @@
                     <connections>
                         <outlet property="activityDial" destination="Khd-01-Lac" id="4dN-Vw-RnA"/>
                         <outlet property="backTestLabel" destination="vIZ-Xd-6Th" id="ZO8-YP-zch"/>
+                        <outlet property="backtestBttn" destination="4Qq-fT-472" id="znT-u8-mzS"/>
+                        <outlet property="csvBttn" destination="l1e-KK-Dup" id="sWm-qJ-2Yb"/>
                         <outlet property="csvLabel" destination="uJM-vA-P7s" id="nt3-Ec-Crm"/>
+                        <outlet property="entriesBttn" destination="FSv-Fu-t54" id="405-X6-n30"/>
                         <outlet property="entriesLabel" destination="6Er-cW-oWf" id="P9f-T7-aqH"/>
+                        <outlet property="etradeBttn" destination="KNp-Sp-h8R" id="Zm1-Ys-FNQ"/>
                         <outlet property="etradeLabel" destination="bcz-tb-3x2" id="GXZ-Tg-dfO"/>
+                        <outlet property="ibBttn" destination="uOT-Md-Vhx" id="v9P-jY-yPp"/>
                         <outlet property="ibLabel" destination="rTA-Kq-Max" id="mMq-Tr-n2p"/>
+                        <outlet property="riskBttn" destination="rz6-vy-pVI" id="89X-aQ-2aM"/>
                         <outlet property="riskLabel" destination="fsW-ol-SwK" id="ADF-pG-z0Y"/>
+                        <outlet property="sma10Bttn" destination="9rF-KL-YuZ" id="kb2-Bc-TeM"/>
+                        <outlet property="sma200Bttn" destination="0vS-AR-zcR" id="8rH-U9-bxq"/>
                         <outlet property="smaLabel" destination="l3z-B4-8ew" id="36g-Mo-LRw"/>
                         <outlet property="smaTwoHundoLabel" destination="VoW-HU-I5b" id="bhx-lw-gbb"/>
+                        <outlet property="tdaBttn" destination="KoG-6L-uHD" id="fVs-Hf-gwY"/>
                         <outlet property="tdaLabel" destination="9Eu-YA-A2I" id="7Af-oM-rGd"/>
+                        <outlet property="wPctRbttn" destination="Me1-DI-wbW" id="sWp-tn-Tjc"/>
                         <outlet property="williamsPctLabel" destination="tfM-uj-jDB" id="bJ6-XK-wSZ"/>
                     </connections>
                 </viewController>

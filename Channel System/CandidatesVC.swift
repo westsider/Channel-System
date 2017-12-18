@@ -40,7 +40,6 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    
     @IBAction func showStats(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "StatsVC") as! StatsViewController
         navigationController?.pushViewController(myVC, animated: true)

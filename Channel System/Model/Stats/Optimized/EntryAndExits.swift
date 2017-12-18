@@ -22,10 +22,7 @@ class EntryAndExit {
      run the func below and test
      */
     
-    //let risk = 50
-    
     func doItAll(ticker:String, debug:Bool, updateRealm:Bool)->(Double, Double, Double, Double, Double) {
-        
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         let realm = try! Realm()
         var flat:Bool = true
@@ -75,18 +72,15 @@ class EntryAndExit {
                     print("Target hit on \(each.dateString)")
                     flat = true
                     tradeGain = (each.close - entryPrice) * shares
-                    
                     if updateRealm {
                         let realm = try! Realm()
                         try! realm.write {
                             each.backTestProfit = tradeGain
                         }
                     }
-                    
                     if  tradeGain > largestWin { largestWin = tradeGain }
                     if debug { print("wPctR \(String(format: "%.1f", each.wPctR)) exit on \(each.dateString) Win \(String(format: "%.1f", tradeGain))")}
                     allTrades.append(tradeGain)
-                    
                 }
             }
             //MARK: - time stop
@@ -94,14 +88,12 @@ class EntryAndExit {
                 if daysInTrade >= 7 {
                     flat = true
                     tradeGain = (each.close - entryPrice) * shares
-                    
                     if updateRealm {
                         let realm = try! Realm()
                         try! realm.write {
                             each.backTestProfit = tradeGain
                         }
                     }
-                    
                     allTrades.append(tradeGain)
                     if (( each.close - entryPrice ) >=  0 ) {
                         if  tradeGain > largestWin { largestWin = tradeGain }
@@ -119,7 +111,6 @@ class EntryAndExit {
                 if  thisLoss < largestLoser { largestLoser = thisLoss }
                 if debug { print("Stop hit on \(each.dateString) Loss is \(String(format: "%.1f", thisLoss)) ") }
                 tradeGain = tradeGain + thisLoss
-                
                 if updateRealm {
                     let realm = try! Realm()
                     try! realm.write {
@@ -134,7 +125,6 @@ class EntryAndExit {
         //MARK: - stats
         grossProfit = allTrades.reduce(0, +)
         tradeCount = allTrades.count
-        
         for each in allTrades {
             if each >= 0 {
                 winCount += 1
