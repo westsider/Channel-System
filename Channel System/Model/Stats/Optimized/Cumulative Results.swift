@@ -26,6 +26,8 @@ class CumulativeProfit {
         var totalStars:Int = 0
         var winCount:Int = 0
         var tradeCount:Int = 0
+        var largestWinner:Double = 0.00
+        var largestLooser:Double = 0.00
         for (fileIndex, today) in dateArray.enumerated() {
             if fileIndex < 24185 { continue }
             // daily process
@@ -49,6 +51,12 @@ class CumulativeProfit {
                     portfolioDict.removeValue(forKey: today.ticker)
                     if today.backTestProfit >= 0 {
                         winCount += 1
+                    }
+                    if today.backTestProfit > largestWinner {
+                        largestWinner = today.backTestProfit
+                    }
+                    if today.backTestProfit < largestLooser {
+                        largestLooser = today.backTestProfit
                     }
                     if debug { print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(Utilities().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")}
                 }
@@ -99,6 +107,12 @@ class CumulativeProfit {
                         if today.backTestProfit >= 0 {
                             winCount += 1
                         }
+                        if today.backTestProfit > largestWinner {
+                            largestWinner = today.backTestProfit
+                        }
+                        if today.backTestProfit < largestLooser {
+                            largestLooser = today.backTestProfit
+                        }
                         if debug { print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(Utilities().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)") }
                     }
                 }
@@ -112,7 +126,7 @@ class CumulativeProfit {
         let annual = endGame / 2
         let avgStars:Double = Double(totalStars) / Double(tradeCount)
         print("\nAvg stars: \(avgStars) = total stars: \(totalStars) / trade count: \(tradeCount)\n")
-        if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost) }
+        if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost, largestWin: largestWinner, largestLoss: largestLooser) }
         print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Total gain: \(Utilities().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(Utilities().dollarStr(largeNumber: endGame)), Annual Return: \(Utilities().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n")
         return allTradesPortfolioRecord
     }

@@ -22,7 +22,7 @@ class Stats: Object {
     @objc dynamic var taskID     = "01"
     
     //MARK: - saveTotalStatsToRealm update or new object
-    func updateFinalTotal(grossProfit: Double, avgPctWin:Double,avgROI:Double, grossROI:Double, avgStars:Double, maxCost:Double  ) {
+    func updateFinalTotal(grossProfit: Double, avgPctWin:Double,avgROI:Double, grossROI:Double, avgStars:Double, maxCost:Double, largestWin:Double, largestLoss:Double  ) {
         
         let realm = try! Realm()
         let id = "01"
@@ -35,6 +35,8 @@ class Stats: Object {
                 updateStats.grossROI = grossROI
                 updateStats.avgStars = avgStars
                 updateStats.maxCost = maxCost
+                updateStats.largestWinner = largestWin
+                updateStats.largestLoser = largestLoss
             }
         } else {
             print("first time saving Stats Object")

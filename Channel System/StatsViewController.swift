@@ -22,6 +22,12 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var bottomLeft: UILabel!
     
+    @IBOutlet weak var largestWinLabel: UILabel!
+    
+    @IBOutlet weak var largestLossLabel: UILabel!
+    
+    @IBOutlet weak var tradingDaysLabel: UILabel!
+    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var activityIndicatorTwo: UIActivityIndicatorView!
@@ -62,6 +68,9 @@ class StatsViewController: UIViewController {
         self.topRight.alpha = 0.1
         self.backtestButton.alpha = 0.2
         self.graphButton.alpha = 0.2
+        self.largestWinLabel.alpha = 0.2
+        self.largestLossLabel.alpha = 0.2
+        self.tradingDaysLabel.alpha = 0.2
         ActivityOne(isOn:true)
         textAlpha(isNow: 0.1)
         DispatchQueue.global(qos: .background).async {
@@ -76,6 +85,9 @@ class StatsViewController: UIViewController {
                         self.topRight.alpha = 1.0
                         self.backtestButton.alpha = 1.0
                         self.graphButton.alpha = 1.0
+                        self.largestWinLabel.alpha = 1.0
+                        self.largestLossLabel.alpha = 1.0
+                        self.tradingDaysLabel.alpha = 1.0
                     }
                 }
             }
@@ -155,6 +167,10 @@ class StatsViewController: UIViewController {
                 self.midLeft.text = "\(String(format: "%.2f", roi))%  Roi "
                 self.midRight.text = "$\(cost) Cost, \(thisRisk) Risk"
                 self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
+                let lWin = Utilities().dollarStr(largeNumber: updateStats.largestWinner)
+                self.largestWinLabel.text = "Largest Win \(lWin)"
+                let lLos = Utilities().dollarStr(largeNumber: updateStats.largestLoser)
+                self.largestLossLabel.text = "Largest Loss \(lLos)"
                 self.ActivityOne(isOn: false)
                 self.callChart()
             }
