@@ -44,6 +44,10 @@ class Account:Object {
         case "Risk":
             answer =  Utilities().dollarStr(largeNumber: Double((currentAcct?.risk)!)) 
             print("string value for Risk account is \(answer)")
+        case "Accounts":
+            let total = (currentAcct?.ib)! +  (currentAcct?.tda)! + (currentAcct?.eTrade)!
+            answer =  Utilities().dollarStr(largeNumber: total)
+            print("string value for  accounts is \(answer)")
         default:
             print("No account founbd")
         }

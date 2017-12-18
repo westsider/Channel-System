@@ -35,6 +35,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var williamsPctLabel: UILabel!
     @IBOutlet weak var entriesLabel: UILabel!
     @IBOutlet weak var backTestLabel: UILabel!
+    @IBOutlet weak var acctTotalLabel: UILabel!
     
     var galaxie = [String]()
     
@@ -69,6 +70,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         ibLabel.text = Account().textValueFor(account:"IB" )
         tdaLabel.text = Account().textValueFor(account:"TDA" )
         etradeLabel.text = Account().textValueFor(account:"E*Trade" )
+        acctTotalLabel.text = Account().textValueFor(account:"Accounts" )
     }
     
     //MARK: - TODO - need to make an account realm object to track account size and risk
