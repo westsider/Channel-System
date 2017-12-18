@@ -25,25 +25,15 @@ class PrefViewController: UIViewController, UITextViewDelegate {
 
     // all labels
     @IBOutlet weak var activityDial: UIActivityIndicatorView!
-    
     @IBOutlet weak var riskLabel: UITextField!
-    
     @IBOutlet weak var ibLabel: UITextField!
-    
     @IBOutlet weak var tdaLabel: UITextField!
-    
     @IBOutlet weak var etradeLabel: UITextField!
-    
     @IBOutlet weak var csvLabel: UILabel!
-    
     @IBOutlet weak var smaLabel: UILabel!
-    
     @IBOutlet weak var smaTwoHundoLabel: UILabel!
-    
     @IBOutlet weak var williamsPctLabel: UILabel!
-    
     @IBOutlet weak var entriesLabel: UILabel!
-    
     @IBOutlet weak var backTestLabel: UILabel!
     
     var galaxie = [String]()
@@ -97,12 +87,8 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             print("\n-------> ERROR reading Risk String <------\n")
         }
         
-        //MARK: - call entries then backtest
+        //MARK: - call entries then backtest then update realm then segue
         entriesWithCompletion(completion: entryBlock)
-  
-        // put backtest inside entries completion block
-        //   put calcStats inside entries backtest block
-        //      put segue to stats inside backtest block
     }
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
@@ -125,63 +111,52 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func segueToStats() {
-        let myVC = storyboard?.instantiateViewController(withIdentifier: "StatsVC") as! StatsViewController
-        navigationController?.pushViewController(myVC, animated: true)
-    }
-    
-    func buttonsAre(on:Bool){
-        if on {
-            riskBttn.isEnabled = true
-            ibBttn.isEnabled = true
-            tdaBttn.isEnabled = true
-            etradeBttn.isEnabled = true
-            csvBttn.isEnabled = true // nil
-            sma10Bttn.isEnabled = true
-            sma200Bttn.isEnabled = true
-            wPctRbttn.isEnabled = true
-            entriesBttn.isEnabled = true
-            backtestBttn.isEnabled = true
-            riskBttn.alpha = 1.0
-            ibBttn.alpha = 1.0
-            tdaBttn.alpha = 1.0
-            etradeBttn.alpha = 1.0
-            csvBttn.alpha = 1.0
-            sma10Bttn.alpha = 1.0
-            sma200Bttn.alpha = 1.0
-            wPctRbttn.alpha = 1.0
-            entriesBttn.alpha = 1.0
-            backtestBttn.alpha = 1.0
+    @IBAction func ibAction(_ sender: Any) {
+        if (ibLabel.text! != "") {
+            textEntered = ibLabel.text!
+            // convert text entered to double
+            if let number = Double(textEntered) {
+                // safely get number from risk
+                Account().updateIB(ib: number)
+                print("\n-------> Saved IB of \(number) <------\n")
+            } else {
+                print("\n-------> ERROR unwrapping IB <------\n")
+            }
         } else {
-            ibBttn.isEnabled = false
-            tdaBttn.isEnabled = false
-            etradeBttn.isEnabled = false
-            csvBttn.isEnabled = false
-            sma10Bttn.isEnabled = false
-            sma200Bttn.isEnabled = false
-            wPctRbttn.isEnabled = false
-            entriesBttn.isEnabled = false
-            backtestBttn.isEnabled = false
-            riskBttn.alpha = 0.2
-            ibBttn.alpha = 0.2
-            tdaBttn.alpha = 0.2
-            etradeBttn.alpha = 0.2
-            csvBttn.alpha = 0.2
-            sma10Bttn.alpha = 0.2
-            sma200Bttn.alpha = 0.2
-            wPctRbttn.alpha = 0.2
-            entriesBttn.alpha = 0.2
-            backtestBttn.alpha = 0.2
+            print("\n-------> ERROR reading IB String <------\n")
         }
     }
     
-    @IBAction func ibAction(_ sender: Any) {
-    }
-    
     @IBAction func tdaAction(_ sender: Any) {
+        if (tdaLabel.text! != "") {
+            textEntered = tdaLabel.text!
+            // convert text entered to double
+            if let number = Double(textEntered) {
+                // safely get number from risk
+                Account().updateTDA(tda: number)
+                print("\n-------> Saved TDA of \(number) <------\n")
+            } else {
+                print("\n-------> ERROR unwrapping TDA <------\n")
+            }
+        } else {
+            print("\n-------> ERROR reading TDA String <------\n")
+        }
     }
     
     @IBAction func etradeAction(_ sender: Any) {
+        if (etradeLabel.text! != "") {
+            textEntered = etradeLabel.text!
+            // convert text entered to double
+            if let number = Double(textEntered) {
+                // safely get number from risk
+                Account().updateEtrade(eTrade: number)
+                print("\n-------> Saved Etrade of \(number) <------\n")
+            } else {
+                print("\n-------> ERROR unwrapping Etrade <------\n")
+            }
+        } else {
+            print("\n-------> ERROR reading Etrade String <------\n")
+        }
     }
     
     @IBAction func csvAction(_ sender: Any) {
@@ -346,6 +321,57 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
+    
+    func buttonsAre(on:Bool){
+        if on {
+            riskBttn.isEnabled = true
+            ibBttn.isEnabled = true
+            tdaBttn.isEnabled = true
+            etradeBttn.isEnabled = true
+            csvBttn.isEnabled = true // nil
+            sma10Bttn.isEnabled = true
+            sma200Bttn.isEnabled = true
+            wPctRbttn.isEnabled = true
+            entriesBttn.isEnabled = true
+            backtestBttn.isEnabled = true
+            riskBttn.alpha = 1.0
+            ibBttn.alpha = 1.0
+            tdaBttn.alpha = 1.0
+            etradeBttn.alpha = 1.0
+            csvBttn.alpha = 1.0
+            sma10Bttn.alpha = 1.0
+            sma200Bttn.alpha = 1.0
+            wPctRbttn.alpha = 1.0
+            entriesBttn.alpha = 1.0
+            backtestBttn.alpha = 1.0
+        } else {
+            ibBttn.isEnabled = false
+            tdaBttn.isEnabled = false
+            etradeBttn.isEnabled = false
+            csvBttn.isEnabled = false
+            sma10Bttn.isEnabled = false
+            sma200Bttn.isEnabled = false
+            wPctRbttn.isEnabled = false
+            entriesBttn.isEnabled = false
+            backtestBttn.isEnabled = false
+            riskBttn.alpha = 0.2
+            ibBttn.alpha = 0.2
+            tdaBttn.alpha = 0.2
+            etradeBttn.alpha = 0.2
+            csvBttn.alpha = 0.2
+            sma10Bttn.alpha = 0.2
+            sma200Bttn.alpha = 0.2
+            wPctRbttn.alpha = 0.2
+            entriesBttn.alpha = 0.2
+            backtestBttn.alpha = 0.2
+        }
+    }
+    
+    func segueToStats() {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "StatsVC") as! StatsViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
     //MARK: - Keyboard behavior functions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)

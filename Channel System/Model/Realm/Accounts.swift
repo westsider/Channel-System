@@ -24,8 +24,7 @@ class Account:Object {
         let thisRisk = acct.first?.risk
         return thisRisk!
     }
-    //let currentRisk = Account().currentRisk()
-    
+
     func textValueFor(account: String)-> String{
         let realm = try! Realm()
         let id = "03"
