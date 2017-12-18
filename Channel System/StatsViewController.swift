@@ -160,6 +160,10 @@ class StatsViewController: UIViewController {
             let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
             let thisRisk = Account().currentRisk()
             let roi = updateStats.avgROI * 100
+            let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
+            let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
+            print("\n The first date is \(updateStats.firstDate)\n")
+            let numYears = Double(numDays) / 365.00
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
                 self.topLeft.text = "$\(gross) Profit"
@@ -170,6 +174,7 @@ class StatsViewController: UIViewController {
                 let lWin = Utilities().dollarStr(largeNumber: updateStats.largestWinner)
                 self.largestWinLabel.text = "Largest Win \(lWin)"
                 let lLos = Utilities().dollarStr(largeNumber: updateStats.largestLoser)
+                self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
                 self.largestLossLabel.text = "Largest Loss \(lLos)"
                 self.ActivityOne(isOn: false)
                 self.callChart()

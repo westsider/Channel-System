@@ -76,6 +76,18 @@ class Utilities {
         return isMakretHours
     }
     
+    func calcuateDaysBetweenTwoDates(start: Date, end: Date) -> Int {
+        
+        let currentCalendar = Calendar.current
+        guard let start = currentCalendar.ordinality(of: .day, in: .era, for: start) else {
+            return 0
+        }
+        guard let end = currentCalendar.ordinality(of: .day, in: .era, for: end) else {
+            return 0
+        }
+        return end - start
+    }
+    
     func realmNotCurrent(debug: Bool)-> Bool {
         let lastUpdateToday = lastUpdateWasToday(debug: debug)
         let yesLastPrint = wasLastPrint(close: [0,0], lastUpdate: lastUpdateToday.1, debug: debug)

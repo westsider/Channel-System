@@ -28,12 +28,16 @@ class CumulativeProfit {
         var tradeCount:Int = 0
         var largestWinner:Double = 0.00
         var largestLooser:Double = 0.00
+        var firstTradeDate = Date()
         for (fileIndex, today) in dateArray.enumerated() {
             if fileIndex < 24185 { continue }
             // daily process
             // if buy then buy and record ticker and cost
             if portfolioDict.count < 20 {
                 if today.capitalReq != 0.00 {
+                    if tradeCount == 0 {
+                        firstTradeDate = today.date!
+                    }
                     // only buy if I dont own it
                     if portfolioDict[today.ticker] == nil {
                         portfolioDict[today.ticker] = today.capitalReq
@@ -126,7 +130,7 @@ class CumulativeProfit {
         let annual = endGame / 2
         let avgStars:Double = Double(totalStars) / Double(tradeCount)
         print("\nAvg stars: \(avgStars) = total stars: \(totalStars) / trade count: \(tradeCount)\n")
-        if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost, largestWin: largestWinner, largestLoss: largestLooser) }
+        if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost, largestWin: largestWinner, largestLoss: largestLooser, firstDate: firstTradeDate) }
         print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Total gain: \(Utilities().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(Utilities().dollarStr(largeNumber: endGame)), Annual Return: \(Utilities().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n")
         return allTradesPortfolioRecord
     }
