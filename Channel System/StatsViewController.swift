@@ -46,7 +46,7 @@ class StatsViewController: UIViewController {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    let maxBarsOnChart:Int = 120
+    let maxBarsOnChart:Int = 100
     //MARK: - chart vars
     var dataFeed = DataFeed()
     var oneTicker:Results<Prices>!
@@ -235,7 +235,9 @@ class StatsViewController: UIViewController {
     fileprivate func topChartDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
         cumulativeProfit.acceptUnsortedData = true
+        var profit:Double = 0.0
         for things in results! {
+            profit = things.profit
             cumulativeProfit.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.profit))
         }
         let topChartRenderSeries = SCIFastLineRenderableSeries()
@@ -243,22 +245,29 @@ class StatsViewController: UIViewController {
         topChartRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
         topChartRenderSeries.xAxisId = xID
         topChartRenderSeries.yAxisId = yID
+        //addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), valueFormat: "%.0f", value: SCIGeneric( profit ))
         surface.renderableSeries.add(topChartRenderSeries)
     }
     
     //MARK: - Cost Data Series
     fileprivate func bottomChartDataSeries(surface:SCIChartSurface, xID:String, yID:String)  {
-        let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
-        cumulativeProfit.acceptUnsortedData = true
+        let cumulativeCost = SCIXyDataSeries(xType: .dateTime, yType: .double)
+        cumulativeCost.acceptUnsortedData = true
         for things in results! {
-            cumulativeProfit.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.cost))
+            cumulativeCost.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.cost))
         }
-        let topChartRenderSeries = SCIFastLineRenderableSeries()
-        topChartRenderSeries.dataSeries = cumulativeProfit
-        topChartRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
-        topChartRenderSeries.xAxisId = xID
-        topChartRenderSeries.yAxisId = yID
-        surface.renderableSeries.add(topChartRenderSeries)
+        let bottomChartRenderSeries = SCIFastColumnRenderableSeries()
+        bottomChartRenderSeries.dataSeries = cumulativeCost
+        bottomChartRenderSeries.xAxisId = xID
+        bottomChartRenderSeries.yAxisId = yID
+        bottomChartRenderSeries.dataSeries = cumulativeCost
+        bottomChartRenderSeries.paletteProvider = ColumnsTripleColorPalette()
+        
+        let animation = SCIWaveRenderableSeriesAnimation(duration: 1.5, curveAnimation: SCIAnimationCurveEaseOut)
+        animation.start(afterDelay: 0.3)
+        bottomChartRenderSeries.addAnimation(animation)
+        surface.renderableSeries.add(bottomChartRenderSeries)
+        
     }
    
     fileprivate func configureChartSuraface() {
@@ -350,10 +359,10 @@ class StatsViewController: UIViewController {
         let axisMarker:SCIAxisMarkerAnnotation = SCIAxisMarkerAnnotation()
         axisMarker.yAxisId = yID;
         axisMarker.style.margin = 5;
-        
+
         let textFormatting:SCITextFormattingStyle = SCITextFormattingStyle();
         textFormatting.color = UIColor.white;
-        textFormatting.fontSize = 10;
+        textFormatting.fontSize = 14;
         axisMarker.style.textStyle = textFormatting;
         axisMarker.formattedValue = String.init(format: valueFormat, SCIGenericDouble(value));
         axisMarker.coordinateMode = .absolute
@@ -361,5 +370,33 @@ class StatsViewController: UIViewController {
         axisMarker.position = value;
         //print("SMA Anntation \(value.doubleData)")
         surface.annotations.add(axisMarker);
+    }
+}
+
+class ColumnsTripleColorPalette : SCIPaletteProvider {
+    let style1 : SCIColumnSeriesStyle = SCIColumnSeriesStyle()
+    let style2 : SCIColumnSeriesStyle = SCIColumnSeriesStyle()
+    let style3 : SCIColumnSeriesStyle = SCIColumnSeriesStyle()
+    
+    override init() {
+        super.init()
+
+        style1.fillBrushStyle = SCILinearGradientBrushStyle(colorStart: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), finish: #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1), direction: .vertical)
+        style1.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), withThickness: 0.2)
+        style2.fillBrushStyle = SCILinearGradientBrushStyle(colorStart: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), finish: #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1), direction: .vertical)
+        style2.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), withThickness: 0.2)
+        style3.fillBrushStyle = SCILinearGradientBrushStyle(colorStart: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), finish: #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1), direction: .vertical)
+        style3.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), withThickness: 0.2)
+    }
+    
+    override func styleFor(x: Double, y: Double, index: Int32) -> SCIStyleProtocol! {
+        let styleIndex : Int32 = index % 3;
+        if (styleIndex == 0) {
+            return style1;
+        } else if (styleIndex == 1) {
+            return style2;
+        } else {
+            return style3;
+        }
     }
 }
