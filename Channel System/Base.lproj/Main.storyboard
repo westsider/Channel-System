@@ -539,7 +539,7 @@
                         <outlet property="activityIndicator" destination="GY3-YP-2fw" id="d68-9n-ov9"/>
                         <outlet property="backtestButton" destination="FwS-Rg-Gkp" id="Co4-IK-a3a"/>
                         <outlet property="bottomLeft" destination="SPT-jl-tNV" id="Xcf-9X-nC7"/>
-                        <outlet property="chartView" destination="ccl-Df-KON" id="TeF-pJ-ELh"/>
+                        <outlet property="bottomView" destination="f8J-GJ-Ag2" id="lgW-Jd-98P"/>
                         <outlet property="graphButton" destination="sq9-LA-55H" id="iV5-p6-XHv"/>
                         <outlet property="largestLossLabel" destination="lsG-Os-b3b" id="MeC-ZZ-ggF"/>
                         <outlet property="largestWinLabel" destination="Vot-Rd-Nbq" id="sTd-EG-7oy"/>
@@ -547,6 +547,7 @@
                         <outlet property="midRight" destination="mI0-zv-mLu" id="tUp-yC-SQZ"/>
                         <outlet property="topLeft" destination="SMx-1W-QQF" id="uhK-Ut-Wse"/>
                         <outlet property="topRight" destination="fCi-7h-zmI" id="MRR-oh-wju"/>
+                        <outlet property="topView" destination="ccl-Df-KON" id="jsn-pK-g8Q"/>
                         <outlet property="tradingDaysLabel" destination="yGs-EL-Flk" id="05w-fy-Fga"/>
                     </connections>
                 </viewController>

@@ -32,7 +32,9 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var activityIndicatorTwo: UIActivityIndicatorView!
     
-    @IBOutlet weak var chartView: UIView!
+    @IBOutlet weak var topView: UIView!
+    
+    @IBOutlet weak var bottomView: UIView!
     
     @IBOutlet weak var backtestButton: UIButton!
     
@@ -44,7 +46,28 @@ class StatsViewController: UIViewController {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    let barsToShow:Int = 125
+    let maxBarsOnChart:Int = 120
+    //MARK: - chart vars
+    var dataFeed = DataFeed()
+    var oneTicker:Results<Prices>!
+    let showTrades = ShowTrades()
+    var ticker:String = "SPY"
+    var taskIdSelected:String = ""
+    var rangeStart:Int = 0
+    let axisY1Id:String = "Y1"
+    let axisX1Id:String = "X1"
+    var highestPrice:Double = 0.00
+    let axisY2Id:String = "Y2"
+    let axisX2Id:String = "X2"
+    var sciChartView1 = SCIChartSurface()
+    var sciChartView2 = SCIChartSurface()
+    let rangeSync = SCIAxisRangeSynchronization()
+    let sizeAxisAreaSync = SCIAxisAreaSizeSynchronization()
+    let rolloverModifierSync = SCIMultiSurfaceModifier(modifierType: SCIRolloverModifier.self)
+    let pinchZoomModifierSync = SCIMultiSurfaceModifier(modifierType: SCIPinchZoomModifier.self)
+    let yDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIYAxisDragModifier.self)
+    let xDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIXAxisDragModifier.self)
+    let zoomExtendsSync = SCIMultiSurfaceModifier(modifierType: SCIZoomExtentsModifier.self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +83,7 @@ class StatsViewController: UIViewController {
     @IBAction func runNewBacktestAction(_ sender: Any) {
         self.topLeft.textAlignment = .right
         ActivityOne(isOn:true)
-        calcStats(debug: false, completion: callChart)
+        calcStats(debug: false, completion: getDataForChart)
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
@@ -78,7 +101,7 @@ class StatsViewController: UIViewController {
                 (result: Bool) in
                 if result {
                     DispatchQueue.main.async {
-                        self.callChart()
+                        self.getDataForChart()
                         self.ActivityOne(isOn:false)
                         self.textAlpha(isNow: 1.0)
                         self.topLeft.alpha = 1.0
@@ -127,13 +150,7 @@ class StatsViewController: UIViewController {
             }
         }
     }
-    
-    func callChart() {
-        ActivityOne(isOn: false)
-        print("finished getting stats, calling build chart")
-        getWeeklyFromRealm()
-    }
-    
+
     func getWeeklyFromRealm() {
         print("\n inside getWeeklyFromRealm()\n")
         let realm = try! Realm()
@@ -148,7 +165,7 @@ class StatsViewController: UIViewController {
             }
             completeConfiguration()
         } else {
-            calcStats(debug: false, completion: callChart)
+            calcStats(debug: false, completion: getDataForChart)
         }
     }
 
@@ -177,11 +194,11 @@ class StatsViewController: UIViewController {
                 self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
                 self.largestLossLabel.text = "Largest Loss \(lLos)"
                 self.ActivityOne(isOn: false)
-                self.callChart()
+                self.getDataForChart()
             }
         } else {
             print("did not find realm")
-            calcStats(debug: false, completion: callChart)
+            calcStats(debug: false, completion: getDataForChart)
         }
     }
     
@@ -199,56 +216,150 @@ class StatsViewController: UIViewController {
         }
     }
 
-    var sciChartView1 = SCIChartSurface()
-    
-    // MARK: initialize surface
-    fileprivate func addSurface() {
-        sciChartView1 = SCIChartSurface(frame: self.chartView.bounds)
-        sciChartView1.frame = self.chartView.bounds
-        sciChartView1.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        sciChartView1.translatesAutoresizingMaskIntoConstraints = true
-        self.chartView.addSubview(sciChartView1)
+    func getDataForChart() {
+        ActivityOne(isOn: false)
+        print("finished getting stats, calling build chart")
+        getWeeklyFromRealm()
     }
     
     // MARK: Overrided Functions
     func completeConfiguration() {
-        addSurface()
-        SCIUpdateSuspender.usingWithSuspendable(sciChartView1) {[unowned self] in
-            self.addAxes(BarsToShow: self.barsToShow)
-            self.addSeries()
-        }
+        configureChartSuraface()
+        addAxis(BarsToShow: maxBarsOnChart)
+        addModifiers()
+        topChartDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        bottomChartDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
     }
     
-    // MARK: Private Functions
-    fileprivate func addAxes(BarsToShow:Int) {
+    //MARK: - Add Profit Series
+    fileprivate func topChartDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
+        let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
+        cumulativeProfit.acceptUnsortedData = true
+        for things in results! {
+            cumulativeProfit.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.profit))
+        }
+        let topChartRenderSeries = SCIFastLineRenderableSeries()
+        topChartRenderSeries.dataSeries = cumulativeProfit
+        topChartRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
+        topChartRenderSeries.xAxisId = xID
+        topChartRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(topChartRenderSeries)
+    }
+    
+    //MARK: - Cost Data Series
+    fileprivate func bottomChartDataSeries(surface:SCIChartSurface, xID:String, yID:String)  {
+        let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
+        cumulativeProfit.acceptUnsortedData = true
+        for things in results! {
+            cumulativeProfit.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.cost))
+        }
+        let topChartRenderSeries = SCIFastLineRenderableSeries()
+        topChartRenderSeries.dataSeries = cumulativeProfit
+        topChartRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
+        topChartRenderSeries.xAxisId = xID
+        topChartRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(topChartRenderSeries)
+    }
+   
+    fileprivate func configureChartSuraface() {
+        sciChartView1 = SCIChartSurface(frame: self.topView.bounds)
+        sciChartView1.frame = self.topView.bounds
+        sciChartView1.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        sciChartView1.translatesAutoresizingMaskIntoConstraints = true
+        self.topView.addSubview(sciChartView1)
+        
+        sciChartView2 = SCIChartSurface(frame: self.bottomView.bounds)
+        sciChartView2.frame = self.bottomView.bounds
+        sciChartView2.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        sciChartView2.translatesAutoresizingMaskIntoConstraints = true
+        self.bottomView.addSubview(sciChartView2)
+    }
+    
+    fileprivate func addAxis(BarsToShow: Int) {
+        
+        let dateAxisSize:Float = 9.0
+        let dollarAxisSize :Float = 12.0
         
         let totalBars:Int = results!.count
-        let rangeStart:Int = totalBars - BarsToShow
+        rangeStart = totalBars - BarsToShow
         
-        let xAxis = SCICategoryDateTimeAxis()
-        xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
-        xAxis.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
-        xAxis.style.labelStyle.fontName = "Helvetica"
-        xAxis.style.labelStyle.fontSize = 7
-        let yAxis = SCINumericAxis()
-        yAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
-        yAxis.style.labelStyle.fontName = "Helvetica"
-        yAxis.style.labelStyle.fontSize = 14
-        sciChartView1.xAxes.add(xAxis)
-        sciChartView1.yAxes.add(yAxis)
+        let axisX1:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
+        axisX1.axisId = axisX1Id
+        rangeSync.attachAxis(axisX1)
+        
+        axisX1.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
+        axisX1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        axisX1.style.labelStyle.fontName = "Helvetica"
+        axisX1.style.labelStyle.fontSize = dateAxisSize
+        
+        sciChartView1.xAxes.add(axisX1)
+        
+        let axisY1:SCINumericAxis = SCINumericAxis()
+        axisY1.axisId = axisY1Id
+        axisY1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        axisY1.style.labelStyle.fontName = "Helvetica"
+        axisY1.style.labelStyle.fontSize = dollarAxisSize
+        sciChartView1.yAxes.add(axisY1)
+        
+        let axisX2:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
+        axisX2.axisId = axisX2Id
+        rangeSync.attachAxis(axisX2)
+        axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
+        axisX2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        axisX2.style.labelStyle.fontName = "Helvetica"
+        axisX2.style.labelStyle.fontSize = dateAxisSize
+        sciChartView2.xAxes.add(axisX2)
+        
+        let axisY2:SCINumericAxis = SCINumericAxis()
+        axisY2.axisId = axisY2Id
+        axisY2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+        axisY2.style.labelStyle.fontName = "Helvetica"
+        axisY2.style.labelStyle.fontSize = dollarAxisSize
+        sciChartView2.yAxes.add(axisY2)
     }
     
-    fileprivate func addSeries() {
-        let lineDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
-        lineDataSeries.acceptUnsortedData = true
-        for things in results! {
-            lineDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.profit))
-        }
+    fileprivate func addModifiers() {
+        sizeAxisAreaSync.syncMode = .right
+        sizeAxisAreaSync.attachSurface(sciChartView1)
+        sizeAxisAreaSync.attachSurface(sciChartView2)
         
-        let lineRenderSeries = SCIFastLineRenderableSeries()
-        lineRenderSeries.dataSeries = lineDataSeries
-        lineRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
-        sciChartView1.renderableSeries.add(lineRenderSeries)
+        var yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView1) as? SCIYAxisDragModifier
+        yDragModifier?.axisId = axisY1Id
+        yDragModifier?.dragMode = .pan;
+        
+        var xDragModifier = xDragModifierSync.modifier(forSurface: sciChartView1) as? SCIXAxisDragModifier
+        xDragModifier?.axisId = axisX1Id
+        xDragModifier?.dragMode = .pan;
+        
+        var modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
+        sciChartView1.chartModifiers = modifierGroup
+        
+        yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView2) as? SCIYAxisDragModifier
+        yDragModifier?.axisId = axisY2Id
+        yDragModifier?.dragMode = .pan;
+        
+        xDragModifier = xDragModifierSync.modifier(forSurface: sciChartView2) as? SCIXAxisDragModifier
+        xDragModifier?.axisId = axisX2Id
+        xDragModifier?.dragMode = .pan;
+        
+        modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
+        sciChartView2.chartModifiers = modifierGroup
     }
     
+    func addAxisMarkerAnnotation(surface:SCIChartSurface, yID:String, color:UIColor, valueFormat:String, value:SCIGenericType){
+        let axisMarker:SCIAxisMarkerAnnotation = SCIAxisMarkerAnnotation()
+        axisMarker.yAxisId = yID;
+        axisMarker.style.margin = 5;
+        
+        let textFormatting:SCITextFormattingStyle = SCITextFormattingStyle();
+        textFormatting.color = UIColor.white;
+        textFormatting.fontSize = 10;
+        axisMarker.style.textStyle = textFormatting;
+        axisMarker.formattedValue = String.init(format: valueFormat, SCIGenericDouble(value));
+        axisMarker.coordinateMode = .absolute
+        axisMarker.style.backgroundColor = color
+        axisMarker.position = value;
+        //print("SMA Anntation \(value.doubleData)")
+        surface.annotations.add(axisMarker);
+    }
 }

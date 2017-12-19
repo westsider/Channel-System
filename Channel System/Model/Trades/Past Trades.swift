@@ -46,6 +46,9 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "EWT", date: "12/08", entry: 36.28, exit: 0.00, shares: 45.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/08", entry: 74.38, exit: 75.55, shares: 22.00) )
         
+        trades.append( MyPrice().profit(ticker: "EWY", date: "12/19", entry: 72.96, exit: 0.00, shares: 22.00) )
+        trades.append( MyPrice().profit(ticker: "RSX", date: "12/19", entry: 20.82, exit: 0.00, shares: 80.00) )
+        trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.5, exit: 0.00, shares: 7.00) )
         
         
         
