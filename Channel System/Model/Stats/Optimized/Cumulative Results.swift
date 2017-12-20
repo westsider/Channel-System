@@ -35,7 +35,7 @@ class CumulativeProfit {
             if fileIndex < 24185 { continue }
             // daily process
             // if buy then buy and record ticker and cost
-            if portfolioDict.count < 20 && today.stars > minStars {
+            if portfolioDict.count < 20 && today.stars >= minStars {
                 if today.capitalReq != 0.00 {
                     if tradeCount == 0 {
                         firstTradeDate = today.date!

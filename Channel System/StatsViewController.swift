@@ -42,6 +42,8 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var minStarsLabel: UILabel!
     
+    @IBOutlet weak var annualProfitLabel: UILabel!
+    
     var galaxie = [String]()
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
@@ -183,8 +185,9 @@ class StatsViewController: UIViewController {
             let roi = updateStats.avgROI * 100
             let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
             let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
-            print("\n The first date is \(updateStats.firstDate)\n")
             let numYears = Double(numDays) / 365.00
+            let annualProfit = updateStats.grossProfit / numYears
+            let annualProfitString = Utilities().dollarStr(largeNumber: annualProfit)
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
                 self.topLeft.text = "$\(gross) Profit"
@@ -198,6 +201,7 @@ class StatsViewController: UIViewController {
                 self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
                 self.largestLossLabel.text = "Largest Loss \(lLos)"
                 self.minStarsLabel.text = "Minimun Stars: \(self.minStars)"
+                self.annualProfitLabel.text = "$\(annualProfitString) Annually"
                 self.ActivityOne(isOn: false)
                 self.getDataForChart()
             }

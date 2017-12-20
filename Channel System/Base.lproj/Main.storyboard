@@ -451,11 +451,17 @@
                                                             </label>
                                                         </subviews>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1tR-cp-Sn2">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="1tR-cp-Sn2">
                                                         <rect key="frame" x="0.0" y="92" width="319" height="24.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 Min Stars" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vni-JJ-wOn">
-                                                                <rect key="frame" x="0.0" y="0.0" width="319" height="24.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="159.5" height="24.5"/>
+                                                                <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Annual Profit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ImT-pm-W4O">
+                                                                <rect key="frame" x="159.5" y="0.0" width="159.5" height="24.5"/>
                                                                 <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -561,6 +567,7 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="GY3-YP-2fw" id="d68-9n-ov9"/>
+                        <outlet property="annualProfitLabel" destination="ImT-pm-W4O" id="RR8-Kj-6SR"/>
                         <outlet property="backtestButton" destination="FwS-Rg-Gkp" id="Co4-IK-a3a"/>
                         <outlet property="bottomLeft" destination="SPT-jl-tNV" id="Xcf-9X-nC7"/>
                         <outlet property="bottomView" destination="f8J-GJ-Ag2" id="lgW-Jd-98P"/>
