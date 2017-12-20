@@ -114,7 +114,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="biD-pr-RAe"/>
+                    <navigationItem key="navigationItem" id="biD-pr-RAe">
+                        <barButtonItem key="rightBarButtonItem" image="gear" id="Rnt-Ux-R9O">
+                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="segueToSettings:" destination="BYZ-38-t0r" id="f53-xA-ZM9"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activity" destination="0yM-3j-dra" id="r2b-JR-ZAa"/>
                         <outlet property="currentProcessLable" destination="lIN-xi-Yu4" id="vSU-cH-Eiw"/>
@@ -138,7 +145,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fQZ-Wh-aOk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="627"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="611"/>
                                 <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -179,42 +186,42 @@
                                 </connections>
                             </tableView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="aFC-Jt-Cw3">
-                                <rect key="frame" x="16" y="632" width="341" height="30"/>
+                                <rect key="frame" x="40" y="622" width="295" height="37"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCC-xV-E7u">
-                                        <rect key="frame" x="0.0" y="0.0" width="74" height="30"/>
-                                        <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <state key="normal" title="Settings">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCC-xV-E7u">
+                                        <rect key="frame" x="0.0" y="0.0" width="62.5" height="37"/>
+                                        <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <state key="normal" image="gear">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="clearRealmAction:" destination="rsc-Si-hcx" eventType="touchUpInside" id="7tB-9z-UHY"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gF-fg-mbq">
-                                        <rect key="frame" x="89" y="0.0" width="74" height="30"/>
-                                        <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <state key="normal" title="Index">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gF-fg-mbq">
+                                        <rect key="frame" x="77.5" y="0.0" width="62.5" height="37"/>
+                                        <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <state key="normal" image="sp500_75">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="showIndexAction:" destination="rsc-Si-hcx" eventType="touchUpInside" id="8aQ-NZ-f5k"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VJE-NN-i7A">
-                                        <rect key="frame" x="178" y="0.0" width="74" height="30"/>
-                                        <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <state key="normal" title="Portfolio">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VJE-NN-i7A">
+                                        <rect key="frame" x="155" y="0.0" width="62.5" height="37"/>
+                                        <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <state key="normal" image="cashFlow">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="readRealmContents:" destination="rsc-Si-hcx" eventType="touchUpInside" id="gzI-nx-icD"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nx3-2J-xOE">
-                                        <rect key="frame" x="267" y="0.0" width="74" height="30"/>
-                                        <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <state key="normal" title="Stats">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nx3-2J-xOE">
+                                        <rect key="frame" x="232.5" y="0.0" width="62.5" height="37"/>
+                                        <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <state key="normal" image="graph">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -226,13 +233,13 @@
                         </subviews>
                         <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="6NJ-we-50Y" firstAttribute="bottom" secondItem="aFC-Jt-Cw3" secondAttribute="bottom" constant="5" id="7ZE-8G-cXi"/>
-                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="top" secondItem="fQZ-Wh-aOk" secondAttribute="bottom" constant="5" id="JY2-R3-bwC"/>
-                            <constraint firstItem="6NJ-we-50Y" firstAttribute="trailing" secondItem="aFC-Jt-Cw3" secondAttribute="trailing" constant="18" id="aZL-Ue-Uxc"/>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="trailing" secondItem="6NJ-we-50Y" secondAttribute="trailing" id="b5E-Bi-iBn"/>
-                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" constant="16" id="bsq-PI-SUc"/>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="top" secondItem="LLy-So-AA8" secondAttribute="top" id="btF-QS-Jhw"/>
-                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" id="hxR-Fz-5gl"/>
+                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="top" secondItem="fQZ-Wh-aOk" secondAttribute="bottom" constant="11" id="7b7-Fy-mq2"/>
+                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" id="SSY-xq-f85"/>
+                            <constraint firstItem="6NJ-we-50Y" firstAttribute="trailing" secondItem="aFC-Jt-Cw3" secondAttribute="trailing" constant="40" id="UNy-c4-KhQ"/>
+                            <constraint firstItem="6NJ-we-50Y" firstAttribute="bottom" secondItem="aFC-Jt-Cw3" secondAttribute="bottom" constant="8" id="WMx-Gm-46u"/>
+                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="trailing" secondItem="6NJ-we-50Y" secondAttribute="trailing" id="ZiC-p1-m78"/>
+                            <constraint firstItem="fQZ-Wh-aOk" firstAttribute="top" secondItem="LLy-So-AA8" secondAttribute="top" id="bpa-aL-b2n"/>
+                            <constraint firstItem="aFC-Jt-Cw3" firstAttribute="leading" secondItem="6NJ-we-50Y" secondAttribute="leading" constant="40" id="tAa-yd-pH0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6NJ-we-50Y"/>
                     </view>
@@ -289,6 +296,12 @@
                             <barButtonItem systemItem="edit" id="Ey2-nD-OyU">
                                 <connections>
                                     <action selector="managePortfolioAction:" destination="x0Q-wm-iek" id="dT4-k8-gg6"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="gear" id="PzG-Pq-SeS">
+                                <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="segueToSettings:" destination="x0Q-wm-iek" id="CAH-2B-vDb"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -1134,4 +1147,10 @@
             <point key="canvasLocation" x="2104.8000000000002" y="115.59220389805098"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="cashFlow" width="25" height="25"/>
+        <image name="gear" width="25" height="25"/>
+        <image name="graph" width="25" height="25"/>
+        <image name="sp500_75" width="37" height="37"/>
+    </resources>
 </document>

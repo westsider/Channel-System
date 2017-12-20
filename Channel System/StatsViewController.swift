@@ -235,9 +235,7 @@ class StatsViewController: UIViewController {
     fileprivate func topChartDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
         cumulativeProfit.acceptUnsortedData = true
-        var profit:Double = 0.0
         for things in results! {
-            profit = things.profit
             cumulativeProfit.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.profit))
         }
         let topChartRenderSeries = SCIFastLineRenderableSeries()
@@ -245,7 +243,6 @@ class StatsViewController: UIViewController {
         topChartRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1), withThickness: 1.0)
         topChartRenderSeries.xAxisId = xID
         topChartRenderSeries.yAxisId = yID
-        //addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), valueFormat: "%.0f", value: SCIGeneric( profit ))
         surface.renderableSeries.add(topChartRenderSeries)
     }
     

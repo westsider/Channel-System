@@ -63,6 +63,12 @@ class ScanViewController: UIViewController {
         }
     }
     
+    
+    @IBAction func segueToSettings(_ sender: Any) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
     private func saveCompanyInfoToRealm() {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         for ticker in galaxie {

@@ -47,6 +47,13 @@ class SCSSyncMultiChartView: UIViewController {
         title = ticker
         completeConfiguration()
     }
+    
+    @IBAction func segueToSettings(_ sender: Any) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    
     //MARK: - Add Pices Series
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         surface.renderableSeries.add(getCandleRenderSeries(debug: false, xID: xID, yID: yID))
