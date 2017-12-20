@@ -22,7 +22,8 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var wPctRbttn: UIButton!
     @IBOutlet weak var entriesBttn: UIButton!
     @IBOutlet weak var backtestBttn: UIButton!
-
+    @IBOutlet weak var starsButton: UIButton!
+    
     // all labels
     @IBOutlet weak var activityDial: UIActivityIndicatorView!
     @IBOutlet weak var riskLabel: UITextField!
@@ -36,6 +37,8 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var entriesLabel: UILabel!
     @IBOutlet weak var backTestLabel: UILabel!
     @IBOutlet weak var acctTotalLabel: UILabel!
+    @IBOutlet weak var starsTextField: UITextField!
+    
     
     var galaxie = [String]()
     
@@ -62,6 +65,23 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         activityDial.stopAnimating()
     }
     
+    
+    @IBAction func changeStarsAction(_ sender: Any) {
+        if (starsTextField.text! != "") {
+            textEntered = starsTextField.text!
+            // convert text entered to double
+            if let numberStars = Int(textEntered) {
+                // safely get number from risk
+                Stats().changeStars(stars: numberStars)
+                print("\n-------> Saved new stars of \(numberStars) <------\n")
+            } else {
+                print("\n-------> ERROR unwrapping stars <------\n")
+            }
+        } else {
+            print("\n-------> ERROR reading stars String <------\n")
+        }
+    }
+    
     func populateLables() {
         let riskRecd = Account().currentRisk()
         print("Loading risk of \(riskRecd)")
@@ -71,6 +91,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         tdaLabel.text = Account().textValueFor(account:"TDA" )
         etradeLabel.text = Account().textValueFor(account:"E*Trade" )
         acctTotalLabel.text = Account().textValueFor(account:"Accounts" )
+        starsTextField.text = "\(Stats().getStars())"
     }
     
     //MARK: - TODO - need to make an account realm object to track account size and risk
@@ -336,6 +357,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             wPctRbttn.isEnabled = true
             entriesBttn.isEnabled = true
             backtestBttn.isEnabled = true
+            starsButton.isEnabled = true
             riskBttn.alpha = 1.0
             ibBttn.alpha = 1.0
             tdaBttn.alpha = 1.0
@@ -346,6 +368,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             wPctRbttn.alpha = 1.0
             entriesBttn.alpha = 1.0
             backtestBttn.alpha = 1.0
+            starsTextField.alpha = 1.0
         } else {
             ibBttn.isEnabled = false
             tdaBttn.isEnabled = false
@@ -356,6 +379,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             wPctRbttn.isEnabled = false
             entriesBttn.isEnabled = false
             backtestBttn.isEnabled = false
+            starsButton.isEnabled = false
             riskBttn.alpha = 0.2
             ibBttn.alpha = 0.2
             tdaBttn.alpha = 0.2
@@ -366,6 +390,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             wPctRbttn.alpha = 0.2
             entriesBttn.alpha = 0.2
             backtestBttn.alpha = 0.2
+            starsTextField.alpha = 0.2
         }
     }
     
@@ -383,6 +408,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         ibLabel.resignFirstResponder()
         tdaLabel.resignFirstResponder()
         etradeLabel.resignFirstResponder()
+        starsTextField.resignFirstResponder()
         return true
     }
 }

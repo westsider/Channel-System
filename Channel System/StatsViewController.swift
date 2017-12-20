@@ -40,6 +40,8 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var graphButton: UIButton!
     
+    @IBOutlet weak var minStarsLabel: UILabel!
+    
     var galaxie = [String]()
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
@@ -47,6 +49,7 @@ class StatsViewController: UIViewController {
     var averageStars = [Double]()
     var results: Results<WklyStats>?
     let maxBarsOnChart:Int = 100
+    var minStars:Int = 0
     //MARK: - chart vars
     var dataFeed = DataFeed()
     var oneTicker:Results<Prices>!
@@ -79,7 +82,7 @@ class StatsViewController: UIViewController {
         getStatsfromRealm()
     }
     
-    // need completion handler for this
+    //MARK: - Backtest Button
     @IBAction func runNewBacktestAction(_ sender: Any) {
         self.topLeft.textAlignment = .right
         ActivityOne(isOn:true)
@@ -171,6 +174,7 @@ class StatsViewController: UIViewController {
 
     func getStatsfromRealm() {
         let realm = try! Realm()
+        minStars = Stats().getStars()
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
             let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
@@ -193,6 +197,7 @@ class StatsViewController: UIViewController {
                 let lLos = Utilities().dollarStr(largeNumber: updateStats.largestLoser)
                 self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
                 self.largestLossLabel.text = "Largest Loss \(lLos)"
+                self.minStarsLabel.text = "Minimun Stars: \(self.minStars)"
                 self.ActivityOne(isOn: false)
                 self.getDataForChart()
             }
@@ -205,11 +210,12 @@ class StatsViewController: UIViewController {
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             self.ActivityOne(isOn:true)
-            
-            _ = CumulativeProfit().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+            print("\n---------------> Now running new backtest <----------------\n")
+            _ = CumulativeProfit().allTickerBacktestWithCost(debug: true, saveToRealm: true)
            
             DispatchQueue.main.async {
                 completion()
+                print("\n---------------> Now calling completion on new backtest <----------------\n")
                 self.getStatsfromRealm()
                 self.ActivityOne(isOn:false)
             }

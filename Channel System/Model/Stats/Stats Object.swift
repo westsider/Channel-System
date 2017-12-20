@@ -21,6 +21,33 @@ class Stats: Object {
     @objc dynamic var largestWinner = 0.00
     @objc dynamic var taskID     = "01"
     @objc dynamic var firstDate = Date()
+    @objc dynamic var minStars = 0
+    
+    func changeStars(stars: Int) {
+        let realm = try! Realm()
+        let id = "01"
+        if let updateStats = realm.objects(Stats.self).filter("taskID == %@", id).first {
+            try! realm.write {
+                updateStats.minStars = stars
+            }
+        } else {
+            let newStats = Stats()
+            newStats.minStars = stars
+            try! realm.write {
+                realm.add(newStats)
+            }
+        }
+    }
+    
+    func getStars()-> Int {
+        let realm = try! Realm()
+        var minStars:Int = 0
+        let id = "01"
+        if let updateStats = realm.objects(Stats.self).filter("taskID == %@", id).first {
+            minStars = updateStats.minStars
+        }
+        return minStars
+    }
     
     //MARK: - saveTotalStatsToRealm update or new object
     func updateFinalTotal(grossProfit: Double, avgPctWin:Double,avgROI:Double, grossROI:Double, avgStars:Double, maxCost:Double, largestWin:Double, largestLoss:Double, firstDate:Date  ) {
