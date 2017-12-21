@@ -282,6 +282,7 @@
 		0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDF1FBC401600095560 /* Get CSV.swift */; };
 		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
 		0DD37FF81FD6427E00D1CFE7 /* Cumulative Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */; };
+		0DE1C0C71FEC2538003CB393 /* Market Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE1C0C61FEC2538003CB393 /* Market Condition.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
 		0DE78F551FD888B400915777 /* Stats Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE78F541FD888B400915777 /* Stats Object.swift */; };
 		0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */; };
@@ -568,6 +569,7 @@
 		0DCAAFDF1FBC401600095560 /* Get CSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV.swift"; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
 		0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cumulative Results.swift"; sourceTree = "<group>"; };
+		0DE1C0C61FEC2538003CB393 /* Market Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Market Condition.swift"; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
 		0DE78F541FD888B400915777 /* Stats Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats Object.swift"; sourceTree = "<group>"; };
 		0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Weekly Stats.swift"; sourceTree = "<group>"; };
@@ -957,6 +959,7 @@
 		0DEFBCBF1FA912BC00C156B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0DE1C0C61FEC2538003CB393 /* Market Condition.swift */,
 				0DA11AE51FD07C140074BAD7 /* Realm */,
 				0DA11AE21FD07B620074BAD7 /* Stats */,
 				0DA11AE31FD07B920074BAD7 /* Data */,
@@ -1382,6 +1385,7 @@
 				0DD37FF81FD6427E00D1CFE7 /* Cumulative Results.swift in Sources */,
 				0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */,
 				0DCAAFDB1FBC3AF200095560 /* PctR.swift in Sources */,
+				0DE1C0C71FEC2538003CB393 /* Market Condition.swift in Sources */,
 				0DEEA0DF1FCDFC520046BABC /* LastUpdate.swift in Sources */,
 				0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */,
 				0DE78F551FD888B400915777 /* Stats Object.swift in Sources */,
