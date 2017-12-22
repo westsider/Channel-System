@@ -32,17 +32,11 @@ class ScanViewController: UIViewController {
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
     
     let prices = Prices()
-    
     var updatedProgress: Float = 0
-    
     var incProgress: Float = 0
-    
     var counter:Int = 0
-    
     var updateRealm:Bool = false
-    
     var lastDateInRealm:Date!
-   
     var galaxie = [String]()
     
     override func viewDidLoad() {
@@ -52,6 +46,7 @@ class ScanViewController: UIViewController {
         updateButton(isOn: false)
         ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
+        // MarketCondition().calcMarketCondFirstRun(debug: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,7 +57,6 @@ class ScanViewController: UIViewController {
             subsequentRuns()
         }
     }
-    
     
     @IBAction func segueToSettings(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
@@ -87,6 +81,7 @@ class ScanViewController: UIViewController {
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
         saveCompanyInfoToRealm()
+        MarketCondition().calcMarketCondFirstRun(debug: true)
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
     
@@ -244,6 +239,7 @@ class ScanViewController: UIViewController {
                 self.updateUI(with: "Processing SMA(200) Complete", spinIsOff: true)
                 print("\nSegue to Charts\n")
                 self.calcwPctR(completion: self.wPctRBlock)
+                MarketCondition().calcMarketCondUpdate(debug: true)
             }
         }
     }

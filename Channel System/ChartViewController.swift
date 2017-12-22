@@ -12,6 +12,11 @@ import RealmSwift
 
 class SCSSyncMultiChartView: UIViewController {
     
+    /* if ticker is SPY:
+            add bands
+            replace wPctR with ATR
+            create a matrix to show market cond
+     */
     var dataFeed = DataFeed()
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
@@ -123,6 +128,7 @@ class SCSSyncMultiChartView: UIViewController {
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        addBands(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         
         let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
@@ -295,14 +301,43 @@ class SCSSyncMultiChartView: UIViewController {
         }
         let renderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
         renderSeries.dataSeries = smaDataSeries
-        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1), withThickness: 2)
+        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 2)
         renderSeries.style.isDigitalLine = false
         renderSeries.hitTestProvider().hitTestMode = .verticalInterpolate
         renderSeries.xAxisId = xID
         renderSeries.yAxisId = yID
         surface.renderableSeries.add(renderSeries)
         addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: lastValue)
+    }
     
+    fileprivate func addBands(surface:SCIChartSurface, xID:String, yID:String)  {
+        if ticker != "SPY" { return }
+        let upperBandDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
+        let lowerBandDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
+        
+        let marketCondition = MarketCondition().getData()
+        for things in marketCondition {
+            upperBandDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.upperBand))
+            lowerBandDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.lowerBand))
+        }
+        
+        let renderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
+        renderSeries.dataSeries = upperBandDataSeries
+        renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 1)
+        renderSeries.style.isDigitalLine = false
+        renderSeries.hitTestProvider().hitTestMode = .verticalInterpolate
+        renderSeries.xAxisId = xID
+        renderSeries.yAxisId = yID
+        surface.renderableSeries.add(renderSeries)
+        
+        let renderSeries2:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
+        renderSeries2.dataSeries = lowerBandDataSeries
+        renderSeries2.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 1)
+        renderSeries2.style.isDigitalLine = false
+        renderSeries2.hitTestProvider().hitTestMode = .verticalInterpolate
+        renderSeries2.xAxisId = xID
+        renderSeries2.yAxisId = yID
+        surface.renderableSeries.add(renderSeries2)
     }
     
     func addAxisMarkerAnnotation(surface:SCIChartSurface, yID:String, color:UIColor, valueFormat:String, value:SCIGenericType){

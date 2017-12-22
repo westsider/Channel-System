@@ -148,6 +148,7 @@ class Prices: Object {
         let lastTicker = realm.objects(Prices.self).filter("taskID == %@", taskID).last!
         return lastTicker.taskID
     }
+    
     func getLastDateInRealm(debug: Bool)-> Date {
         let realm = try! Realm()
         let theTickerSeries = realm.objects(Prices.self)
@@ -155,12 +156,17 @@ class Prices: Object {
         if ( debug ) { print("Last Date In Realm is: \(sortedByDate.dateString)") }
         return sortedByDate.date!
     }
+    
+    func getLastDateInMktCond(debug: Bool)-> Date {
+        let realm = try! Realm()
+        let theTickerSeries = realm.objects(MarketCondition.self)
+        let sortedByDate = theTickerSeries.sorted(byKeyPath: "date", ascending: true).last!
+        if ( debug ) { print("Last Date In market condition is: \(sortedByDate.dateString)") }
+        return sortedByDate.date!
+    }
+    
     func checkIfNew(date:Date, realmDate:Date, debug: Bool)-> Bool {
         var isNewer = false
-        //let realm = try! Realm()
-        // this is not getting the last price.. sort it
-        //let lastTicker = sortEntries().first!
-        //let realmDate = getLastDateInRealm(debug: false)
         if ( debug ) { print("Last date in realm \(String(describing: realmDate)) vs new date: \(date))")}
         
         if date > realmDate {
