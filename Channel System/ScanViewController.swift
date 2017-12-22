@@ -46,7 +46,9 @@ class ScanViewController: UIViewController {
         updateButton(isOn: false)
         ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
-        // MarketCondition().calcMarketCondFirstRun(debug: true)
+        //MarketCondition().deleteAll()
+        //MarketCondition().calcMarketCondFirstRun(debug: true)
+        //MarketCondition().testlast100()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -239,7 +241,6 @@ class ScanViewController: UIViewController {
                 self.updateUI(with: "Processing SMA(200) Complete", spinIsOff: true)
                 print("\nSegue to Charts\n")
                 self.calcwPctR(completion: self.wPctRBlock)
-                MarketCondition().calcMarketCondUpdate(debug: true)
             }
         }
     }
@@ -257,6 +258,7 @@ class ScanViewController: UIViewController {
                 completion()
                 self.updateUI(with: "Processing SPctR Complete", spinIsOff: true)
                 self.calcEntries(completion: self.entryBlock)
+                MarketCondition().calcMarketCondUpdate(debug: true)
             }
         }
     }

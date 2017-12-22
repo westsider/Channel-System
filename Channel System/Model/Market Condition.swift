@@ -29,6 +29,16 @@ class MarketCondition: Object {
     @objc dynamic var stdDevClacLow = 0.00
     @objc dynamic var taskID     = NSUUID().uuidString
     
+    //MARK: - Clear Realm
+    func deleteAll() {
+        let realm = try! Realm()
+        let allMarketCondition = realm.objects(MarketCondition.self)
+        try! realm.write {
+            realm.delete(allMarketCondition)
+        }
+        print("\nRealm \tMarketCondition \tCleared!\n")
+    }
+    
     //MARK: -  trend as bull, bear, sideways
     func trend(close: Double, sma200: Double)-> (trend:String, value:Int, upper:Double, lower:Double) {
         let up = sma200 + ( sma200 * 0.02 )
@@ -44,8 +54,12 @@ class MarketCondition: Object {
     }
     
     //MARK: -  trueRange
-    func trueRange(high:Double, low:Double)-> Double {
-        return  high - low
+    func trueRange(high:Double, low:Double, close1:Double)-> Double {
+        //double trueRange    = Math.Max(Math.Abs(low0 - close1), Math.Max(high0 - low0, Math.Abs(high0 - close1)));
+        let calc1 = low - close1
+        let calc2 = high - low
+        let calc3 = high - close1
+        return max(calc1, calc2, calc3)
     }
     
     //MARK: -  ATR % = ATR(14)  / close renturns array same size as realm object
@@ -54,9 +68,9 @@ class MarketCondition: Object {
         var sum:Double
         var averages = [Double]()
         let period:Int = 14
-        
+        var close1:Double = 0.00
         for today in series {
-            let range = trueRange(high: today.high, low: today.low)
+            let range = trueRange(high: today.high, low: today.low, close1: close1)
             fourteenPeriodArray.append(range)
             if fourteenPeriodArray.count > period {
                 fourteenPeriodArray.remove(at: 0)
@@ -67,6 +81,7 @@ class MarketCondition: Object {
             } else {
                 averages.append(0.00)
             }
+            close1 = today.close
         }
         return averages
     }
@@ -80,6 +95,9 @@ class MarketCondition: Object {
         var volatilityAnswer = [(volatility:String, value:Int, stdDevClacHi:Double, stdDevClacLo:Double)]()
         let period:Int = 100
         
+        let arraySlice = atrSeries.suffix(100); print(arraySlice)
+        
+        
         for today in atrSeries {
             array100.append(today)
             if array100.count > period {
@@ -88,10 +106,12 @@ class MarketCondition: Object {
                 let average = sum / Double(period)
                 let max = array100.max()
                 let min = array100.min()
-                // find Std Dev
-                let summedSquared = sumOfSquareOfDifferences(array: array100)
-                let arrayLength:Double = Double(array100.count)-1
-                let stdDev = sqrt( summedSquared / arrayLength )
+//                // find Std Dev
+//                let summedSquared = sumOfSquareOfDifferences(array: array100)
+//                let arrayLength:Double = Double(array100.count)-1
+               // let stdDev = sqrt( summedSquared / arrayLength )
+                
+                let stdDev = standardDeviation(arr: array100)
                 
                 let stdDevClacHi:Double = average + stdDev;
                 let stdDevClacLo:Double = average - stdDev;
@@ -108,15 +128,12 @@ class MarketCondition: Object {
                 
                 if( today > stdDevClacHi ) {
                     answer = ("volatil", 1, stdDevClacHi, stdDevClacLo)
-                    //volatil = true; // normal = false;  //quiet = false;
                 }
                 else if( today < stdDevClacLo ) {
                     answer = ("quiet", -1, stdDevClacHi, stdDevClacLo)
-                    // volatil = false // normal = false // quiet = true;
                 }
                 else {
                     answer = ("normal", 0, stdDevClacHi, stdDevClacLo)
-                    // volatil = false; // normal = true; // quiet = false;
                 }
                 
                 volatilityAnswer.append(answer)
@@ -228,12 +245,13 @@ class MarketCondition: Object {
     //  4. plot a matrix of 9 market conditions
     
     // filter backtest with market condition and check the results
-    
-    
-    
-    
-    
-    
-    
-    
+    func standardDeviation(arr : [Double]) -> Double
+    {
+        let length = Double(arr.count)
+        let avg = arr.reduce(0, {$0 + $1}) / length
+        let sumOfSquaredAvgDiff = arr.map { pow($0 - avg, 2.0)}.reduce(0, {$0 + $1})
+        return sqrt(sumOfSquaredAvgDiff / length)
+    }
 }
+
+

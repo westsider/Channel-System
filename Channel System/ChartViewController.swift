@@ -13,12 +13,13 @@ import RealmSwift
 class SCSSyncMultiChartView: UIViewController {
     
     /* if ticker is SPY:
-            add bands
-            replace wPctR with ATR
-            create a matrix to show market cond
+            [X] add bands
+            [ ] replace wPctR with ATR
+            [ ] create a matrix to show market cond
      */
     var dataFeed = DataFeed()
     var oneTicker:Results<Prices>!
+    var marketCondition:Results<MarketCondition>!
     let showTrades = ShowTrades()
     var ticker:String = ""
     var taskIdSelected:String = ""
@@ -41,13 +42,12 @@ class SCSSyncMultiChartView: UIViewController {
     let zoomExtendsSync = SCIMultiSurfaceModifier(modifierType: SCIZoomExtentsModifier.self)
     
     @IBOutlet weak var topView: UIView!
-    
     @IBOutlet weak var bottomView: UIView!
-    
     @IBAction func unwindToCharts(segue: UIStoryboardSegue) {}
     
     override func viewDidLoad() {
         oneTicker = Prices().getFrom(taskID: taskIdSelected)
+        marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
         title = ticker
         completeConfiguration()
@@ -126,6 +126,7 @@ class SCSSyncMultiChartView: UIViewController {
         addModifiers()
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addWPctRSeries(debug: false, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        addWAtrSeries(debug: true, surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addBands(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
@@ -176,6 +177,8 @@ class SCSSyncMultiChartView: UIViewController {
         axisY1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisY1.style.labelStyle.fontName = "Helvetica"
         axisY1.style.labelStyle.fontSize = 14
+        //sciChartView1.yAxes.item(at: 0).autoRange = .always
+        axisY1.autoRange = .always
         sciChartView1.yAxes.add(axisY1)
         
         let axisX2:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
@@ -192,6 +195,7 @@ class SCSSyncMultiChartView: UIViewController {
         axisY2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisY2.style.labelStyle.fontName = "Helvetica"
         axisY2.style.labelStyle.fontSize = 14
+        axisY2.autoRange = .always
         sciChartView2.yAxes.add(axisY2)
     }
     
@@ -203,10 +207,11 @@ class SCSSyncMultiChartView: UIViewController {
         var yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView1) as? SCIYAxisDragModifier
         yDragModifier?.axisId = axisY1Id
         yDragModifier?.dragMode = .pan;
-        
-        var xDragModifier = xDragModifierSync.modifier(forSurface: sciChartView1) as? SCIXAxisDragModifier
-        xDragModifier?.axisId = axisX1Id
-        xDragModifier?.dragMode = .pan;
+        //sciChartView1.yAxes.item(at: 0).autoRange = .always
+        var xDateDragModifier = xDragModifierSync.modifier(forSurface: sciChartView1) as? SCIXAxisDragModifier
+        xDateDragModifier?.axisId = axisX1Id
+        xDateDragModifier?.dragMode = .pan;
+        xDateDragModifier?.clipModeX = .none
         
         var modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView1.chartModifiers = modifierGroup
@@ -215,9 +220,10 @@ class SCSSyncMultiChartView: UIViewController {
         yDragModifier?.axisId = axisY2Id
         yDragModifier?.dragMode = .pan;
         
-        xDragModifier = xDragModifierSync.modifier(forSurface: sciChartView2) as? SCIXAxisDragModifier
-        xDragModifier?.axisId = axisX2Id
-        xDragModifier?.dragMode = .pan;
+        xDateDragModifier = xDragModifierSync.modifier(forSurface: sciChartView2) as? SCIXAxisDragModifier
+        xDateDragModifier?.axisId = axisX2Id
+        xDateDragModifier?.dragMode = .pan;
+        xDateDragModifier?.clipModeX = .none
         
         modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView2.chartModifiers = modifierGroup
@@ -233,6 +239,7 @@ class SCSSyncMultiChartView: UIViewController {
     }
     //MARK: - pctR
     fileprivate func addWPctRSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
+        if ticker == "SPY" { return }
         let indicatorDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
         indicatorDataSeries.acceptUnsortedData = true
         let triggerDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
@@ -265,6 +272,47 @@ class SCSSyncMultiChartView: UIViewController {
         
         let sellTriggerRenderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
         sellTriggerRenderSeries.dataSeries = sellTriggerDataSeries
+        sellTriggerRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 2.0)
+        sellTriggerRenderSeries.xAxisId = xID
+        sellTriggerRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(sellTriggerRenderSeries)
+    }
+    
+    //MARK: - atr
+    fileprivate func addWAtrSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
+        if ticker != "SPY" { return }
+        let atrPctAvgDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
+        atrPctAvgDataSeries.acceptUnsortedData = true
+        let stdDevHiDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
+        stdDevHiDataSeries.acceptUnsortedData = true
+        let stdDevLoDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
+        stdDevLoDataSeries.acceptUnsortedData = true
+        //var wPctR:Double = 0.0
+        for things in marketCondition {
+            
+            if ( debug ) { print("c:\(things.close) ATR: \(things.volatilityAverage) High: \(things.stdDevClacHi) Low: \(things.stdDevClacLow)") }
+            atrPctAvgDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.volatilityAverage))
+            stdDevHiDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.stdDevClacHi))
+            stdDevLoDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.stdDevClacLow))
+        }
+        
+        let indicatorRenderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
+        indicatorRenderSeries.dataSeries = atrPctAvgDataSeries
+        indicatorRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 1.0)
+        indicatorRenderSeries.xAxisId = xID
+        indicatorRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(indicatorRenderSeries)
+        //addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: SCIGeneric( wPctR))
+        
+        let triggerRenderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
+        triggerRenderSeries.dataSeries = stdDevHiDataSeries
+        triggerRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 2.0)
+        triggerRenderSeries.xAxisId = xID
+        triggerRenderSeries.yAxisId = yID
+        surface.renderableSeries.add(triggerRenderSeries)
+        
+        let sellTriggerRenderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
+        sellTriggerRenderSeries.dataSeries = stdDevLoDataSeries
         sellTriggerRenderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 2.0)
         sellTriggerRenderSeries.xAxisId = xID
         sellTriggerRenderSeries.yAxisId = yID
@@ -314,11 +362,11 @@ class SCSSyncMultiChartView: UIViewController {
         if ticker != "SPY" { return }
         let upperBandDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
         let lowerBandDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .double)
-        
-        let marketCondition = MarketCondition().getData()
+        print("\nwe are adding bands")
         for things in marketCondition {
             upperBandDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.upperBand))
             lowerBandDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.lowerBand))
+            print("upper: \(things.upperBand) lower: \(things.lowerBand)")
         }
         
         let renderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
