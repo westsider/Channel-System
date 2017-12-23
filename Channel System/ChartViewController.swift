@@ -11,12 +11,7 @@ import SciChart
 import RealmSwift
 
 class SCSSyncMultiChartView: UIViewController {
-    
-    /* if ticker is SPY:
-            [X] add bands
-            [ ] replace wPctR with ATR
-            [ ] create a matrix to show market cond
-     */
+
     var dataFeed = DataFeed()
     var oneTicker:Results<Prices>!
     var marketCondition:Results<MarketCondition>!
@@ -140,8 +135,17 @@ class SCSSyncMultiChartView: UIViewController {
         let guidanceText = MarketCondition().getStrMatixForChart()
         let guideChart = ShowTrades().showStats(xID: axisX2Id, yID: axisY2Id,
                                                 date: Double(rangeStart), price: highestAtr, text: guidanceText)
+        
+        
         sciChartView1.annotations.add(stats)
         sciChartView2.annotations.add(guideChart)
+    }
+    
+    fileprivate func addMatrixValues(isOn:Bool, date:Date, low:Double, index:Double) {
+        if !isOn { return }
+        let matrix = MarketCondition().getMatixToProveOnChart(date: date)
+        let mStat = ShowTrades().showMatrix(xID: axisX1Id, yID: axisY1Id, date: index, price: low, text: "\(matrix)")
+        sciChartView1.annotations.add(mStat)
     }
     
     fileprivate func configureChartSuraface() {
@@ -241,6 +245,7 @@ class SCSSyncMultiChartView: UIViewController {
             let high:Double = things.high
             let low:Double = things.low
             surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
+            addMatrixValues(isOn:true, date: things.date!, low: things.low, index: Double(index))
         }
     }
     //MARK: - pctR

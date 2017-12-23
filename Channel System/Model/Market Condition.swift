@@ -137,7 +137,6 @@ class MarketCondition: Object {
                     answer = ("normal", 0, stdDevClacHi, stdDevClacLo)
                     print("Setting Volatility to 0 because \(today) <> \(stdDevClacHi) \(stdDevClacLo)")
                 }
-                
                 volatilityAnswer.append(answer)
             } else {
                 volatilityAnswer.append(("nil", -100, 0.0, 0.0))
@@ -358,6 +357,15 @@ class MarketCondition: Object {
         } else {
             return false
         }
+    }
+    
+    func getMatixToProveOnChart(date:Date)->Int {
+        var answer = 20
+        let realm = try! Realm()
+        if let mc = realm.objects(MarketCondition.self).filter("date == %@", date).last {
+            answer = mc.matrixResult
+        }
+        return answer
     }
 }
 
