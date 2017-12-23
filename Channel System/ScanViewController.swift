@@ -30,6 +30,7 @@ class ScanViewController: UIViewController {
     let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
     let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
+    let mcBlock = { print( "\nMarket Condition block finished  <----------\n" ) }
     
     let prices = Prices()
     var updatedProgress: Float = 0
@@ -47,7 +48,7 @@ class ScanViewController: UIViewController {
         ManualTrades().showProfit()
         // iphone 7+ Sim is  192397
         //MarketCondition().deleteAll()
-        //MarketCondition().calcMarketCondFirstRun(debug: true)
+        //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock) // needs a completion handler
         //MarketCondition().testlast100()
     }
     
@@ -83,7 +84,7 @@ class ScanViewController: UIViewController {
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
         saveCompanyInfoToRealm()
-        MarketCondition().calcMarketCondFirstRun(debug: true)
+        MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock)
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
     

@@ -45,11 +45,9 @@ class ShowTrades {
         textStyle.fontSize = 14
         textAnnotation.text = text
         textAnnotation.style.textStyle = textStyle;
-        textAnnotation.style.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        textAnnotation.style.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         textAnnotation.style.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         textAnnotation.isEditable = false
-        
-        
        
         //textAnnotation.x1 = SCIGeneric(Date);
         //textAnnotation.y1 = SCIGeneric(Entry);
@@ -57,6 +55,31 @@ class ShowTrades {
         textAnnotation.yAxisId = yID
         return textAnnotation
     }
+    
+//    func showGuidanceForChart( xID:String, yID:String, date:Double, price:Double, text: String)-> SCITextAnnotation {
+//        
+//        let textAnnotation = SCITextAnnotation()
+//        textAnnotation.coordinateMode = .absolute;
+//        textAnnotation.x1 = SCIGeneric(date);
+//        textAnnotation.y1 = SCIGeneric(price);
+//        textAnnotation.horizontalAnchorPoint = .left;
+//        textAnnotation.verticalAnchorPoint = .top;
+//        
+//        let textStyle = SCITextFormattingStyle()
+//        textStyle.fontName = "Helvetica"
+//        textStyle.fontSize = 14
+//        textAnnotation.text = text
+//        textAnnotation.style.textStyle = textStyle;
+//        textAnnotation.style.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+//        textAnnotation.style.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+//        textAnnotation.isEditable = false
+//        
+//        //textAnnotation.x1 = SCIGeneric(Date);
+//        //textAnnotation.y1 = SCIGeneric(Entry);
+//        textAnnotation.xAxisId = xID
+//        textAnnotation.yAxisId = yID
+//        return textAnnotation
+//    }
     
     func createDnArrow(Date: Int, Entry:Double, xID:String, yID:String)-> SCICustomAnnotation {
         let customAnnotationGreen = SCICustomAnnotation()

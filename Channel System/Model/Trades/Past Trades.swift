@@ -45,6 +45,8 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/08", entry: 74.38, exit: 75.54, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "EWT", date: "12/08", entry: 36.28, exit: 0.00, shares: 45.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/08", entry: 74.38, exit: 75.55, shares: 22.00) )
+        trades.append( MyPrice().profit(ticker: "EWI", date: "12/14", entry: 30.84, exit: 30.70, shares: 53.00) )
+        trades.append( MyPrice().profit(ticker: "EWI", date: "12/15", entry: 30.38, exit: 30.70, shares: 54.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/19", entry: 72.96, exit: 0.00, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "RSX", date: "12/19", entry: 20.82, exit: 0.00, shares: 80.00) )
         trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.5, exit: 0.00, shares: 7.00) )
@@ -52,6 +54,8 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.67, exit: 0.00, shares: 14.00) )
         trades.append( MyPrice().profit(ticker: "MCD", date: "12/20", entry: 172.1, exit: 0.00, shares: 9.00) )
         trades.append( MyPrice().profit(ticker: "MMM", date: "12/20", entry: 236.91, exit: 0.00, shares: 7.00) )
+        trades.append( MyPrice().profit(ticker: "UNH", date: "12/22", entry: 219.93, exit: 0.00, shares: 7.00) )
+        trades.append( MyPrice().profit(ticker: "VEA", date: "12/22", entry: 44.56, exit: 0.00, shares: 37.00) )
         
         print(" ")
         for each in trades {

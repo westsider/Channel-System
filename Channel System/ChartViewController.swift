@@ -26,7 +26,9 @@ class SCSSyncMultiChartView: UIViewController {
     var rangeStart:Int = 0
     let axisY1Id:String = "Y1"
     let axisX1Id:String = "X1"
+    var startBar:Int = 0
     var highestPrice:Double = 0.00
+    var highestAtr:Double = 0.00
     let axisY2Id:String = "Y2"
     let axisX2Id:String = "X2"
     let maxBarsOnChart:Int = 75
@@ -73,7 +75,7 @@ class SCSSyncMultiChartView: UIViewController {
         let downWickPen:SCISolidPenStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), withThickness: 0.7)
         let ohlcDataSeries:SCIOhlcDataSeries = SCIOhlcDataSeries(xType: .dateTime, yType: .double)
         ohlcDataSeries.acceptUnsortedData = true
-        let startBar:Int = oneTicker.count - maxBarsOnChart
+        startBar = oneTicker.count - maxBarsOnChart
         
         for ( index, things ) in oneTicker.enumerated() {
             if ( debug ) { print("\(things.date!) \(things.open) \(things.high) \(things.low) \(things.close)") }
@@ -135,7 +137,11 @@ class SCSSyncMultiChartView: UIViewController {
         let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
         let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id,
                                            date: Double(rangeStart), price: highestPrice, text: statsText)
+        let guidanceText = MarketCondition().getStrMatixForChart()
+        let guideChart = ShowTrades().showStats(xID: axisX2Id, yID: axisY2Id,
+                                                date: Double(rangeStart), price: highestAtr, text: guidanceText)
         sciChartView1.annotations.add(stats)
+        sciChartView2.annotations.add(guideChart)
     }
     
     fileprivate func configureChartSuraface() {
@@ -288,12 +294,18 @@ class SCSSyncMultiChartView: UIViewController {
         let stdDevLoDataSeries:SCIXyDataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
         stdDevLoDataSeries.acceptUnsortedData = true
         //var wPctR:Double = 0.0
-        for things in marketCondition {
+        for (index, things) in marketCondition.enumerated() {
             
             if ( debug ) { print("c:\(things.close) ATR: \(things.volatilityAverage) High: \(things.stdDevClacHi) Low: \(things.stdDevClacLow)") }
             atrPctAvgDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.volatilityAverage))
             stdDevHiDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.stdDevClacHi))
             stdDevLoDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.stdDevClacLow))
+            
+            if index >= startBar {
+                if things.stdDevClacHi > highestAtr {
+                    highestAtr = things.stdDevClacHi
+                }
+            }
         }
         
         let indicatorRenderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
