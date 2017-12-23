@@ -4,7 +4,16 @@
 //
 //  Created by Warren Hansen on 12/21/17.
 //  Copyright © 2017 Warren Hansen. All rights reserved.
-//
+/*
+     1               2               3
+     Bull Volatile   Bull Normal     Bull Quiet
+ 
+     4               5               6
+     Side Volatile   Side Normal     Side Quiet
+ 
+     7               8               9
+     Bear Volatile   Bear Normal     Bear Quiet
+ */
 
 import Foundation
 import RealmSwift
@@ -266,18 +275,6 @@ class MarketCondition: Object {
         let sumOfSquaredAvgDiff = arr.map { pow($0 - avg, 2.0)}.reduce(0, {$0 + $1})
         return sqrt(sumOfSquaredAvgDiff / length)
     }
-    
-    /*
-        1               2               3
-        Bull Volatile   Bull Normal     Bull Quiet
-     
-        4               5               6
-        Side Volatile   Side Normal     Side Quiet
-     
-        7               8               9
-        Bear Volatile   Bear Normal     Bear Quiet
-    */
-    
     
     func setMatrix(trnd:Int, volatl:Int)-> (result:Int, condition:String) {
         var answer:(result:Int, condition:String) = (result:0, condition:"no condition")

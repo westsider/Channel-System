@@ -245,7 +245,7 @@ class SCSSyncMultiChartView: UIViewController {
             let high:Double = things.high
             let low:Double = things.low
             surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
-            addMatrixValues(isOn:true, date: things.date!, low: things.low, index: Double(index))
+            addMatrixValues(isOn:false, date: things.date!, low: things.low, index: Double(index))
         }
     }
     //MARK: - pctR

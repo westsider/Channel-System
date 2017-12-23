@@ -34,8 +34,13 @@ class CumulativeProfit {
         for (fileIndex, today) in dateArray.enumerated() {
             if fileIndex < 24185 { continue }
             // daily process
+            let matrix = MarketCondition().getMatixToProveOnChart(date: today.date!)
+            var marketCondition = false
+            if matrix <= 3 || matrix == 6 {
+                marketCondition = true
+            }
             // if buy then buy and record ticker and cost
-            if portfolioDict.count < 20 && today.stars >= minStars {
+            if portfolioDict.count < 20 && today.stars >= minStars && marketCondition {
                 if today.capitalReq != 0.00 {
                     if tradeCount == 0 {
                         firstTradeDate = today.date!
