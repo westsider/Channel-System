@@ -267,6 +267,18 @@ class MarketCondition: Object {
         return sqrt(sumOfSquaredAvgDiff / length)
     }
     
+    /*
+        1               2               3
+        Bull Volatile   Bull Normal     Bull Quiet
+     
+        4               5               6
+        Side Volatile   Side Normal     Side Quiet
+     
+        7               8               9
+        Bear Volatile   Bear Normal     Bear Quiet
+    */
+    
+    
     func setMatrix(trnd:Int, volatl:Int)-> (result:Int, condition:String) {
         var answer:(result:Int, condition:String) = (result:0, condition:"no condition")
         if  trnd == 1 && volatl == 1 {
