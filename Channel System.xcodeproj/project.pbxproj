@@ -13,6 +13,7 @@
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
 		0D31FF6E1FDE0F6D00D87D81 /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */; };
 		0D4A01881FC8C5CF00C53E2F /* AGG.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A01871FC8C5CF00C53E2F /* AGG.csv */; };
+		0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5A43A41FEF10EB00842801 /* S+P Returns.swift */; };
 		0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5CEC751FB378A400762900 /* PortfolioViewController.swift */; };
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
 		0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* ChartViewController.swift */; };
@@ -298,6 +299,7 @@
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
 		0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
+		0D5A43A41FEF10EB00842801 /* S+P Returns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S+P Returns.swift"; sourceTree = "<group>"; };
 		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
 		0D771E061FAE5C5E006269DD /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
@@ -849,6 +851,7 @@
 			isa = PBXGroup;
 			children = (
 				0DB6B1021FCE9A71009F6BEB /* BackTest.swift */,
+				0D5A43A41FEF10EB00842801 /* S+P Returns.swift */,
 			);
 			path = "Brute Force";
 			sourceTree = "<group>";
@@ -858,6 +861,7 @@
 			children = (
 				0DC70C6D1FE1BFEF00DC58BF /* EntryAndExits.swift */,
 				0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */,
+				0DE1C0C61FEC2538003CB393 /* Market Condition.swift */,
 			);
 			path = Optimized;
 			sourceTree = "<group>";
@@ -959,7 +963,6 @@
 		0DEFBCBF1FA912BC00C156B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0DE1C0C61FEC2538003CB393 /* Market Condition.swift */,
 				0DA11AE51FD07C140074BAD7 /* Realm */,
 				0DA11AE21FD07B620074BAD7 /* Stats */,
 				0DA11AE31FD07B920074BAD7 /* Data */,
@@ -1368,6 +1371,7 @@
 				0D77DDD01FCF8E1B007573C3 /* StatsViewController.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
 				0D31FF6E1FDE0F6D00D87D81 /* Accounts.swift in Sources */,
+				0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */,
 				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
 				0DC70C701FE1CEFB00DC58BF /* Past Trades.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,

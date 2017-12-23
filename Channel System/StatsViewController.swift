@@ -44,6 +44,8 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var annualProfitLabel: UILabel!
     
+    @IBOutlet weak var spReturnLabel: UILabel!
+    
     var galaxie = [String]()
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
@@ -92,15 +94,8 @@ class StatsViewController: UIViewController {
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
-        self.topLeft.alpha = 0.1
-        self.topRight.alpha = 0.1
-        self.backtestButton.alpha = 0.2
-        self.graphButton.alpha = 0.2
-        self.largestWinLabel.alpha = 0.2
-        self.largestLossLabel.alpha = 0.2
-        self.tradingDaysLabel.alpha = 0.2
         ActivityOne(isOn:true)
-        textAlpha(isNow: 0.1)
+        //textAlpha(isNow: 0.3)
         DispatchQueue.global(qos: .background).async {
             CumulativeProfit().weeklyProfit(debug: false) {
                 (result: Bool) in
@@ -108,14 +103,7 @@ class StatsViewController: UIViewController {
                     DispatchQueue.main.async {
                         self.getDataForChart()
                         self.ActivityOne(isOn:false)
-                        self.textAlpha(isNow: 1.0)
-                        self.topLeft.alpha = 1.0
-                        self.topRight.alpha = 1.0
-                        self.backtestButton.alpha = 1.0
-                        self.graphButton.alpha = 1.0
-                        self.largestWinLabel.alpha = 1.0
-                        self.largestLossLabel.alpha = 1.0
-                        self.tradingDaysLabel.alpha = 1.0
+                        //self.textAlpha(isNow: 1.0)
                     }
                 }
             }
@@ -132,11 +120,21 @@ class StatsViewController: UIViewController {
     
     func textAlpha(isNow:CGFloat){
         DispatchQueue.main.async {
-            //self.topLeft.alpha = isNow
-            //self.topRight.alpha = isNow
+            self.topLeft.alpha = isNow
+            self.topRight.alpha = isNow
             self.midLeft.alpha = isNow
             self.midRight.alpha = isNow
             self.bottomLeft.alpha = isNow
+            self.topLeft.alpha = isNow
+            self.topRight.alpha = isNow
+            self.backtestButton.alpha = isNow
+            self.graphButton.alpha = isNow
+            self.largestWinLabel.alpha = isNow
+            self.largestLossLabel.alpha = isNow
+            self.tradingDaysLabel.alpha = isNow
+            self.spReturnLabel.alpha = isNow
+            self.minStarsLabel.alpha = isNow
+            self.annualProfitLabel.alpha = isNow
         }
     }
     
@@ -144,7 +142,7 @@ class StatsViewController: UIViewController {
         DispatchQueue.main.async {
             if isOn {
                 self.activityIndicator.startAnimating()
-                self.textAlpha(isNow: 0.1)
+                self.textAlpha(isNow: 0.3)
                 self.backtestButton.alpha = 0.2
                 self.graphButton.alpha = 0.2
             } else {
@@ -202,6 +200,7 @@ class StatsViewController: UIViewController {
                 self.largestLossLabel.text = "Largest Loss \(lLos)"
                 self.minStarsLabel.text = "Minimun Stars: \(self.minStars)"
                 self.annualProfitLabel.text = "$\(annualProfitString) Annually"
+                self.spReturnLabel.text = SpReturns().textForStats(yearEnding: 2007)
                 self.ActivityOne(isOn: false)
                 self.getDataForChart()
             }

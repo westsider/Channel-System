@@ -163,6 +163,7 @@ class MarketCondition: Object {
     
     //MARK: -  Market condition func to be called at price update after sma200
     func calcMarketCondFirstRun(debug:Bool, completion: @escaping () -> ()) {
+        deleteAll()
         let realm = try! Realm()
         if realm.objects(MarketCondition.self).last != nil {
             print("\nYo! we have data in market condition so we are not calling calcMarketCondFirstRun()\n")

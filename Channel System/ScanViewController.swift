@@ -46,10 +46,10 @@ class ScanViewController: UIViewController {
         tradeButton(isOn: false)
         updateButton(isOn: false)
         ManualTrades().showProfit()
-        // iphone 7+ Sim is  192397
-        //MarketCondition().deleteAll()
+        // iphone 7+ Sim is  192397        
         //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock) // needs a completion handler
-        //MarketCondition().testlast100()
+        _ = SpReturns().textForStats(yearEnding: 2007)
+        _ = SpReturns().textForStats(yearEnding: 2017)
     }
     
     override func viewDidAppear(_ animated: Bool) {
