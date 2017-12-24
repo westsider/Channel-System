@@ -31,8 +31,13 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let task:String = "\(tasks[indexPath.row].ticker)"
         cell.textLabel?.text = task
-        let profit:Double = tasks[indexPath.row].profit
-        cell.detailTextLabel?.text = String(profit)
+       
+        let profit:Double = (tasks[indexPath.row].entry - tasks[indexPath.row].close) * Double(tasks[indexPath.row].shares)
+         print("\nHere is the entry price \(tasks[indexPath.row].entry) and close \(tasks[indexPath.row].close) shares \(tasks[indexPath.row].shares) and profit \(profit)")
+        cell.detailTextLabel?.text = (String(format: "%.2f", profit))
+        if profit < 0 {
+            cell.contentView.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        }
         return cell
     }
     
