@@ -19,7 +19,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let days:Int = 1
+        let days:Int = 4
         title = "last \(days) day(s)"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
@@ -52,6 +52,10 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let ticker:String = tasks[indexPath.row].ticker
+        if tasks[indexPath.row].inTrade && !tasks[indexPath.row].exitedTrade {
+            print("\nI already own this ticker")
+            cell.contentView.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        }
         cell.textLabel?.text = BackTest().tableViewString(ticker: ticker)
         
         let longDate:String = tasks[indexPath.row].dateString
@@ -59,6 +63,8 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         let slash:String = date.replacingOccurrences(of: "-", with: "/")
         
         cell.detailTextLabel?.text = slash
+        
+        // if portfolio contains ticker, make bkg Yellow 
         return cell
     }
     
