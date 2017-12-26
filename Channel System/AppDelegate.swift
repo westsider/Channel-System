@@ -37,6 +37,7 @@
 import UIKit
 import SciChart
 import RealmSwift
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -77,6 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         "</LicenseContract>"
         
         SCIChartSurface.setRuntimeLicenseKey(licencing)
+        
+        FirebaseApp.configure()
         
         return true
     }

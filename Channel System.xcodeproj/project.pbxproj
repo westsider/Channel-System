@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0D129D5B1FBB4D1F003C6E5E /* MDY.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D501FBB4D1D003C6E5E /* MDY.csv */; };
 		0D129D5D1FBB4D1F003C6E5E /* IWM.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D521FBB4D1D003C6E5E /* IWM.csv */; };
+		0D16296C1FF1E49B00E11A64 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D16296B1FF1E49B00E11A64 /* GoogleService-Info.plist */; };
+		0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D16296D1FF1E54700E11A64 /* Firebase Service.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
 		0D31FF6E1FDE0F6D00D87D81 /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */; };
@@ -295,6 +297,8 @@
 /* Begin PBXFileReference section */
 		0D129D501FBB4D1D003C6E5E /* MDY.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MDY.csv; sourceTree = "<group>"; };
 		0D129D521FBB4D1D003C6E5E /* IWM.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWM.csv; sourceTree = "<group>"; };
+		0D16296B1FF1E49B00E11A64 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0D16296D1FF1E54700E11A64 /* Firebase Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Service.swift"; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
 		0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
@@ -900,6 +904,7 @@
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
 				0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */,
+				0D16296B1FF1E49B00E11A64 /* GoogleService-Info.plist */,
 				0D949CE31FA3B7B600960BA2 /* Info.plist */,
 			);
 			path = "Channel System";
@@ -941,6 +946,7 @@
 		0DA11AE51FD07C140074BAD7 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
+				0D16296D1FF1E54700E11A64 /* Firebase Service.swift */,
 				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
 				0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */,
 				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
@@ -1180,6 +1186,7 @@
 				0D809BD01FC8D2F300CE476D /* PGJ.csv in Resources */,
 				0D809B551FC8D2F300CE476D /* CVX.csv in Resources */,
 				0D809B201FC8D2F300CE476D /* KO.csv in Resources */,
+				0D16296C1FF1E49B00E11A64 /* GoogleService-Info.plist in Resources */,
 				0D809B261FC8D2F300CE476D /* TLT.csv in Resources */,
 				0D809BA11FC8D2F300CE476D /* DBC.csv in Resources */,
 				0D809B251FC8D2F300CE476D /* SOXX.csv in Resources */,
@@ -1314,13 +1321,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Channel System-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BEB7CCBE8AB21A68925431EF /* [CP] Embed Pods Frameworks */ = {
@@ -1329,9 +1339,30 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Channel System/Pods-Channel System-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CSV.swift/CSV.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${PODS_ROOT}/SciChart/SciChart.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CSV.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SciChart.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1385,6 +1416,7 @@
 				0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */,
+				0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */,
 				0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */,
 				0DD37FF81FD6427E00D1CFE7 /* Cumulative Results.swift in Sources */,
 				0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */,
