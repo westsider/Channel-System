@@ -31,7 +31,7 @@ class ScanViewController: UIViewController {
     let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
     let mcBlock = { print( "\nMarket Condition block finished  <----------\n" ) }
-    
+    let firebaseBlock = { print( "\nSave Firebase block finished  <----------\n" ) }
     let prices = Prices()
     var updatedProgress: Float = 0
     var incProgress: Float = 0
@@ -46,18 +46,31 @@ class ScanViewController: UIViewController {
         tradeButton(isOn: false)
         updateButton(isOn: false)
         ManualTrades().showProfit()
-        // iphone 7+ Sim is  192397        
+        // iphone 7+ Sim is  191634
         //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock) // needs a completion handler
         _ = SpReturns().textForStats(yearEnding: 2007)
         _ = SpReturns().textForStats(yearEnding: 2017)
     }
     
+    func firebaseBackup(now:Bool) {
+        if now {
+            tradeButton(isOn: false)
+            updateButton(isOn: false)
+            self.updateUI(with: "Backing Up To Firebase...", spinIsOff: false)
+            FirbaseLink().backUp(completion: firebaseBlock)
+            self.updateUI(with: "Backing Up Complete", spinIsOff: true)
+            tradeButton(isOn: true)
+            updateButton(isOn: true)
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
-        
         if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
             firstRun()
         } else {
             subsequentRuns()
+            firebaseBackup(now: false)
+            FirbaseLink().allData(clear: false)
         }
     }
     
