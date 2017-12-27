@@ -327,10 +327,10 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UG5-we-OMK">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <color key="backgroundColor" red="0.3376372755" green="0.34831565619999999" blue="0.39609014990000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="sectionIndexBackgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="sectionIndexBackgroundColor" red="0.12567600609999999" green="0.1331624985" blue="0.145101428" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="jhL-G9-lrH" detailTextLabel="FX9-zd-05C" style="IBUITableViewCellStyleValue1" id="Ynw-OM-yQu">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -367,7 +367,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.12567600607872009" green="0.13316249847412109" blue="0.14510142803192139" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="UG5-we-OMK" firstAttribute="bottom" secondItem="2OD-7w-R1c" secondAttribute="bottom" id="3nK-M7-F2E"/>
                             <constraint firstItem="UG5-we-OMK" firstAttribute="trailing" secondItem="2OD-7w-R1c" secondAttribute="trailing" id="NuY-6B-UTX"/>

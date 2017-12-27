@@ -24,6 +24,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         tasks = RealmHelpers().getOpenTrades()
         TradeManage().printOpenTrades()
         title = "Portfolio"
+        
     }
     
     
@@ -32,20 +33,22 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         sender.setTitle(title.0, for: [])
         sender.setTitleColor(title.1, for: [])
         sender.backgroundColor = title.2
+        tableView.reloadData()
     }
     
     func activateButton(bool: Bool)-> (String, UIColor, UIColor) {
         isOn = bool
         let onColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         let offColor = #colorLiteral(red: 0.3489862084, green: 0.3490410447, blue: 0.3489741683, alpha: 1)
-
         let onTitle = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         let offTitle = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        
         let color = bool ? onColor : offColor
         let title = bool ? "Closed" : "Open"
         let titleColor = bool ? onTitle : offTitle
         let bkgColor = bool ? onColor : offColor
+        
+        //tasks = RealmHelpers().getOpenTrades()
+        tasks = bool ? RealmHelpers().getClosedTrades() : RealmHelpers().getOpenTrades()
         print(isOn,color, title, titleColor)
         return (title, titleColor, bkgColor)
     }
@@ -64,8 +67,11 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let profit:Double = (tasks[indexPath.row].entry - tasks[indexPath.row].close) * Double(tasks[indexPath.row].shares)
          print("\nHere is the entry price \(tasks[indexPath.row].entry) and close \(tasks[indexPath.row].close) shares \(tasks[indexPath.row].shares) and profit \(profit)")
         cell.detailTextLabel?.text = (String(format: "%.2f", profit))
+        
         if profit < 0 {
-            cell.contentView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+            cell.contentView.backgroundColor = UIColorScheme().alertCell
+        } else {
+            cell.contentView.backgroundColor = UIColorScheme().activeCell
         }
         return cell
     }
