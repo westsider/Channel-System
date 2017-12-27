@@ -29,6 +29,12 @@ class Utilities {
         return formatter.string(from: date)
     }
     
+    func convertToStringNoTimeFrom(date: Date)-> String {
+        formatter.dateFormat = "MM/dd/yyyy"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter.string(from: date)
+    }
+    
     // convert UTC to local
     func convertUTCtoLocal(debug: Bool, UTC: Date)-> Date {
         if ( debug ) { print("convertUTCtoLocal\nUTC:       \(today)") }

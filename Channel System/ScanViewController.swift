@@ -106,9 +106,9 @@ class ScanViewController: UIViewController {
         updateRealm = Utilities().realmNotCurrent(debug: false)
         lastDateInRealm = Prices().getLastDateInRealm(debug: false)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        let lastDate = Utilities().convertToStringFrom(date: lastDateInRealm)
-        let thisString = "Last update was \(lastDate) zulu"
-currentProcessLable.text = thisString //LastUpdate().checkUpate()
+        let lastUpDate = Utilities().convertToStringNoTimeFrom(date: lastDateInRealm)
+        let lastUpDateString = "Updated on \(lastUpDate)"
+        currentProcessLable.text = lastUpDateString
         activity.stopAnimating()
         tradeButton(isOn: true)
         updateButton(isOn: true)
