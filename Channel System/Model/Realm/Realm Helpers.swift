@@ -44,6 +44,15 @@ class RealmHelpers: Object {
         print("\nRealm \tCleared!\n")
     }
 
+    func getTaskIDfor(yyyyMMdd:String, ticker:String)->String {
+        // 2017-12-27 AAPL
+        if let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false).filter("dateString == %@", yyyyMMdd).last {
+            return (oneTicker.taskID)
+        } else {
+            return "noTaskID"
+        }
+
+    }
     //MARK: - Make Entry
     func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String, capital: Double) {
         //print("You entered \(entryString)")
@@ -63,6 +72,8 @@ class RealmHelpers: Object {
         
         if ( debug ) { _ = self.getOpenTrades() }
     }
+    
+    
     //MARK: - Sort Entries
     func getOpenTrades()-> Results<Prices> {
         let realm = try! Realm()

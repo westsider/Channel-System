@@ -310,7 +310,7 @@
                     <connections>
                         <outlet property="bottomView" destination="u8c-Sm-UNG" id="cJY-Ex-6E9"/>
                         <outlet property="topView" destination="Xsk-wm-kOS" id="l41-0F-LdE"/>
-                        <segue destination="elU-G9-o6D" kind="show" identifier="ChartToPortfolio" id="09v-oY-kbr"/>
+                        <segue destination="Syc-BF-fgJ" kind="show" identifier="ChartToPortfolio" id="09v-oY-kbr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0IU-Ei-hOa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -326,7 +326,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UG5-we-OMK">
-                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" red="0.3376372755" green="0.34831565619999999" blue="0.39609014990000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -376,13 +376,30 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2OD-7w-R1c"/>
                     </view>
+                    <navigationItem key="navigationItem" id="6AL-L8-hKD">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="x2n-xg-Bzt">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Kdk-LQ-chb">
+                                <rect key="frame" x="276" y="4" width="83" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                <state key="normal" title="Open">
+                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="portfolioSwitch:" destination="elU-G9-o6D" eventType="touchUpInside" id="AR2-9L-EHP"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="openTradesBttnTxt" destination="Kdk-LQ-chb" id="bEW-LO-t07"/>
                         <outlet property="tableView" destination="UG5-we-OMK" id="Avy-VL-2D6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="awq-di-R2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1422" y="824"/>
+            <point key="canvasLocation" x="2105" y="824"/>
         </scene>
         <!--Stats-->
         <scene sceneID="1ja-Hw-86N">
@@ -601,7 +618,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="77X-Kh-uDL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2109.5999999999999" y="824.43778110944538"/>
+            <point key="canvasLocation" x="65" y="1522"/>
         </scene>
         <!--Pref View Controller-->
         <scene sceneID="C15-TO-dIT">
@@ -940,7 +957,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rxq-Bk-h1F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2773.5999999999999" y="824.43778110944538"/>
+            <point key="canvasLocation" x="748" y="1522"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VeR-NG-g8r">
@@ -1203,6 +1220,24 @@
                 <exit id="tU1-8h-orj" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2104.8000000000002" y="115.59220389805098"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="gFp-cI-PQc">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Syc-BF-fgJ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8Sy-uF-u2g">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="elU-G9-o6D" kind="relationship" relationship="rootViewController" id="2gx-6t-aL1"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9l6-UA-MCw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1420.8" y="823.98800599700155"/>
         </scene>
     </scenes>
     <resources>
