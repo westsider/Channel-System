@@ -76,6 +76,32 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         return cell
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "$\(totalOpenProfit().0) profit \t\(totalOpenProfit().1)% win"
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int){
+        view.tintColor = UIColorScheme().activeCell
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = UIColor.white
+        header.textLabel?.font = UIFont(name: "PingFang HK", size: 20)
+    }
+    
+    func totalOpenProfit()->(String,String) {
+        var sum = 0.00
+        var wins = 0.00
+        for each in tasks {
+            let profit:Double = (each.entry - each.close) * Double(each.shares)
+            sum += profit
+            if profit > 0 {
+                wins += 1
+            }
+        }
+        let winPct = (wins / Double(tasks.count)) * 100
+        let winPctStr = String(format: "%.2f", winPct)
+        return (String(format: "%.2f", sum), winPctStr)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
         selectedSymbol(index: indexPath.row)
