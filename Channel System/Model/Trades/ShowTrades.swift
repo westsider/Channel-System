@@ -46,7 +46,7 @@ class ShowTrades {
         textAnnotation.text = text
         textAnnotation.style.textStyle = textStyle;
         textAnnotation.style.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        textAnnotation.style.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        textAnnotation.style.backgroundColor = #colorLiteral(red: 0.1247214451, green: 0.1294646859, blue: 0.1380600333, alpha: 0.5)
         textAnnotation.isEditable = false
 
         textAnnotation.xAxisId = xID
@@ -69,7 +69,7 @@ class ShowTrades {
         textAnnotation.text = text
         textAnnotation.style.textStyle = textStyle;
         textAnnotation.style.textColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
-        textAnnotation.style.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        textAnnotation.style.backgroundColor = #colorLiteral(red: 0.1247214451, green: 0.1294646859, blue: 0.1380600333, alpha: 0)
         textAnnotation.isEditable = false
         
         textAnnotation.xAxisId = xID

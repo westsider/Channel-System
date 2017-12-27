@@ -854,8 +854,10 @@
 		0D14D0031FE5AB2D000BA6D5 /* Brute Force */ = {
 			isa = PBXGroup;
 			children = (
+				0DE78F541FD888B400915777 /* Stats Object.swift */,
 				0DB6B1021FCE9A71009F6BEB /* BackTest.swift */,
 				0D5A43A41FEF10EB00842801 /* S+P Returns.swift */,
+				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 			);
 			path = "Brute Force";
 			sourceTree = "<group>";
@@ -915,8 +917,6 @@
 			children = (
 				0D14D0041FE5AB56000BA6D5 /* Optimized */,
 				0D14D0031FE5AB2D000BA6D5 /* Brute Force */,
-				0DE78F541FD888B400915777 /* Stats Object.swift */,
-				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 			);
 			path = Stats;
 			sourceTree = "<group>";

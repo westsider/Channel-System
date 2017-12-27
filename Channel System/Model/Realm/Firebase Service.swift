@@ -43,52 +43,53 @@ class FirbaseLink {
         let galaxie:[String] = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         var counter:Int = 0
         var totalCount:Int = 1000000
-        for ticker in galaxie {
-            let thisPrice = Prices().sortOneTicker(ticker: ticker, debug: false)
-            
-            totalCount = galaxie.count * thisPrice.count
-            for each in thisPrice {
-                let key = ref.childByAutoId().key
-                let onePrice = [ "ticker": each.ticker as String,
-                    "dateString": each.dateString as String,
-                    "date": "\(each.date!)" as String,
-                    "exitDate": "\(each.exitDate)" as String,
-                    "open": each.open as Double,
-                    "high": each.high as Double,
-                    "low": each.low as Double,
-                    "close": each.close as Double,
-                    "volume": each.volume as Double,
-                    "movAvg10": each.movAvg10 as Double,
-                    "movAvg200": each.movAvg200 as Double,
-                    "wPctR": each.wPctR as Double,
-                    // Manage Trade
-                    "entry": each.entry as Double,
-                    "stop": each.stop as Double,
-                    "target": each.target as Double,
-                    "risk": each.risk as Double,
-                    "profit": each.profit as Double,
-                    "loss": each.loss as Double,
-                    "capitalReq": each.capitalReq as Double,
-                    "backTestProfit": each.backTestProfit as Double,
-                    "shares": each.shares as Int,
-                    "stars": each.stars as Int,
-                    "account": each.account as String,
-                    "taskID": each.taskID as String,
-                    "inTrade": each.inTrade as Bool,
-                    "exitedTrade": each.exitedTrade as Bool,
-                    "longEntry": each.longEntry as Bool,
-                ] as [String : Any]
+        DispatchQueue.global(qos: .background).async {
+            for ticker in galaxie {
+                let thisPrice = Prices().sortOneTicker(ticker: ticker, debug: false)
                 
-                ref.child(key).setValue(onePrice)
-                counter += 1
-                print("Saved \(counter) of \(totalCount) to firebase")
+                totalCount = galaxie.count * thisPrice.count
+                for each in thisPrice {
+                    let key = ref.childByAutoId().key
+                    let onePrice = [ "ticker": each.ticker as String,
+                        "dateString": each.dateString as String,
+                        "date": "\(each.date!)" as String,
+                        "exitDate": "\(each.exitDate)" as String,
+                        "open": each.open as Double,
+                        "high": each.high as Double,
+                        "low": each.low as Double,
+                        "close": each.close as Double,
+                        "volume": each.volume as Double,
+                        "movAvg10": each.movAvg10 as Double,
+                        "movAvg200": each.movAvg200 as Double,
+                        "wPctR": each.wPctR as Double,
+                        // Manage Trade
+                        "entry": each.entry as Double,
+                        "stop": each.stop as Double,
+                        "target": each.target as Double,
+                        "risk": each.risk as Double,
+                        "profit": each.profit as Double,
+                        "loss": each.loss as Double,
+                        "capitalReq": each.capitalReq as Double,
+                        "backTestProfit": each.backTestProfit as Double,
+                        "shares": each.shares as Int,
+                        "stars": each.stars as Int,
+                        "account": each.account as String,
+                        "taskID": each.taskID as String,
+                        "inTrade": each.inTrade as Bool,
+                        "exitedTrade": each.exitedTrade as Bool,
+                        "longEntry": each.longEntry as Bool,
+                    ] as [String : Any]
+                    
+                    ref.child(key).setValue(onePrice)
+                    counter += 1
+                    print("Saved \(counter) of \(totalCount) to firebase")
+                }
             }
         }
         if counter == totalCount {
-            
-        }
-        DispatchQueue.main.async {
-            completion()
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
     
