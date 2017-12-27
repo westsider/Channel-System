@@ -46,8 +46,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let title = bool ? "Closed" : "Open"
         let titleColor = bool ? onTitle : offTitle
         let bkgColor = bool ? onColor : offColor
-        
-        //tasks = RealmHelpers().getOpenTrades()
+
         tasks = bool ? RealmHelpers().getClosedTrades() : RealmHelpers().getOpenTrades()
         print(isOn,color, title, titleColor)
         return (title, titleColor, bkgColor)
