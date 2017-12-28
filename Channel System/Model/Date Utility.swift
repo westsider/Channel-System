@@ -30,7 +30,7 @@ class Utilities {
     }
     
     func convertToStringNoTimeFrom(date: Date)-> String {
-        formatter.dateFormat = "MM/dd/yyyy"
+        formatter.dateFormat = "MM/dd/yy"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
     }

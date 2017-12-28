@@ -17,15 +17,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var currentProcessLable: UILabel!
     
-    @IBOutlet weak var activity: UIActivityIndicatorView!
+    @IBOutlet weak var marketCondText: UITextView!
     
-    @IBOutlet weak var circleImage: UIImageView!
+
+    @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var updateButton: UIButton!
     
     @IBOutlet weak var tradeButton: UIButton!
-    
-    @IBOutlet weak var topView: UIView!
     
     let size = CGSize(width: 100, height: 100)
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
@@ -45,7 +44,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var lastDateInRealm:Date!
     var galaxie = [String]()
     var marketCondition:Results<MarketCondition>!
-    var marketReportString:String = "no report"
+    var marketReportString = ("No Title", "No Text")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,37 +59,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         marketCondition = MarketCondition().getData()
         marketReportString = overview(debug: false)
         print("\n", marketReportString, "\n")
-    }
-    
-    func overview(debug:Bool)->String {
-        let latest = marketCondition.last!
-        var pct:Double = 0.0
-        var longTrendString = ""
-        
-        if latest.close > latest.upperBand {
-            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
-            longTrendString = "\n\(String(format: "%.2f", pct))% above the long term trend"
-        } else if latest.close < latest.lowerBand {
-            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
-            longTrendString = "\n\(String(format: "%.2f", pct))%) below the long term trend"
-        } else {
-            longTrendString = "\n\the index is withing the trend bands"
-        }
-        
-        var thisString = "Market Condition on \(latest.dateString)"
-        
-        thisString  += "\nS&P 500 Index is at \(latest.close)"
-        
-        thisString  += longTrendString
-        
-        thisString  += "\nWe are in a \(latest.trendString) Trend"
-        
-        thisString += "\nThe volatility is currently \(latest.volatilityString)"
-        
-        thisString += "\n\(latest.guidanceChart) for Longs"
-        
-        if ( debug ) { print(thisString) }
-        return thisString
     }
     
     func firebaseBackup(now:Bool) {
@@ -160,12 +128,44 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         currentProcessLable.text = lastUpDateString
         tradeButton(isOn: true)
         updateButton(isOn: true)
-        
-        //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-            self.stopAnimating()
-        //}
+ 
+        self.stopAnimating()
+        titleLabel.text = marketReportString.0
+        marketCondText.text = marketReportString.1
+        print("title \(marketReportString.0) body \(marketReportString.1)")
     }
 
+    func overview(debug:Bool)-> (String, String ) {
+        let latest = marketCondition.last!
+        var pct:Double = 0.0
+        var longTrendString = ""
+        let dateString = Utilities().convertToStringNoTimeFrom(date: latest.date!)
+        if latest.close > latest.upperBand {
+            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
+            longTrendString = "\n\t\t\(String(format: "%.2f", pct))% above the long term trend"
+        } else if latest.close < latest.lowerBand {
+            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
+            longTrendString = "\n\t\t\(String(format: "%.2f", pct))%) below the long term trend"
+        } else {
+            longTrendString = "\n\t\the index is withing the trend bands"
+        }
+        
+        let titleString = "Market Condition \(dateString)"
+        
+        var thisString  = "\t\tS&P 500 Index is at \(latest.close)"
+        
+        thisString  += longTrendString
+        
+        thisString  += "\n\t\tWe are in a \(latest.trendString) Trend"
+        
+        thisString += "\n\t\tThe volatility is currently \(latest.volatilityString)"
+        
+        thisString += "\n\t\t\(latest.guidanceChart) for Longs"
+        
+        if ( debug ) { print(thisString) }
+        return ( titleString, thisString )
+    }
+    
     @IBAction func getNewDataAction(_ sender: Any) {
         //MARK: - get new data
         LastUpdate().incUpdate()
@@ -371,32 +371,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             //print(with)
             self.lastUpdateLable.text =  with
         }
-    }
-    
-    func setUpAnnimation() {
-        
-        let x = self.topView.center.x
-        let y = self.topView.center.y
-        let size:CGFloat = 150
-        let half:CGFloat = size / 2
-        let frame = CGRect(x: (x - half), y: (y - half), width: size, height: size)
-        let activityIndicatorView = NVActivityIndicatorView(frame: frame)
-        activityIndicatorView.type = .ballScaleRippleMultiple
-        activityIndicatorView.color = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        
-//        self.view.addSubview(activityIndicatorView)
-//        if isOn {
-//            print("run spinner")
-//            activityIndicatorView.startAnimating()
-//            self.screenDim(isOn: true)
-//
-//        }
-//        if !isOn {
-//            activityIndicatorView.stopAnimating()
-//            print("stop spinner")
-//            self.screenDim(isOn: false)
-//        }
-        
     }
     
     func screenDim(isOn:Bool) {

@@ -14,6 +14,7 @@
     <customFonts key="customFonts">
         <array key="PingFang.ttc">
             <string>PingFangHK-Regular</string>
+            <string>PingFangHK-Semibold</string>
             <string>PingFangSC-Regular</string>
         </array>
     </customFonts>
@@ -48,7 +49,7 @@
                                 <rect key="frame" x="16" y="293" width="343" height="100"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting to update or trade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hQG-0g-wbn">
-                                        <rect key="frame" x="8" y="38.5" width="327" height="24"/>
+                                        <rect key="frame" x="8" y="38" width="327" height="24"/>
                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -92,25 +93,56 @@
                                     <constraint firstAttribute="width" secondItem="wG0-AO-Vih" secondAttribute="height" multiplier="91:30" id="c7b-aa-YQ0"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DYj-rs-tgv" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
-                                <rect key="frame" x="16" y="82" width="343" height="191"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Updating database and calculating markert condition." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-xe-Ufe">
+                                <rect key="frame" x="16" y="186" width="343" height="91"/>
+                                <color key="backgroundColor" red="0.1885371208190918" green="0.19965288043022156" blue="0.22353574633598328" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="textColor" red="0.52154112490000004" green="0.65439286890000004" blue="0.97105586529999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" calendarEvent="YES"/>
+                            </textView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sql-BG-IWs">
+                                <rect key="frame" x="16" y="87" width="343" height="73"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Market Condition for Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Lq-Tm-bk2">
+                                        <rect key="frame" x="21" y="8" width="314" height="57"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Semibold" family="PingFang HK" pointSize="20"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="1Lq-Tm-bk2" secondAttribute="trailing" constant="8" id="6bT-q3-xZ1"/>
+                                    <constraint firstItem="1Lq-Tm-bk2" firstAttribute="leading" secondItem="Sql-BG-IWs" secondAttribute="leading" constant="21" id="V2X-ja-1TK"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="73" id="XQe-6Z-CC8"/>
+                                    <constraint firstAttribute="bottom" secondItem="1Lq-Tm-bk2" secondAttribute="bottom" constant="8" id="ew9-um-KHU"/>
+                                    <constraint firstItem="1Lq-Tm-bk2" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="top" constant="8" id="gIx-hZ-jzy"/>
+                                    <constraint firstAttribute="height" constant="73" id="wZN-58-1nT"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.19245842099189758" green="0.20357471704483032" blue="0.22745734453201294" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="DYj-rs-tgv" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="18" id="07Z-Ja-6SN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Sql-BG-IWs" secondAttribute="trailing" constant="16" id="0hK-Zk-RUC"/>
+                            <constraint firstItem="dhA-xe-Ufe" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="bottom" constant="26" id="1wc-d3-jx9"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="23" id="52m-1w-gdj"/>
+                            <constraint firstItem="dhA-xe-Ufe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="8Mg-h1-qNf"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pjh-GY-89w" secondAttribute="trailing" constant="16" id="ADG-GJ-iQh"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="top" secondItem="Pjh-GY-89w" secondAttribute="bottom" constant="18" id="ArK-jY-dM7"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wG0-AO-Vih" secondAttribute="bottom" constant="24" id="IPt-23-nlC"/>
                             <constraint firstItem="Gtg-gI-fW5" firstAttribute="top" secondItem="o5g-HL-Lw5" secondAttribute="bottom" constant="19" id="PYF-Nw-pab"/>
                             <constraint firstItem="wG0-AO-Vih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Pcf-4A-Pfm"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Rjj-vK-vlh"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="T4l-QU-sRU"/>
+                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="dhA-xe-Ufe" secondAttribute="bottom" constant="16" id="Ucs-uw-nkm"/>
+                            <constraint firstItem="dhA-xe-Ufe" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="bottom" constant="26" id="Uff-tG-RGN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wG0-AO-Vih" secondAttribute="trailing" constant="16" id="W9E-96-tJe"/>
-                            <constraint firstItem="DYj-rs-tgv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="WDk-gf-lbB"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DYj-rs-tgv" secondAttribute="trailing" constant="16" id="X7r-UA-Wyr"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Sql-BG-IWs" secondAttribute="trailing" constant="16" id="dP5-2u-gnO"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="eDE-aj-5rv"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dhA-xe-Ufe" secondAttribute="trailing" constant="16" id="jx1-2K-eAK"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-HL-Lw5" secondAttribute="trailing" constant="16" id="lSs-zr-yTD"/>
-                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="DYj-rs-tgv" secondAttribute="bottom" constant="20" id="phm-Ne-d50"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="23" id="oYU-9C-5Pt"/>
                             <constraint firstItem="Pjh-GY-89w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="qj9-TZ-W41"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -126,7 +158,8 @@
                     <connections>
                         <outlet property="currentProcessLable" destination="lIN-xi-Yu4" id="vSU-cH-Eiw"/>
                         <outlet property="lastUpdateLable" destination="hQG-0g-wbn" id="1IB-IW-pEN"/>
-                        <outlet property="topView" destination="DYj-rs-tgv" id="3GA-5R-wMC"/>
+                        <outlet property="marketCondText" destination="dhA-xe-Ufe" id="voU-gh-Acv"/>
+                        <outlet property="titleLabel" destination="1Lq-Tm-bk2" id="WQe-HH-KG4"/>
                         <outlet property="tradeButton" destination="x8N-0N-Aed" id="ddf-ar-VLP"/>
                         <outlet property="updateButton" destination="Gtg-gI-fW5" id="TBC-09-I4B"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>
