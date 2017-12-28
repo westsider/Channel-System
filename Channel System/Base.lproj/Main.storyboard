@@ -411,7 +411,7 @@
                         <viewLayoutGuide key="safeArea" id="2OD-7w-R1c"/>
                     </view>
                     <navigationItem key="navigationItem" id="6AL-L8-hKD">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="x2n-xg-Bzt">
+                        <barButtonItem key="rightBarButtonItem" id="x2n-xg-Bzt">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Kdk-LQ-chb">
                                 <rect key="frame" x="276" y="4" width="83" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

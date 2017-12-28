@@ -59,7 +59,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let date = tasks[indexPath.row].dateString
-        let shortDate = String(date.characters.dropFirst(5))
+        let shortDate = date.dropFirst(5)
         let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker)"
         cell.textLabel?.text = task
        
