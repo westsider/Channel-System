@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import RealmSwift
 
 class PortfolioViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -57,6 +58,11 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+//        print("\nThis is the task loaded:")
+//        debugPrint(tasks)
+//        print("")
+        
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let date = tasks[indexPath.row].dateString
         let shortDate = date.dropFirst(5)
@@ -64,9 +70,9 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let closeString = String(format: "%.2f", (thisSymbol?.close)!)
         let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString)"
         cell.textLabel?.text = task
-       
+        //print("isOn: \(isOn) \(tasks[indexPath.row].ticker) \(tasks[indexPath.row].taskID)")
         let profit:Double = (thisSymbol!.close - tasks[indexPath.row].entry) * Double(tasks[indexPath.row].shares)
-        print("\n\(tasks[indexPath.row].ticker) entry: \(tasks[indexPath.row].entry) and close \(thisSymbol!.close) shares \(tasks[indexPath.row].shares) and profit \(profit)")
+        //print("\n\(tasks[indexPath.row].ticker) entry: \(tasks[indexPath.row].entry) and close \(thisSymbol!.close) shares \(tasks[indexPath.row].shares) and profit \(profit)")
         cell.detailTextLabel?.text = (String(format: "%.2f", profit))
         
         if profit < 0 {
@@ -78,7 +84,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let openProfit = totalOpenProfit()
+        let openProfit = totalOpenProfit(debug: false)
         return "$\(openProfit.0) profit \t\(openProfit.1)% win"
     }
     
@@ -89,13 +95,13 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         header.textLabel?.font = UIFont(name: "PingFang HK", size: 20)
     }
     
-    func totalOpenProfit()->(String,String) {
+    func totalOpenProfit(debug:Bool)->(String,String) {
         var sum = 0.00
         var wins = 0.00
         for each in tasks {
             let thisSymbol = Prices().sortOneTicker(ticker: each.ticker, debug: false).last
             let profit:Double = (thisSymbol!.close - each.entry ) * Double(each.shares)
-            print("\(each.ticker) profit: \(String(format: "%.2f", profit)) = c:\(thisSymbol!.close) - e:\(each.entry) * s:\(each.shares)")
+            if debug {print("\(each.ticker) profit: \(String(format: "%.2f", profit)) = c:\(thisSymbol!.close) - e:\(each.entry) * s:\(each.shares)")}
             sum += profit
             if profit > 0 {
                 wins += 1
@@ -109,6 +115,28 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
         selectedSymbol(index: indexPath.row)
+        
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .delete
+    }
+    
+    //MARK: - Swipe left to delete old trade if isOn bool is true
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+
+        if isOn {
+            if editingStyle == .delete {
+                print("swipe left on \(tasks[indexPath.row].taskID)")
+                RealmHelpers().deleteClosedTrade(taskID: tasks[indexPath.row].taskID, debug: false)
+                tasks = RealmHelpers().getClosedTrades()
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+       }
     }
     
     func selectedSymbol(index: Int) {

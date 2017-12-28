@@ -136,6 +136,12 @@ class Prices: Object {
         return sortedByDate
     }
     
+    func getOnePriceFrom(taskID:String)-> Prices {
+        let realm = try! Realm()
+        let thisItem = realm.objects(Prices.self).filter("taskID == %@", taskID).first!
+        return thisItem
+    }
+    
     func getOneDateFrom(taskID:String)-> Prices {
         let realm = try! Realm()
         let tickerID = realm.objects(Prices.self).filter("taskID == %@", taskID).first!

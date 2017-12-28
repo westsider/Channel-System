@@ -50,7 +50,7 @@ class ManualTrades {
         
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/19", entry: 73.00, exit: 0.00, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "RSX", date: "12/19", entry: 20.82, exit: 0.00, shares: 80.00) )
-    trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.64, exit: 0.00, shares: 7.00) )
+        trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.64, exit: 0.00, shares: 7.00) )
         trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.74, exit: 0.00, shares: 14.00) )
         trades.append( MyPrice().profit(ticker: "MCD", date: "12/20", entry: 172.21, exit: 0.00, shares: 9.00) )
         trades.append( MyPrice().profit(ticker: "MMM", date: "12/20", entry: 237.05, exit: 0.00, shares: 7.00) )
@@ -89,15 +89,14 @@ class ManualTrades {
         //makePastEntry()
     }
     
-    func makePastEntry(){
-        let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: "2017-12-19", ticker: "TLT")
-        print(myTaskID)
+    func makePastEntry(yyyyMMdd: String, ticker: String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, account:String, capitol:Double){
+        let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
+        print("Found TaskID: \(myTaskID) for \(ticker)")
         let tickerInQuestion = Prices().getOneDateFrom(taskID: myTaskID)
-        print("\nThis is TLT on 12/19")
+        print("\nThis is \(ticker) on \(yyyyMMdd)")
         print(tickerInQuestion)
         print("")
-        RealmHelpers().makeEntry(taskID: myTaskID, entry: 125.64, stop: 118.97, target: 131.49, shares: 7, risk: 50.00, debug: false, account: "IB", capital: 876.61)
-        
+        RealmHelpers().makeEntry(taskID: myTaskID, entry: entry, stop: stop, target: target, shares: shares, risk: risk, debug: false, account: account, capital: capitol)
         print("\nProve it:")
         let tickerModified = Prices().getOneDateFrom(taskID: myTaskID)
         debugPrint(tickerModified)

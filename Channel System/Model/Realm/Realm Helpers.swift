@@ -89,6 +89,20 @@ class RealmHelpers: Object {
         return sortedByDate
     }
     
+    func deleteClosedTrade(taskID:String, debug:Bool) {
+        
+        let closed = Prices().getOnePriceFrom(taskID: taskID)
+        if debug { print("Changing \(closed.ticker) to exitedTrade = false") }
+        debugPrint(closed)
+        let realm = try! Realm()
+        try! realm.write {
+            closed.exitedTrade = false
+        }
+        let closedCheck = Prices().getFrom(taskID: taskID).last!
+        if debug { print("\nProve it!")
+            debugPrint(closedCheck) }
+    }
+    
     func printOpenTrades(){
         let openTrades = getOpenTrades()
         for each in openTrades {
