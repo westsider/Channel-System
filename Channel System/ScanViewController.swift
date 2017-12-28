@@ -27,10 +27,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var topView: UIView!
     
-    //let activityData = ActivityData()
     let size = CGSize(width: 100, height: 100)
-
-    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -47,6 +44,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var updateRealm:Bool = false
     var lastDateInRealm:Date!
     var galaxie = [String]()
+    var marketCondition:Results<MarketCondition>!
+    var marketReportString:String = "no report"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +57,40 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock) // needs a completion handler
         _ = SpReturns().textForStats(yearEnding: 2007)
         _ = SpReturns().textForStats(yearEnding: 2017)
+        marketCondition = MarketCondition().getData()
+        marketReportString = overview(debug: false)
+        print("\n", marketReportString, "\n")
+    }
+    
+    func overview(debug:Bool)->String {
+        let latest = marketCondition.last!
+        var pct:Double = 0.0
+        var longTrendString = ""
+        
+        if latest.close > latest.upperBand {
+            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
+            longTrendString = "\n\(String(format: "%.2f", pct))% above the long term trend"
+        } else if latest.close < latest.lowerBand {
+            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
+            longTrendString = "\n\(String(format: "%.2f", pct))%) below the long term trend"
+        } else {
+            longTrendString = "\n\the index is withing the trend bands"
+        }
+        
+        var thisString = "Market Condition on \(latest.dateString)"
+        
+        thisString  += "\nS&P 500 Index is at \(latest.close)"
+        
+        thisString  += longTrendString
+        
+        thisString  += "\nWe are in a \(latest.trendString) Trend"
+        
+        thisString += "\nThe volatility is currently \(latest.volatilityString)"
+        
+        thisString += "\n\(latest.guidanceChart) for Longs"
+        
+        if ( debug ) { print(thisString) }
+        return thisString
     }
     
     func firebaseBackup(now:Bool) {
