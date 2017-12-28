@@ -92,24 +92,25 @@
                                     <constraint firstAttribute="width" secondItem="wG0-AO-Vih" secondAttribute="height" multiplier="91:30" id="c7b-aa-YQ0"/>
                                 </constraints>
                             </stackView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0yM-3j-dra">
-                                <rect key="frame" x="168.5" y="159.5" width="37" height="37"/>
-                            </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DYj-rs-tgv" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                <rect key="frame" x="16" y="82" width="343" height="191"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.19245842099189758" green="0.20357471704483032" blue="0.22745734453201294" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="DYj-rs-tgv" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="18" id="07Z-Ja-6SN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pjh-GY-89w" secondAttribute="trailing" constant="16" id="ADG-GJ-iQh"/>
-                            <constraint firstItem="0yM-3j-dra" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="95.5" id="ANp-vR-Sk3"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="top" secondItem="Pjh-GY-89w" secondAttribute="bottom" constant="18" id="ArK-jY-dM7"/>
-                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="0yM-3j-dra" secondAttribute="bottom" constant="96.5" id="DSa-FS-Vsl"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wG0-AO-Vih" secondAttribute="bottom" constant="24" id="IPt-23-nlC"/>
                             <constraint firstItem="Gtg-gI-fW5" firstAttribute="top" secondItem="o5g-HL-Lw5" secondAttribute="bottom" constant="19" id="PYF-Nw-pab"/>
                             <constraint firstItem="wG0-AO-Vih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Pcf-4A-Pfm"/>
-                            <constraint firstItem="0yM-3j-dra" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="168.5" id="QHE-pX-qbJ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wG0-AO-Vih" secondAttribute="trailing" constant="16" id="W9E-96-tJe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0yM-3j-dra" secondAttribute="trailing" constant="169.5" id="bjl-DA-TAd"/>
+                            <constraint firstItem="DYj-rs-tgv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="WDk-gf-lbB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DYj-rs-tgv" secondAttribute="trailing" constant="16" id="X7r-UA-Wyr"/>
                             <constraint firstItem="o5g-HL-Lw5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="eDE-aj-5rv"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-HL-Lw5" secondAttribute="trailing" constant="16" id="lSs-zr-yTD"/>
+                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="DYj-rs-tgv" secondAttribute="bottom" constant="20" id="phm-Ne-d50"/>
                             <constraint firstItem="Pjh-GY-89w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="qj9-TZ-W41"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -123,9 +124,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="activity" destination="0yM-3j-dra" id="r2b-JR-ZAa"/>
                         <outlet property="currentProcessLable" destination="lIN-xi-Yu4" id="vSU-cH-Eiw"/>
                         <outlet property="lastUpdateLable" destination="hQG-0g-wbn" id="1IB-IW-pEN"/>
+                        <outlet property="topView" destination="DYj-rs-tgv" id="3GA-5R-wMC"/>
                         <outlet property="tradeButton" destination="x8N-0N-Aed" id="ddf-ar-VLP"/>
                         <outlet property="updateButton" destination="Gtg-gI-fW5" id="TBC-09-I4B"/>
                         <segue destination="rsc-Si-hcx" kind="show" identifier="ScanToSymbols" id="hUv-4f-E0Z"/>
@@ -134,7 +135,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.5" y="115.5"/>
+            <point key="canvasLocation" x="748" y="114.69265367316342"/>
         </scene>
         <!--Candidates-->
         <scene sceneID="70W-qy-HoG">

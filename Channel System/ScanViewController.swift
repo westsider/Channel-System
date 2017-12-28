@@ -8,8 +8,10 @@
 import Foundation
 import RealmSwift
 import UIKit
+import NVActivityIndicatorView
 
-class ScanViewController: UIViewController {
+//, NVActivityIndicatorViewable
+class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var lastUpdateLable: UILabel!
     
@@ -22,6 +24,12 @@ class ScanViewController: UIViewController {
     @IBOutlet weak var updateButton: UIButton!
     
     @IBOutlet weak var tradeButton: UIButton!
+    
+    @IBOutlet weak var topView: UIView!
+    
+    //let activityData = ActivityData()
+    let size = CGSize(width: 100, height: 100)
+
     
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
@@ -56,11 +64,17 @@ class ScanViewController: UIViewController {
         if now {
             tradeButton(isOn: false)
             updateButton(isOn: false)
-            self.updateUI(with: "Backing Up To Firebase...", spinIsOff: false)
+            self.updateUI(with: "Backing Up To Firebase...")
             FirbaseLink().backUp(completion: firebaseBlock)
-            self.updateUI(with: "Backing Up Complete", spinIsOff: true)
+            self.updateUI(with: "Backing Up Complete")
             tradeButton(isOn: true)
             updateButton(isOn: true)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballScale.rawValue)!)
         }
     }
     
@@ -68,9 +82,11 @@ class ScanViewController: UIViewController {
         if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
             firstRun()
         } else {
-            subsequentRuns()
-            firebaseBackup(now: false)
-            FirbaseLink().allData(clear: false)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                self.subsequentRuns()
+                self.firebaseBackup(now: false)
+                FirbaseLink().allData(clear: false)
+            }
         }
     }
     
@@ -91,8 +107,7 @@ class ScanViewController: UIViewController {
         print("\nThis was first run so I will load CSV historical data\n")
         initially(deleteAll: true, printPrices: false, printTrades: false)
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        initProgressBar()
-        self.updateUI(with: "Cleaning CSV Data...", spinIsOff: true)
+        self.updateUI(with: "Cleaning CSV Data...")
         GetCSV().areTickersValid(megaSymbols: galaxie)
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
@@ -108,10 +123,14 @@ class ScanViewController: UIViewController {
         galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         let lastUpDate = Utilities().convertToStringNoTimeFrom(date: lastDateInRealm)
         let lastUpDateString = "Updated on \(lastUpDate)"
+        NVActivityIndicatorPresenter.sharedInstance.setMessage(lastUpDateString)
         currentProcessLable.text = lastUpDateString
-        activity.stopAnimating()
         tradeButton(isOn: true)
         updateButton(isOn: true)
+        
+        //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            self.stopAnimating()
+        //}
     }
 
     @IBAction func getNewDataAction(_ sender: Any) {
@@ -121,7 +140,7 @@ class ScanViewController: UIViewController {
     }
     
     @IBAction func manageTradesAction(_ sender: Any) {
-        updateUI(with: "Calculating Performance", spinIsOff: false)
+        updateUI(with: "Calculating Performance")
         segueToCandidatesVC()
     }
     
@@ -193,10 +212,10 @@ class ScanViewController: UIViewController {
     private func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Getting local data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
+                self.updateUI(with: "Getting local data for \(symbols) \(index+1) of \( self.galaxie.count)")
                 DataFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
             }
-            self.updateUI(with: "All tickers have been downloaded!", spinIsOff: true)
+            self.updateUI(with: "All tickers have been downloaded!")
             self.calcSMA10(completion: self.smaBlock2)
         }
         DispatchQueue.main.async {
@@ -206,15 +225,20 @@ class ScanViewController: UIViewController {
     
     //MARK: - Get Data From Datafeed
     private func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
+        DispatchQueue.main.async {
+            self.startAnimating(self.size, message: "Contacting Data Provider", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!)
+        }
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
+                //self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
                 DataFeed().getLastPrice(ticker: symbols, lastInRealm: self.lastDateInRealm, debug: false, completion: {
                     self.counter += 1
+                    NVActivityIndicatorPresenter.sharedInstance.setMessage("Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)")
                     if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.galaxie.count) <----\n") }
                     if ( self.counter == self.galaxie.count ) {
-                        self.updateUI(with: "All remote data has been downloaded!\n", spinIsOff: true)
+                        self.updateUI(with: "All remote data has been downloaded!\n")
                         self.calcSMA10(completion: self.smaBlock2)
+                        
                     }
                 })
             }
@@ -226,17 +250,18 @@ class ScanViewController: UIViewController {
     
     //MARK: - SMA 10
     private func calcSMA10(completion: @escaping () -> ()) {
-        self.updateUI(with: "Calulating SMA(10)...", spinIsOff: false)
+        self.updateUI(with: "Calulating Trend 1")
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                //self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)")
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
-                self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
+                //self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
                 completion()
-                self.updateUI(with: "Processing SMA(10) Complete", spinIsOff: true)
+                self.updateUI(with: "Calculating Main Trend")
                 print("\nSegue to Charts\n")
                 self.calcSMA200(completion: self.smaBlock2)
             }
@@ -244,35 +269,36 @@ class ScanViewController: UIViewController {
     }
     //MARK: - SMA 200
     private func calcSMA200(completion: @escaping () -> ()) {
-        self.updateUI(with: "Processing SMA(200)...", spinIsOff: false)
+        self.updateUI(with: "Calculating Main Trend")
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                //self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)")
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
-                self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
+                //self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
                 completion()
-                self.updateUI(with: "Processing SMA(200) Complete", spinIsOff: true)
-                print("\nSegue to Charts\n")
+                self.updateUI(with: "Processing SMA(200) Complete")
                 self.calcwPctR(completion: self.wPctRBlock)
             }
         }
     }
     //MARK: - wPctR
     private func calcwPctR(completion: @escaping () -> ()) {
-        self.updateUI(with: "Processing PctR...", spinIsOff: false)
+        self.updateUI(with: "Processing Oscilator")
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+               // self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)")
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: false, completion: self.wPctRBlock)
-                self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
+                //self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
                 completion()
-                self.updateUI(with: "Processing SPctR Complete", spinIsOff: true)
+                self.updateUI(with: "Processing Oscilator Complete")
                 self.calcEntries(completion: self.entryBlock)
                 MarketCondition().calcMarketCondUpdate(debug: true)
             }
@@ -280,10 +306,13 @@ class ScanViewController: UIViewController {
     }
     //MARK: - Entries
     private func calcEntries(completion: @escaping () -> ()) {
-        self.updateUI(with: "Processing Entries...", spinIsOff: false)
+        self.updateUI(with: "Processing Trades")
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                //self.updateUI(with: "Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+                
+                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)")
+                
                 let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
                 if ( self.lastDateInRealm != nil ) {
                     Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
@@ -293,35 +322,58 @@ class ScanViewController: UIViewController {
                     let firstDate  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false)
                     Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
                 }
-                self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
+                //self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
                 completion()
-                self.updateUI(with: "Processing Entries Complete", spinIsOff: true)
+                self.updateUI(with: "Processing Entries Complete")
+                self.stopAnimating()
                 self.manageTradesOrShowEntries(debug: false)
             }
         }
     }
     
-    private func updateUI(with: String, spinIsOff: Bool) {
+    private func updateUI(with: String) {
         DispatchQueue.main.async {
             //print(with)
             self.lastUpdateLable.text =  with
-            
-            if spinIsOff {
-                self.activity.stopAnimating()
-                
-            } else {
-                self.activity.startAnimating()
-            }
         }
     }
     
-    private func initProgressBar() {
-        let tickerCount:Double = Double(galaxie.count)
-        let processCount:Double = Double(5)
-        let divisor:Double = Double(1)
-        incProgress = Float( divisor / (tickerCount * processCount ) )
+    func setUpAnnimation() {
+        
+        let x = self.topView.center.x
+        let y = self.topView.center.y
+        let size:CGFloat = 150
+        let half:CGFloat = size / 2
+        let frame = CGRect(x: (x - half), y: (y - half), width: size, height: size)
+        let activityIndicatorView = NVActivityIndicatorView(frame: frame)
+        activityIndicatorView.type = .ballScaleRippleMultiple
+        activityIndicatorView.color = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        
+//        self.view.addSubview(activityIndicatorView)
+//        if isOn {
+//            print("run spinner")
+//            activityIndicatorView.startAnimating()
+//            self.screenDim(isOn: true)
+//
+//        }
+//        if !isOn {
+//            activityIndicatorView.stopAnimating()
+//            print("stop spinner")
+//            self.screenDim(isOn: false)
+//        }
+        
+    }
+    
+    func screenDim(isOn:Bool) {
+        if isOn {
+            tradeButton(isOn:false)
+            updateButton(isOn:false)
+        } else {
+            tradeButton(isOn:false)
+            updateButton(isOn:false)
+        }
     }
     
     private func checkDuplicates() {
