@@ -134,15 +134,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                         SMA().getData(tenOnly: tenOnly, debug: debug, period: 200) { ( finished ) in // 2.0
                                             if finished {
                                                 print("sma(200) done")
-                                                
-                                                self.goMarketCondition(debug: debug)
-                                                
-                                                DispatchQueue.main.async {
-                                                    self.stopAnimating()
-                                                }
-                                                
-// got this working till 200 sma
-// can I help speed?
+                                                self.updateNVActivity(with:"Loading Oscilator")
+                                                PctR().getwPctR(tenOnly: tenOnly, debug: false, completion: { (finished) in
+                                                    if finished {
+                                                        print("oscilator done")
+                                                        self.goMarketCondition(debug: debug)
+                                                        DispatchQueue.main.async {
+                                                            self.stopAnimating()
+                                                        }
+                                                    }
+                                                })
                                             }
                                         }
                                     }
@@ -385,59 +386,59 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     //MARK: - SMA 10
     private func calcSMA10(completion: @escaping () -> ()) {
-        self.updateUI(with: "Calulating Trend 1")
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-                //self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)")
-                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                //SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
-                //self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
-            }
-            DispatchQueue.main.async {
-                completion()
-                self.updateUI(with: "Calculating Main Trend")
-                print("\nSegue to Charts\n")
-                self.calcSMA200(completion: self.smaBlock2)
-            }
-        }
+//        self.updateUI(with: "Calulating Trend 1")
+//        DispatchQueue.global(qos: .background).async {
+//            for ( index, symbols ) in self.galaxie.enumerated() {
+//                //self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+//                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)")
+//                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+//                //SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
+//                //self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
+//            }
+//            DispatchQueue.main.async {
+//                completion()
+//                self.updateUI(with: "Calculating Main Trend")
+//                print("\nSegue to Charts\n")
+//                self.calcSMA200(completion: self.smaBlock2)
+//            }
+//        }
     }
     //MARK: - SMA 200
     private func calcSMA200(completion: @escaping () -> ()) {
-        self.updateUI(with: "Calculating Main Trend")
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-                //self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)")
-                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                //SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
-                //self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
-            }
-            DispatchQueue.main.async {
-                completion()
-                self.updateUI(with: "Processing SMA(200) Complete")
-                self.calcwPctR(completion: self.wPctRBlock)
-            }
-        }
+//        self.updateUI(with: "Calculating Main Trend")
+//        DispatchQueue.global(qos: .background).async {
+//            for ( index, symbols ) in self.galaxie.enumerated() {
+//                //self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+//                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)")
+//                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+//                //SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
+//                //self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
+//            }
+//            DispatchQueue.main.async {
+//                completion()
+//                self.updateUI(with: "Processing SMA(200) Complete")
+//                self.calcwPctR(completion: self.wPctRBlock)
+//            }
+//        }
     }
     //MARK: - wPctR
     private func calcwPctR(completion: @escaping () -> ()) {
-        self.updateUI(with: "Processing Oscilator")
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-               // self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)")
-                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: false, completion: self.wPctRBlock)
-                //self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
-            }
-            DispatchQueue.main.async {
-                completion()
-                self.updateUI(with: "Processing Oscilator Complete")
-                self.calcEntries(completion: self.entryBlock)
-                MarketCondition().calcMarketCondUpdate(debug: true)
-            }
-        }
+//        self.updateUI(with: "Processing Oscilator")
+//        DispatchQueue.global(qos: .background).async {
+//            for ( index, symbols ) in self.galaxie.enumerated() {
+//               // self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
+//                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)")
+//                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+//                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: false, completion: self.wPctRBlock)
+//                //self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
+//            }
+//            DispatchQueue.main.async {
+//                completion()
+//                self.updateUI(with: "Processing Oscilator Complete")
+//                self.calcEntries(completion: self.entryBlock)
+//                MarketCondition().calcMarketCondUpdate(debug: true)
+//            }
+//        }
     }
     //MARK: - Entries
     private func calcEntries(completion: @escaping () -> ()) {

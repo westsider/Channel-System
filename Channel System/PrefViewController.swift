@@ -251,26 +251,26 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func williamsPctAction(_ sender: Any) {
-        activityDial.startAnimating()
-        self.buttonsAre(on: false)
-        var count = 0
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-                DispatchQueue.main.async {
-                    self.williamsPctLabel.text = "Loading \(index) of \(self.symbolCount)"
-                }
-                let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false)
-                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: true, completion: self.wPctRBlock)
-                count = index
-            }
-            DispatchQueue.main.async {
-                if count == self.symbolCount-1 {
-                    self.activityDial.stopAnimating()
-                    self.williamsPctLabel.text = "Updated"
-                    self.buttonsAre(on: true)
-                }
-            }
-        }
+//        activityDial.startAnimating()
+//        self.buttonsAre(on: false)
+//        var count = 0
+//        DispatchQueue.global(qos: .background).async {
+//            for ( index, symbols ) in self.galaxie.enumerated() {
+//                DispatchQueue.main.async {
+//                    self.williamsPctLabel.text = "Loading \(index) of \(self.symbolCount)"
+//                }
+//                let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false)
+//                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: true, completion: self.wPctRBlock)
+//                count = index
+//            }
+//            DispatchQueue.main.async {
+//                if count == self.symbolCount-1 {
+//                    self.activityDial.stopAnimating()
+//                    self.williamsPctLabel.text = "Updated"
+//                    self.buttonsAre(on: true)
+//                }
+//            }
+//        }
     }
     
     @IBAction func entriesAction(_ sender: Any) {

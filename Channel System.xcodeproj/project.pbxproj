@@ -11,6 +11,8 @@
 		0D129D5D1FBB4D1F003C6E5E /* IWM.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D129D521FBB4D1D003C6E5E /* IWM.csv */; };
 		0D16296C1FF1E49B00E11A64 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D16296B1FF1E49B00E11A64 /* GoogleService-Info.plist */; };
 		0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D16296D1FF1E54700E11A64 /* Firebase Service.swift */; };
+		0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */; };
+		0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */; };
 		0D2D98D31FF6B41C00B7D8BE /* Maintenence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D98D21FF6B41C00B7D8BE /* Maintenence.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
@@ -306,6 +308,8 @@
 		0D129D521FBB4D1D003C6E5E /* IWM.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWM.csv; sourceTree = "<group>"; };
 		0D16296B1FF1E49B00E11A64 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0D16296D1FF1E54700E11A64 /* Firebase Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Service.swift"; sourceTree = "<group>"; };
+		0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.1 wPct(r).swift"; sourceTree = "<group>"; };
+		0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.2 Market Condition.swift"; sourceTree = "<group>"; };
 		0D2D98D21FF6B41C00B7D8BE /* Maintenence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maintenence.swift; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
@@ -902,6 +906,8 @@
 			isa = PBXGroup;
 			children = (
 				0D6726991FF807F800E42A9A /* 2.0 SMA 10, 200.swift */,
+				0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */,
+				0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */,
 			);
 			path = "2. Indicators";
 			sourceTree = "<group>";
@@ -1454,9 +1460,11 @@
 				0DC70C6E1FE1BFEF00DC58BF /* EntryAndExits.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
+				0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
 				0DB6B1031FCE9A71009F6BEB /* BackTest.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
+				0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */,
 				0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
 				0D6726931FF8073B00E42A9A /* 1.2 Get CSV Data.swift in Sources */,
