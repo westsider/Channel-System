@@ -14,15 +14,10 @@ import NVActivityIndicatorView
 class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var lastUpdateLable: UILabel!
-    
     @IBOutlet weak var currentProcessLable: UILabel!
-    
     @IBOutlet weak var marketCondText: UITextView!
-    
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var updateButton: UIButton!
-    
     @IBOutlet weak var tradeButton: UIButton!
     
     let size = CGSize(width: 100, height: 100)
@@ -81,12 +76,12 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.async {
-            self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballScale.rawValue)!)
+            self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             self.initializeEverything(tenOnly: true, debug: false)
         }
 //        SMA().getData(tenOnly: true, debug: true, period: 10) { ( finished ) in // 2.0
@@ -114,15 +109,15 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         updateNVActivity(with:"Clearing Database")
         RealmHelpers().deleteAll()                                                     // 1.0
         Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
-        updateNVActivity(with:"Loading CSV")                                            // 1.1
+        updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
         CSVFeed().getData(tenOnly: tenOnly, debug: debug) { ( finished ) in            // 1.2
             if finished {
                 print("csv done")
-                self.updateNVActivity(with:"Loading Historical Prices")
+                self.updateNVActivity(with:"Loading Exchanges")
                 CompanyData().getInfo(tenOnly: tenOnly, debug: debug) { ( finished ) in // 1.3
                     if finished {
                         print("info done")
-                        self.updateNVActivity(with:"Getting Lastest Prices")
+                        self.updateNVActivity(with:"Contacting NYSE")
                         IntrioFeed().getData(tenOnly: tenOnly, debug: debug) { ( finished ) in // 1.4
                             if finished {
                                 print("intrinio done")
@@ -138,10 +133,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                                 PctR().getwPctR(tenOnly: tenOnly, debug: false, completion: { (finished) in
                                                     if finished {
                                                         print("oscilator done")
-                                                        self.goMarketCondition(debug: debug)
-                                                        DispatchQueue.main.async {
-                                                            self.stopAnimating()
-                                                        }
+                                                        self.updateNVActivity(with:"Loading Market Condition")
+                                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                            if finished  {
+                                                                DispatchQueue.main.async {
+                                                                    self.stopAnimating()
+                                                                    self.marketConditionUI(debug: false)
+                                                                }
+                                                                
+                                                            }
+                                                        })
                                                     }
                                                 })
                                             }
@@ -156,8 +157,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-    func printDone() {
-        print("done weekly stats")
+    func marketConditionUI(debug:Bool) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            print("fuck you")
+            let uiText = MarketCondition().overview(debug: debug)
+            self.titleLabel.text = uiText.0
+            self.marketCondText.text = uiText.1
+        }
     }
     
     func updateNVActivity(with:String) {
@@ -166,13 +172,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-    func goMarketCondition(debug:Bool) {
-        MarketCondition().calcMarketCondFirstRun(debug: debug, completion: mcBlock) // needs a completion handler
-        _ = SpReturns().textForStats(yearEnding: 2007)
-        _ = SpReturns().textForStats(yearEnding: 2017)
-        marketCondition = MarketCondition().getData()
-        marketReportString = overview(debug: debug)
-    }
+
     
     func firebaseBackup(now:Bool) {
         if now {
@@ -208,7 +208,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
         checkDuplicates()
         saveCompanyInfoToRealm()
-        MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock)
+        //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock)
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
     
@@ -226,7 +226,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
  
         self.stopAnimating()
         titleLabel.text = marketReportString.0
-        marketCondText.text = marketReportString.1
+//        marketCondText.text = marketReportString.1
 //        print("title \(marketReportString.0) body \(marketReportString.1)")
 //        print("Last Date in Realm: \(lastDateInRealm) today is\(Date())")
 //        let this = Utilities().lastUpdateWasToday(debug: true)
@@ -512,6 +512,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             updateButton.isEnabled = false
             updateButton.alpha = 0.4
         }
+    }
+    
+    func printDone() {
+        print("done weekly stats")
     }
     
     private func segueToChart(ticker: String) {
