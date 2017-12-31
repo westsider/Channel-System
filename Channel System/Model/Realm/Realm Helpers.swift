@@ -35,6 +35,30 @@ class RealmHelpers: Object {
             realm.add(price)
         })
     }
+    
+    func updateTodaysPrice(each: Prices) {
+        let realm = try! Realm()
+        let price = Prices().sortOneTicker(ticker: each.ticker, debug: false).last!
+        print("now updating \(price.ticker) for \(price.dateString)")
+        try! realm.write({
+            price.date = each.date
+            price.dateString = each.dateString
+            price.open = each.open
+            price.high = each.high
+            price.low = each.low
+            price.close = each.close
+            price.volume = each.volume
+            price.movAvg10 = 0.00
+            price.movAvg200 = 0.00
+            price.wPctR = 0.00
+            price.longEntry = false
+            price.inTrade   = false
+            price.exitedTrade = false
+            price.taskID = NSUUID().uuidString
+            price.account = each.account
+        })
+    }
+    
     //MARK: - Clear Realm
     func deleteAll() {
         let realm = try! Realm()
@@ -43,7 +67,7 @@ class RealmHelpers: Object {
         }
         print("\nRealm \tCleared!\n")
     }
-
+    // RealmHelpers().getTaskIDfor
     func getTaskIDfor(yyyyMMdd:String, ticker:String)->String {
         // 2017-12-27 AAPL
         if let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false).filter("dateString == %@", yyyyMMdd).last {

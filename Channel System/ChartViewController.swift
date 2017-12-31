@@ -26,7 +26,7 @@ class SCSSyncMultiChartView: UIViewController {
     var highestAtr:Double = 0.00
     let axisY2Id:String = "Y2"
     let axisX2Id:String = "X2"
-    let maxBarsOnChart:Int = 75
+    var maxBarsOnChart:Int = 75
     var sciChartView1 = SCIChartSurface()
     var sciChartView2 = SCIChartSurface()
     
@@ -47,7 +47,7 @@ class SCSSyncMultiChartView: UIViewController {
         marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
         title = ticker
-        completeConfiguration()
+        completeConfiguration(debug: false)
     }
     
     @IBAction func segueToSettings(_ sender: Any) {
@@ -116,7 +116,7 @@ class SCSSyncMultiChartView: UIViewController {
     }
     
     //MARK: - Complete Configuration
-    func completeConfiguration() {
+    func completeConfiguration(debug:Bool) {
         //chartSelected = dataFeed.allSortedPrices[indexSelected]
         configureChartSuraface()
         addAxis(BarsToShow: maxBarsOnChart)
@@ -132,7 +132,7 @@ class SCSSyncMultiChartView: UIViewController {
         let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
         let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id,
                                            date: Double(rangeStart), price: highestPrice, text: statsText)
-        let guidanceText = MarketCondition().getStrMatixForChart()
+        let guidanceText = MarketCondition().getStrMatixForChart(debug: debug)
         let guideChart = ShowTrades().showStats(xID: axisX2Id, yID: axisY2Id,
                                                 date: Double(rangeStart), price: highestAtr, text: guidanceText)
         

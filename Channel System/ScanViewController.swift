@@ -19,7 +19,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var marketCondText: UITextView!
     
-
     @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var updateButton: UIButton!
@@ -27,15 +26,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     @IBOutlet weak var tradeButton: UIButton!
     
     let size = CGSize(width: 100, height: 100)
-    let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
-    let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
-    let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
-    let smaBlock2 = { print( "\nSMA calc finished 2 Main Func <----------\n" ) }
-    let wPctRBlock = { print( "\nWpctR calc finished  <----------\n" ) }
-    let entryBlock = { print( "\nEntry calc finished  <----------\n" ) }
-    let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
-    let mcBlock = { print( "\nMarket Condition block finished  <----------\n" ) }
-    let firebaseBlock = { print( "\nSave Firebase block finished  <----------\n" ) }
+    let csvBlock = { print( "1.2 CSV Complete" ) }
+    let infoBlock = { print( "1.3 Company Info Complete" ) }
+    let intrioBlock = { print( "1.4 Intrinio Complete" ) }
+    let smaBlock1 = { print( "2.1 SMA(10) Complete" ) }
+    let smaBlock2 = { print( "SMA(200) Complete" ) }
+    let wPctRBlock = { print( "wPct(R) Complete" ) }
+    let entryBlock = { print( "Entry Complete" ) }
+    
+    let mcBlock = { print( "Market Condition ) Complete" ) }
+    let firebaseBlock = { print( "Firebase Complete" ) }
     let prices = Prices()
     var updatedProgress: Float = 0
     var incProgress: Float = 0
@@ -49,16 +49,128 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        tradeButton(isOn: false)
-        updateButton(isOn: false)
-        ManualTrades().showProfit()
-        // iphone 7+ Sim is  191634
-        //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock) // needs a completion handler
+//        tradeButton(isOn: false)
+//        updateButton(isOn: false)
+//        ManualTrades().showProfit()
+//        //RealmHelpers().deleteAll()
+//
+//        let oldClosedTrades =  RealmHelpers().getClosedTrades()
+//        print("\nPrinting Closed trades in realm")
+//        for each in oldClosedTrades {
+//            print("\(each.ticker) \(each.dateString) entry: \(each.entry) profit: \(each.profit) loss: \(each.loss)")
+//        }
+//        // iphone 7+ Sim is  191634
+//
+//        // stats get stuck in inf loop.. might be calcMarketCondFirstRun() didnt get calles
+//        // in pref run
+//        // [ ] entries
+//        // [ ] backtest
+
+//        print("\n", marketReportString, "\n")
+//
+//        // this was never called on first run
+//        CumulativeProfit().weeklyProfit(debug: true) {
+//            (result: Bool) in
+//            if result {
+//                DispatchQueue.main.async {
+//                    self.printDone()
+//                }
+//            }
+//        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballScale.rawValue)!)
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            self.initializeEverything(tenOnly: true, debug: false)
+        }
+//        SMA().getData(tenOnly: true, debug: true, period: 10) { ( finished ) in // 2.0
+//            if finished {
+//                print("\nfinished redo of sma 10\n")
+//            }
+//        }
+//        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+//            firstRun()
+//        } else {
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+//                self.subsequentRuns()
+//                self.firebaseBackup(now: false)
+//                FirbaseLink().allData(clear: false)
+//            }
+//        }
+    }
+    
+//////////////////////////////////////////////////////////////////////////////////
+//                              New First Run                                   //
+//////////////////////////////////////////////////////////////////////////////////
+    
+    //MARK: - Initialize Everything
+    func initializeEverything(tenOnly: Bool, debug:Bool) {
+        updateNVActivity(with:"Clearing Database")
+        RealmHelpers().deleteAll()                                                     // 1.0
+        Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
+        updateNVActivity(with:"Loading CSV")                                            // 1.1
+        CSVFeed().getData(tenOnly: tenOnly, debug: debug) { ( finished ) in            // 1.2
+            if finished {
+                print("csv done")
+                self.updateNVActivity(with:"Loading Historical Prices")
+                CompanyData().getInfo(tenOnly: tenOnly, debug: debug) { ( finished ) in // 1.3
+                    if finished {
+                        print("info done")
+                        self.updateNVActivity(with:"Getting Lastest Prices")
+                        IntrioFeed().getData(tenOnly: tenOnly, debug: debug) { ( finished ) in // 1.4
+                            if finished {
+                                print("intrinio done")
+                                self.updateNVActivity(with:"Loading Trend 1")
+                                SMA().getData(tenOnly: tenOnly, debug: debug, period: 10) { ( finished ) in // 2.0
+                                    if finished {
+                                        print("sma(10) done")
+                                        self.updateNVActivity(with:"Loading Trend 2")
+                                        SMA().getData(tenOnly: tenOnly, debug: debug, period: 200) { ( finished ) in // 2.0
+                                            if finished {
+                                                print("sma(200) done")
+                                                
+                                                self.goMarketCondition(debug: debug)
+                                                
+                                                DispatchQueue.main.async {
+                                                    self.stopAnimating()
+                                                }
+                                                
+// got this working till 200 sma
+// can I help speed?
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func printDone() {
+        print("done weekly stats")
+    }
+    
+    func updateNVActivity(with:String) {
+        DispatchQueue.main.async {
+            NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
+        }
+    }
+    
+    func goMarketCondition(debug:Bool) {
+        MarketCondition().calcMarketCondFirstRun(debug: debug, completion: mcBlock) // needs a completion handler
         _ = SpReturns().textForStats(yearEnding: 2007)
         _ = SpReturns().textForStats(yearEnding: 2017)
         marketCondition = MarketCondition().getData()
-        marketReportString = overview(debug: false)
-        print("\n", marketReportString, "\n")
+        marketReportString = overview(debug: debug)
     }
     
     func firebaseBackup(now:Bool) {
@@ -73,34 +185,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        DispatchQueue.main.async {
-            self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballScale.rawValue)!)
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-            firstRun()
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-                self.subsequentRuns()
-                self.firebaseBackup(now: false)
-                FirbaseLink().allData(clear: false)
-            }
-        }
-    }
-    
     @IBAction func segueToSettings(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
     
     private func saveCompanyInfoToRealm() {
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        for ticker in galaxie {
-            CompanyData().getInfoFor(ticker: ticker, debug: false, completion: self.infoBlock)
-        }
+//        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+//        for ticker in galaxie {
+//            CompanyData().getInfoFor(ticker: ticker, debug: false, completion: self.infoBlock)
+//        }
     }
     
     private func firstRun() {
@@ -132,7 +226,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         self.stopAnimating()
         titleLabel.text = marketReportString.0
         marketCondText.text = marketReportString.1
-        print("title \(marketReportString.0) body \(marketReportString.1)")
+//        print("title \(marketReportString.0) body \(marketReportString.1)")
+//        print("Last Date in Realm: \(lastDateInRealm) today is\(Date())")
+//        let this = Utilities().lastUpdateWasToday(debug: true)
+//        print("Last dat is today \(this.0)")
     }
 
     func overview(debug:Bool)-> (String, String ) {
@@ -169,7 +266,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     @IBAction func getNewDataAction(_ sender: Any) {
         //MARK: - get new data
         LastUpdate().incUpdate()
-        getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
+       // getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
     }
     
     @IBAction func manageTradesAction(_ sender: Any) {
@@ -240,13 +337,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
+
+///////////////////////////////////////////////////////////
+
     
-    //MARK: - Get Data From CSV
+    //MARK: - 1.2 Get Data From CSV
     private func getDataFromCSV(completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 self.updateUI(with: "Getting local data for \(symbols) \(index+1) of \( self.galaxie.count)")
-                DataFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
+               // CSVFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
             }
             self.updateUI(with: "All tickers have been downloaded!")
             self.calcSMA10(completion: self.smaBlock2)
@@ -259,14 +359,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     //MARK: - Get Data From Datafeed
     private func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
         DispatchQueue.main.async {
-            self.startAnimating(self.size, message: "Contacting Data Provider", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!)
+            self.startAnimating(self.size, message: "Contacting NYSE", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!)
         }
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 //self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
-                DataFeed().getLastPrice(ticker: symbols, lastInRealm: self.lastDateInRealm, debug: false, completion: {
+                DataFeed().getLastPrice(ticker: symbols, lastInRealm: self.lastDateInRealm, debug: true, completion: {
                     self.counter += 1
-                    NVActivityIndicatorPresenter.sharedInstance.setMessage("Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)")
+                    DispatchQueue.main.async {
+                        NVActivityIndicatorPresenter.sharedInstance.setMessage("Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)")
+                    }
                     if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.galaxie.count) <----\n") }
                     if ( self.counter == self.galaxie.count ) {
                         self.updateUI(with: "All remote data has been downloaded!\n")
@@ -288,8 +390,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 //self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)")
-                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
+                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+                //SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
                 //self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {
@@ -307,8 +409,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 //self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
                 NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)")
-                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
+                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
+                //SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
                 //self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
             }
             DispatchQueue.main.async {

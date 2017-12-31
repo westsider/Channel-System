@@ -135,16 +135,16 @@ class MarketCondition: Object {
                 }
                 
                 if( today > stdDevClacHi ) {
-                    print("Setting Volatility to 1 because \(today) > \(stdDevClacHi)")
+                    if debug { print("Setting Volatility to 1 because \(today) > \(stdDevClacHi)")}
                     answer = ("volatil", 1, stdDevClacHi, stdDevClacLo)
                 }
                 else if( today < stdDevClacLo ) {
                     answer = ("quiet", -1, stdDevClacHi, stdDevClacLo)
-                    print("Setting Volatility to -1 because \(today) < \(stdDevClacLo)")
+                    if debug { print("Setting Volatility to -1 because \(today) < \(stdDevClacLo)")}
                 }
                 else {
                     answer = ("normal", 0, stdDevClacHi, stdDevClacLo)
-                    print("Setting Volatility to 0 because \(today) <> \(stdDevClacHi) \(stdDevClacLo)")
+                    if debug { print("Setting Volatility to 0 because \(today) <> \(stdDevClacHi) \(stdDevClacLo)")}
                 }
                 volatilityAnswer.append(answer)
             } else {
@@ -166,18 +166,18 @@ class MarketCondition: Object {
         deleteAll()
         let realm = try! Realm()
         if realm.objects(MarketCondition.self).last != nil {
-            print("\nYo! we have data in market condition so we are not calling calcMarketCondFirstRun()\n")
+            if debug { print("\nYo! we have data in market condition so we are not calling calcMarketCondFirstRun()\n")}
             return
         }
         //DispatchQueue.global(qos: .background).async {
-            print("\n------> Market Contition Start <--------\n")
+        if debug { print("\n------> Market Contition Start <--------\n") }
             let spySeries = Prices().sortOneTicker(ticker: "SPY", debug: debug)
             let aytrPct = self.atrPct(series: spySeries )
             let volatil = self.volatility(atrSeries: aytrPct, debug: debug)
             var count = 0
             for (index, today) in spySeries.enumerated() {
                 let todayTrend = self.trend(close: today.close, sma200: today.movAvg200)
-                let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value)
+                let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value, debug: debug)
                 let guide = self.guidance(matrix: matrix)
                 
                 let mc = MarketCondition()
@@ -206,13 +206,13 @@ class MarketCondition: Object {
                     realm.add(mc)
                 }
                 count = index
-                print("MC: finished \(count) of \(spySeries.count)")
+                if debug { print("MC: finished \(count) of \(spySeries.count)")}
             }
     
             DispatchQueue.main.async {
                 if count == spySeries.count {
                     completion()
-                    print("\n------> Market Contition Complete <--------\n")
+                    if debug { print("\n------> Market Contition Complete <--------\n")}
                 }
             }
         //}
@@ -231,7 +231,7 @@ class MarketCondition: Object {
                 let todayTrend = self.trend(close: today.close, sma200: today.movAvg200)
                 isNewDate = Prices().checkIfNew(date: today.date!, realmDate:lastInRealm, debug: debug)
                 if isNewDate {
-                    let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value)
+                    let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value, debug: debug)
                     let guide = self.guidance(matrix: matrix)
                     let mc = MarketCondition()
                     mc.dateString = today.dateString
@@ -277,7 +277,7 @@ class MarketCondition: Object {
         return sqrt(sumOfSquaredAvgDiff / length)
     }
     
-    func setMatrix(trnd:Int, volatl:Int)-> (result:Int, condition:String) {
+    func setMatrix(trnd:Int, volatl:Int, debug:Bool)-> (result:Int, condition:String) {
         var answer:(result:Int, condition:String) = (result:0, condition:"no condition")
         if  trnd == 1 && volatl == 1 {
             answer = (result:1, condition:"bull volatile")
@@ -306,7 +306,7 @@ class MarketCondition: Object {
         if trnd == -1 && volatl == -1 {
             answer = (result:9, condition:"Bear Quiet")
         }
-        print("we have set matrix! \ninput trend: \(trnd) volatility: \(volatl)\noutput: condition \(answer.condition) result \(answer.result) ")
+        if debug { print("we have set matrix! \ninput trend: \(trnd) volatility: \(volatl)\noutput: condition \(answer.condition) result \(answer.result) ") }
         return answer
     }
     
@@ -327,37 +327,34 @@ class MarketCondition: Object {
         return guidance
     }
     
-    func getStrMatixForChart()->String {
+    func getStrMatixForChart(debug:Bool)->String {
         let realm = try! Realm()
         let mc = realm.objects(MarketCondition.self)
         let sortedByDate = mc.sorted(byKeyPath: "date", ascending: true)
         let lastMc = sortedByDate.last
-        let strResult = (lastMc?.dateString)! + " " + (lastMc?.matrixCondition)! + ", " + (lastMc?.guidanceChart)!
-        
-        print("\n----> here is your  matrix <----")
-        print("date: \(String(describing: lastMc?.date!))")
-        //print("open: \(String(describing: lastMc?.open))")
-        //print("high: \(String(describing:   lastMc?.high))")
-        //print("low: \(String(describing: lastMc?.low ))")
-        //print("close: \(String(describing: lastMc?.close))")
-        //print("200: \(String(describing: lastMc?.movAvg200 ))")
-        print("trend: \(String(describing: lastMc?.trend ))")
-        print("trend string: \(String(describing: lastMc?.trendString ))")
-        print("volatility: \(String(describing: lastMc?.volatility ))")
-        print("volatilityString: \(String(describing: lastMc?.volatilityString ))")
-        print("strGuidance: \(String(describing: lastMc?.strGuidance ))")
-        print("guidance: \(String(describing: lastMc?.guidance ))")
-        print("guidanceChart: \(String(describing: lastMc?.guidanceChart))")
-        print("matrixResult: \(String(describing: lastMc?.matrixResult))")
-        print("matrixCondition: \(String(describing: lastMc?.matrixCondition))")
-        print("\nThe bands -----------------------------")
-        print("volatilityAverage: \(String(describing: lastMc?.volatilityAverage ))")
-        //print("upper: \(String(describing: lastMc?.upperBand ))")
-        //print("lower: \(String(describing: lastMc?.lowerBand ))")
-        print("stdDevClacHi: \(String(describing: lastMc?.stdDevClacHi))")
-        print("stdDevClacLow: \(String(describing: lastMc?.stdDevClacLow ))\n")
-            return strResult
-       
+        if let date = lastMc?.dateString, let condition = lastMc?.matrixCondition, let guidance = lastMc?.guidanceChart {
+        let strResult = date + " " + condition + ", " + guidance
+        if debug {
+            print("\n----> here is your  matrix <----")
+            print("date: \(String(describing: lastMc?.date!))")
+            print("trend: \(String(describing: lastMc?.trend ))")
+            print("trend string: \(String(describing: lastMc?.trendString ))")
+            print("volatility: \(String(describing: lastMc?.volatility ))")
+            print("volatilityString: \(String(describing: lastMc?.volatilityString ))")
+            print("strGuidance: \(String(describing: lastMc?.strGuidance ))")
+            print("guidance: \(String(describing: lastMc?.guidance ))")
+            print("guidanceChart: \(String(describing: lastMc?.guidanceChart))")
+            print("matrixResult: \(String(describing: lastMc?.matrixResult))")
+            print("matrixCondition: \(String(describing: lastMc?.matrixCondition))")
+            print("\nThe bands -----------------------------")
+            print("volatilityAverage: \(String(describing: lastMc?.volatilityAverage ))")
+            print("stdDevClacHi: \(String(describing: lastMc?.stdDevClacHi))")
+            print("stdDevClacLow: \(String(describing: lastMc?.stdDevClacLow ))\n")
+            }
+        return strResult
+        } else {
+            return "NoData"
+        }
     }
     
     func getMatixForBacktest()->Bool {

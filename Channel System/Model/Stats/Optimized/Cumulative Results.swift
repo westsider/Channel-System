@@ -86,7 +86,7 @@ class CumulativeProfit {
                     maxCost = dailyCostSum
                 }
                 totalGain += todaysProfit
-                print("--------------------------------------------------------------------> Totsl Gain: \(totalGain)")
+                if debug { print("--------------------------------------------------------------------> Total Gain: \(totalGain)") }
                 // print the record
                 if debug { print("\n\(fileIndex) New day, summing daily cost and adding a portfolio daily record")
                     print("\(fileIndex) Todays Record: ", lastDate, "  Profit: ", Utilities().dollarStr(largeNumber:todaysProfit), "  Cost: ",Utilities().dollarStr(largeNumber:dailyCostSum), "  Positions: ", portfolioDict.count) }
@@ -136,9 +136,9 @@ class CumulativeProfit {
         let endGame = totalPortfolio * roi
         let annual = endGame / 2
         let avgStars:Double = Double(totalStars) / Double(tradeCount)
-        print("\nAvg stars: \(avgStars) = total stars: \(totalStars) / trade count: \(tradeCount)\n")
+        if debug { print("\nAvg stars: \(avgStars) = total stars: \(totalStars) / trade count: \(tradeCount)\n") }
         if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost, largestWin: largestWinner, largestLoss: largestLooser, firstDate: firstTradeDate) }
-        print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Total gain: \(Utilities().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(Utilities().dollarStr(largeNumber: endGame)), Annual Return: \(Utilities().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n")
+        if debug { print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Total gain: \(Utilities().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(Utilities().dollarStr(largeNumber: endGame)), Annual Return: \(Utilities().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n") }
         return allTradesPortfolioRecord
     }
     

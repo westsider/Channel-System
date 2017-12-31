@@ -23,6 +23,7 @@ class Prices: Object {
     @objc dynamic var wPctR      = 0.00
     @objc dynamic var longEntry  = false
     @objc dynamic var taskID     = NSUUID().uuidString
+
     // Manage Trade
     @objc dynamic var entry     = 0.00
     @objc dynamic var stop      = 0.00
@@ -70,7 +71,7 @@ class Prices: Object {
         let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
         if ( debug ) {
             for each in sortedByDate {
-                print("\(each.ticker) \(each.dateString) o\(each.open) h\(each.high) l\(each.low) c\(each.close)  --> t\(each.movAvg10) lth\(each.movAvg200) w\(each.wPctR)")
+                print("\(each.ticker) \(each.dateString) o\(each.open) h\(each.high) l\(each.low) c\(each.close)  --> sma(10) \(each.movAvg10) sma(200) \(each.movAvg200) w\(each.wPctR)")
             }
         }
         return sortedByDate
@@ -90,6 +91,7 @@ class Prices: Object {
             }
         }
     }
+    
     func findDuplicates(ticker:String, debug:Bool){
         let realm = try! Realm()
         let id = ticker
@@ -104,7 +106,6 @@ class Prices: Object {
             }
             lastDate = each.date
         }
-        
     }
     
     //MARK: - Sort Entries
@@ -149,9 +150,8 @@ class Prices: Object {
     }
     
     func getLastTaskIDfrom(ticker:String)-> String {
-        
         let realm = try! Realm()
-         let theIndex = realm.objects(Prices.self).filter("ticker == %@", ticker)
+        let theIndex = realm.objects(Prices.self).filter("ticker == %@", ticker)
         return theIndex.last!.taskID
     }
     
@@ -164,9 +164,13 @@ class Prices: Object {
     func getLastDateInRealm(debug: Bool)-> Date {
         let realm = try! Realm()
         let theTickerSeries = realm.objects(Prices.self)
-        let sortedByDate = theTickerSeries.sorted(byKeyPath: "date", ascending: true).last!
-        if ( debug ) { print("Last Date In Realm is: \(sortedByDate.dateString)") }
-        return sortedByDate.date!
+        if let sortedByDate = theTickerSeries.sorted(byKeyPath: "date", ascending: true).last {
+            if ( debug ) { print("Last Date In Realm is: \(sortedByDate.dateString)") }
+            return sortedByDate.date!
+        } else {
+            return Utilities().convertToDateFrom(string: "2017/10/01", debug: false)
+        }
+        
     }
     
     func getLastDateInMktCond(debug: Bool)-> Date {

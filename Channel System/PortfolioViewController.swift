@@ -142,6 +142,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     func selectedSymbol(index: Int) {
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = tasks[index].taskID
+        myVC.maxBarsOnChart = 30
         navigationController?.pushViewController(myVC, animated: true)
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 class MyPrice {
     
@@ -47,18 +48,16 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/08", entry: 74.38, exit: 75.55, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "EWI", date: "12/14", entry: 30.84, exit: 30.70, shares: 53.00) )
         trades.append( MyPrice().profit(ticker: "EWI", date: "12/15", entry: 30.38, exit: 30.70, shares: 54.00) )
+        trades.append( MyPrice().profit(ticker: "RSX", date: "12/19", entry: 20.82, exit: 21.71, shares: 80.00) )
+        trades.append( MyPrice().profit(ticker: "EWY", date: "12/19", entry: 73.00, exit: 74.84, shares: 22.00) )
+        trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.64, exit: 126.94, shares: 7.00) )
         
-        trades.append( MyPrice().profit(ticker: "EWY", date: "12/19", entry: 73.00, exit: 0.00, shares: 22.00) )
-        trades.append( MyPrice().profit(ticker: "RSX", date: "12/19", entry: 20.82, exit: 0.00, shares: 80.00) )
-        trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.64, exit: 0.00, shares: 7.00) )
         trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.74, exit: 0.00, shares: 14.00) )
         trades.append( MyPrice().profit(ticker: "MCD", date: "12/20", entry: 172.21, exit: 0.00, shares: 9.00) )
         trades.append( MyPrice().profit(ticker: "MMM", date: "12/20", entry: 237.05, exit: 0.00, shares: 7.00) )
         trades.append( MyPrice().profit(ticker: "UNH", date: "12/22", entry: 220.07, exit: 0.00, shares: 7.00) )
         trades.append( MyPrice().profit(ticker: "VEA", date: "12/22", entry: 44.58, exit: 0.00, shares: 37.00) )
         trades.append( MyPrice().profit(ticker: "AAPL", date: "12/27", entry: 170.27, exit: 0.00, shares: 5.00) )
-        
-        
         
         for each in trades {
             print(each.0)
@@ -86,11 +85,23 @@ class ManualTrades {
         let annumReturnStr = Utilities().dollarStr(largeNumber: annumReturn)
         print("Total\t$\(profitSumStr)\t\(winPctStr)% win\n\n$\(avgCost) avg cost\t\t$\(meanCost) mean cost\n\(approxRoiStr)% roi\t\t\t\(annumRoiStr)% annual return\n$\(annumReturnStr) annual gain\n\n")
         
-        //makePastEntry()
+        //makePastEntry() trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.74, exit: 0.00, shares: 14.00) )
+        //makePastEntry(yyyyMMdd: "2017-12-20", ticker: "EFA", entry: 69.74, stop: 66.24, target: 73.21, shares: 14, risk: 50.00, account: "IB", capitol: 976.15)
+        
+        // 2017-12-27 AAPL
+        //let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: "2017-12-27", ticker: "EFA")
+        //print("here is EFA \(myTaskID)")
+        //Prices().sortOneTicker(ticker: "EFA", debug: true)
+        //let dates = Mainenence().allWeekDays(debug: false)
+        
     }
     
-    func makePastEntry(yyyyMMdd: String, ticker: String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, account:String, capitol:Double){
+    func makePastEntry(yyyyMMdd: String, ticker: String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, account:String, capitol:Double) {
         let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
+        if myTaskID == "noTaskID" {
+            print("no TaskID found, cancel entry")
+            return
+        }
         print("Found TaskID: \(myTaskID) for \(ticker)")
         let tickerInQuestion = Prices().getOneDateFrom(taskID: myTaskID)
         print("\nThis is \(ticker) on \(yyyyMMdd)")
@@ -101,6 +112,26 @@ class ManualTrades {
         let tickerModified = Prices().getOneDateFrom(taskID: myTaskID)
         debugPrint(tickerModified)
         print("")
+    }
+    
+    func makePastExit(yyyyMMdd: String, ticker: String, debug:Bool) {
+        let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
+        print("Found TaskID: \(myTaskID) for \(ticker)")
+        let tickerInQuestion = Prices().getOneDateFrom(taskID: myTaskID)
+        print("\nThis is \(ticker) on \(yyyyMMdd)")
+        debugPrint(tickerInQuestion)
+        print("")
+        
+        //let closed = Prices().getOnePriceFrom(taskID: taskID)
+        if debug { print("Changing \(tickerInQuestion.ticker) to exitedTrade = true") }
+     
+        let realm = try! Realm()
+        try! realm.write {
+            tickerInQuestion.exitedTrade = true
+        }
+        let closedCheck = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
+        if debug { print("\nProve it!")
+            debugPrint(closedCheck) }
     }
 }
 

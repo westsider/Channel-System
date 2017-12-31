@@ -83,6 +83,8 @@ class StatsViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        
+// got stuck in inf loop after reloading everything
         getStatsfromRealm()
     }
     
@@ -153,7 +155,7 @@ class StatsViewController: UIViewController {
             }
         }
     }
-
+// this is nil and so we call calc stats
     func getWeeklyFromRealm() {
         print("\n inside getWeeklyFromRealm()\n")
         let realm = try! Realm()
@@ -214,7 +216,7 @@ class StatsViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.ActivityOne(isOn:true)
             print("\n---------------> Now running new backtest <----------------\n")
-            _ = CumulativeProfit().allTickerBacktestWithCost(debug: true, saveToRealm: true)
+            _ = CumulativeProfit().allTickerBacktestWithCost(debug: false, saveToRealm: true)
            
             DispatchQueue.main.async {
                 completion()

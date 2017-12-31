@@ -59,7 +59,7 @@ class DataFeed {
             completion()
         }
     }
-    
+
     /// Get realtime ohlc
     func getLastPrice(ticker: String, lastInRealm: Date, debug: Bool, completion: @escaping () -> ()) {
         // get last price from intrio
@@ -76,6 +76,7 @@ class DataFeed {
                     let json = JSON(value)
                     if ( debug ) { print("JSON: \(json)") }
                     for data in json["data"].arrayValue {
+                        print("\n---------------> starting json loop  <---------------------")
                         let prices = Prices()
                         prices.ticker = ticker
                         if let date = data["date"].string {
@@ -95,6 +96,12 @@ class DataFeed {
                             RealmHelpers().saveSymbolsToRealm(each: prices)
                         } else {
                             if ( debug ) { print("we are NOT adding \(prices.dateString) to realm\n") }
+                        }
+                        let dateIsToday = Utilities().thisDateIsToday(date: prices.date!, debug: true)
+                        if dateIsToday {
+                            if ( debug ) {  print("replace todays data for \(prices.ticker)") }
+                        
+                            RealmHelpers().updateTodaysPrice(each: prices)
                         }
                     }
                     DispatchQueue.main.async { completion() }

@@ -61,6 +61,14 @@ class Utilities {
             return ( true, lastUpdate )
         } else { return ( false, lastUpdate )}
     }
+    
+    func thisDateIsToday(date:Date,debug: Bool)-> (Bool) {
+        let calendar = NSCalendar.current
+        if ( debug ) { print("checking today \(today) against \(date)") }
+        if (calendar.isDateInToday(date)) {
+            return ( true)
+        } else { return ( false)}
+    }
 
     func wasLastPrint(close: [Int], lastUpdate: Date, debug: Bool ) -> Bool {
         let calendar = Calendar.current

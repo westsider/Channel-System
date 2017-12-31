@@ -1,26 +1,45 @@
 //
-//  SMA.swift
+//  2.1 SMA 10, 200.swift
 //  Channel System
 //
-//  Created by Warren Hansen on 11/15/17.
+//  Created by Warren Hansen on 12/30/17.
 //  Copyright © 2017 Warren Hansen. All rights reserved.
 //
 
 import Foundation
 import RealmSwift
 
-class SMAmama {
+class SMA {
+
+    func getData(tenOnly:Bool, debug:Bool, period:Int, completion: @escaping (Bool) -> Void) {
+        let galaxie = SymbolLists().getSymbols(tenOnly: true)
+        var counter = 0
+        let total = galaxie.count
+        var done:Bool = false
+        for  symbols in galaxie {
+            DispatchQueue.global(qos: .background).async {
+                done = false
+                let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false)
+                done = self.averageOf(period: period, debug: debug, prices: oneTicker, redoAll: false)
+                if done {
+                    DispatchQueue.main.async {
+                        counter += 1
+                        print("sma\(period) \(counter) of \(total)") 
+                        if counter == total {
+                            completion(true)
+                        }
+                    }
+                }
+            }
+        }
+    }
     
-    func averageOf(period:Int, debug: Bool, priorCount: Int, prices: Results<Prices>, redoAll: Bool, completion: @escaping () -> ()) {
-        
+    func averageOf(period:Int, debug: Bool, prices: Results<Prices>, redoAll: Bool)->Bool {
         let sortedPrices = prices
-        
         var closes = [Double]()
-        
         for eachClose in sortedPrices {
             closes.append(eachClose.close)
         }
-        
         var sum:Double
         var tenPeriodArray = [Double]()
         var averages = [Double]()
@@ -35,10 +54,9 @@ class SMAmama {
                 averages.append(close)
             }
         }
-       
         if ( debug ) { print("\nFinished calc for\(period) SMA for \(String(describing: sortedPrices.last!.ticker))\n") }
         if ( period == 10 ) {
-            print("\n---> num of 10 SMA \(averages.count) prior count \(priorCount) closes = \(closes.count) <---\n")
+            if ( debug ) { print("\n---> num of 10 SMA \(averages.count) closes = \(closes.count) <---\n") }
             for (index, eachAverage) in averages.enumerated() {
                 // add indicator if none exists
                 
@@ -53,13 +71,15 @@ class SMAmama {
                     let realm = try! Realm()
                     try! realm.write {
                         sortedPrices[index].movAvg10 = eachAverage
+                        if ( debug ) { print("SAVE \(sortedPrices[index].ticker) \(sortedPrices[index].dateString) \(sortedPrices[index].movAvg10)") }
                     }
                 }
                 
             }
+            return true
         } else {
             for (index, eachAverage) in averages.enumerated() {
-
+                
                 if ( redoAll ) {
                     if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
                     let realm = try! Realm()
@@ -74,12 +94,10 @@ class SMAmama {
                     }
                 }
             }
-        }
-
-        DispatchQueue.main.async {
-            completion()
+            return true
         }
     }
 }
+    
 
 
