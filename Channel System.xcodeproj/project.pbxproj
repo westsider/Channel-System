@@ -13,6 +13,10 @@
 		0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D16296D1FF1E54700E11A64 /* Firebase Service.swift */; };
 		0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */; };
 		0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */; };
+		0D187BFA1FF97B4000FE4FEC /* 3.0 Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF91FF97B4000FE4FEC /* 3.0 Entry.swift */; };
+		0D187BFD1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFC1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift */; };
+		0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */; };
+		0D187C011FF97BED00FE4FEC /* 3.3 Weekly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */; };
 		0D2D98D31FF6B41C00B7D8BE /* Maintenence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D98D21FF6B41C00B7D8BE /* Maintenence.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
@@ -310,6 +314,10 @@
 		0D16296D1FF1E54700E11A64 /* Firebase Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Service.swift"; sourceTree = "<group>"; };
 		0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.1 wPct(r).swift"; sourceTree = "<group>"; };
 		0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.2 Market Condition.swift"; sourceTree = "<group>"; };
+		0D187BF91FF97B4000FE4FEC /* 3.0 Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.0 Entry.swift"; sourceTree = "<group>"; };
+		0D187BFC1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.1 Brute Force Backtest.swift"; sourceTree = "<group>"; };
+		0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.2 Calc Stars.swift"; sourceTree = "<group>"; };
+		0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.3 Weekly.swift"; sourceTree = "<group>"; };
 		0D2D98D21FF6B41C00B7D8BE /* Maintenence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maintenence.swift; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
@@ -890,6 +898,17 @@
 			path = Optimized;
 			sourceTree = "<group>";
 		};
+		0D187BFB1FF97B5500FE4FEC /* 3. Entries */ = {
+			isa = PBXGroup;
+			children = (
+				0D187BF91FF97B4000FE4FEC /* 3.0 Entry.swift */,
+				0D187BFC1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift */,
+				0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */,
+				0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */,
+			);
+			path = "3. Entries";
+			sourceTree = "<group>";
+		};
 		0D6726981FF807A500E42A9A /* 1. Get Prices */ = {
 			isa = PBXGroup;
 			children = (
@@ -1012,6 +1031,7 @@
 			children = (
 				0D6726981FF807A500E42A9A /* 1. Get Prices */,
 				0D67269B1FF8080100E42A9A /* 2. Indicators */,
+				0D187BFB1FF97B5500FE4FEC /* 3. Entries */,
 				0DA11AE51FD07C140074BAD7 /* Realm */,
 				0DA11AE21FD07B620074BAD7 /* Stats */,
 				0DA11AE31FD07B920074BAD7 /* Data */,
@@ -1443,6 +1463,7 @@
 				0D77DDCE1FCF705C007573C3 /* Trade Helpers.swift in Sources */,
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */,
+				0D187BFD1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
@@ -1463,10 +1484,12 @@
 				0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
 				0DB6B1031FCE9A71009F6BEB /* BackTest.swift in Sources */,
+				0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
 				0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */,
 				0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
+				0D187C011FF97BED00FE4FEC /* 3.3 Weekly.swift in Sources */,
 				0D6726931FF8073B00E42A9A /* 1.2 Get CSV Data.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */,
 				0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */,
@@ -1479,6 +1502,7 @@
 				0D6726971FF8079900E42A9A /* 1.4 Get Intrio.swift in Sources */,
 				0DEEA0DF1FCDFC520046BABC /* LastUpdate.swift in Sources */,
 				0D67269D1FF80B9E00E42A9A /* 1.0 Galaxie.swift in Sources */,
+				0D187BFA1FF97B4000FE4FEC /* 3.0 Entry.swift in Sources */,
 				0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */,
 				0DE78F551FD888B400915777 /* Stats Object.swift in Sources */,
 			);

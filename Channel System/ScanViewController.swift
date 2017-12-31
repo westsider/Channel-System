@@ -136,10 +136,18 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                                         self.updateNVActivity(with:"Loading Market Condition")
                                                         MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
                                                             if finished  {
-                                                                DispatchQueue.main.async {
-                                                                    self.stopAnimating()
-                                                                    self.marketConditionUI(debug: false)
-                                                                }
+                                                                print("mc done")
+                                                                self.updateNVActivity(with:"Finding Trades")
+                                                                Entry().getEntry(tenOnly: tenOnly, debug: debug, completion: { (finished) in
+                                                                    if finished  {
+                                                                         print("Entry done")
+                                                                        DispatchQueue.main.async {
+                                                                            self.stopAnimating()
+                                                                            self.marketConditionUI(debug: false)
+                                                                        }
+                                                                    }
+                                                                })
+                                                                
                                                                 
                                                             }
                                                         })
@@ -159,7 +167,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     func marketConditionUI(debug:Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            print("fuck you")
             let uiText = MarketCondition().overview(debug: debug)
             self.titleLabel.text = uiText.0
             self.marketCondText.text = uiText.1
