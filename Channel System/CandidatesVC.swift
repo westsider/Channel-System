@@ -21,8 +21,8 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         let days:Int = 1
         title = "last \(days) day(s)"
-        //tasks = Prices().sortEntriesBy(recent: true, days: days)
-        tasks = Prices().sortOneTicker(ticker: "QQQ", debug: false)
+        tasks = Prices().sortEntriesBy(recent: true, days: days)
+        //tasks = Prices().sortOneTicker(ticker: "QQQ", debug: false)
     }
 
     @IBAction func clearRealmAction(_ sender: Any) {

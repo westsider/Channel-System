@@ -90,26 +90,26 @@ class StatsViewController: UIViewController {
     
     //MARK: - Backtest Button
     @IBAction func runNewBacktestAction(_ sender: Any) {
-        self.topLeft.textAlignment = .right
-        ActivityOne(isOn:true)
-        calcStats(debug: false, completion: getDataForChart)
+//        self.topLeft.textAlignment = .right
+//        ActivityOne(isOn:true)
+//        calcStats(debug: false, completion: getDataForChart)
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
-        ActivityOne(isOn:true)
-        //textAlpha(isNow: 0.3)
-        DispatchQueue.global(qos: .background).async {
-            CumulativeProfit().weeklyProfit(debug: false) {
-                (result: Bool) in
-                if result {
-                    DispatchQueue.main.async {
-                        self.getDataForChart()
-                        self.ActivityOne(isOn:false)
-                        //self.textAlpha(isNow: 1.0)
-                    }
-                }
-            }
-        }
+//        ActivityOne(isOn:true)
+//        //textAlpha(isNow: 0.3)
+//        DispatchQueue.global(qos: .background).async {
+//            CumulativeProfit().weeklyProfit(debug: false) {
+//                (result: Bool) in
+//                if result {
+//                    DispatchQueue.main.async {
+//                        self.getDataForChart()
+//                        self.ActivityOne(isOn:false)
+//                        //self.textAlpha(isNow: 1.0)
+//                    }
+//                }
+//            }
+//        }
     }
     
     func showCounter(count:Int,max:Int) {
@@ -170,6 +170,7 @@ class StatsViewController: UIViewController {
             }
             completeConfiguration()
         } else {
+            print("No stats in Realm")
             calcStats(debug: false, completion: getDataForChart)
         }
     }

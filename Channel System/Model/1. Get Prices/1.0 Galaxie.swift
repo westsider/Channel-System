@@ -36,7 +36,7 @@ class SymbolLists {
             return true
         }
         if ( testTenOnly ) {
-            return Array(result.prefix(2))
+            return Array(result.prefix(10))
         } else {
             return result
         }

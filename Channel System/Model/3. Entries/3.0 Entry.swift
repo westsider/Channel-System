@@ -75,9 +75,7 @@ class Entry {
         }
         print("Reset of \(ticker) complete")
     }
-    
-    
-    
+
     func calcLong(lastDate: Date, debug: Bool, prices: Results<Prices>, completion: @escaping () -> ()) {
         let realm = try! Realm()
         let sortedPrices = prices

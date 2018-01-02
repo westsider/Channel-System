@@ -82,7 +82,17 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.initializeEverything(tenOnly: true, debug: false)
+            self.initializeEverything(tenOnly: true, debug: true)
+            
+//            CumulativeProfit().weeklyProfit(debug: true, completion: { (finished) in
+//                if finished {
+//                    print("\n----------------------------------------------------------\n\t\t\tdone with weekly\n")
+//                }
+//            })
+            
+            
+           //let master = CumulativeProfit().allTickerBacktestWithCost(debug: true, saveToRealm: false)
+        
         }
 //        SMA().getData(tenOnly: true, debug: true, period: 10) { ( finished ) in // 2.0
 //            if finished {
@@ -140,15 +150,23 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                                                 self.updateNVActivity(with:"Finding Trades")
                                                                 Entry().getEntry(tenOnly: tenOnly, debug: debug, completion: { (finished) in
                                                                     if finished  {
-                                                                         print("Entry done")
-                                                                        DispatchQueue.main.async {
-                                                                            self.stopAnimating()
-                                                                            self.marketConditionUI(debug: false)
-                                                                        }
+                                                                        print("Entry done")
+                                                                        self.updateNVActivity(with:"Brute Force Back Test")
+                                                                        CalcStars().backtest(testTenOnly: true, debug: true, completion: {
+                                                                            print("\ncalc Stars done!\n")
+                                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
+                                                                            CumulativeProfit().backtestDailyWeekly(debug: true, completion: { (finished) in
+                                                                                if finished  {
+                                                                                    print("Backtest done")
+                                                                                    DispatchQueue.main.async {
+                                                                                        self.stopAnimating()
+                                                                                        self.marketConditionUI(debug: false)
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                        })
                                                                     }
                                                                 })
-                                                                
-                                                                
                                                             }
                                                         })
                                                     }
