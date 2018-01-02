@@ -10,7 +10,6 @@ import RealmSwift
 import UIKit
 import NVActivityIndicatorView
 
-//, NVActivityIndicatorViewable
 class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var lastUpdateLable: UILabel!
@@ -40,6 +39,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var galaxie = [String]()
     var marketCondition:Results<MarketCondition>!
     var marketReportString = ("No Title", "No Text")
+    var reset:Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +55,17 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-                self.firstRun()
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-                    self.subsequentRuns()
+        reset = false
+        if reset {
+            csvOnly(tenOnly: true, debug: true)
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+                    self.firstRun()
+                } else {
+                    self.stopAnimating()
+                    self.marketConditionUI(debug: false)
+                    print("this is not a new run... standing by")
                 }
             }
         }
@@ -68,22 +73,27 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     private func firstRun() {
         print("\nThis is the first run.\n")
-        self.initializeEverything(tenOnly: true, debug: false)
+        initializeEverything(tenOnly: true, debug: false)
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
     
     private func subsequentRuns() {
-        print("\nThis is NOT the first run.\n")
-        updateRealm = Utilities().realmNotCurrent(debug: true)
-        lastDateInRealm = Prices().getLastDateInRealm(debug: true)
+        print("\nThis is NOT the first run. Updating Prices \n")
+        //updateRealm = Utilities().realmNotCurrent(debug: true)
+        //lastDateInRealm = Prices().getLastDateInRealm(debug: true)
         //galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
         //let lastUpDate = Utilities().convertToStringNoTimeFrom(date: lastDateInRealm)
         //let lastUpDateString = "Updated on \(lastUpDate)"
-        stopAnimating()
+        updateNewPrices(tenOnly: true, debug: false)
     }
     
+    //MARK: - get new data
+    @IBAction func getNewDataAction(_ sender: Any) {
+        self.startAnimating(self.size, message: "Updating Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        subsequentRuns()
+    }
     //////////////////////////////////////////////////////////////////////////////////
-    //                              New First Run                                   //
+    //                                  First Run                                   //
     //////////////////////////////////////////////////////////////////////////////////
     //MARK: - Initialize Everything
     func initializeEverything(tenOnly: Bool, debug:Bool) {
@@ -111,7 +121,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                             if finished {
                                                 print("sma(200) done")
                                                 self.updateNVActivity(with:"Loading Oscilator")
-                                                PctR().getwPctR(tenOnly: tenOnly, debug: false, completion: { (finished) in
+                                                PctR().getwPctR(tenOnly: tenOnly, debug: debug, completion: { (finished) in
                                                     if finished {
                                                         print("oscilator done")
                                                         self.updateNVActivity(with:"Loading Market Condition")
@@ -123,10 +133,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                                                     if finished  {
                                                                         print("Entry done")
                                                                         self.updateNVActivity(with:"Brute Force Back Test")
-                                                                        CalcStars().backtest(testTenOnly: true, debug: true, completion: {
+                                                                        CalcStars().backtest(testTenOnly: true, debug: debug, completion: {
                                                                             print("\ncalc Stars done!\n")
                                                                             self.updateNVActivity(with:"Daily + Weekly Back Test")
-                                                                            CumulativeProfit().backtestDailyWeekly(debug: true, completion: { (finished) in
+                                                                            CumulativeProfit().backtestDailyWeekly(debug: debug, completion: { (finished) in
                                                                                 if finished  {
                                                                                     print("Backtest done")
                                                                                     DispatchQueue.main.async {
@@ -154,6 +164,133 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
+    //////////////////////////////////////////////////////////////////////////////////
+    //                              Update New Prices                               //
+    //////////////////////////////////////////////////////////////////////////////////
+    //MARK: - Initialize Everything
+    func updateNewPrices(tenOnly: Bool, debug:Bool) {
+        //updateNVActivity(with:"Updating Database")                                                   // 1.0
+        Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
+        updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
+        IntrioFeed().getData(tenOnly: tenOnly, debug: debug) { ( finished ) in // 1.4
+            if finished {
+                print("intrinio done")
+                self.updateNVActivity(with:"Loading Trend 1")
+                SMA().getData(tenOnly: tenOnly, debug: debug, period: 10) { ( finished ) in // 2.0
+                    if finished {
+                        print("sma(10) done")
+                        self.updateNVActivity(with:"Loading Trend 2")
+                        SMA().getData(tenOnly: tenOnly, debug: debug, period: 200) { ( finished ) in // 2.0
+                            if finished {
+                                print("sma(200) done")
+                                self.updateNVActivity(with:"Loading Oscilator")
+                                PctR().getwPctR(tenOnly: tenOnly, debug: debug, completion: { (finished) in
+                                    if finished {
+                                        print("oscilator done")
+                                        self.updateNVActivity(with:"Loading Market Condition")
+                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                            if finished  {
+                                                print("mc done")
+                                                self.updateNVActivity(with:"Finding Trades")
+                                                Entry().getEntry(tenOnly: tenOnly, debug: debug, completion: { (finished) in
+                                                    if finished  {
+                                                        print("Entry done")
+                                                        self.updateNVActivity(with:"Brute Force Back Test")
+                                                        CalcStars().backtest(testTenOnly: true, debug: debug, completion: {
+                                                            print("\ncalc Stars done!\n")
+                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
+                                                            CumulativeProfit().backtestDailyWeekly(debug: debug, completion: { (finished) in
+                                                                if finished  {
+                                                                    print("Backtest done")
+                                                                    DispatchQueue.main.async {
+                                                                        self.stopAnimating()
+                                                                        self.marketConditionUI(debug: false)
+                                                                    }
+                                                                }
+                                                            })
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////
+    //                               Clear for csv only                             //
+    //////////////////////////////////////////////////////////////////////////////////
+    //MARK: - Initialize Everything
+    func csvOnly(tenOnly: Bool, debug:Bool) {
+        updateNVActivity(with:"Clearing Database")
+        RealmHelpers().deleteAll()                                                     // 1.0
+        Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
+        updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
+        CSVFeed().getData(tenOnly: tenOnly, debug: debug) { ( finished ) in            // 1.2
+            if finished {
+                print("csv done")
+                self.updateNVActivity(with:"Loading Exchanges")
+                CompanyData().getInfo(tenOnly: tenOnly, debug: debug) { ( finished ) in // 1.3
+                    if finished {
+                        print("info done")
+                        self.updateNVActivity(with:"Contacting NYSE")
+                                print("skipping intrinio")
+                                self.updateNVActivity(with:"Loading Trend 1")
+                                SMA().getData(tenOnly: tenOnly, debug: debug, period: 10) { ( finished ) in // 2.0
+                                    if finished {
+                                        print("sma(10) done")
+                                        self.updateNVActivity(with:"Loading Trend 2")
+                                        SMA().getData(tenOnly: tenOnly, debug: debug, period: 200) { ( finished ) in // 2.0
+                                            if finished {
+                                                print("sma(200) done")
+                                                self.updateNVActivity(with:"Loading Oscilator")
+                                                PctR().getwPctR(tenOnly: tenOnly, debug: debug, completion: { (finished) in
+                                                    if finished {
+                                                        print("oscilator done")
+                                                        self.updateNVActivity(with:"Loading Market Condition")
+                                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                            if finished  {
+                                                                print("mc done")
+                                                                self.updateNVActivity(with:"Finding Trades")
+                                                                Entry().getEntry(tenOnly: tenOnly, debug: debug, completion: { (finished) in
+                                                                    if finished  {
+                                                                        print("Entry done")
+                                                                        self.updateNVActivity(with:"Brute Force Back Test")
+                                                                        CalcStars().backtest(testTenOnly: true, debug: debug, completion: {
+                                                                            print("\ncalc Stars done!\n")
+                                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
+                                                                            CumulativeProfit().backtestDailyWeekly(debug: debug, completion: { (finished) in
+                                                                                if finished  {
+                                                                                    print("Backtest done")
+                                                                                    DispatchQueue.main.async {
+                                                                                        self.stopAnimating()
+                                                                                        self.marketConditionUI(debug: false)
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                        })
+                                                                    }
+                                                                })
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    }
+                                }
+                    }
+                }
+            }
+        }
+    }
+    
     func marketConditionUI(debug:Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             let uiText = MarketCondition().overview(debug: debug)
@@ -168,15 +305,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
+
+    
     func firebaseBackup(now:Bool) {
         if now {
-            tradeButton(isOn: false)
-            updateButton(isOn: false)
             self.updateUI(with: "Backing Up To Firebase...")
             FirbaseLink().backUp(completion: firebaseBlock)
             self.updateUI(with: "Backing Up Complete")
-            tradeButton(isOn: true)
-            updateButton(isOn: true)
         }
     }
     
@@ -216,13 +351,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         if ( debug ) { print(thisString) }
         return ( titleString, thisString )
     }
-    
-    @IBAction func getNewDataAction(_ sender: Any) {
-        //MARK: - get new data
-        LastUpdate().incUpdate()
-       // getDataFromDataFeed(debug: false, completion: self.datafeedBlock)
-    }
-    
+
     @IBAction func manageTradesAction(_ sender: Any) {
         updateUI(with: "Calculating Performance")
         segueToCandidatesVC()
@@ -291,151 +420,11 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
-
-///////////////////////////////////////////////////////////
-
-    
-    //MARK: - 1.2 Get Data From CSV
-    private func getDataFromCSV(completion: @escaping () -> ()) {
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-                self.updateUI(with: "Getting local data for \(symbols) \(index+1) of \( self.galaxie.count)")
-               // CSVFeed().getPricesFromCSV(count: index, ticker: symbols, debug: false, completion: self.csvBlock)
-            }
-            self.updateUI(with: "All tickers have been downloaded!")
-            self.calcSMA10(completion: self.smaBlock2)
-        }
-        DispatchQueue.main.async {
-            completion()
-        }
-    }
-    
-    //MARK: - Get Data From Datafeed
-    private func getDataFromDataFeed(debug: Bool, completion: @escaping () -> ()) {
-        DispatchQueue.main.async {
-            self.startAnimating(self.size, message: "Contacting NYSE", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!)
-        }
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-                //self.updateUI(with: "Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)", spinIsOff: false)
-                DataFeed().getLastPrice(ticker: symbols, lastInRealm: self.lastDateInRealm, debug: true, completion: {
-                    self.counter += 1
-                    DispatchQueue.main.async {
-                        NVActivityIndicatorPresenter.sharedInstance.setMessage("Getting remote data for \(symbols) \(index+1) of \( self.galaxie.count)")
-                    }
-                    if ( debug ) { print("\n----> counter: \(self.counter) universe: \(self.galaxie.count) <----\n") }
-                    if ( self.counter == self.galaxie.count ) {
-                        self.updateUI(with: "All remote data has been downloaded!\n")
-                        self.calcSMA10(completion: self.smaBlock2)
-                        
-                    }
-                })
-            }
-        }
-        DispatchQueue.main.async {
-            completion()
-        }
-    }
-    
-    //MARK: - SMA 10
-    private func calcSMA10(completion: @escaping () -> ()) {
-//        self.updateUI(with: "Calulating Trend 1")
-//        DispatchQueue.global(qos: .background).async {
-//            for ( index, symbols ) in self.galaxie.enumerated() {
-//                //self.updateUI(with: "Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-//                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(10) for \(symbols) \(index+1) of \(self.galaxie.count)")
-//                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-//                //SMA().averageOf(period: 10, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
-//                //self.updateUI(with: "Finished Processing SMA(10) for \(symbols)", spinIsOff: true)
-//            }
-//            DispatchQueue.main.async {
-//                completion()
-//                self.updateUI(with: "Calculating Main Trend")
-//                print("\nSegue to Charts\n")
-//                self.calcSMA200(completion: self.smaBlock2)
-//            }
-//        }
-    }
-    //MARK: - SMA 200
-    private func calcSMA200(completion: @escaping () -> ()) {
-//        self.updateUI(with: "Calculating Main Trend")
-//        DispatchQueue.global(qos: .background).async {
-//            for ( index, symbols ) in self.galaxie.enumerated() {
-//                //self.updateUI(with: "Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-//                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing SMA(200) for \(symbols) \(index+1) of \(self.galaxie.count)")
-//                //let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-//                //SMA().averageOf(period: 200, debug: false, priorCount: oneTicker.count, prices: oneTicker, redoAll: false, completion: self.smaBlock1)
-//                //self.updateUI(with: "Finished Processing SMA(200) for \(symbols)", spinIsOff: true)
-//            }
-//            DispatchQueue.main.async {
-//                completion()
-//                self.updateUI(with: "Processing SMA(200) Complete")
-//                self.calcwPctR(completion: self.wPctRBlock)
-//            }
-//        }
-    }
-    //MARK: - wPctR
-    private func calcwPctR(completion: @escaping () -> ()) {
-//        self.updateUI(with: "Processing Oscilator")
-//        DispatchQueue.global(qos: .background).async {
-//            for ( index, symbols ) in self.galaxie.enumerated() {
-//               // self.updateUI(with: "Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-//                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing PctR for \(symbols) \(index+1) of \(self.galaxie.count)")
-//                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-//                PctR().williamsPctR(priorCount: oneTicker.count, debug: false, prices: oneTicker, redoAll: false, completion: self.wPctRBlock)
-//                //self.updateUI(with: "Finished Processing PctR for \(symbols)", spinIsOff: true)
-//            }
-//            DispatchQueue.main.async {
-//                completion()
-//                self.updateUI(with: "Processing Oscilator Complete")
-//                self.calcEntries(completion: self.entryBlock)
-//                MarketCondition().calcMarketCondUpdate(debug: true)
-//            }
-//        }
-    }
-    //MARK: - Entries
-    private func calcEntries(completion: @escaping () -> ()) {
-        self.updateUI(with: "Processing Trades")
-        DispatchQueue.global(qos: .background).async {
-            for ( index, symbols ) in self.galaxie.enumerated() {
-                //self.updateUI(with: "Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)", spinIsOff: false)
-                
-                NVActivityIndicatorPresenter.sharedInstance.setMessage("Processing Entries for \(symbols) \(index+1) of \(self.galaxie.count)")
-                
-                let oneTicker = self.prices.sortOneTicker(ticker: symbols, debug: false)
-                if ( self.lastDateInRealm != nil ) {
-                    Entry().calcLong(lastDate: self.lastDateInRealm, debug: false, prices: oneTicker, completion: self.entryBlock)
-                } else {
-                    // if first run when lastDateInRealm == nil and i need to load all symbols
-                    // so i will pass in the first date in the CSV
-                    let firstDate  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false)
-                    Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
-                }
-                //self.updateUI(with: "Finished Processing Entries for \(symbols)", spinIsOff: true)
-            }
-            DispatchQueue.main.async {
-                completion()
-                self.updateUI(with: "Processing Entries Complete")
-                self.stopAnimating()
-                self.manageTradesOrShowEntries(debug: false)
-            }
-        }
-    }
     
     private func updateUI(with: String) {
         DispatchQueue.main.async {
             //print(with)
             self.lastUpdateLable.text =  with
-        }
-    }
-    
-    func screenDim(isOn:Bool) {
-        if isOn {
-            tradeButton(isOn:false)
-            updateButton(isOn:false)
-        } else {
-            tradeButton(isOn:false)
-            updateButton(isOn:false)
         }
     }
     
@@ -445,30 +434,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             Prices().findDuplicates(ticker: ticker, debug: true)
         }
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
-    }
-    
-    private func tradeButton(isOn:Bool) {
-        if isOn {
-            tradeButton.isEnabled = true
-            tradeButton.alpha = 1.0
-        } else {
-            tradeButton.isEnabled = false
-            tradeButton.alpha = 0.4
-        }
-    }
-    
-    private func updateButton(isOn:Bool){
-        if isOn {
-            updateButton.isEnabled = true
-            updateButton.alpha = 1.0
-        } else {
-            updateButton.isEnabled = false
-            updateButton.alpha = 0.4
-        }
-    }
-    
-    func printDone() {
-        print("done weekly stats")
     }
     
     private func segueToChart(ticker: String) {
