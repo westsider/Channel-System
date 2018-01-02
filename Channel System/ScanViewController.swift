@@ -44,34 +44,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-//        tradeButton(isOn: false)
-//        updateButton(isOn: false)
-//        ManualTrades().showProfit()
-//        //RealmHelpers().deleteAll()
-//
-//        let oldClosedTrades =  RealmHelpers().getClosedTrades()
-//        print("\nPrinting Closed trades in realm")
-//        for each in oldClosedTrades {
-//            print("\(each.ticker) \(each.dateString) entry: \(each.entry) profit: \(each.profit) loss: \(each.loss)")
-//        }
-//        // iphone 7+ Sim is  191634
-//
-//        // stats get stuck in inf loop.. might be calcMarketCondFirstRun() didnt get calles
-//        // in pref run
-//        // [ ] entries
-//        // [ ] backtest
-
-//        print("\n", marketReportString, "\n")
-//
-//        // this was never called on first run
-//        CumulativeProfit().weeklyProfit(debug: true) {
-//            (result: Bool) in
-//            if result {
-//                DispatchQueue.main.async {
-//                    self.printDone()
-//                }
-//            }
-//        }
+        ManualTrades().showProfit()
+        // iphone 7+ Sim is  191634
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,38 +56,35 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.initializeEverything(tenOnly: true, debug: true)
-            
-//            CumulativeProfit().weeklyProfit(debug: true, completion: { (finished) in
-//                if finished {
-//                    print("\n----------------------------------------------------------\n\t\t\tdone with weekly\n")
-//                }
-//            })
-            
-            
-           //let master = CumulativeProfit().allTickerBacktestWithCost(debug: true, saveToRealm: false)
-        
+            if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+                self.firstRun()
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                    self.subsequentRuns()
+                }
+            }
         }
-//        SMA().getData(tenOnly: true, debug: true, period: 10) { ( finished ) in // 2.0
-//            if finished {
-//                print("\nfinished redo of sma 10\n")
-//            }
-//        }
-//        if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-//            firstRun()
-//        } else {
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-//                self.subsequentRuns()
-//                self.firebaseBackup(now: false)
-//                FirbaseLink().allData(clear: false)
-//            }
-//        }
     }
     
-//////////////////////////////////////////////////////////////////////////////////
-//                              New First Run                                   //
-//////////////////////////////////////////////////////////////////////////////////
+    private func firstRun() {
+        print("\nThis is the first run.\n")
+        self.initializeEverything(tenOnly: true, debug: false)
+        UserDefaults.standard.set(false, forKey: "FirstRun")
+    }
     
+    private func subsequentRuns() {
+        print("\nThis is NOT the first run.\n")
+        updateRealm = Utilities().realmNotCurrent(debug: true)
+        lastDateInRealm = Prices().getLastDateInRealm(debug: true)
+        //galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        //let lastUpDate = Utilities().convertToStringNoTimeFrom(date: lastDateInRealm)
+        //let lastUpDateString = "Updated on \(lastUpDate)"
+        stopAnimating()
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////
+    //                              New First Run                                   //
+    //////////////////////////////////////////////////////////////////////////////////
     //MARK: - Initialize Everything
     func initializeEverything(tenOnly: Bool, debug:Bool) {
         updateNVActivity(with:"Clearing Database")
@@ -197,8 +168,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-
-    
     func firebaseBackup(now:Bool) {
         if now {
             tradeButton(isOn: false)
@@ -216,47 +185,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    private func saveCompanyInfoToRealm() {
-//        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-//        for ticker in galaxie {
-//            CompanyData().getInfoFor(ticker: ticker, debug: false, completion: self.infoBlock)
-//        }
-    }
-    
-    private func firstRun() {
-        lastUpdateLable.text = "First run of app."
-        print("\nThis was first run so I will load CSV historical data\n")
-        initially(deleteAll: true, printPrices: false, printTrades: false)
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        self.updateUI(with: "Cleaning CSV Data...")
-        GetCSV().areTickersValid(megaSymbols: galaxie)
-        getDataFromCSV(completion: self.csvBlock) // get entries crash on first run, lastUpdateInRealm = Nil
-        checkDuplicates()
-        saveCompanyInfoToRealm()
-        //MarketCondition().calcMarketCondFirstRun(debug: true, completion: mcBlock)
-        UserDefaults.standard.set(false, forKey: "FirstRun")
-    }
-    
-    private func subsequentRuns() {
-        print("\nThis is NOT the first run.\n")
-        updateRealm = Utilities().realmNotCurrent(debug: false)
-        lastDateInRealm = Prices().getLastDateInRealm(debug: false)
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
-        let lastUpDate = Utilities().convertToStringNoTimeFrom(date: lastDateInRealm)
-        let lastUpDateString = "Updated on \(lastUpDate)"
-        NVActivityIndicatorPresenter.sharedInstance.setMessage(lastUpDateString)
-        currentProcessLable.text = lastUpDateString
-        tradeButton(isOn: true)
-        updateButton(isOn: true)
- 
-        self.stopAnimating()
-        titleLabel.text = marketReportString.0
-//        marketCondText.text = marketReportString.1
-//        print("title \(marketReportString.0) body \(marketReportString.1)")
-//        print("Last Date in Realm: \(lastDateInRealm) today is\(Date())")
-//        let this = Utilities().lastUpdateWasToday(debug: true)
-//        print("Last dat is today \(this.0)")
-    }
 
     func overview(debug:Bool)-> (String, String ) {
         let latest = marketCondition.last!
