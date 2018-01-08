@@ -13,8 +13,8 @@
 		0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D16296D1FF1E54700E11A64 /* Firebase Service.swift */; };
 		0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */; };
 		0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */; };
-		0D187BFA1FF97B4000FE4FEC /* 3.0 Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF91FF97B4000FE4FEC /* 3.0 Entry.swift */; };
-		0D187BFD1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFC1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift */; };
+		0D187BFA1FF97B4000FE4FEC /* 3.0 Every Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF91FF97B4000FE4FEC /* 3.0 Every Entry.swift */; };
+		0D187BFD1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */; };
 		0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */; };
 		0D187C011FF97BED00FE4FEC /* 3.3 Weekly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */; };
 		0D2D98D31FF6B41C00B7D8BE /* Maintenence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2D98D21FF6B41C00B7D8BE /* Maintenence.swift */; };
@@ -278,6 +278,10 @@
 		0D809C391FC9387B00CE476D /* IWN.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C381FC9387B00CE476D /* IWN.csv */; };
 		0D809C3B1FC9389500CE476D /* IWP.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C3A1FC9389400CE476D /* IWP.csv */; };
 		0D809C3D1FC938CA00CE476D /* IXC.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C3C1FC938CA00CE476D /* IXC.csv */; };
+		0D8944A6200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8944A5200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift */; };
+		0D8944A8200162F30046D6AC /* 4.1 Chrono Daily Profit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8944A7200162F30046D6AC /* 4.1 Chrono Daily Profit.swift */; };
+		0D8944AA2001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */; };
+		0D8944AC20017D780046D6AC /* 4.3 Limited Portfolio Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8944AB20017D780046D6AC /* 4.3 Limited Portfolio Util.swift */; };
 		0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D941BA51FD1A91D007335E6 /* Company Feed.swift */; };
 		0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */; };
 		0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CD91FA3B7B600960BA2 /* ScanViewController.swift */; };
@@ -297,6 +301,7 @@
 		0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */; };
 		0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDF1FBC401600095560 /* Get CSV.swift */; };
 		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
+		0DD146AB2003D0630000056C /* DeBugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD146AA2003D0630000056C /* DeBugViewController.swift */; };
 		0DD37FF81FD6427E00D1CFE7 /* Cumulative Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */; };
 		0DE1C0C71FEC2538003CB393 /* Market Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE1C0C61FEC2538003CB393 /* Market Condition.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
@@ -314,8 +319,8 @@
 		0D16296D1FF1E54700E11A64 /* Firebase Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Service.swift"; sourceTree = "<group>"; };
 		0D187BF51FF93FF700FE4FEC /* 2.1 wPct(r).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.1 wPct(r).swift"; sourceTree = "<group>"; };
 		0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.2 Market Condition.swift"; sourceTree = "<group>"; };
-		0D187BF91FF97B4000FE4FEC /* 3.0 Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.0 Entry.swift"; sourceTree = "<group>"; };
-		0D187BFC1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.1 Brute Force Backtest.swift"; sourceTree = "<group>"; };
+		0D187BF91FF97B4000FE4FEC /* 3.0 Every Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.0 Every Entry.swift"; sourceTree = "<group>"; };
+		0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.1 Enter When Flat.swift"; sourceTree = "<group>"; };
 		0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.2 Calc Stars.swift"; sourceTree = "<group>"; };
 		0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.3 Weekly.swift"; sourceTree = "<group>"; };
 		0D2D98D21FF6B41C00B7D8BE /* Maintenence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maintenence.swift; sourceTree = "<group>"; };
@@ -579,6 +584,10 @@
 		0D809C381FC9387B00CE476D /* IWN.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWN.csv; sourceTree = "<group>"; };
 		0D809C3A1FC9389400CE476D /* IWP.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IWP.csv; sourceTree = "<group>"; };
 		0D809C3C1FC938CA00CE476D /* IXC.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IXC.csv; sourceTree = "<group>"; };
+		0D8944A5200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "4.0 Limited Portfolio Positions.swift"; sourceTree = "<group>"; };
+		0D8944A7200162F30046D6AC /* 4.1 Chrono Daily Profit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "4.1 Chrono Daily Profit.swift"; sourceTree = "<group>"; };
+		0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "4.2 Chrono Weekly Profit.swift"; sourceTree = "<group>"; };
+		0D8944AB20017D780046D6AC /* 4.3 Limited Portfolio Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "4.3 Limited Portfolio Util.swift"; sourceTree = "<group>"; };
 		0D941BA51FD1A91D007335E6 /* Company Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company Feed.swift"; sourceTree = "<group>"; };
 		0D949CD41FA3B7B600960BA2 /* Channel System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channel System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D949CD71FA3B7B600960BA2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -600,6 +609,7 @@
 		0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Long Entry.swift"; sourceTree = "<group>"; };
 		0DCAAFDF1FBC401600095560 /* Get CSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV.swift"; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
+		0DD146AA2003D0630000056C /* DeBugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeBugViewController.swift; sourceTree = "<group>"; };
 		0DD37FF71FD6427E00D1CFE7 /* Cumulative Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cumulative Results.swift"; sourceTree = "<group>"; };
 		0DE1C0C61FEC2538003CB393 /* Market Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Market Condition.swift"; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
@@ -883,6 +893,7 @@
 				0DE78F541FD888B400915777 /* Stats Object.swift */,
 				0DB6B1021FCE9A71009F6BEB /* BackTest.swift */,
 				0D5A43A41FEF10EB00842801 /* S+P Returns.swift */,
+				0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */,
 				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 			);
 			path = "Brute Force";
@@ -901,10 +912,9 @@
 		0D187BFB1FF97B5500FE4FEC /* 3. Entries */ = {
 			isa = PBXGroup;
 			children = (
-				0D187BF91FF97B4000FE4FEC /* 3.0 Entry.swift */,
-				0D187BFC1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift */,
+				0D187BF91FF97B4000FE4FEC /* 3.0 Every Entry.swift */,
+				0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */,
 				0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */,
-				0D187C001FF97BED00FE4FEC /* 3.3 Weekly.swift */,
 			);
 			path = "3. Entries";
 			sourceTree = "<group>";
@@ -929,6 +939,17 @@
 				0D187BF71FF940DD00FE4FEC /* 2.2 Market Condition.swift */,
 			);
 			path = "2. Indicators";
+			sourceTree = "<group>";
+		};
+		0D8944A42001624A0046D6AC /* Portfolio */ = {
+			isa = PBXGroup;
+			children = (
+				0D8944A5200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift */,
+				0D8944A7200162F30046D6AC /* 4.1 Chrono Daily Profit.swift */,
+				0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */,
+				0D8944AB20017D780046D6AC /* 4.3 Limited Portfolio Util.swift */,
+			);
+			path = Portfolio;
 			sourceTree = "<group>";
 		};
 		0D949CCB1FA3B7B600960BA2 = {
@@ -961,6 +982,7 @@
 				0D7B2E7F1FC3699D004B751C /* ManageViewController.swift */,
 				0D77DDCF1FCF8E1B007573C3 /* StatsViewController.swift */,
 				0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */,
+				0DD146AA2003D0630000056C /* DeBugViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -1032,6 +1054,7 @@
 				0D6726981FF807A500E42A9A /* 1. Get Prices */,
 				0D67269B1FF8080100E42A9A /* 2. Indicators */,
 				0D187BFB1FF97B5500FE4FEC /* 3. Entries */,
+				0D8944A42001624A0046D6AC /* Portfolio */,
 				0DA11AE51FD07C140074BAD7 /* Realm */,
 				0DA11AE21FD07B620074BAD7 /* Stats */,
 				0DA11AE31FD07B920074BAD7 /* Data */,
@@ -1460,10 +1483,12 @@
 			files = (
 				0DCAAFD71FBC37D200095560 /* Price Temp.swift in Sources */,
 				0D67269A1FF807F800E42A9A /* 2.0 SMA 10, 200.swift in Sources */,
+				0DD146AB2003D0630000056C /* DeBugViewController.swift in Sources */,
+				0D8944A6200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift in Sources */,
 				0D77DDCE1FCF705C007573C3 /* Trade Helpers.swift in Sources */,
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */,
-				0D187BFD1FF97B8000FE4FEC /* 3.1 Brute Force Backtest.swift in Sources */,
+				0D187BFD1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
@@ -1477,6 +1502,7 @@
 				0DCAAFE01FBC401600095560 /* Get CSV.swift in Sources */,
 				0DC70C701FE1CEFB00DC58BF /* Past Trades.swift in Sources */,
 				0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */,
+				0D8944A8200162F30046D6AC /* 4.1 Chrono Daily Profit.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,
 				0DC70C6E1FE1BFEF00DC58BF /* EntryAndExits.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */,
@@ -1489,11 +1515,13 @@
 				0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */,
 				0D941BA61FD1A91D007335E6 /* Company Feed.swift in Sources */,
 				0DCAAFD91FBC385100095560 /* SMA.swift in Sources */,
+				0D8944AA2001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift in Sources */,
 				0D187C011FF97BED00FE4FEC /* 3.3 Weekly.swift in Sources */,
 				0D6726931FF8073B00E42A9A /* 1.2 Get CSV Data.swift in Sources */,
 				0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */,
 				0D16296E1FF1E54700E11A64 /* Firebase Service.swift in Sources */,
 				0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */,
+				0D8944AC20017D780046D6AC /* 4.3 Limited Portfolio Util.swift in Sources */,
 				0DD37FF81FD6427E00D1CFE7 /* Cumulative Results.swift in Sources */,
 				0D2D98D31FF6B41C00B7D8BE /* Maintenence.swift in Sources */,
 				0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */,
@@ -1502,7 +1530,7 @@
 				0D6726971FF8079900E42A9A /* 1.4 Get Intrio.swift in Sources */,
 				0DEEA0DF1FCDFC520046BABC /* LastUpdate.swift in Sources */,
 				0D67269D1FF80B9E00E42A9A /* 1.0 Galaxie.swift in Sources */,
-				0D187BFA1FF97B4000FE4FEC /* 3.0 Entry.swift in Sources */,
+				0D187BFA1FF97B4000FE4FEC /* 3.0 Every Entry.swift in Sources */,
 				0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */,
 				0DE78F551FD888B400915777 /* Stats Object.swift in Sources */,
 			);

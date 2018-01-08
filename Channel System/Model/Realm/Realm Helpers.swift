@@ -39,7 +39,7 @@ class RealmHelpers: Object {
     func updateTodaysPrice(each: Prices) {
         let realm = try! Realm()
         let price = Prices().sortOneTicker(ticker: each.ticker, debug: false).last!
-        print("now updating \(price.ticker) for \(price.dateString)")
+        print("now updating todays \(price.ticker) for \(price.dateString)")
         try! realm.write({
             price.date = each.date
             price.dateString = each.dateString
@@ -57,6 +57,25 @@ class RealmHelpers: Object {
             price.taskID = NSUUID().uuidString
             price.account = each.account
         })
+    }
+    
+    func updatePriorPrice(each: Prices) {
+        let realm = try! Realm()
+        let price = getOneDay(ticker: each.ticker, date: each.date!)
+        print("now updating prior day \(price.ticker) for \(price.dateString)")
+        try! realm.write({
+            price.open = each.open
+            price.high = each.high
+            price.low = each.low
+            price.close = each.close
+            price.volume = each.volume
+        })
+    }
+    
+    func getOneDay(ticker:String, date:Date)-> Prices {
+        // 2017-12-27 AAPL
+        let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false).filter("date == %@", date).last
+        return oneTicker!
     }
     
     //MARK: - Clear Realm

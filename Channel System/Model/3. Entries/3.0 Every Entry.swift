@@ -1,5 +1,5 @@
 //
-//  3.0 Entry.swift
+//  3.0 Every Entry.swift
 //  Channel System
 //
 //  Created by Warren Hansen on 12/31/17.
@@ -9,9 +9,19 @@ import Foundation
 import RealmSwift
 
 class Entry {
-    
-    func getEntry(tenOnly:Bool, debug:Bool, completion: @escaping (Bool) -> Void) {
-        let galaxie = SymbolLists().getSymbols(tenOnly: true)
+    /**
+     - Author: Warren Hansen
+     - Step 1 of 3 Complete backtest process
+     -      Entry().getEntry()
+     -      CalcStars().backTest() calls BackTest().bruteForceTradesForEach()
+     -      weeklyProfit()  # the mess
+     - loop though each Prices sorted by tickerate and d
+     - update realm with longEntry, shares, target, stop, cap required
+     ### Declare As:
+            let done = self.calcLongForOnly(ticker: symbols, deBug: debug)
+     ## galaxie ttt
+     */
+    func getEveryEntry(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
         var counter = 0
         let total = galaxie.count
         var done:Bool = false
@@ -31,8 +41,29 @@ class Entry {
             }
         }
     }
-    func calcLongForOnly(ticker:String, deBug:Bool)->Bool {
+    
+    func testGetEntry(galaxie: [String], summaryOnly:Bool){
+        var totalEntries:Int = 0
+        var totalTickers:Int = 0
+        for ticker in galaxie {
+            var counter:Int = 0
+            let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
+            for each in prices {
+                if each.longEntry {
+                    counter += 1
+                }
+                
+            }
+            totalTickers += 1
+            totalEntries += counter
+            if !summaryOnly { print("\(prices.last?.ticker ?? "nil") had \(counter) entries. Total Entries: \(totalEntries) Total Tickers \(totalTickers)") }
+        }
         
+        print("\n---------------------------------------\n\t\tSummary of Entry test\nTotal Entries \(totalEntries), Total Tickers \(totalTickers)\n---------------------------------------\n")
+        
+    }
+    func calcLongForOnly(ticker:String, deBug:Bool)->Bool {
+        print("Getting all dates for \(ticker) to calc entries")
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         let realm = try! Realm()
         for each in prices {

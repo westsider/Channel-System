@@ -15,7 +15,7 @@ class MyPrice {
     func profit(ticker: String, date: String, entry:Double, exit:Double, shares: Double)-> (String, Double, Double) {
         var profit:Double = 0.00
         if exit != 0.00 {
-            profit = (exit - entry) * shares - 1.05 // comm
+            profit = (exit - entry) * shares - (1.05 * 2) // comm
         }
         let cost = shares * entry
         let profitString = String(format: "%.2f", profit)
@@ -31,6 +31,7 @@ class ManualTrades {
         var cumProfit = [Double]()
         var cumCost = [Double]()
         var winCount:Int = 0
+        print("\n-------------------\n \tLive Trades\n-------------------")
         trades.append( MyPrice().profit(ticker: "DBB", date: "11/28", entry: 18.21, exit: 17.8, shares: 90.00) )
         trades.append( MyPrice().profit(ticker: "KO", date: "11/28", entry: 45.57, exit: 46.19, shares: 36.00) )
         trades.append( MyPrice().profit(ticker: "DJP", date: "12/01", entry: 23.91, exit: 23.05, shares: 100.00) )
@@ -42,7 +43,6 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "SOXX", date: "12/06", entry: 167.38, exit: 167.87, shares: 5.00) )
         trades.append( MyPrice().profit(ticker: "EEM", date: "12/07", entry: 45.92, exit: 46.45, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "EWA", date: "12/07", entry: 22.6, exit: 23.17, shares: 73.00) )
-        trades.append( MyPrice().profit(ticker: "EWY", date: "12/07", entry: 74.25, exit: 0.00, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/08", entry: 74.38, exit: 75.54, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "EWT", date: "12/08", entry: 36.28, exit: 36.6, shares: 45.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/08", entry: 74.38, exit: 75.55, shares: 22.00) )
@@ -51,13 +51,15 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "RSX", date: "12/19", entry: 20.82, exit: 21.71, shares: 80.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12/19", entry: 73.00, exit: 74.84, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "TLT", date: "12/19", entry: 125.64, exit: 126.94, shares: 7.00) )
-        
-        trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.74, exit: 0.00, shares: 14.00) )
-        trades.append( MyPrice().profit(ticker: "MCD", date: "12/20", entry: 172.21, exit: 0.00, shares: 9.00) )
-        trades.append( MyPrice().profit(ticker: "MMM", date: "12/20", entry: 237.05, exit: 0.00, shares: 7.00) )
-        trades.append( MyPrice().profit(ticker: "UNH", date: "12/22", entry: 220.07, exit: 0.00, shares: 7.00) )
-        trades.append( MyPrice().profit(ticker: "VEA", date: "12/22", entry: 44.58, exit: 0.00, shares: 37.00) )
-        trades.append( MyPrice().profit(ticker: "AAPL", date: "12/27", entry: 170.27, exit: 0.00, shares: 5.00) )
+        trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.74, exit: 70.73, shares: 14.00) )
+        trades.append( MyPrice().profit(ticker: "MCD", date: "12/20", entry: 172.21, exit: 173.33, shares: 9.00) )
+        trades.append( MyPrice().profit(ticker: "MMM", date: "12/20", entry: 237.05, exit: 235.11, shares: 7.00) )
+        trades.append( MyPrice().profit(ticker: "VEA", date: "12/22", entry: 44.58, exit: 45.19, shares: 37.00) )
+        trades.append( MyPrice().profit(ticker: "UNH", date: "12/22", entry: 220.07, exit: 225.65, shares: 7.00) )
+        trades.append( MyPrice().profit(ticker: "AAPL", date: "12/27", entry: 170.27, exit: 174.9, shares: 5.00) )
+        trades.append( MyPrice().profit(ticker: "IFY", date: "1/3", entry: 119.41, exit: 120.69, shares: 13.00) )
+        trades.append( MyPrice().profit(ticker: "FXO", date: "1/3", entry: 31.28, exit: 31.68, shares: 53.00) )
+        trades.append( MyPrice().profit(ticker: "PG", date: "1/3", entry: 90.80, exit: 0.00, shares: 18.00) )
         
         for each in trades {
             print(each.0)

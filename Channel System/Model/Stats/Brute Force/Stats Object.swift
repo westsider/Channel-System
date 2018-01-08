@@ -65,7 +65,7 @@ class Stats: Object {
                 updateStats.maxCost = maxCost
                 updateStats.largestWinner = largestWin
                 updateStats.largestLoser = largestLoss
-                updateStats.firstDate = firstDate
+                updateStats.firstDate = firstDate  // not sure what this is used for, might be to calc annual roi
             }
         } else {
             print("first time saving Stats Object")

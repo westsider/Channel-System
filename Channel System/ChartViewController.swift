@@ -43,6 +43,7 @@ class SCSSyncMultiChartView: UIViewController {
     @IBAction func unwindToCharts(segue: UIStoryboardSegue) {}
     
     override func viewDidLoad() {
+        detectDevice()
         oneTicker = Prices().getFrom(taskID: taskIdSelected)
         marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
@@ -143,7 +144,12 @@ class SCSSyncMultiChartView: UIViewController {
     
     fileprivate func addMatrixValues(isOn:Bool, date:Date, low:Double, index:Double) {
         if !isOn { return }
-        let matrix = MarketCondition().getMatixToProveOnChart(date: date)
+        var matrix = MarketCondition().getMatixToProveOnChart(date: date)
+        if matrix <= 3 || matrix == 6 {
+            matrix = 1
+        } else {
+            matrix = 0
+        }
         let mStat = ShowTrades().showMatrix(xID: axisX1Id, yID: axisY1Id, date: index, price: low, text: "\(matrix)")
         sciChartView1.annotations.add(mStat)
     }
@@ -245,7 +251,7 @@ class SCSSyncMultiChartView: UIViewController {
             let high:Double = things.high
             let low:Double = things.low
             surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
-            addMatrixValues(isOn:false, date: things.date!, low: things.low, index: Double(index))
+            //addMatrixValues(isOn:true, date: things.date!, low: things.low, index: Double(index))
         }
     }
     //MARK: - pctR
@@ -428,5 +434,60 @@ class SCSSyncMultiChartView: UIViewController {
         myVC.action = "Entry For"
         navigationController?.pushViewController(myVC, animated: true)
     }
+    
+    func detectDevice() {
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            print("It's an iPhone")
+        case .pad:
+            print("it's an iPad")
+            maxBarsOnChart = maxBarsOnChart * 2
+        case .unspecified:
+           print("It's an iPhone")
+        case .tv:
+            print("It's an iPhone")
+            maxBarsOnChart = maxBarsOnChart * 3
+        case .carPlay:
+            print("It's an iPhone")
+        }
+    }
+    
+    enum UIUserInterfaceIdiom : Int {
+        case unspecified
+        case phone // iPhone and iPod touch style UI
+        case pad // iPad style UI
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -40,7 +40,7 @@ class FirbaseLink {
     func backUp(completion: @escaping () -> ()) {
         var ref: DatabaseReference!
         ref =  Database.database().reference().child("prices");
-        let galaxie:[String] = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        let galaxie:[String] = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
         var counter:Int = 0
         var totalCount:Int = 1000000
         DispatchQueue.global(qos: .background).async {

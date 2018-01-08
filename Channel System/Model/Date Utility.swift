@@ -150,4 +150,12 @@ class Utilities {
     func decimalStr(input:Double, Decimals:Int)->String {
         return String(format: "%.\(Decimals)f", input)
     }
+    
+    func happySad(num:Double) -> String {
+        if num >= 0 {
+            return "🔵"
+        } else {
+            return "🔴"
+        }
+    }
 }

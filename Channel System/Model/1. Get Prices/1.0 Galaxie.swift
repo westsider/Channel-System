@@ -26,7 +26,7 @@ class SymbolLists {
     
     let allSymbols = Symbols().indexes + Symbols().DOW30 + Symbols().ETF200
     
-    func uniqueElementsFrom(testTenOnly: Bool) -> [String] {
+    func uniqueElementsFrom(testSet: Bool, of:Int) -> [String] {
         var set = Set<String>()
         let result = allSymbols.filter {
             guard !set.contains($0) else {
@@ -35,17 +35,17 @@ class SymbolLists {
             set.insert($0)
             return true
         }
-        if ( testTenOnly ) {
-            return Array(result.prefix(10))
+        if ( testSet ) {
+            return Array(result.prefix(of))
         } else {
             return result
         }
     }
     
-    // let galaxie = SymbolLists().getSymbols(tenOnly: true)
-    func getSymbols(tenOnly: Bool)-> [String] {
-        return SymbolLists().uniqueElementsFrom(testTenOnly: tenOnly)
-    }
+//    // let galaxie = SymbolLists().getSymbols(tenOnly: true)
+//    func getSymbols(testSet: Bool,of:Int)-> [String] {
+//        return SymbolLists().uniqueElementsFrom(testTenOnly: testSet, of: <#Int#>)
+//    }
 }
 
 

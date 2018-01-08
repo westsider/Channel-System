@@ -225,9 +225,13 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             
             capitalReq.text = "Cost $\(capReqd)"
             
-            let stopSize:CompanyData = CompanyData().getExchangeFrom(ticker: thisTrade.ticker, debug: false)
+            if let stopSize:CompanyData = CompanyData().getExchangeFrom(ticker: thisTrade.ticker, debug: false) {
+                stopSizeLable.text = "Stop Size \(stopSize.stopSize)%"
+            } else {
+                stopSizeLable.text = "Stop Size was nil"
+            }
             
-            stopSizeLable.text = "Stop Size \(stopSize.stopSize)%"
+            
             
         } else if (action == "Manage") {
             //MARK: - TODO - set up lables

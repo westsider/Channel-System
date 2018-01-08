@@ -14,8 +14,11 @@ import CSV
 
 class CSVFeed {
     
-    func getData(tenOnly:Bool, debug:Bool, completion: @escaping (Bool) -> Void) {
-        let galaxie = SymbolLists().getSymbols(tenOnly: true); print("1.0 Galaxie Complete")
+    func getData(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
+        //var galaxie = SymbolLists().allSymbols
+//        if tenOnly {
+//            galaxie = SymbolLists().uniqueElementsFrom(testSet: tenOnly, of: 20) ; print("1.0 Galaxie Complete")
+//        } 
         var counter = 0
         let total = galaxie.count
         var done:Bool = false

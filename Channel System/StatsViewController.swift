@@ -79,37 +79,68 @@ class StatsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Stats"
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         
-// got stuck in inf loop after reloading everything
-        getStatsfromRealm()
+        
+        //MARK: - Todo if lastdate in realm wklySTats is today just load from realm.. else CumulativeProfit().weeklyProfit
+        
+        // now only calc cum profit when this vc is called
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            PortfolioWeekly().weeklyProfit(debug: true, completion: { (finished) in
+                if finished {
+                    WklyStats().showCumProfitFromRealm()
+                    self.getStatsfromRealm()
+                }
+            })
+        }
+
+        // got stuck in inf loop after reloading everything
+        //getStatsfromRealm()
+        //newStatsToGet()
+        
     }
     
+    
+    func newStatsToGet() {
+//        CalcStars().backtest(galaxie: galaxie, debug: false, completion: {
+//            print("\ncalc Stars done!\n")
+//            //self.updateNVActivity(with:"Daily + Weekly Back Test")
+//            CumulativeProfit().backtestDailyWeekly(debug: false, completion: { (finished) in
+//                if finished  {
+//                    print("Backtest done")
+//                    DispatchQueue.main.async {
+//                        //self.stopAnimating()
+//                    }
+//                }
+//            })
+//        })
+    }
     //MARK: - Backtest Button
     @IBAction func runNewBacktestAction(_ sender: Any) {
 //        self.topLeft.textAlignment = .right
 //        ActivityOne(isOn:true)
 //        calcStats(debug: false, completion: getDataForChart)
+        newStatsToGet()
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
-//        ActivityOne(isOn:true)
-//        //textAlpha(isNow: 0.3)
-//        DispatchQueue.global(qos: .background).async {
-//            CumulativeProfit().weeklyProfit(debug: false) {
-//                (result: Bool) in
-//                if result {
-//                    DispatchQueue.main.async {
-//                        self.getDataForChart()
-//                        self.ActivityOne(isOn:false)
-//                        //self.textAlpha(isNow: 1.0)
-//                    }
-//                }
-//            }
-//        }
+        ActivityOne(isOn:true)
+        //textAlpha(isNow: 0.3)
+        DispatchQueue.global(qos: .background).async {
+            PortfolioWeekly().weeklyProfit(debug: false) {
+                (result: Bool) in
+                if result {
+                    DispatchQueue.main.async {
+                        self.getDataForChart()
+                        self.ActivityOne(isOn:false)
+                        //self.textAlpha(isNow: 1.0)
+                    }
+                }
+            }
+        }
     }
     
     func showCounter(count:Int,max:Int) {
@@ -171,7 +202,7 @@ class StatsViewController: UIViewController {
             completeConfiguration()
         } else {
             print("No stats in Realm")
-            calcStats(debug: false, completion: getDataForChart)
+            //calcStats(debug: false, completion: getDataForChart)
         }
     }
 
@@ -209,7 +240,7 @@ class StatsViewController: UIViewController {
             }
         } else {
             print("did not find realm")
-            calcStats(debug: false, completion: getDataForChart)
+            //calcStats(debug: false, completion: getDataForChart)
         }
     }
     
@@ -217,7 +248,7 @@ class StatsViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.ActivityOne(isOn:true)
             print("\n---------------> Now running new backtest <----------------\n")
-            _ = CumulativeProfit().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+            _ = PortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
            
             DispatchQueue.main.async {
                 completion()

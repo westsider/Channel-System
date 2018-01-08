@@ -39,9 +39,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var acctTotalLabel: UILabel!
     @IBOutlet weak var starsTextField: UITextField!
     
-    
     var galaxie = [String]()
-    
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
     let infoBlock = { print( "\nCompany Info Returned <----------\n" ) }
     let smaBlock1 = { print( "\nSMA calc finished 1 Calc Func first <----------\n" ) }
@@ -60,7 +58,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         Account().debugAccount()
         title = "Preferences"
         populateLables()
-        galaxie = SymbolLists().uniqueElementsFrom(testTenOnly: false)
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         symbolCount = galaxie.count
         activityDial.stopAnimating()
     }
@@ -111,7 +109,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         }
         
         //MARK: - call entries then backtest then update realm then segue
-        entriesWithCompletion(completion: entryBlock)
+        // entriesWithCompletion(completion: entryBlock)
     }
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
@@ -121,7 +119,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 self.buttonsAre(on: false)
                 self.backTestLabel.text = "saving to realm"
             }
-            _ = CumulativeProfit().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+            _ = PortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
             
             DispatchQueue.main.async {
                 self.activityDial.stopAnimating()
@@ -281,6 +279,20 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         activityDial.startAnimating()
         self.buttonsAre(on: false)
         var count = 0
+        Entry().getEveryEntry(galaxie: galaxie, debug: true, completion: { (finished) in
+            if finished  {
+                print("Entry done")
+                CalcStars().backtest(galaxie: self.galaxie, debug: true, completion: {
+                    print("\ncalc Stars done!\n")
+                    PortfolioWeekly().weeklyProfit(debug: true, completion: { (finished) in
+                        if finished {
+                            self.activityDial.stopAnimating()
+                            self.buttonsAre(on: true)
+                        }
+                    })
+                })
+            }
+        })
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
                 DispatchQueue.main.async {
@@ -305,7 +317,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func backtestAction(_ sender: Any) {
-        backtest(completion: backtestBlock)
+        //backtest(completion: backtestBlock)
     }
     
     func backtest(completion: @escaping () -> ()) {
@@ -318,7 +330,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 DispatchQueue.main.async {
                     self.backTestLabel.text = "profit \(symC) of \(self.galaxie.count)"
                 }
-                let results =   BackTest().bruteForceTradesForEach(ticker: symbols, debug: false, updateRealm: true)
+                let results =   BackTest().enterWhenFlat(ticker: symbols, debug: false, updateRealm: true)
                 tickerStar.append((ticker: symbols, grossProfit: results.0, Roi: results.3, WinPct: results.4))
                 print("\(symC) of \(self.symbolCount)")
             }
@@ -328,7 +340,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 DispatchQueue.main.async {
                     self.backTestLabel.text = "star calc \(count) of \(tickerStar.count)"
                 }
-                let stars = BackTest().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: false)
+                let stars = CalcStars().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: false)
                 Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: true)
                 count += 1
             }

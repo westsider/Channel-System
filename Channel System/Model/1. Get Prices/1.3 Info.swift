@@ -20,40 +20,68 @@ class CompanyData: Object {
     @objc dynamic var sector        = ""
     @objc dynamic var stopSize        = 3
     
+    func databeseReport(debug:Bool, galaxie:[String]) {
+        var counter:Int = 0
+        let total = galaxie.count
+        for ticker in galaxie {
+            if let symbol = getExchangeFrom(ticker: ticker, debug: debug) {
+                if debug { print("\(symbol.ticker) \(symbol.name) \(symbol.stockExchange) \(symbol.country) \(symbol.sector) \(symbol.stopSize)")}
+                counter += 1
+            } else {
+                if debug { print("\n*** WARNING *** No comapny info for \(ticker)\n") }
+            }
+        }
+        if counter != total {
+            print("\n*** WARNING *** Only \(counter) company records out of \(total) records expected")
+        } else {
+            print("\n*** Company Database is AWESOME ***\n\(counter) company records found out of \(total) total tickers")
+        }
+    }
+    
     //let request = "https://api.intrinio.com/companies?identifier=\(ticker)"
     //let request = "https://api.intrinio.com/securities?identifier=\(ticker)"
-    func getExchangeFrom(ticker:String, debug: Bool)-> CompanyData {
+    func getExchangeFrom(ticker:String, debug: Bool)-> CompanyData? {
         let realm = try! Realm()
         let id = ticker
-        let symbol = realm.objects(CompanyData.self).filter("ticker == %@", id).last!
-        if debug { print("\(symbol.ticker) \(symbol.name) \(symbol.stockExchange) \(symbol.country) \(symbol.sector) \(symbol.stopSize)") }
-        return symbol
+        if let symbol = realm.objects(CompanyData.self).filter("ticker == %@", id).last  {// found nil for Dia
+            if debug { print("\(String(describing: symbol.ticker)) \(String(describing: symbol.name)) \(String(describing: symbol.stockExchange)) \(String(describing: symbol.country)) \(String(describing: symbol.sector)) \(String(describing: symbol.stopSize))") }
+            return symbol
+        } else {
+            print("\n*** WARNING *** \nCompanyData().getExchangeFrom\nNo comapny info for \(ticker)\n")
+            return nil
+        }
     }
     
     /////
-    func getInfo(tenOnly:Bool, debug:Bool, completion: @escaping (Bool) -> Void) {
-        let galaxie = SymbolLists().getSymbols(tenOnly: true); print("1.0 Galaxie Complete")
+    func getInfo(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
+//        var galaxie = SymbolLists().allSymbols
+//        if tenOnly {
+//            galaxie = SymbolLists().uniqueElementsFrom(testSet: tenOnly, of: 20); print("1.0 Galaxie Complete")
+//        } 
         var counter = 0
         let total = galaxie.count
-        var done:Bool = false
         for ticker in galaxie {
             DispatchQueue.global(qos: .background).async {
-                done = false
-                done = self.getInfoFor(ticker: ticker, debug: debug)
-                if done {
-                    DispatchQueue.main.async {
-                        counter += 1
-                        print("Company \(counter) of \(total)")
-                        if counter == total {
-                            completion(true)
+                self.getInfoFor(ticker: ticker, debug: debug, completion: { (finished) in
+                    if finished {
+                        DispatchQueue.main.async {
+                            counter += 1
+                            print("Company \(counter) of \(total)")
+                            if counter == total {
+                                print("\n*** Completion for getting company data now running ***\n")
+                                completion(true)
+                            }
                         }
                     }
-                }
+                })
+                
             }
         }
     }
     
-    func getInfoFor(ticker: String, debug: Bool)-> Bool {
+   
+    
+    func getInfoFor(ticker: String, debug: Bool, completion: @escaping (Bool) -> Void)  {
         // get last price from intrio
         if ( debug ) { print("Requesting company data for \(ticker)") }
         let request = "https://api.intrinio.com/securities?identifier=\(ticker)"
@@ -117,7 +145,7 @@ class CompanyData: Object {
                     })
                     
                     if ( debug ) { print("\(ticker) request complete") }
-                    
+                    completion(true)
                 case .failure(let error):
                     /*   Error Code    Meaning
                      200    OK – Everything worked as expected
@@ -132,7 +160,6 @@ class CompanyData: Object {
                     debugPrint(error)
                 }
         }
-        return true
     }
 }
 

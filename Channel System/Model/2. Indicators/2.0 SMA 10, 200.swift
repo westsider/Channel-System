@@ -11,8 +11,7 @@ import RealmSwift
 
 class SMA {
 
-    func getData(tenOnly:Bool, debug:Bool, period:Int, completion: @escaping (Bool) -> Void) {
-        let galaxie = SymbolLists().getSymbols(tenOnly: true)
+    func getData(galaxie: [String], debug:Bool, period:Int, completion: @escaping (Bool) -> Void) {
         var counter = 0
         let total = galaxie.count
         var done:Bool = false

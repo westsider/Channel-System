@@ -51,6 +51,28 @@ class Prices: Object {
         }
     }
     
+    func databaseReport(debug:Bool, galaxie:[String]) {
+        let realm = try! Realm()
+        var counter:Int = 0
+        let total = galaxie.count
+        let numRecords =  Utilities().dollarStr(largeNumber: Double(allPricesCount()))
+        if debug {  print("\nDebug all Prices. \(numRecords) records found")}
+        for ticker in galaxie {
+            let count = realm.objects(Prices.self).filter("ticker == %@", ticker).count
+            if let symbol = realm.objects(Prices.self).filter("ticker == %@", ticker).last  {
+                if debug { print("\(symbol.ticker) was found and has \(count) days. Last Date was \(symbol.dateString)")}
+                counter += 1
+            } else {
+                if debug { print("\n*** WARNING *** No prices info for \(ticker)\n")}
+            }
+        }
+        if counter != total {
+            print("\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)")
+        } else {
+            print("\n***Congratulations *** \nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols\n")
+        }
+    }
+    
     func printLastPrices(symbols: [String], last: Int) {
         
         for ticker in symbols {
@@ -184,7 +206,6 @@ class Prices: Object {
     func checkIfNew(date:Date, realmDate:Date, debug: Bool)-> Bool {
         var isNewer = false
         if ( debug ) { print("Last date in realm \(String(describing: realmDate)) vs new date: \(date))")}
-        
         if date > realmDate {
             if ( debug ) {
                 print("New Date is greater then realm date")
@@ -196,6 +217,48 @@ class Prices: Object {
             isNewer =  false
         }
         return isNewer
+    }
+    
+    func checkIfInLastTenDays(date:Date, realmDate:Date, debug: Bool)-> Bool {
+        var withinTenDays = false
+        if ( debug ) { print("Last date in realm \(String(describing: realmDate)) vs new date: \(date))")}
+        
+        let tenDaysAgo = subtractTenDays(currentDate: realmDate, debug: false)
+        let dateStr = Utilities().convertToStringNoTimeFrom(date: date)
+        
+        if date > tenDaysAgo {
+            if ( debug ) {
+                print("\n\(dateStr) is within last 10 days <-------------------------------\n")
+            }
+            withinTenDays =  true
+        } else {
+            if ( debug ) { print("\(dateStr) is older than 10 days ago.") }
+            withinTenDays =  false
+        }
+        return withinTenDays
+    }
+    
+    func subtractTenDays(currentDate:Date, debug:Bool)-> Date {
+        let daysToRemove = -10
+        var dateComponent = DateComponents()
+        dateComponent.day = daysToRemove
+        //let pastDate = Calendar.current.date
+        let pastDate = Calendar.current.date(byAdding: dateComponent, to: currentDate)
+        if debug { print("Date now is \(currentDate), and 10 days ago was \(pastDate!)") }
+        return pastDate!
+    }
+    
+    func tickerCount() {
+        let galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 0)
+        var counter = 0
+        for each in galaxie {
+            let id = each
+            let oneSymbol = realm?.objects(Prices.self).filter("ticker == %@", id)
+            if oneSymbol?.last?.ticker != "" {
+                counter += 1
+            }
+        }
+        print("Number of tickers in realm is \(counter)\n")
     }
 }
 
