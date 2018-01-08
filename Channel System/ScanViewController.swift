@@ -58,33 +58,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.stopAnimating()
+            if self.reset {
+                self.csvOnly(galaxie: self.galaxie, debug: false)
+            } else {
+                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+                    self.firstRun()
+                } else {
+                    self.stopAnimating()
+                }
+            }
         }
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-//            let _ = PortfolioEntries().allTickerBacktestWithCost(debug: true, saveToRealm: true)
-//            self.stopAnimating()
-//
-//        }
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-//            PortfolioWeekly().weeklyProfit(debug: true, completion: { (finished) in
-//                if finished {
-//                    WklyStats().showCumProfitFromRealm()
-//                     self.stopAnimating()
-//                }
-//            })
-//        }
-        
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-//            if self.reset {
-//                self.csvOnly(galaxie: self.galaxie, debug: false)
-//            } else {
-//                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-//                    self.firstRun()
-//                } else {
-//                    self.subsequentRuns()
-//                }
-//            }
-//        }
     }
     
     private func firstRun() {
