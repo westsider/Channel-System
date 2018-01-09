@@ -52,25 +52,108 @@ class Prices: Object {
     }
     
     func databaseReport(debug:Bool, galaxie:[String]) {
-        let realm = try! Realm()
-        var counter:Int = 0
+        /*
+            1. check num of records in each ticker and alert if less than spy
+            2. check each ticker for 0 prices
+            3. check for double prints
+            4. check not last date
+        */
+     
         let total = galaxie.count
-        let numRecords =  Utilities().dollarStr(largeNumber: Double(allPricesCount()))
-        if debug {  print("\nDebug all Prices. \(numRecords) records found")}
-        for ticker in galaxie {
-            let count = realm.objects(Prices.self).filter("ticker == %@", ticker).count
-            if let symbol = realm.objects(Prices.self).filter("ticker == %@", ticker).last  {
-                if debug { print("\(symbol.ticker) was found and has \(count) days. Last Date was \(symbol.dateString)")}
+        let numRecords =  allPricesCount()
+        let lastUpdate = Prices().getLastDateInRealm(debug: false)
+        var missingPriceRecords:Int = 0
+        var zeroValues:Int = 0
+        var doublePrints:Int = 0
+        var notUpdatedCounter:Int = 0
+        var counter:Int = 0
+        if debug {  print("\nChecking database integrity. \(numRecords) records found")}
+        //DispatchQueue.global(qos: .background).async {
+            for ticker in galaxie {
+                missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
+                //DispatchQueue.main.async { print("missing prices check complete")}
+                zeroValues += self.checkForZeroVal(ticker: ticker)             // test 2
+                //DispatchQueue.main.async { print("zero values check complete")}
+                doublePrints += self.findDuplicates(ticker: ticker, debug: true) // test 3
+                //DispatchQueue.main.async { print("double prints check complete")}
+                notUpdatedCounter += Utilities().lastDateMatchesRealm(ticker: ticker, lastUpdate: lastUpdate, debug: false)                            // test 4
                 counter += 1
-            } else {
-                if debug { print("\n*** WARNING *** No prices info for \(ticker)\n")}
             }
+        //}
+       // DispatchQueue.main.async {
+            if counter != total {
+                print("\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)")
+            } else {
+                print("\nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols\n")
+            }
+            
+            print("\n-------------------------------------------------------")
+            print("----------   Database Condition Summary   -------------")
+            print("\tWarning! missing \(missingPriceRecords) days of price data")
+            print("\tWarning! found \(zeroValues) zero values")
+            print("\tWarning! found \(doublePrints) duplicate days")
+            print("\tWarning! found \(notUpdatedCounter) tickers not updated")
+            print("-------------------------------------------------------\n")
+        //}
+    }
+    
+    func checkForMissingPrices(ticker:String)-> Int {
+        let realm = try! Realm()
+        let numSpyPrices = realm.objects(Prices.self).filter("ticker == %@", "SPY").count
+        let count = realm.objects(Prices.self).filter("ticker == %@", ticker).count
+        var diff:Int = 0
+        if count < numSpyPrices {
+            //print("spy count is \(numSpyPrices) \(ticker) count is \(count)")
+            diff = numSpyPrices - count
+            print("Warning test # 1 \(ticker) is missisng \(diff) days of data")
         }
-        if counter != total {
-            print("\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)")
-        } else {
-            print("\n***Congratulations *** \nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols\n")
+        return diff
+    }
+    
+    func checkForZeroVal(ticker:String)-> Int {
+        let prices = sortOneTicker(ticker: ticker, debug: false)
+        var zeroValCounter:Int = 0
+        for each in prices {
+            let open = each.open
+            let high = each.high
+            let low = each.low
+            let close = each.close
+            let sma10 = each.movAvg10
+            let sma200 = each.movAvg200
+
+            let arrayVals = [open, high, low, close, sma10, sma200]
+            //let nameVals = ["open", "high", "low", "close", "sma10", "sma200"]
+            
+            for  vals in arrayVals {
+                if vals == 0.0 {
+                    //print("Warning test #2 on \(ticker) \(nameVals[index]) on \(each.dateString) is \(vals)")
+                    zeroValCounter += 1
+                }
+            }
+            
         }
+        if zeroValCounter != 0 {
+            print("Warning test #2 on \(ticker) we found \(zeroValCounter) with a value of zero")
+        }
+        return zeroValCounter
+    }
+    
+    func findDuplicates(ticker:String, debug:Bool)-> Int {
+        let realm = try! Realm()
+        let id = ticker
+        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
+        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
+        var lastDate:Date?
+        var doublePrintCounter:Int = 0
+        for each in sortedByDate {
+            //print("\(String(describing: each.date )) \(String(describing: lastDate))")
+            if (each.date == lastDate ) {
+                print("Warning test #3  double printsfor \(ticker) on \(each.dateString)")
+                doublePrintCounter += 1
+            }
+            lastDate = each.date
+        }
+        return doublePrintCounter
     }
     
     func printLastPrices(symbols: [String], last: Int) {
@@ -114,21 +197,7 @@ class Prices: Object {
         }
     }
     
-    func findDuplicates(ticker:String, debug:Bool){
-        let realm = try! Realm()
-        let id = ticker
-        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
-        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
-        var lastDate:Date?
 
-        for each in sortedByDate {
-            //print("\(String(describing: each.date )) \(String(describing: lastDate))")
-            if (each.date == lastDate ) {
-                print("\n====> Found Duplicate date \(each.dateString) <======\n")
-            }
-            lastDate = each.date
-        }
-    }
     
     //MARK: - Sort Entries
     func sortEntriesBy(recent: Bool, days: Int)-> Results<Prices> {
@@ -190,7 +259,7 @@ class Prices: Object {
             if ( debug ) { print("Last Date In Realm is: \(sortedByDate.dateString)") }
             return sortedByDate.date!
         } else {
-            return Utilities().convertToDateFrom(string: "2017/10/01", debug: false)
+            return Utilities().convertToDateFrom(string: "2018/01/09", debug: false)
         }
         
     }

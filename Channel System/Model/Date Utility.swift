@@ -62,6 +62,15 @@ class Utilities {
         } else { return ( false, lastUpdate )}
     }
     
+    func lastDateMatchesRealm(ticker:String, lastUpdate:Date, debug: Bool)-> Int {
+        var notUpdateCount:Int = 0
+        let date = Prices().sortOneTicker(ticker: ticker, debug: false).last
+        if (date?.date)! < lastUpdate {
+            notUpdateCount = 1
+        }
+        return notUpdateCount
+    }
+    
     func thisDateIsToday(date:Date,debug: Bool)-> (Bool) {
         let calendar = NSCalendar.current
         if ( debug ) { print("checking today \(today) against \(date)") }

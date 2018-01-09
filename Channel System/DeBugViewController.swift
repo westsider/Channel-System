@@ -75,22 +75,24 @@ class DeBugViewController: UIViewController {
     @IBAction func stepperChanged(_ sender: UIStepper) {
         let currentValue = Int(sender.value)
         let update = String(galaxie[currentValue])
-        topLable.text = update
+        topLable.text = "\(update) \(currentValue)"
         print("Hello stepper value \(sender.value) \(update)")
         ticker = update
         clearSeries()
         removeSeries()
         chartConfiguration(debug: false)
+        sliderDefault.setValue(Float(currentValue), animated: true)
     }
     @objc func sliderDidEndSliding() {
         let currentValue = Int(sliderDefault.value)
         let update = String(galaxie[currentValue])
-        topLable.text = update
+        topLable.text = "\(update) \(currentValue)"
         print("Hello Slider value \(sliderDefault.value) \(update)")
         ticker = update
         clearSeries()
         removeSeries()
         chartConfiguration(debug: false)
+        stepper.value = Double(currentValue)
     }
     
     func removeSeries() {

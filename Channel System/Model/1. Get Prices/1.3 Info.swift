@@ -34,7 +34,7 @@ class CompanyData: Object {
         if counter != total {
             print("\n*** WARNING *** Only \(counter) company records out of \(total) records expected")
         } else {
-            print("\n*** Company Database is AWESOME ***\n\(counter) company records found out of \(total) total tickers")
+            print("\n*** Company Database is Good ***\n\(counter) company info records found out of \(total) total tickers")
         }
     }
     
