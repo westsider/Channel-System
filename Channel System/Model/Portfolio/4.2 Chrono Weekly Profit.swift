@@ -44,6 +44,7 @@ class PortfolioWeekly {
         }
     }
     
+
     func isFriday(date:Date, debug:Bool) -> Bool {
         let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)
         let components = calendar!.components([.weekday], from: date as Date)

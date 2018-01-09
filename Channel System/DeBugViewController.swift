@@ -73,7 +73,30 @@ class DeBugViewController: UIViewController {
         topLable.text = update
         print("Hello Slider value \(sliderDefault.value) \(update)")
         ticker = update
+        removeSeries()
         chartConfiguration(debug: false)
+    }
+    
+    func removeSeries() {
+        if sciChartView1.renderableSeries.count() > 0 {
+            sciChartView1.renderableSeries.remove(at: 0)
+            highestPrice = 0.0
+        }
+    }
+    
+    func clearSeries() {
+        sciChartView1.renderableSeries.clear()
+        sciChartView1.annotations.clear()
+        sciChartView1.xAxes.clear()
+        sciChartView1.yAxes.clear()
+        sciChartView1.chartModifiers.clear()
+        
+        
+        sciChartView2.renderableSeries.clear()
+        sciChartView2.annotations.clear()
+        sciChartView2.xAxes.clear()
+        sciChartView2.yAxes.clear()
+        sciChartView2.chartModifiers.clear()
     }
     
     //////////////////////////////////////////////////////////////////
@@ -87,10 +110,10 @@ class DeBugViewController: UIViewController {
         addDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addFastSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
-        //let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id, date: Double(rangeStart), price: highestPrice, text: statsText)
-        //sciChartView1.annotations.add(stats)
+        showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
+        let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id, date: Double(rangeStart), price: highestPrice, text: statsText)
+        sciChartView1.annotations.add(stats)
     }
     
     //MARK: - Add Prices Series
@@ -176,22 +199,6 @@ class DeBugViewController: UIViewController {
         axisY1.autoRange = .always
         sciChartView1.yAxes.add(axisY1)
         
-        let axisX2:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
-        axisX2.axisId = axisX2Id
-        rangeSync.attachAxis(axisX2)
-        axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
-        axisX2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
-        axisX2.style.labelStyle.fontName = "Helvetica"
-        axisX2.style.labelStyle.fontSize = 14
-        sciChartView2.xAxes.add(axisX2)
-        
-        let axisY2:SCINumericAxis = SCINumericAxis()
-        axisY2.axisId = axisY2Id
-        axisY2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
-        axisY2.style.labelStyle.fontName = "Helvetica"
-        axisY2.style.labelStyle.fontSize = 14
-        axisY2.autoRange = .always
-        sciChartView2.yAxes.add(axisY2)
     }
     
     fileprivate func addModifiers() {
@@ -199,29 +206,17 @@ class DeBugViewController: UIViewController {
         sizeAxisAreaSync.attachSurface(sciChartView1)
         sizeAxisAreaSync.attachSurface(sciChartView2)
         
-        var yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView1) as? SCIYAxisDragModifier
+        let yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView1) as? SCIYAxisDragModifier
         yDragModifier?.axisId = axisY1Id
         yDragModifier?.dragMode = .pan;
         //sciChartView1.yAxes.item(at: 0).autoRange = .always
-        var xDateDragModifier = xDragModifierSync.modifier(forSurface: sciChartView1) as? SCIXAxisDragModifier
+        let xDateDragModifier = xDragModifierSync.modifier(forSurface: sciChartView1) as? SCIXAxisDragModifier
         xDateDragModifier?.axisId = axisX1Id
         xDateDragModifier?.dragMode = .pan;
         xDateDragModifier?.clipModeX = .none
         
-        var modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
+        let modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView1.chartModifiers = modifierGroup
-        
-        yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView2) as? SCIYAxisDragModifier
-        yDragModifier?.axisId = axisY2Id
-        yDragModifier?.dragMode = .pan;
-        
-        xDateDragModifier = xDragModifierSync.modifier(forSurface: sciChartView2) as? SCIXAxisDragModifier
-        xDateDragModifier?.axisId = axisX2Id
-        xDateDragModifier?.dragMode = .pan;
-        xDateDragModifier?.clipModeX = .none
-        
-        modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
-        sciChartView2.chartModifiers = modifierGroup
     }
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
