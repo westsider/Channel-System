@@ -78,6 +78,7 @@ class DeBugViewController: UIViewController {
         topLable.text = update
         print("Hello stepper value \(sender.value) \(update)")
         ticker = update
+        clearSeries()
         removeSeries()
         chartConfiguration(debug: false)
     }
@@ -87,14 +88,16 @@ class DeBugViewController: UIViewController {
         topLable.text = update
         print("Hello Slider value \(sliderDefault.value) \(update)")
         ticker = update
+        clearSeries()
         removeSeries()
         chartConfiguration(debug: false)
     }
     
     func removeSeries() {
+        highestPrice = 0.0
         if sciChartView1.renderableSeries.count() > 0 {
             sciChartView1.renderableSeries.remove(at: 0)
-            highestPrice = 0.0
+            
         }
     }
     
