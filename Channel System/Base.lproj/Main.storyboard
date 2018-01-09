@@ -1003,16 +1003,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wad-h5-soW" userLabel="Top View">
-                                <rect key="frame" x="0.0" y="64" width="414" height="74"/>
+                                <rect key="frame" x="0.0" y="64" width="419.33333333333331" height="73"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="oTt-dy-RTk" userLabel="Top Stack View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="74"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="419.33333333333331" height="73"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rqO-uc-EIX" userLabel="Buttons Stack View">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="36"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="419.33333333333331" height="36"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8cf-vJ-dFA">
-                                                        <rect key="frame" x="0.0" y="0.0" width="132.66666666666666" height="36"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="134.66666666666666" height="36"/>
                                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                         <state key="normal" title="All Entry">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1022,7 +1022,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3uV-FU-tSe">
-                                                        <rect key="frame" x="140.66666666666669" y="0.0" width="132.66666666666669" height="36"/>
+                                                        <rect key="frame" x="142.66666666666663" y="0.0" width="134.33333333333337" height="36"/>
                                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                         <state key="normal" title="Flat Entry">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1032,25 +1032,33 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="71.3% Win" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rg9-Ye-PiN">
-                                                        <rect key="frame" x="281.33333333333331" y="0.0" width="132.66666666666669" height="36"/>
+                                                        <rect key="frame" x="285" y="0.0" width="134.33333333333337" height="36"/>
                                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="0Jd-0a-a69" userLabel="Slider Stack View">
-                                                <rect key="frame" x="0.0" y="44" width="414" height="30"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="0Jd-0a-a69" userLabel="Slider Stack View">
+                                                <rect key="frame" x="0.0" y="44" width="419.33333333333331" height="29"/>
                                                 <subviews>
                                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZHt-75-Jhm">
-                                                        <rect key="frame" x="-2" y="0.0" width="418" height="31"/>
+                                                        <rect key="frame" x="-2" y="0.0" width="321.33333333333331" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="313" id="qRD-pE-UKV"/>
+                                                        </constraints>
                                                     </slider>
+                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="250" translatesAutoresizingMaskIntoConstraints="NO" id="AS6-cI-UBu">
+                                                        <rect key="frame" x="325.33333333333337" y="0.0" width="94" height="29"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="94" id="WYk-aM-KRb"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <connections>
+                                                            <action selector="stepperChanged:" destination="mgA-if-Kaq" eventType="valueChanged" id="wI5-7q-aqH"/>
+                                                        </connections>
+                                                    </stepper>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="ZHt-75-Jhm" firstAttribute="top" secondItem="0Jd-0a-a69" secondAttribute="top" id="7wT-f8-v8E"/>
-                                                    <constraint firstItem="ZHt-75-Jhm" firstAttribute="leading" secondItem="0Jd-0a-a69" secondAttribute="leadingMargin" id="9a0-uC-K18"/>
-                                                    <constraint firstAttribute="bottom" secondItem="ZHt-75-Jhm" secondAttribute="bottom" id="Z6X-yZ-d8V"/>
-                                                </constraints>
                                             </stackView>
                                         </subviews>
                                     </stackView>
@@ -1065,14 +1073,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="92R-WD-VHV" userLabel="Chart View">
-                                <rect key="frame" x="0.0" y="146" width="414" height="427"/>
+                                <rect key="frame" x="0.0" y="145" width="419.33333333333331" height="427"/>
                                 <color key="backgroundColor" red="0.332110196352005" green="0.34938341379165649" blue="0.40330174565315247" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" priority="750" constant="427" id="pZQ-5g-kQ2"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Mm-t9-Kxc" userLabel="Profit View">
-                                <rect key="frame" x="0.0" y="581" width="414" height="155"/>
+                                <rect key="frame" x="0.0" y="580" width="419.33333333333331" height="156"/>
                                 <color key="backgroundColor" red="0.332110196352005" green="0.34938341379165649" blue="0.40330174565315247" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" priority="250" constant="161" id="HHp-Mb-5ds"/>
@@ -1100,6 +1108,7 @@
                         <outlet property="bottomView" destination="6Mm-t9-Kxc" id="35u-Kd-Gsz"/>
                         <outlet property="chartView" destination="92R-WD-VHV" id="alW-B6-bTv"/>
                         <outlet property="sliderDefault" destination="ZHt-75-Jhm" id="iuq-yO-aVp"/>
+                        <outlet property="stepper" destination="AS6-cI-UBu" id="DIe-SE-CoQ"/>
                         <outlet property="topLable" destination="Rg9-Ye-PiN" id="jAV-8L-lJT"/>
                     </connections>
                 </viewController>

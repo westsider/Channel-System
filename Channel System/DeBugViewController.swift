@@ -20,6 +20,8 @@ class DeBugViewController: UIViewController {
     
     @IBOutlet weak var sliderDefault: UISlider!
     
+    @IBOutlet weak var stepper: UIStepper!
+    
     var ticker:String = "SPY"
     var taskIdSelected:String = ""
     var galaxie = [String]()
@@ -54,19 +56,31 @@ class DeBugViewController: UIViewController {
         detectDevice()
         oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false)
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-        setUpSlider()
+        setUpControls()
         chartConfiguration(debug: false)
     }
     
     
     //////////////////////////////////////////////////////////////////
-    //                            Set Up Slider                     //
+    //                        Set Up Controls                       //
     //////////////////////////////////////////////////////////////////
-    func setUpSlider() {
+    func setUpControls() {
         sliderDefault.maximumValue = Float(galaxie.count)
         sliderDefault.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        stepper.maximumValue = Double(galaxie.count)
+        stepper.autorepeat = true
+        stepper.wraps = true
     }
     
+    @IBAction func stepperChanged(_ sender: UIStepper) {
+        let currentValue = Int(sender.value)
+        let update = String(galaxie[currentValue])
+        topLable.text = update
+        print("Hello stepper value \(sender.value) \(update)")
+        ticker = update
+        removeSeries()
+        chartConfiguration(debug: false)
+    }
     @objc func sliderDidEndSliding() {
         let currentValue = Int(sliderDefault.value)
         let update = String(galaxie[currentValue])
