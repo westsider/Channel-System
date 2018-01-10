@@ -59,6 +59,20 @@ class OldPortfolioEntries {
                 // if this sell matches one of my tickers
                 if portfolioDict[today.ticker] != nil {
                     todaysProfit += today.backTestProfit
+    print("\t\ttodaysProfit \(Utilities().dollarStr(largeNumber: todaysProfit)) += backtestProfit \(Utilities().dollarStr(largeNumber: today.backTestProfit))")
+                    
+                    // why is daily profit 0?
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                      
                     portfolioDict.removeValue(forKey: today.ticker)
                     if today.backTestProfit >= 0 {
                         winCount += 1
