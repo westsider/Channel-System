@@ -13,8 +13,8 @@ class PortfolioWeekly {
     // get cumulative daily profit save weekly cumulative profit to realm
     func weeklyProfit(debug: Bool, completion:  (_ result:Bool) ->Void) {
         
-        let portfolioDaily = PortfolioDaily()
-        let cumProfit = portfolioDaily.dailyProfit(debug: debug)
+        //let portfolioDaily = PortfolioDaily()
+        let cumProfit = PortfolioDaily().dailyProfit(debug: debug)
         print("inside weeklyProfit() here is cum profit")
         //debugPrint(cumProfit)
         //var cumProfitWeelky: [(date: Date, profit: Double, cost:Double)] = []
@@ -33,7 +33,7 @@ class PortfolioWeekly {
             // if today is friday
             if isFriday(date: today.element.date, debug: true) && today.element.date <= Date() { // not finding any fridays
                 print("Hello Friday")
-                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit, cost: today.element.cost, maxCost: portfolioDaily.maxCosts)
+                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit, cost: today.element.cost, maxCost: 1.0 ) //portfolioDaily.maxCosts
                 print("Adding \(today.element.date) $\(today.element.profit) to realm")
             }
             

@@ -14,11 +14,8 @@ class PortfolioDaily {
     func dailyProfit(debug: Bool)-> [(date: Date, profit: Double, cost:Double, positions: Int)]  {
         print("inside dailyProfit()")
         let master = PortfolioEntries().allTickerBacktestWithCost(debug: debug, saveToRealm: true)
-        
-        //print("--> debugPrint of master from allTickerBacktestWithCost <--"); debugPrint(master)
         var cumProfit = master
         var runOfProfit = Double()
-        
         
         for (index, today) in master.enumerated() {
             runOfProfit += today.profit
@@ -36,7 +33,6 @@ class PortfolioDaily {
                 }
             }
         }
-        
         return cumProfit
     }
 }

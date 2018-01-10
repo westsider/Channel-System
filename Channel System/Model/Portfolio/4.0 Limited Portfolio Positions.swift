@@ -98,7 +98,6 @@ class PortfolioEntries {
     
     func debugBuy(debug:Bool, dateStr:String, stars:Int, ticker:String, cap:Double) {
         if debug { print("Buy on \(dateStr) with \(stars) stars, adding to portfolio \(ticker) cost \(Utilities().dollarStr(largeNumber: cap)) positions: \(portfolioDict.count)") }
-        //if debug { print("Buy on \(today.dateString) with \(today.stars) stars, adding to portfolio \(today.ticker) cost \(Utilities().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)") }
     }
     /** if buy and I dont own it then buy and record ticker and cost */
     func buyIfConfirmed(buyConfirm:Bool, todayDate:Date, dateStr:String, capRequired: Double, ticker: String, stars:Int, debug:Bool) {
@@ -152,7 +151,6 @@ class PortfolioEntries {
             Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost, largestWin: largestWinner, largestLoss: largestLooser, firstDate: firstTradeDate) }
         
         if debug { print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Total gain: \(Utilities().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(Utilities().dollarStr(largeNumber: endGame)), Annual Return: \(Utilities().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n") }
-        
     }
     
     func sumDailyCost() {

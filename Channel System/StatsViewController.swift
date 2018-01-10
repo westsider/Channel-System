@@ -83,10 +83,6 @@ class StatsViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        
-        
-        //MARK: - Todo if lastdate in realm wklySTats is today just load from realm.. else CumulativeProfit().weeklyProfit
-        
         // now only calc cum profit when this vc is called
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             PortfolioWeekly().weeklyProfit(debug: true, completion: { (finished) in
@@ -95,35 +91,13 @@ class StatsViewController: UIViewController {
                     self.getStatsfromRealm()
                 }
             })
-        }
-
-        // got stuck in inf loop after reloading everything
-        //getStatsfromRealm()
-        //newStatsToGet()
-        
+        }        
     }
     
     
-    func newStatsToGet() {
-//        CalcStars().backtest(galaxie: galaxie, debug: false, completion: {
-//            print("\ncalc Stars done!\n")
-//            //self.updateNVActivity(with:"Daily + Weekly Back Test")
-//            CumulativeProfit().backtestDailyWeekly(debug: false, completion: { (finished) in
-//                if finished  {
-//                    print("Backtest done")
-//                    DispatchQueue.main.async {
-//                        //self.stopAnimating()
-//                    }
-//                }
-//            })
-//        })
-    }
     //MARK: - Backtest Button
     @IBAction func runNewBacktestAction(_ sender: Any) {
-//        self.topLeft.textAlignment = .right
-//        ActivityOne(isOn:true)
-//        calcStats(debug: false, completion: getDataForChart)
-        newStatsToGet()
+
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
@@ -248,7 +222,7 @@ class StatsViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.ActivityOne(isOn:true)
             print("\n---------------> Now running new backtest <----------------\n")
-            _ = PortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+           // _ = OldPortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
            
             DispatchQueue.main.async {
                 completion()
