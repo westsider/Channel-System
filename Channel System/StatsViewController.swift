@@ -55,7 +55,7 @@ class StatsViewController: UIViewController {
     let maxBarsOnChart:Int = 100
     var minStars:Int = 0
     //MARK: - chart vars
-    var dataFeed = DataFeed()
+
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
     var ticker:String = "SPY"

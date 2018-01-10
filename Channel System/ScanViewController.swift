@@ -48,28 +48,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        DispatchQueue.main.async {
-            self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+            self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
             self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-            CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
             self.resetThis(ticker: "PVI", isOn: false)
             self.canIgetDataFor(ticker: "AAPL", isOn: false)
-            CleanData().report(debug: true, galaxie: self.galaxie)
-        }
-    }
-    
-    func resetThis(ticker:String, isOn:Bool){
-        if isOn { ReplacePrices().writeOverPrblemSymbol(ticker: ticker) }
-    }
-    
-    func canIgetDataFor(ticker:String, isOn:Bool) {
-        if isOn {
-            ReplacePrices().getLastPrice(ticker: ticker, debug: true, page: 1, saveToRealm: false, completion: { (finished) in
-                if finished {
-                    print("finished getting prices for \(ticker)")
-                }
-            })
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -80,7 +62,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-                    self.stopAnimating()
+                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
+                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
+                        if finished {
+                            self.stopAnimating()
+                            self.marketConditionUI(debug: false)
+                        }
+                    })
                 }
             }
         }
@@ -452,9 +440,24 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     private func checkDuplicates() {
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
         for ticker in galaxie {
-            let _ = CleanData().findDuplicates(ticker: ticker, debug: true)
+            let _ = CheckDatabase().findDuplicates(ticker: ticker, debug: true)
         }
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
+    }
+    
+    
+    func resetThis(ticker:String, isOn:Bool){
+        if isOn { ReplacePrices().writeOverPrblemSymbol(ticker: ticker) }
+    }
+    
+    func canIgetDataFor(ticker:String, isOn:Bool) {
+        if isOn {
+            ReplacePrices().getLastPrice(ticker: ticker, debug: true, page: 1, saveToRealm: false, completion: { (finished) in
+                if finished {
+                    print("finished getting prices for \(ticker)")
+                }
+            })
+        }
     }
     
     private func segueToChart(ticker: String) {

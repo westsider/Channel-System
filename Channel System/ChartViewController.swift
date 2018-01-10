@@ -12,7 +12,7 @@ import RealmSwift
 
 class SCSSyncMultiChartView: UIViewController {
 
-    var dataFeed = DataFeed()
+
     var oneTicker:Results<Prices>!
     var marketCondition:Results<MarketCondition>!
     let showTrades = ShowTrades()

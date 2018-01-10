@@ -44,6 +44,8 @@ class CSVFeed {
         let filleURLProject = Bundle.main.path(forResource: ticker, ofType: "csv")
         let stream = InputStream(fileAtPath: filleURLProject!)!
         let csv = try! CSVReader(stream: stream)
+        var lastHigh:Double = 0.0
+        var lastLow:Double = 0.0
         //"date","close","volume","open","high","low"
         while let row = csv.next() {
             if ( debug ) { print("\(row)") }
@@ -66,16 +68,22 @@ class CSVFeed {
             }
             if let high = Double(row[4]){
                 prices.high = high
-                if (high == 0.00 ) { print("\n========================     high was 0 for \(ticker)     ===========================\n") }
+                if (high == 0.00 ) { prices.high = lastHigh }
+            } else {
+                prices.high = lastHigh
             }
             if let low = Double(row[5]){
                 prices.low = low
-                if (low == 0.00 ) { print("\n========================     low was 0 for \(ticker)     ===========================\n") }
+                if (low == 0.00 ) {  prices.low = lastLow }
+            } else {
+                prices.low = lastLow
             }
             
             if (prices.close != 0.00 && prices.open != 0.00  && prices.high != 0.00 && prices.low != 0.00 ) {
                 RealmHelpers().saveSymbolsToRealm(each: prices)
             }
+            lastLow = prices.high
+            lastHigh = prices.low
         }
         return true
     }

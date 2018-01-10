@@ -21,8 +21,7 @@ class DeBugViewController: UIViewController {
     var ticker:String = "SPY"
     var taskIdSelected:String = ""
     var galaxie = [String]()
-    
-    var dataFeed = DataFeed()
+
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
     

@@ -9,11 +9,11 @@
 import Foundation
 import  RealmSwift
 
-class CleanData {
+class CheckDatabase {
     
     var portfolio: [String: Int] = [:]
     
-    func report(debug:Bool, galaxie:[String]) {
+    func report(debug:Bool, galaxie:[String], completion: @escaping (Bool) -> Void) {
         /*
          1. check num of records in each ticker and alert if less than spy
             -my solution is to wipe and reload manually with CleadDate()
@@ -64,6 +64,7 @@ class CleanData {
         print("\tWarning! found \(notUpdatedCounter) tickers not updated")
         print("\tif you see errors call\n\tresetThis(ticker: \"EZU\", isOn: true)\n\tto clean the ticker")
         print("-------------------------------------------------------\n")
+        completion(true)
         //}
     }
     
