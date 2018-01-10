@@ -86,6 +86,8 @@ class ReplacePrices {
         let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
         let password = "e6cf8f921bb621f398240e315ab79068"
         var dateIsToday:Bool = false
+        var lastHigh:Double = 0.0
+        var lastLow:Double = 0.0
         Alamofire.request("\(request)")
             .authenticate(user: user, password: password)
             .responseJSON { response in
@@ -105,8 +107,12 @@ class ReplacePrices {
                         if let close = data["close"].double { prices.close = close }
                         if let volume = data["volume"].double { prices.volume = volume }
                         if let open = data["open"].double { prices.open = open }
-                        if let high = data["high"].double { prices.high = high }
-                        if let low = data["low"].double { prices.low = low }
+                        if let high = data["high"].double { prices.high = high } else {
+                            prices.high = lastHigh
+                        }
+                        if let low = data["low"].double { prices.low = low } else {
+                            prices.low = lastLow
+                        }
                         // the next section is complicated becuase the intrio feed will only return open and close for today
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
                         if saveToRealm { RealmHelpers().saveSymbolsToRealm(each: prices) }
@@ -118,6 +124,8 @@ class ReplacePrices {
                             let simHighLow = self.simulateHighLow(with: prices)
                             if saveToRealm { RealmHelpers().updateTodaysPrice(each: simHighLow) }
                         }
+                        lastLow = prices.high
+                        lastHigh = prices.low
                         
                     }  // JSON loop ends
                     if ( debug ) { print("\(ticker) request complete") }
@@ -155,23 +163,7 @@ class ReplacePrices {
                     let json = JSON(value)
                     if ( debug ) { print("JSON: \(json)") }
                    // for data in json["data"].arrayValue {
-//                        let prices = Prices()
-//                        prices.ticker = ticker
-//                        if let date = data["date"].string {
-//                            prices.dateString = date
-//                            prices.date = Utilities().convertToDateFrom(string: date, debug: false)
-//                            dateIsToday = Utilities().thisDateIsToday(date: prices.date!, debug: false)
-//                        }
-//                        if let close = data["close"].double { prices.close = close }
-//                        if let volume = data["volume"].double { prices.volume = volume }
-//                        if let open = data["open"].double { prices.open = open }
-//                        if let high = data["high"].double { prices.high = high }
-//                        if let low = data["low"].double { prices.low = low }
-                        // the next section is complicated becuase the intrio feed will only return open and close for today
-                        // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
-                        
-
-                        
+        
                     //}  // JSON loop ends
                     if ( debug ) { print("Symbol request complete") }
                     completion(true)

@@ -31,7 +31,9 @@ class CleanData {
         var notUpdatedCounter:Int = 0
         var counter:Int = 0
         
-        if debug {  print("\nChecking database integrity. \(numRecords) records found")}
+        if debug {
+            print("\n-------------------------------------------------------")
+            print("Checking database integrity. \(numRecords) records found")}
         //DispatchQueue.global(qos: .background).async {
         for ticker in galaxie {
             missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
@@ -45,13 +47,13 @@ class CleanData {
         if counter != total {
             print("\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)")
         } else {
-            print("\nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols\n")
+            print("No missing tickers in realm\n\(counter) records found out of \(total) total symbols")
         }
         
         print("\n-------------------------------------------------------")
         print("----------   Database Condition Summary   -------------")
         print("\tWarning! missing \(missingPriceRecords) days of price data")
-        debugPrint(portfolio)
+        print("\t\(portfolio)")
         print("\tWarning! found \(zeroValues) zero values")
         if doublePrints != 0 {
             print("\tWarning! found \(doublePrints) duplicate days")
@@ -60,6 +62,7 @@ class CleanData {
         }
         
         print("\tWarning! found \(notUpdatedCounter) tickers not updated")
+        print("\tif you see errors call\n\tresetThis(ticker: \"EZU\", isOn: true)\n\tto clean the ticker")
         print("-------------------------------------------------------\n")
         //}
     }
@@ -74,9 +77,11 @@ class CleanData {
         if count < numSpyPrices {
             //print("spy count is \(numSpyPrices) \(ticker) count is \(count)")
             diff = numSpyPrices - count
-            print("Warning test # 1 \(ticker) is missisng \(diff) days of data")
-            if portfolio[ticker] == nil {
-                portfolio[ticker] = diff }
+            if diff > 2 {
+                print("Warning test # 1 \(ticker) is missisng \(diff) days of data")
+                if portfolio[ticker] == nil {
+                    portfolio[ticker] = diff }
+                }
         }
         
         return diff
@@ -94,11 +99,11 @@ class CleanData {
             let sma200 = each.movAvg200
             
             let arrayVals = [open, high, low, close, sma10, sma200]
-            //let nameVals = ["open", "high", "low", "close", "sma10", "sma200"]
+            let nameVals = ["open", "high", "low", "close", "sma10", "sma200"]
             
-            for  vals in arrayVals {
+            for  (index, vals) in arrayVals.enumerated() {
                 if vals == 0.0 {
-                    //print("Warning test #2 on \(ticker) \(nameVals[index]) on \(each.dateString) is \(vals)")
+                    print("\t\t \(ticker) \(nameVals[index]) on \(each.dateString) is \(vals)")
                     zeroValCounter += 1
                 }
             }

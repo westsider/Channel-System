@@ -52,10 +52,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
             self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
             CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
-            self.resetThis(ticker: "DGL", isOn: true)
+            self.resetThis(ticker: "PVI", isOn: false)
             self.canIgetDataFor(ticker: "AAPL", isOn: false)
-            
-            //CleanData().report(debug: true, galaxie: self.galaxie)
+            CleanData().report(debug: true, galaxie: self.galaxie)
         }
     }
     
