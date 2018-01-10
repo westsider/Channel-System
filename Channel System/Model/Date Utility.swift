@@ -64,9 +64,10 @@ class Utilities {
     
     func lastDateMatchesRealm(ticker:String, lastUpdate:Date, debug: Bool)-> Int {
         var notUpdateCount:Int = 0
-        let date = Prices().sortOneTicker(ticker: ticker, debug: false).last
-        if (date?.date)! < lastUpdate {
-            notUpdateCount = 1
+        if let date = Prices().sortOneTicker(ticker: ticker, debug: false).last {
+            if (date.date)! < lastUpdate {
+                notUpdateCount = 1
+            }
         }
         return notUpdateCount
     }

@@ -9,30 +9,72 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
-
+import RealmSwift
 class ReplacePrices {
     
-    func saveNewSymbol(ticker:String, saveToRealm:Bool) {
+    func writeOverPrblemSymbol(ticker:String) {
+        deleteOldSymbol(ticker: ticker)
+        saveNewSymbol(ticker: ticker, saveToRealm: true, debug: true)
+    }
+    
+    func deleteOldSymbol(ticker:String) {
+        // delete ralm object
+        let realm = try! Realm()
+        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", ticker)
+        try! realm.write {
+            realm.delete(oneSymbol)
+        }
+    }
+    
+    func saveNewSymbol(ticker:String, saveToRealm:Bool, debug:Bool) {
 
-        var countCalls:Int = 1
+        var countCalls:Int = 0
+        let galaxie = [ticker]
         
         for i in 1...8 {
             self.getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
                 if finished {
                     countCalls += 1
-                    print("got page \(i)")
+                    print("got page \(i) countCall = \(countCalls)")
                     if countCalls == 8 {
+                        print("\n------> Now Calc Indicators <-----")
                         print("Finished all \(countCalls)")
                         // need 2014/11/25  got 2014-11-05
                         //run indicators ect
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                            if finished {
+                                print("sma(10) done")
+                                SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
+                                    if finished {
+                                        print("sma(200) done")
+                                        PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
+                                            if finished {
+                                                print("oscilator done")
+                                                MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                    if finished  {
+                                                        print("mc done")
+                                                        Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
+                                                            if finished  {
+                                                                print("Entry done")
+                                                                CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                                    print("\ncalc Stars done!\n")
+                                                                    let thisGalaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+                                                                    CleanData().report(debug: true, galaxie: thisGalaxie)
+                                                                })
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             })
         }
-        
-       
-        
-        
     }
    
     
@@ -50,13 +92,13 @@ class ReplacePrices {
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    //if ( debug ) { print("JSON: \(json)") }
+                   if ( debug ) { print("JSON: \(json)") }
                     for data in json["data"].arrayValue {
                         let prices = Prices()
                         prices.ticker = ticker
                         if let date = data["date"].string {
                             prices.dateString = date
-                            //if page == 8 { print(date) }
+                            if page == 8 { print(date) }
                             prices.date = Utilities().convertToDateFrom(string: date, debug: false)
                             dateIsToday = Utilities().thisDateIsToday(date: prices.date!, debug: false)
                         }
@@ -81,7 +123,7 @@ class ReplacePrices {
                     if ( debug ) { print("\(ticker) request complete") }
                     completion(true)
                 case .failure(let error):
-                    print("Intrinio Error getting \(ticker)")
+                    print("\n---------------------------------\n\tIntrinio Error getting \(ticker)\n-----------------------------------")
                     debugPrint(error)
                 }  // result ends
         }

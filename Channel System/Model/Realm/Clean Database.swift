@@ -9,11 +9,14 @@
 import Foundation
 import  RealmSwift
 
-class Clean {
+class CleanData {
     
-    func databaseReport(debug:Bool, galaxie:[String]) {
+    var portfolio: [String: Int] = [:]
+    
+    func report(debug:Bool, galaxie:[String]) {
         /*
          1. check num of records in each ticker and alert if less than spy
+            -my solution is to wipe and reload manually with CleadDate()
          2. check each ticker for 0 prices
          3. check for double prints
          4. check not last date
@@ -27,6 +30,7 @@ class Clean {
         var doublePrints:Int = 0
         var notUpdatedCounter:Int = 0
         var counter:Int = 0
+        
         if debug {  print("\nChecking database integrity. \(numRecords) records found")}
         //DispatchQueue.global(qos: .background).async {
         for ticker in galaxie {
@@ -47,6 +51,7 @@ class Clean {
         print("\n-------------------------------------------------------")
         print("----------   Database Condition Summary   -------------")
         print("\tWarning! missing \(missingPriceRecords) days of price data")
+        debugPrint(portfolio)
         print("\tWarning! found \(zeroValues) zero values")
         if doublePrints != 0 {
             print("\tWarning! found \(doublePrints) duplicate days")
@@ -60,6 +65,8 @@ class Clean {
     }
     
     func checkForMissingPrices(ticker:String)-> Int {
+        //MARK: - TODO list tickers affected
+        
         let realm = try! Realm()
         let numSpyPrices = realm.objects(Prices.self).filter("ticker == %@", "SPY").count
         let count = realm.objects(Prices.self).filter("ticker == %@", ticker).count
@@ -68,7 +75,10 @@ class Clean {
             //print("spy count is \(numSpyPrices) \(ticker) count is \(count)")
             diff = numSpyPrices - count
             print("Warning test # 1 \(ticker) is missisng \(diff) days of data")
+            if portfolio[ticker] == nil {
+                portfolio[ticker] = diff }
         }
+        
         return diff
     }
     
