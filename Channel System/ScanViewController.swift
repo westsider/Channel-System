@@ -52,7 +52,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             self.startAnimating(self.size, message: "Loading Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
             self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
             CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
-            Prices().databaseReport(debug: true, galaxie: self.galaxie)
+            Clean().databaseReport(debug: true, galaxie: self.galaxie)
+
         }
     }
     
@@ -312,8 +313,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-
-    
     func firebaseBackup(now:Bool) {
         if now {
             self.updateUI(with: "Backing Up To Firebase...")
@@ -438,7 +437,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     private func checkDuplicates() {
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
         for ticker in galaxie {
-            Prices().findDuplicates(ticker: ticker, debug: true)
+            let _ = Clean().findDuplicates(ticker: ticker, debug: true)
         }
         print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
     }

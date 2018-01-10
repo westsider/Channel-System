@@ -15,7 +15,8 @@ class Symbols {
     
     let indexes = ["SPY", "QQQ", "DIA", "MDY", "IWM", "EFA", "ILF", "EEM", "EPP", "IEV"]
     
-    let DOW30 = ["AAPL","AXP","BA","CAT","CSCO","CVX","DD","DIS","GE","GS","HD","IBM","INTC","JNJ","JPM","KO","MCD","MMM","MRK","MSFT","NKE","PFE","PG","TRV","UNH","UTX","V","VZ","WMT","XOM"]
+    let DOW30 = ["AAPL","AXP","BA","CAT","CSCO","CVX","DIS","GE","GS","HD","IBM","INTC","JNJ","JPM","KO","MCD","MMM","MRK","MSFT","NKE","PFE","PG","TRV","UNH","UTX","V","VZ","WMT","XOM"]
+    // DD removed, became DWDP ut only has data from 9/1/2017
     
     let ETF32 = ["DBA","DBC","DIA","EEB","EEM","EFA","EMB","EPP","EWA","EWJ","EWZ","FXI","GLD","GUR","IEV","ILF","IWM","IYR","MDY","QQQ","SHY","SPY","TLT","XLB","XLE","XLF","XLI","XLK","XLP","XLU","XLV","XLY"]
     

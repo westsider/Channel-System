@@ -268,7 +268,6 @@
 		0D809C251FC8D76C00CE476D /* SPY.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C241FC8D76C00CE476D /* SPY.csv */; };
 		0D809C271FC8D77800CE476D /* QQQ.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C261FC8D77800CE476D /* QQQ.csv */; };
 		0D809C291FC8DF7000CE476D /* EEM.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C281FC8DF6F00CE476D /* EEM.csv */; };
-		0D809C2B1FC8E01200CE476D /* DD.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C2A1FC8E01200CE476D /* DD.csv */; };
 		0D809C2D1FC8E18B00CE476D /* DVY.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C2C1FC8E18B00CE476D /* DVY.csv */; };
 		0D809C2F1FC937A600CE476D /* ECH.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C2E1FC937A600CE476D /* ECH.csv */; };
 		0D809C311FC9380E00CE476D /* IDV.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D809C301FC9380D00CE476D /* IDV.csv */; };
@@ -291,6 +290,9 @@
 		0D949CEA1FA3B82500960BA2 /* Data Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CE91FA3B82500960BA2 /* Data Feed.swift */; };
 		0D949CEC1FA3BD3000960BA2 /* Prices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CEB1FA3BD3000960BA2 /* Prices.swift */; };
 		0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */; };
+		0DA5C50E20056C2600CB0E05 /* Clean Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA5C50D20056C2600CB0E05 /* Clean Database.swift */; };
+		0DA5C51020056FB400CB0E05 /* DD.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0DA5C50F20056FB300CB0E05 /* DD.csv */; };
+		0DA5C5122005715F00CB0E05 /* Replace Prices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA5C5112005715F00CB0E05 /* Replace Prices.swift */; };
 		0DB6B1031FCE9A71009F6BEB /* BackTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB6B1021FCE9A71009F6BEB /* BackTest.swift */; };
 		0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */; };
 		0DC70C6E1FE1BFEF00DC58BF /* EntryAndExits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC70C6D1FE1BFEF00DC58BF /* EntryAndExits.swift */; };
@@ -574,7 +576,6 @@
 		0D809C241FC8D76C00CE476D /* SPY.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SPY.csv; path = "../../../../../symbols to load/SPY.csv"; sourceTree = "<group>"; };
 		0D809C261FC8D77800CE476D /* QQQ.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = QQQ.csv; path = "../../../../../symbols to load/QQQ.csv"; sourceTree = "<group>"; };
 		0D809C281FC8DF6F00CE476D /* EEM.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EEM.csv; sourceTree = "<group>"; };
-		0D809C2A1FC8E01200CE476D /* DD.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DD.csv; sourceTree = "<group>"; };
 		0D809C2C1FC8E18B00CE476D /* DVY.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DVY.csv; sourceTree = "<group>"; };
 		0D809C2E1FC937A600CE476D /* ECH.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ECH.csv; sourceTree = "<group>"; };
 		0D809C301FC9380D00CE476D /* IDV.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IDV.csv; sourceTree = "<group>"; };
@@ -599,6 +600,9 @@
 		0D949CE91FA3B82500960BA2 /* Data Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Feed.swift"; sourceTree = "<group>"; };
 		0D949CEB1FA3BD3000960BA2 /* Prices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prices.swift; sourceTree = "<group>"; };
 		0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Utility.swift"; sourceTree = "<group>"; };
+		0DA5C50D20056C2600CB0E05 /* Clean Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Clean Database.swift"; sourceTree = "<group>"; };
+		0DA5C50F20056FB300CB0E05 /* DD.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DD.csv; sourceTree = "<group>"; };
+		0DA5C5112005715F00CB0E05 /* Replace Prices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Replace Prices.swift"; sourceTree = "<group>"; };
 		0DB6B1021FCE9A71009F6BEB /* BackTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackTest.swift; sourceTree = "<group>"; };
 		0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm Helpers.swift"; sourceTree = "<group>"; };
 		0DC70C6D1FE1BFEF00DC58BF /* EntryAndExits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryAndExits.swift; sourceTree = "<group>"; };
@@ -645,6 +649,7 @@
 				0D809ADC1FC8D2DE00CE476D /* MCD.csv */,
 				0D129D501FBB4D1D003C6E5E /* MDY.csv */,
 				0D809A4B1FC8D2B100CE476D /* AXP.csv */,
+				0DA5C50F20056FB300CB0E05 /* DD.csv */,
 				0D809C301FC9380D00CE476D /* IDV.csv */,
 				0D809C321FC9382A00CE476D /* IEF.csv */,
 				0D809C361FC9385800CE476D /* IEO.csv */,
@@ -660,7 +665,6 @@
 				0D809AE21FC8D2E000CE476D /* BSV.csv */,
 				0D809C2C1FC8E18B00CE476D /* DVY.csv */,
 				0D809C2E1FC937A600CE476D /* ECH.csv */,
-				0D809C2A1FC8E01200CE476D /* DD.csv */,
 				0D809C281FC8DF6F00CE476D /* EEM.csv */,
 				0D809AD61FC8D2DC00CE476D /* BWX.csv */,
 				0D809A901FC8D2C600CE476D /* CAT.csv */,
@@ -1030,6 +1034,8 @@
 			children = (
 				0D949CEB1FA3BD3000960BA2 /* Prices.swift */,
 				0DBE20141FB256F80089FFB2 /* Realm Helpers.swift */,
+				0DA5C5112005715F00CB0E05 /* Replace Prices.swift */,
+				0DA5C50D20056C2600CB0E05 /* Clean Database.swift */,
 				0D16296D1FF1E54700E11A64 /* Firebase Service.swift */,
 				0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */,
 				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
@@ -1185,6 +1191,7 @@
 				0D809B6A1FC8D2F300CE476D /* JNK.csv in Resources */,
 				0D809B4D1FC8D2F300CE476D /* DBA.csv in Resources */,
 				0D809BF41FC8D2F300CE476D /* IYK.csv in Resources */,
+				0DA5C51020056FB400CB0E05 /* DD.csv in Resources */,
 				0D809C091FC8D2F300CE476D /* EWS.csv in Resources */,
 				0D809C2F1FC937A600CE476D /* ECH.csv in Resources */,
 				0D809B7C1FC8D2F300CE476D /* OIH.csv in Resources */,
@@ -1393,7 +1400,6 @@
 				0D809BCB1FC8D2F300CE476D /* VTV.csv in Resources */,
 				0D809B351FC8D2F300CE476D /* PEJ.csv in Resources */,
 				0D809B4A1FC8D2F300CE476D /* IYF.csv in Resources */,
-				0D809C2B1FC8E01200CE476D /* DD.csv in Resources */,
 				0D809BA31FC8D2F300CE476D /* JNJ.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1493,8 +1499,10 @@
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */,
+				0DA5C50E20056C2600CB0E05 /* Clean Database.swift in Sources */,
 				0D77DDD01FCF8E1B007573C3 /* StatsViewController.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
+				0DA5C5122005715F00CB0E05 /* Replace Prices.swift in Sources */,
 				0D6726911FF806E300E42A9A /* 1.1 Risk.swift in Sources */,
 				0D6726951FF8076C00E42A9A /* 1.3 Info.swift in Sources */,
 				0D31FF6E1FDE0F6D00D87D81 /* Accounts.swift in Sources */,

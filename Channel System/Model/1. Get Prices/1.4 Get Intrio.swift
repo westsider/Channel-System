@@ -40,7 +40,7 @@ class IntrioFeed {
         // get last price from intrio
         //if ( debug ) {
             print("Requesting remote data for \(ticker)") //}
-        let request = "https://api.intrinio.com/prices?ticker=\(ticker)"
+        let request = "https://api.intrinio.com/prices?ticker=\(ticker)" //DWDP
         let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
         let password = "e6cf8f921bb621f398240e315ab79068"
         var isNewDate:Bool = false
