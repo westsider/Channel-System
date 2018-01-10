@@ -162,8 +162,11 @@ class Utilities {
     }
     
     func happySad(num:Double) -> String {
-        if num >= 0 {
+        if num > 0 {
             return "🔵"
+            
+        } else if num == 0 {
+            return "⚪️"
         } else {
             return "🔴"
         }

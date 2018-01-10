@@ -15,12 +15,6 @@ class OldPortfolioEntries {
     
     func allTickerBacktestWithCost(debug:Bool, saveToRealm:Bool)-> [(date: Date, profit: Double, cost: Double, positions: Int)]  {
 
-        print("-------------------------------------------------")
-        print("-------------------------------------------------")
-        print("-------------------------------------------------")
-        print("-------------<  OldPortfolioEntries  >-----------")
-        print("-------------------------------------------------")
-        print("-------------------------------------------------")
         var allTradesPortfolioRecord: [(date: Date, profit: Double, cost: Double, positions: Int)] = []
         let realm = try! Realm()
         let dateArray = realm.objects(Prices.self).sorted(byKeyPath: "date", ascending: true)
@@ -46,7 +40,7 @@ class OldPortfolioEntries {
                 marketCondition = true
             }
             // if buy then buy and record ticker and cost
-            if portfolioDict.count < 20 && today.stars >= minStars && marketCondition {
+            if portfolioDict.count < 200 { // && today.stars >= minStars && marketCondition {
                 if today.capitalReq != 0.00 {
                     if tradeCount == 0 {
                         firstTradeDate = today.date!
@@ -56,7 +50,7 @@ class OldPortfolioEntries {
                         portfolioDict[today.ticker] = today.capitalReq
                         tradeCount += 1
                         totalStars += today.stars
-                        if debug { print("\(fileIndex) Found a buy on \(today.dateString) with \(today.stars) stars, adding to portfolio \(today.ticker) cost \(Utilities().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)") }
+                        debugBuy(debug: debug, dateStr: today.dateString, stars: today.stars, ticker: today.ticker, cap: today.capitalReq, portfolioCount: portfolioDict.count)
                     }
                 }
             }
@@ -75,7 +69,7 @@ class OldPortfolioEntries {
                     if today.backTestProfit < largestLooser {
                         largestLooser = today.backTestProfit
                     }
-                    if debug { print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(Utilities().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)")}
+                    debugSell(debug: debug, profit: today.backTestProfit, dateStr: today.dateString, ticker: today.ticker, portfolioCount: portfolioDict.count)
                 }
             }
             //on a new day
@@ -92,15 +86,14 @@ class OldPortfolioEntries {
                     maxCost = dailyCostSum
                 }
                 totalGain += todaysProfit
-                if debug { print("--------------------------------------------------------------------> Total Gain: \(totalGain)") }
+
                 // print the record
-                if debug { print("\n\(fileIndex) New day, summing daily cost and adding a portfolio daily record")
-                    print("\(fileIndex) Todays Record: ", lastDate, "  Profit: ", Utilities().dollarStr(largeNumber:todaysProfit), "  Cost: ",Utilities().dollarStr(largeNumber:dailyCostSum), "  Positions: ", portfolioDict.count) }
+                todaysRecord(profit: today.profit, debug: true, todaysProfit: todaysProfit, portfolioCount: portfolioDict.count, lastDate: lastDate, dailyCostSum: dailyCostSum, totalGain: totalGain)
                 // clear todays profit
                 todaysProfit = 0
                 // incrementDate
                 lastDate = today.date!
-                if debug { print("\(fileIndex) clearing todays profit, new date is \(lastDate)") }
+                if debug { print("clearing todays profit, new date is \(Utilities().convertToStringNoTimeFrom(date: lastDate))") }
                 // repeat daily process
                 // daily process
                 // if buy then buy and record ticker and cost
@@ -111,7 +104,7 @@ class OldPortfolioEntries {
                             portfolioDict[today.ticker] = today.capitalReq
                             tradeCount += 1
                             totalStars += today.stars
-                            if debug { print("\(fileIndex) Found a buy on \(today.dateString), adding to portfolio \(today.ticker) cost \(Utilities().dollarStr(largeNumber: today.capitalReq)) positions: \(portfolioDict.count)") }
+                            debugBuy(debug: debug, dateStr: today.dateString, stars: today.stars, ticker: today.ticker, cap: today.capitalReq, portfolioCount: portfolioDict.count)
                         }
                     }
                 }
@@ -130,23 +123,65 @@ class OldPortfolioEntries {
                         if today.backTestProfit < largestLooser {
                             largestLooser = today.backTestProfit
                         }
-                        if debug { print("\(fileIndex) Found a sell on \(today.dateString), removing from  portfolio \(today.ticker) adding profit \(Utilities().dollarStr(largeNumber:today.backTestProfit)) positions now: \(portfolioDict.count)") }
+                        debugSell(debug: debug, profit: today.backTestProfit, dateStr: today.dateString, ticker: today.ticker, portfolioCount: portfolioDict.count)
                     }
                 }
             }
         }
-        let roi = totalGain / maxCost
+        let roi = (totalGain / maxCost) * 100.0
         let roiString = String(format: "%.2f", roi)
         let winPct = ( Double( winCount ) / Double(tradeCount) ) * 100
-        let totalPortfolio = 850000.00
-        let endGame = totalPortfolio * roi
-        let annual = endGame / 2
+        //let totalPortfolio = 850000.00
+        //let endGame = totalPortfolio * roi
+        //let annual = endGame / 2
         let avgStars:Double = Double(totalStars) / Double(tradeCount)
-        if debug { print("\nAvg stars: \(avgStars) = total stars: \(totalStars) / trade count: \(tradeCount)\n") }
         if saveToRealm {Stats().updateFinalTotal(grossProfit: totalGain, avgPctWin: winPct, avgROI: roi, grossROI: roi, avgStars: avgStars, maxCost: maxCost, largestWin: largestWinner, largestLoss: largestLooser, firstDate: firstTradeDate) }
-        if debug { print("\n--------------- Cumulative Backtest Results ---------------\nMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Total gain: \(Utilities().dollarStr(largeNumber: totalGain)), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win\nFull Portfolio Return \(Utilities().dollarStr(largeNumber: endGame)), Annual Return: \(Utilities().dollarStr(largeNumber: annual))\n-----------------------------------------------------------\n") }
+        
+        if debug {
+            print("\n--------------- Cumulative Backtest Results ---------------")
+            print("\t\t\t\tTotal gain: \(Utilities().dollarStr(largeNumber: totalGain))")
+            print("\t\tMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win")
+            print("-----------------------------------------------------------\n")
+        }
         return allTradesPortfolioRecord
     }
+    
+    func debugBuy(debug:Bool, dateStr:String, stars:Int, ticker:String, cap:Double, portfolioCount:Int) {
+        if debug { print("Buy on \(dateStr) with \(stars) stars, adding to portfolio \(ticker) cost \(Utilities().dollarStr(largeNumber: cap)) positions: \(portfolioCount)") }
+    }
+    
+    func debugSell(debug:Bool, profit:Double, dateStr:String, ticker:String, portfolioCount:Int) {
+        if debug { print("\(Utilities().happySad(num: profit)) Sell on \(dateStr), removing from  portfolio \(ticker) adding profit \(Utilities().dollarStr(largeNumber: profit)) positions now: \(portfolioCount)")}
+    }
+    
+    func todaysRecord(profit:Double, debug:Bool, todaysProfit:Double, portfolioCount:Int, lastDate:Date, dailyCostSum:Double, totalGain:Double) {
+        if debug && todaysProfit != 0 {
+            print("\(Utilities().happySad(num: profit)) Todays Record: ", Utilities().convertToStringNoTimeFrom(date: lastDate), "  Profit: ", Utilities().dollarStr(largeNumber:profit), "  Cost: ",Utilities().dollarStr(largeNumber:dailyCostSum), "  Positions: \(portfolioCount) ----> Cumulative Gain: \(Utilities().dollarStr(largeNumber: totalGain))\n" )
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // get master: [(date: Date, profit: Double)] ->  cumulative daily profit
     func dailyProfit(debug: Bool)-> [(date: Date, profit: Double, cost:Double, positions: Int)]  {

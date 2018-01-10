@@ -66,8 +66,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
 //                print("Finished stars")
 //                self.stopAnimating()
 //            })
-            self.galaxie = SymbolLists().uniqueElementsFrom(testSet: true, of: 50)
-            BackTest().testbruteForce(galaxie: self.galaxie)
+            //self.galaxie = SymbolLists().uniqueElementsFrom(testSet: true, of: 50)
+            OldPortfolioEntries().allTickerBacktestWithCost(debug: true, saveToRealm: true)
         }
 //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
 //            if self.reset {
