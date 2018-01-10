@@ -46,6 +46,8 @@ class IntrioFeed {
         var isNewDate:Bool = false
         var inlast10:Bool = false
         var dateIsToday:Bool = false
+        var lastHigh:Double = 0.0
+        var lastLow:Double = 0.0
         Alamofire.request("\(request)")
             .authenticate(user: user, password: password)
             .responseJSON { response in
@@ -70,27 +72,31 @@ class IntrioFeed {
                         if let close = data["close"].double { prices.close = close }
                         if let volume = data["volume"].double { prices.volume = volume }
                         if let open = data["open"].double { prices.open = open }
-                        if let high = data["high"].double { prices.high = high } 
-                        if let low = data["low"].double { prices.low = low }
-                // the next section is complicated becuase the intrio feed will only return open and close for today
-                // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
+                        if let high = data["high"].double { prices.high = high } else {
+                            prices.high = lastHigh
+                        }
+                        if let low = data["low"].double { prices.low = low } else {
+                            prices.low = lastLow
+                        }
+                        // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
                         if ( isNewDate ) {
                             if ( debug ) { print("we are adding \(prices.dateString) to realm\n") }
                             RealmHelpers().saveSymbolsToRealm(each: prices)
                         } else {
                             if ( debug ) { print("we are NOT adding \(prices.dateString) to realm\n") }
                         }
-                // for saftey and because today will only return an open and close, update the last 10 days
+                        // for saftey and because today will only return an open and close, update the last 10 days
                         if inlast10 {
                             RealmHelpers().updatePriorPrice(each: prices)
                         }
-                // if this is today, simulate a high and low becuase even after the close I only show a open and close from the API
+                        // if this is today, simulate a high and low becuase even after the close I only show a open and close from the API
                         if dateIsToday {
                             if ( debug ) {  print("replace todays data for \(prices.ticker)") }
                             let simHighLow = self.simulateHighLow(with: prices)
                             RealmHelpers().updateTodaysPrice(each: simHighLow)
                         }
-                        
+                        lastLow = prices.high
+                        lastHigh = prices.low
                     }  // JSON loop ends
                     if ( debug ) { print("\(ticker) request complete") }
                     completion(true)

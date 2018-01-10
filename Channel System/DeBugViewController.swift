@@ -13,13 +13,9 @@ import RealmSwift
 class DeBugViewController: UIViewController {
     
     @IBOutlet weak var topLable: UILabel!
-    
     @IBOutlet weak var chartView: UIView!
-    
     @IBOutlet weak var bottomView: UIView!
-    
     @IBOutlet weak var sliderDefault: UISlider!
-    
     @IBOutlet weak var stepper: UIStepper!
     
     var ticker:String = "SPY"
@@ -60,14 +56,13 @@ class DeBugViewController: UIViewController {
         chartConfiguration(debug: false)
     }
     
-    
     //////////////////////////////////////////////////////////////////
     //                        Set Up Controls                       //
     //////////////////////////////////////////////////////////////////
     func setUpControls() {
-        sliderDefault.maximumValue = Float(galaxie.count)
+        sliderDefault.maximumValue = Float(galaxie.count) - 1
         sliderDefault.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
-        stepper.maximumValue = Double(galaxie.count)
+        stepper.maximumValue = Double(galaxie.count) - 1
         stepper.autorepeat = true
         stepper.wraps = true
     }
