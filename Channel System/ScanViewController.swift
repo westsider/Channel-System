@@ -46,7 +46,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         self.canIgetDataFor(ticker: "AAPL", isOn: false)
 
         //BackTest().testbruteForce(galaxie: self.galaxie)
-        WklyStats().getWeeklyStatsFromRealm()
+        //WklyStats().getWeeklyStatsFromRealm()
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -23,6 +23,7 @@ class CalcStars {
     func backtest(galaxie: [String], debug:Bool, completion: @escaping () -> ()) {
         var count = 0
         var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
+        WklyStats().clearWeekly()
         DispatchQueue.global(qos: .background).async {
             var totals:[Double] = [0.0]
             for ( symC, symbols) in galaxie.enumerated() {

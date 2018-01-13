@@ -113,23 +113,23 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     }
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
-        DispatchQueue.global(qos: .background).async {
-            DispatchQueue.main.async {
-                self.activityDial.startAnimating()
-                self.buttonsAre(on: false)
-                self.backTestLabel.text = "saving to realm"
-            }
-            _ = PortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
-            
-            DispatchQueue.main.async {
-                self.activityDial.stopAnimating()
-                self.buttonsAre(on: true)
-                self.backTestLabel.text = "realm save done"
-                completion()
-                // segue to stats
-                self.segueToStats()
-            }
-        }
+//        DispatchQueue.global(qos: .background).async {
+//            DispatchQueue.main.async {
+//                self.activityDial.startAnimating()
+//                self.buttonsAre(on: false)
+//                self.backTestLabel.text = "saving to realm"
+//            }
+//            _ = PortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+//            
+//            DispatchQueue.main.async {
+//                self.activityDial.stopAnimating()
+//                self.buttonsAre(on: true)
+//                self.backTestLabel.text = "realm save done"
+//                completion()
+//                // segue to stats
+//                self.segueToStats()
+//            }
+//        }
     }
     
     @IBAction func ibAction(_ sender: Any) {

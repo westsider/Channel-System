@@ -13,35 +13,35 @@ class PortfolioWeekly {
     // get cumulative daily profit save weekly cumulative profit to realm
     func weeklyProfit(debug: Bool, completion:  (_ result:Bool) ->Void) {
         
-        //let portfolioDaily = PortfolioDaily()
-        let cumProfit = PortfolioDaily().dailyProfit(debug: debug)
-        print("inside weeklyProfit() here is cum profit")
-        //debugPrint(cumProfit)
-        //var cumProfitWeelky: [(date: Date, profit: Double, cost:Double)] = []
-        // delete old stas in realm
-        let realm = try! Realm()
-        let oldData = realm.objects(WklyStats.self)
-        try! realm.write {
-            realm.delete(oldData)
-        }
-        print("deleted weelky profit")
-        var counter = 0
-        let maxCount = cumProfit.count
-        
-        for today in cumProfit.enumerated() {
-            print("Looping through cumProfit \(today.element.date) \(today.element.profit)")
-            // if today is friday
-            if isFriday(date: today.element.date, debug: true) && today.element.date <= Date() { // not finding any fridays
-                print("Hello Friday")
-                WklyStats().updateCumulativeProfit(date: today.element.date, ticker: "N/A", profit: today.element.profit, cost: today.element.cost, maxCost: 1.0 ) //portfolioDaily.maxCosts
-                print("Adding \(today.element.date) $\(today.element.profit) to realm")
-            }
-            
-            counter += 1
-            if counter == maxCount {
-                completion(true)
-            }
-        }
+//        //let portfolioDaily = PortfolioDaily()
+//        let cumProfit = PortfolioDaily().dailyProfit(debug: debug)
+//        print("inside weeklyProfit() here is cum profit")
+//        //debugPrint(cumProfit)
+//        //var cumProfitWeelky: [(date: Date, profit: Double, cost:Double)] = []
+//        // delete old stas in realm
+//        let realm = try! Realm()
+//        let oldData = realm.objects(WklyStats.self)
+//        try! realm.write {
+//            realm.delete(oldData)
+//        }
+//        print("deleted weelky profit")
+//        var counter = 0
+//        let maxCount = cumProfit.count
+//        
+//        for today in cumProfit.enumerated() {
+//            print("Looping through cumProfit \(today.element.date) \(today.element.profit)")
+//            // if today is friday
+//            if isFriday(date: today.element.date, debug: true) && today.element.date <= Date() { // not finding any fridays
+//                print("Hello Friday")
+//                WklyStats().updateCumulativeProfit(date: today.element.date, ticker: "N/A", profit: today.element.profit, cost: today.element.cost, maxCost: 1.0 ) //portfolioDaily.maxCosts
+//                print("Adding \(today.element.date) $\(today.element.profit) to realm")
+//            }
+//            
+//            counter += 1
+//            if counter == maxCount {
+//                completion(true)
+//            }
+//        }
     }
     
 

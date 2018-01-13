@@ -52,6 +52,7 @@ class StatsViewController: UIViewController {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
+    //var portfolio:[PortfolioFilters.OneTrade]
     let maxBarsOnChart:Int = 100
     var minStars:Int = 0
     //MARK: - chart vars
@@ -76,6 +77,7 @@ class StatsViewController: UIViewController {
     let xDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIXAxisDragModifier.self)
     let zoomExtendsSync = SCIMultiSurfaceModifier(modifierType: SCIZoomExtentsModifier.self)
     
+    var portfolio:[PortfolioFilters.OneTrade] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Stats"
@@ -83,14 +85,12 @@ class StatsViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        // now only calc cum profit when this vc is called
+        // need a completion handler
+        portfolio = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            PortfolioWeekly().weeklyProfit(debug: true, completion: { (finished) in
-                if finished {
-                    WklyStats().showCumProfitFromRealm()
-                    self.getStatsfromRealm()
-                }
-            })
+            
+            self.completeConfiguration()
+            self.activityIndicator.stopAnimating()
         }        
     }
     
@@ -219,18 +219,18 @@ class StatsViewController: UIViewController {
     }
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
-        DispatchQueue.global(qos: .background).async {
-            self.ActivityOne(isOn:true)
-            print("\n---------------> Now running new backtest <----------------\n")
-           // _ = OldPortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
-           
-            DispatchQueue.main.async {
-                completion()
-                print("\n---------------> Now calling completion on new backtest <----------------\n")
-                self.getStatsfromRealm()
-                self.ActivityOne(isOn:false)
-            }
-        }
+//        DispatchQueue.global(qos: .background).async {
+//            self.ActivityOne(isOn:true)
+//            print("\n---------------> Now running new backtest <----------------\n")
+//           // _ = OldPortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
+//
+//            DispatchQueue.main.async {
+//                completion()
+//                print("\n---------------> Now calling completion on new backtest <----------------\n")
+//                self.getStatsfromRealm()
+//                self.ActivityOne(isOn:false)
+//            }
+//        }
     }
 
     func getDataForChart() {
@@ -245,15 +245,16 @@ class StatsViewController: UIViewController {
         addAxis(BarsToShow: maxBarsOnChart)
         addModifiers()
         topChartDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        bottomChartDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        //bottomChartDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
     }
     
     //MARK: - Add Profit Series
     fileprivate func topChartDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
         cumulativeProfit.acceptUnsortedData = true
-        for things in results! {
-            cumulativeProfit.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.profit))
+        //let portfolio = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
+        for things in portfolio {
+            cumulativeProfit.appendX(SCIGeneric(things.date), y: SCIGeneric(things.cumulative))
         }
         let topChartRenderSeries = SCIFastLineRenderableSeries()
         topChartRenderSeries.dataSeries = cumulativeProfit
@@ -303,14 +304,14 @@ class StatsViewController: UIViewController {
         let dateAxisSize:Float = 9.0
         let dollarAxisSize :Float = 12.0
         
-        let totalBars:Int = results!.count
-        rangeStart = totalBars - BarsToShow
+        //let totalBars:Int = results!.count
+        //rangeStart = totalBars - BarsToShow
         
         let axisX1:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
         axisX1.axisId = axisX1Id
         rangeSync.attachAxis(axisX1)
         
-        axisX1.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
+        //axisX1.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         axisX1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisX1.style.labelStyle.fontName = "Helvetica"
         axisX1.style.labelStyle.fontSize = dateAxisSize
@@ -327,7 +328,7 @@ class StatsViewController: UIViewController {
         let axisX2:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
         axisX2.axisId = axisX2Id
         rangeSync.attachAxis(axisX2)
-        axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
+        //axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         axisX2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisX2.style.labelStyle.fontName = "Helvetica"
         axisX2.style.labelStyle.fontSize = dateAxisSize
