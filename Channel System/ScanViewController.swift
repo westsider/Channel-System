@@ -44,17 +44,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         self.resetThis(ticker: "PVI", isOn: false)
         self.canIgetDataFor(ticker: "AAPL", isOn: false)
-        AllEntries().testbruteForce(galaxie: self.galaxie)
-        //print("\n----- correct array follows ----\n")
+
         //BackTest().testbruteForce(galaxie: self.galaxie)
+        WklyStats().getWeeklyStatsFromRealm()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            //let _ =   OldPortfolioEntries().allTickerBacktestWithCost(debug: true, saveToRealm: true)
-            //let _ = BackTest().testbruteForce(galaxie: self.galaxie)
-            
-            
+
             if self.reset {
                 self.csvOnly(galaxie: self.galaxie, debug: false)
             } else {

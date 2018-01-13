@@ -39,12 +39,6 @@ class AllEntries {
             print("\(totalTickers) tickers of \(galaxie.count) galaxie. Total trades \(alltickersAllTrades)")
             print("Sum of all trades \(Utilities().dollarStr(largeNumber: sum))")
             
-//            for each in portfolio {
-//                portFolioSum += each.profit
-//            }
-//            print("\n-----> here is the struct sum \(Utilities().dollarStr(largeNumber: portFolioSum))\n")
-//            print("--------------------------------------------\n")
-//
             // sort portfolio by date
             let newArr = portfolio.sorted { $0.date < $1.date }
             portFolioSum = 0.0

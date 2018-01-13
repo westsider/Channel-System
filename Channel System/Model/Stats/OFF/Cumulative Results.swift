@@ -209,7 +209,7 @@ print("\t\ttodaysProfit \(Utilities().dollarStr(largeNumber: todaysProfit)) += b
             if isFriday(date: today.element.date) {
                 //print("Hello Friday")
                 cumProfitWeelky.append((date: today.element.date, profit: today.element.profit, cost: today.element.cost))
-                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit, cost: today.element.cost, maxCost: maxCosts)
+                WklyStats().updateCumulativeProfit(date: today.element.date, ticker: "N/A", profit: today.element.profit, cost: today.element.cost, maxCost: maxCosts)
             }
             
             counter += 1

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// THIS IS THE CORRECT ARRAY
+// THIS IS THE CORRECT ARRAY  
 
 import Foundation
 import RealmSwift
@@ -19,11 +19,12 @@ class BackTest {
     
     func testbruteForce(galaxie: [String]){
         var totalTickers:Int = 0
-        var totals:[Double] = [0.0] //[(grossProfit:Double, largestWin:Double, largestLoser:Double, annualRoi:Double, winPct:Double) ] = [(0.0,0.0,0.0,0.0,0.0)]
+        var totals:[Double] = [0.0]
+        WklyStats().clearWeekly()
         for ticker in galaxie {
             DispatchQueue.global(qos: .background).async {
                 totalTickers += 1
-                let master = self.enterWhenFlat(ticker: ticker, debug: true, updateRealm: true) // ( grossProfit,largestWin, largestLoser, annualRoi, winPct )
+                let master = self.enterWhenFlat(ticker: ticker, debug: true, updateRealm: true)
                 totals.append(master.grossProfit)
                 let sum = totals.reduce(0, +)
         print("\n---------------------------------------")
@@ -41,7 +42,7 @@ class BackTest {
      - Step 2 of 3 Complete backtest process
      -      Entry().getEntry()
      -      CalcStars().backTest() calls BackTest().bruteForceTradesForEach()
-     -      weeklyProfit()  # the mess
+     -      Save values to realm to do weekly profit
      - loop though each Prices sorted by ticker
      - only enter when flat, record profit from each trade based on risk
      - return tuple aka master (grossProfit, largestWin, largestLoser, annualRoi, winPct)
@@ -69,11 +70,14 @@ class BackTest {
         var largestLoser = 0.0
         var allTrades = [Double]()
         var currentRisk:Int = 0
+        var capitalRequired:Double = 0.0
+        
         for each in prices {
             //MARK: - Entry
             if flat && each.longEntry {
                 flat = false
                 entryPrice = each.close
+                capitalRequired = each.capitalReq
                 daysInTrade = 0
                 tradeCount += 1
                 
@@ -106,6 +110,7 @@ class BackTest {
                     if debug {
                         print("\(each.dateString)\twPct(r) exit on \(each.ticker) with gain of \(String(format: "%.1f", tradeGain))") }
                     allTrades.append(tradeGain)
+                    WklyStats().updateCumulativeProfit(date: each.date!, ticker: each.ticker, profit: tradeGain, cost: capitalRequired, maxCost: 0.0)
 
                 }
                 //MARK: - time stop
@@ -121,6 +126,7 @@ class BackTest {
                     }
 
                     allTrades.append(tradeGain)
+                    WklyStats().updateCumulativeProfit(date: each.date!, ticker: each.ticker, profit: tradeGain, cost: capitalRequired, maxCost: 0.0)
                     if (( each.close - entryPrice ) >=  0 ) {
                         if  tradeGain > largestWin { largestWin = tradeGain }
                         if debug { print("\(each.dateString)\tTime stop \(each.ticker) after \(daysInTrade) days with gain of \(String(format: "%.0f", tradeGain))") }
@@ -133,6 +139,7 @@ class BackTest {
                     flat = true
                     let thisLoss = ( each.low - entryPrice ) * shares
                     allTrades.append(thisLoss)
+                    WklyStats().updateCumulativeProfit(date: each.date!, ticker: each.ticker, profit: thisLoss, cost: capitalRequired, maxCost: 0.0)
                     if  thisLoss < largestLoser { largestLoser = thisLoss }
                     if debug { print("\(each.dateString)\tStop hit on \(each.ticker) Loss is \(String(format: "%.1f", thisLoss)) ") }
                     tradeGain = tradeGain + thisLoss

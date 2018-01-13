@@ -33,7 +33,7 @@ class PortfolioWeekly {
             // if today is friday
             if isFriday(date: today.element.date, debug: true) && today.element.date <= Date() { // not finding any fridays
                 print("Hello Friday")
-                WklyStats().updateCumulativeProfit(date: today.element.date, profit: today.element.profit, cost: today.element.cost, maxCost: 1.0 ) //portfolioDaily.maxCosts
+                WklyStats().updateCumulativeProfit(date: today.element.date, ticker: "N/A", profit: today.element.profit, cost: today.element.cost, maxCost: 1.0 ) //portfolioDaily.maxCosts
                 print("Adding \(today.element.date) $\(today.element.profit) to realm")
             }
             
