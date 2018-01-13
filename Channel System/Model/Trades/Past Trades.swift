@@ -19,7 +19,7 @@ class MyPrice {
         }
         let cost = shares * entry
         let profitString = String(format: "%.2f", profit)
-        let answer = "\(ticker)\t\(date)\t\(profitString)"
+        let answer = "\(ticker)\t\(date)\t\t\(profitString)"
         return (answer, profit, cost)
     }
 }
@@ -27,11 +27,11 @@ class MyPrice {
 class ManualTrades {
     
     func showProfit() {
-        var trades = [(String, Double, Double)]()
+        var trades = [(ticker:String, date:Double, profit:Double)]()
         var cumProfit = [Double]()
         var cumCost = [Double]()
         var winCount:Int = 0
-        print("\n-------------------\n \tLive Trades\n-------------------")
+        print("\n----------------------------\n \tLive Trades\n----------------------------")
         trades.append( MyPrice().profit(ticker: "DBB", date: "11/28", entry: 18.21, exit: 17.8, shares: 90.00) )
         trades.append( MyPrice().profit(ticker: "KO", date: "11/28", entry: 45.57, exit: 46.19, shares: 36.00) )
         trades.append( MyPrice().profit(ticker: "DJP", date: "12/01", entry: 23.91, exit: 23.05, shares: 100.00) )
@@ -59,10 +59,10 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "AAPL", date: "12/27", entry: 170.27, exit: 174.9, shares: 5.00) )
         trades.append( MyPrice().profit(ticker: "IFY", date: "1/3", entry: 119.41, exit: 120.69, shares: 13.00) )
         trades.append( MyPrice().profit(ticker: "FXO", date: "1/3", entry: 31.28, exit: 31.68, shares: 53.00) )
-        trades.append( MyPrice().profit(ticker: "PG", date: "1/3", entry: 90.80, exit: 0.00, shares: 18.00) )
+        trades.append( MyPrice().profit(ticker: "PG", date: "1/3", entry: 90.80, exit: 90.87, shares: 18.00) )
         
         for each in trades {
-            print(each.0)
+            print("\(each.ticker)")
             cumProfit.append(each.1)
             cumCost.append(each.2)
             if each.1 >= 0 {
@@ -85,7 +85,7 @@ class ManualTrades {
         let annumRoiStr = String(format: "%.2f", annumRoi)
         let annumReturn = (annumRoi * 0.01) * 850000
         let annumReturnStr = Utilities().dollarStr(largeNumber: annumReturn)
-        print("Total\t$\(profitSumStr)\t\(winPctStr)% win\n\n$\(avgCost) avg cost\t\t$\(meanCost) mean cost\n\(approxRoiStr)% roi\t\t\t\(annumRoiStr)% annual return\n$\(annumReturnStr) annual gain\n\n")
+        print("Total\t\t$\(profitSumStr)\t\(winPctStr)% win\n\n$\(avgCost) avg cost\t\t$\(meanCost) mean cost\n\(approxRoiStr)% roi\t\t\t\(annumRoiStr)% annual return\n$\(annumReturnStr) annual gain\n\n")
         
         //makePastEntry() trades.append( MyPrice().profit(ticker: "EFA", date: "12/20", entry: 69.74, exit: 0.00, shares: 14.00) )
         //makePastEntry(yyyyMMdd: "2017-12-20", ticker: "EFA", entry: 69.74, stop: 66.24, target: 73.21, shares: 14, risk: 50.00, account: "IB", capitol: 976.15)

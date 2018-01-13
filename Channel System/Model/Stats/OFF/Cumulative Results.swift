@@ -40,8 +40,8 @@ class OldPortfolioEntries {
                 marketCondition = true
             }
             // if buy then buy and record ticker and cost
-            if portfolioDict.count < 200 { // && today.stars >= minStars && marketCondition {
-                if today.capitalReq != 0.00 {
+            if portfolioDict.count < 50000 { // && today.stars >= minStars && marketCondition {
+                if today.longEntry {  //if today.capitalReq != 0.00 {
                     if tradeCount == 0 {
                         firstTradeDate = today.date!
                     }
@@ -59,20 +59,10 @@ class OldPortfolioEntries {
                 // if this sell matches one of my tickers
                 if portfolioDict[today.ticker] != nil {
                     todaysProfit += today.backTestProfit
-    print("\t\ttodaysProfit \(Utilities().dollarStr(largeNumber: todaysProfit)) += backtestProfit \(Utilities().dollarStr(largeNumber: today.backTestProfit))")
+print("\t\ttodaysProfit \(Utilities().dollarStr(largeNumber: todaysProfit)) += backtestProfit \(Utilities().dollarStr(largeNumber: today.backTestProfit))")
                     
-                    // why is daily profit 0?
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                      
+/// why is daily profit 0?
+
                     portfolioDict.removeValue(forKey: today.ticker)
                     if today.backTestProfit >= 0 {
                         winCount += 1
@@ -153,7 +143,7 @@ class OldPortfolioEntries {
         
         if debug {
             print("\n--------------- Cumulative Backtest Results ---------------")
-            print("\t\t\t\tTotal gain: \(Utilities().dollarStr(largeNumber: totalGain))")
+            print("\t\tTotal gain: \(Utilities().dollarStr(largeNumber: totalGain))\tTrade Count \(tradeCount)")
             print("\t\tMax cost: \(Utilities().dollarStr(largeNumber: maxCost) ), Roi: \(roiString), \(Utilities().decimalStr(input: winPct, Decimals: 2))% Win")
             print("-----------------------------------------------------------\n")
         }
@@ -173,28 +163,6 @@ class OldPortfolioEntries {
             print("\(Utilities().happySad(num: profit)) Todays Record: ", Utilities().convertToStringNoTimeFrom(date: lastDate), "  Profit: ", Utilities().dollarStr(largeNumber:profit), "  Cost: ",Utilities().dollarStr(largeNumber:dailyCostSum), "  Positions: \(portfolioCount) ----> Cumulative Gain: \(Utilities().dollarStr(largeNumber: totalGain))\n" )
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     // get master: [(date: Date, profit: Double)] ->  cumulative daily profit
@@ -268,6 +236,45 @@ class OldPortfolioEntries {
     }
 }
 
+// check for profit added at wrong place, and profit not added
+class CheckDatabaseFor {
+    
+    // loop throuh all prices, ascending
+    func loopThoughDays() {
+        
+        let realm = try! Realm()
+        let dateArray = realm.objects(Prices.self).sorted(byKeyPath: "date", ascending: true)
+        
+        for today in dateArray {
+            
+            //print("\(date)\t\(today.ticker)")
+            entryFound(today: today)
+            
+            
+            
+        }
+        print("\nLoop Finished\n")
+    }
+    
+    func entryFound(today:Prices) {
+        // if longEntry && showprofit then Alert
+        let date = Utilities().convertToStringNoTimeFrom(date: today.date!)
+        if today.longEntry && today.profit != 0.0{
+            print("---> Entry \(date) Profit \(today.profit) <----")
+        }
+    }
+    
+    func profitAddedAtWrongPlace() {
+        // !dateStop || !stop || !tgt and profitAdded
+        print("Alert profit added at wrong place")
+    }
+    
+    func missingProfit() {
+        // dateStop || stop || tgt and !profitAdded
+        print("Alert Profit Not Added")
+    }
+}
+
 /*
   get every date in Prices. if backTestProfit -> master: [(date: Date, profit: Double)]
  func calcAllTickers(debug:Bool)-> [(date: Date, profit: Double, cost: Double, positions: Int)]  {
@@ -283,8 +290,6 @@ class OldPortfolioEntries {
  var todaysCost = [Double]()
  var sumOfToday:Double = 0.00
  var sumOfCost:Double = 0.00
- var positionsToday:Int = 0
- print("we have a dateArray of \(dateArray.count)")
  
  for today in dateArray {
  

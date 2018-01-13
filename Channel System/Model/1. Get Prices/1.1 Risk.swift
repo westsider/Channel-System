@@ -39,10 +39,10 @@ class Account:Object {
         let acct = realm.objects(Account.self).filter("taskID == %@", id)
         var answer:Int = 0
         if let thisRisk = acct.first?.risk {
-            print("We found a risk value in realm of \(thisRisk)")
+            //print("We found a risk value in realm of \(thisRisk)")
             answer = thisRisk
         } else {
-            print("No risk found in realm!")
+            //print("No risk found in realm!")
         }
         return answer
     }

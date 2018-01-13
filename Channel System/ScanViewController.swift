@@ -21,14 +21,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     @IBOutlet weak var tradeButton: UIButton!
     
     let size = CGSize(width: 100, height: 100)
-    let csvBlock = { print( "1.2 CSV Complete" ) }
-    let infoBlock = { print( "1.3 Company Info Complete" ) }
-    let intrioBlock = { print( "1.4 Intrinio Complete" ) }
-    let smaBlock1 = { print( "2.1 SMA(10) Complete" ) }
-    let smaBlock2 = { print( "SMA(200) Complete" ) }
-    let wPctRBlock = { print( "wPct(R) Complete" ) }
-    let entryBlock = { print( "Entry Complete" ) }
-    let mcBlock = { print( "Market Condition ) Complete" ) }
     let firebaseBlock = { print( "Firebase Complete" ) }
     let prices = Prices()
     var updatedProgress: Float = 0
@@ -39,7 +31,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var galaxie = [String]()
     var marketCondition:Results<MarketCondition>!
     var marketReportString = ("No Title", "No Text")
-    var reset:Bool = false                              //    var testTicker:Bool = true
+    var reset:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,28 +40,35 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-            self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-            self.resetThis(ticker: "PVI", isOn: false)
-            self.canIgetDataFor(ticker: "AAPL", isOn: false)
+        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        self.resetThis(ticker: "PVI", isOn: false)
+        self.canIgetDataFor(ticker: "AAPL", isOn: false)
+        AllEntries().testbruteForce(galaxie: self.galaxie)
+        //print("\n----- correct array follows ----\n")
+        //BackTest().testbruteForce(galaxie: self.galaxie)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            let _ =   OldPortfolioEntries().allTickerBacktestWithCost(debug: true, saveToRealm: true)
+            //let _ =   OldPortfolioEntries().allTickerBacktestWithCost(debug: true, saveToRealm: true)
+            //let _ = BackTest().testbruteForce(galaxie: self.galaxie)
+            
+            
             if self.reset {
                 self.csvOnly(galaxie: self.galaxie, debug: false)
             } else {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
-                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
-                        if finished {
-                            self.stopAnimating()
-                            self.marketConditionUI(debug: false)
-                        }
-                    })
+//                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
+//                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
+//                        if finished {
+//                            self.stopAnimating()
+//                            self.marketConditionUI(debug: false)
+//                        }
+//                    })
+                    self.stopAnimating()
                 }
             }
         }

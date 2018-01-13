@@ -28,6 +28,7 @@
 		0D6726971FF8079900E42A9A /* 1.4 Get Intrio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6726961FF8079900E42A9A /* 1.4 Get Intrio.swift */; };
 		0D67269A1FF807F800E42A9A /* 2.0 SMA 10, 200.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6726991FF807F800E42A9A /* 2.0 SMA 10, 200.swift */; };
 		0D67269D1FF80B9E00E42A9A /* 1.0 Galaxie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D67269C1FF80B9E00E42A9A /* 1.0 Galaxie.swift */; };
+		0D6C61E620095F7B001FEA2F /* Profit Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6C61E520095F7B001FEA2F /* Profit Graph.swift */; };
 		0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6F55701FB0E31E00E0723B /* ShowTrades.swift */; };
 		0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D771E061FAE5C5E006269DD /* ChartViewController.swift */; };
 		0D77DDCE1FCF705C007573C3 /* Trade Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */; };
@@ -330,6 +331,7 @@
 		0D6726961FF8079900E42A9A /* 1.4 Get Intrio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "1.4 Get Intrio.swift"; sourceTree = "<group>"; };
 		0D6726991FF807F800E42A9A /* 2.0 SMA 10, 200.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "2.0 SMA 10, 200.swift"; sourceTree = "<group>"; };
 		0D67269C1FF80B9E00E42A9A /* 1.0 Galaxie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "1.0 Galaxie.swift"; sourceTree = "<group>"; };
+		0D6C61E520095F7B001FEA2F /* Profit Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profit Graph.swift"; sourceTree = "<group>"; };
 		0D6F55701FB0E31E00E0723B /* ShowTrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTrades.swift; sourceTree = "<group>"; };
 		0D771E061FAE5C5E006269DD /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Helpers.swift"; sourceTree = "<group>"; };
@@ -924,6 +926,7 @@
 		0D8944A42001624A0046D6AC /* Portfolio */ = {
 			isa = PBXGroup;
 			children = (
+				0D6C61E520095F7B001FEA2F /* Profit Graph.swift */,
 				0D8944A5200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift */,
 				0D8944A7200162F30046D6AC /* 4.1 Chrono Daily Profit.swift */,
 				0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */,
@@ -1470,6 +1473,7 @@
 				0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */,
 				0D187BFD1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift in Sources */,
 				0D949CDA1FA3B7B600960BA2 /* ScanViewController.swift in Sources */,
+				0D6C61E620095F7B001FEA2F /* Profit Graph.swift in Sources */,
 				0D3108491FC8968D00E93CB3 /* constants.swift in Sources */,
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */,
