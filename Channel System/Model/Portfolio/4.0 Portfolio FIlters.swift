@@ -10,10 +10,12 @@ import Foundation
 import RealmSwift
 
     /*
+    [X] chart
+    [ ] cumulative cost
+    [ ] calc stats
+    [ ] limit num pos
     [ ] apply mc
     [ ] apply stars
-    [X] chart
-    [ ] limit num pos
     [ ] find big dip
     */
 class PortfolioFilters {
@@ -37,9 +39,19 @@ class PortfolioFilters {
         let sortedByDate = weeklyStats.sorted(byKeyPath: "date", ascending: true)
         var cumulatveSum:Double = 0.0
         var cumulativeCost:Double = 0.0
+        var positionCount:Int = 0
+        var lastDate:Date = Date()
         if sortedByDate.count >  1 {
             let results = sortedByDate
             for each in results {
+                // this shows how many positions sold in a day as a way to roughtly estimate holding cost. needs to be more accurate
+                if each.date == lastDate {
+                    positionCount += 1
+                    cumulativeCost = Double( positionCount ) * each.cost
+                } else {
+                    positionCount  = 0
+                }
+                
                 cumulatveSum += each.profit
                 let date = Utilities().convertToStringNoTimeFrom(date: each.date!)
                 let profit = Utilities().dollarStr(largeNumber: each.profit)
@@ -47,9 +59,9 @@ class PortfolioFilters {
                 let cumulative = Utilities().dollarStr(largeNumber: cumulatveSum)
                 print("\(date)\t\(each.ticker)\t\(profit)\t\(capReq)\t\t\(cumulative)")
                 
-                let oneTrade = OneTrade(ticker: each.ticker, date: each.date!, profit: each.profit, capitalRequired: each.cost, cumulative: cumulatveSum, cumulativeCost: 0.0)
+                let oneTrade = OneTrade(ticker: each.ticker, date: each.date!, profit: each.profit, capitalRequired: each.cost, cumulative: cumulatveSum, cumulativeCost: cumulativeCost)
                 portfolio.append(oneTrade)
-                
+                lastDate = each.date!
             }
         }
         return portfolio

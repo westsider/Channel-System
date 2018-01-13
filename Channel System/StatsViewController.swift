@@ -245,7 +245,7 @@ class StatsViewController: UIViewController {
         addAxis(BarsToShow: maxBarsOnChart)
         addModifiers()
         topChartDataSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        //bottomChartDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
+        bottomChartDataSeries(surface: sciChartView2, xID: axisX2Id, yID: axisY2Id)
     }
     
     //MARK: - Add Profit Series
@@ -268,8 +268,8 @@ class StatsViewController: UIViewController {
     fileprivate func bottomChartDataSeries(surface:SCIChartSurface, xID:String, yID:String)  {
         let cumulativeCost = SCIXyDataSeries(xType: .dateTime, yType: .double)
         cumulativeCost.acceptUnsortedData = true
-        for things in results! {
-            cumulativeCost.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.cost))
+        for things in portfolio {
+            cumulativeCost.appendX(SCIGeneric(things.date), y: SCIGeneric(things.cumulativeCost))
         }
         let bottomChartRenderSeries = SCIFastColumnRenderableSeries()
         bottomChartRenderSeries.dataSeries = cumulativeCost
