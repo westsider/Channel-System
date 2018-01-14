@@ -17,8 +17,9 @@ class WklyStats: Object {
     @objc dynamic var maxCost   = 0.00
     @objc dynamic var taskID    = NSUUID().uuidString
     @objc dynamic var ticker    = ""
+    @objc dynamic var entryDate:Date?
     
-    func updateCumulativeProfit(date: Date, ticker:String, profit: Double, cost:Double, maxCost:Double) {
+    func updateCumulativeProfit(date: Date, entryDate:Date, ticker:String, profit: Double, cost:Double, maxCost:Double) {
         print("today \(Date()) date to save \(date)")
         if date <= Date() {
             let realm = try! Realm()
@@ -28,6 +29,7 @@ class WklyStats: Object {
             thisWeek.profit = profit
             thisWeek.cost = cost
             thisWeek.maxCost = maxCost
+            thisWeek.entryDate = entryDate
             try! realm.write {
                 realm.add(thisWeek)
             }

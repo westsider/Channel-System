@@ -71,7 +71,8 @@ class BackTest {
         var allTrades = [Double]()
         var currentRisk:Int = 0
         var capitalRequired:Double = 0.0
-        
+        var entryDate:Date = Date()
+
         for each in prices {
             //MARK: - Entry
             if flat && each.longEntry {
@@ -80,6 +81,7 @@ class BackTest {
                 capitalRequired = each.capitalReq
                 daysInTrade = 0
                 tradeCount += 1
+                entryDate = each.date!
                 
                 let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: entryPrice, debug: false).2
                 currentRisk = Account().currentRisk()
@@ -110,7 +112,7 @@ class BackTest {
                     if debug {
                         print("\(each.dateString)\twPct(r) exit on \(each.ticker) with gain of \(String(format: "%.1f", tradeGain))") }
                     allTrades.append(tradeGain)
-                    WklyStats().updateCumulativeProfit(date: each.date!, ticker: each.ticker, profit: tradeGain, cost: capitalRequired, maxCost: 0.0)
+                    WklyStats().updateCumulativeProfit(date: each.date!, entryDate: entryDate, ticker: each.ticker, profit: tradeGain, cost: capitalRequired, maxCost: 0.0)
 
                 }
                 //MARK: - time stop
@@ -126,7 +128,7 @@ class BackTest {
                     }
 
                     allTrades.append(tradeGain)
-                    WklyStats().updateCumulativeProfit(date: each.date!, ticker: each.ticker, profit: tradeGain, cost: capitalRequired, maxCost: 0.0)
+                    WklyStats().updateCumulativeProfit(date: each.date!, entryDate: entryDate, ticker: each.ticker, profit: tradeGain, cost: capitalRequired, maxCost: 0.0)
                     if (( each.close - entryPrice ) >=  0 ) {
                         if  tradeGain > largestWin { largestWin = tradeGain }
                         if debug { print("\(each.dateString)\tTime stop \(each.ticker) after \(daysInTrade) days with gain of \(String(format: "%.0f", tradeGain))") }
@@ -139,7 +141,7 @@ class BackTest {
                     flat = true
                     let thisLoss = ( each.low - entryPrice ) * shares
                     allTrades.append(thisLoss)
-                    WklyStats().updateCumulativeProfit(date: each.date!, ticker: each.ticker, profit: thisLoss, cost: capitalRequired, maxCost: 0.0)
+                    WklyStats().updateCumulativeProfit(date: each.date!, entryDate: entryDate, ticker: each.ticker, profit: thisLoss, cost: capitalRequired, maxCost: 0.0)
                     if  thisLoss < largestLoser { largestLoser = thisLoss }
                     if debug { print("\(each.dateString)\tStop hit on \(each.ticker) Loss is \(String(format: "%.1f", thisLoss)) ") }
                     tradeGain = tradeGain + thisLoss

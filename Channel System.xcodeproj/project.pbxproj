@@ -929,6 +929,7 @@
 			isa = PBXGroup;
 			children = (
 				0D6C61E72009B83F001FEA2F /* 4.0 Portfolio FIlters.swift */,
+				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 				0D8944A5200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift */,
 				0D8944A7200162F30046D6AC /* 4.1 Chrono Daily Profit.swift */,
 				0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */,
@@ -983,7 +984,6 @@
 			isa = PBXGroup;
 			children = (
 				0DE78F541FD888B400915777 /* Stats Object.swift */,
-				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 				0D5A43A41FEF10EB00842801 /* S+P Returns.swift */,
 				0D14D0031FE5AB2D000BA6D5 /* OFF */,
 			);

@@ -87,6 +87,7 @@ class StatsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         // need a completion handler
         portfolio = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
+        populateLables()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             
             self.completeConfiguration()
@@ -180,34 +181,36 @@ class StatsViewController: UIViewController {
         }
     }
 
-    func getStatsfromRealm() {
+    //MARK: - update lables
+    func populateLables() {
         let realm = try! Realm()
         minStars = Stats().getStars()
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
-            let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
-            let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
+            //let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
+            //let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
             let thisRisk = Account().currentRisk()
-            let roi = updateStats.avgROI * 100
+            //let roi = updateStats.avgROI * 100
             let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
             let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
             let numYears = Double(numDays) / 365.00
-            let annualProfit = updateStats.grossProfit / numYears
-            let annualProfitString = Utilities().dollarStr(largeNumber: annualProfit)
+            //let annualProfit = updateStats.grossProfit / numYears
+            //let annualProfitString = Utilities().dollarStr(largeNumber: annualProfit)
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
-                self.topLeft.text = "$\(gross) Profit"
-                self.topRight.text = "\(String(format: "%.0f", updateStats.avgPctWin))% Wins"
-                self.midLeft.text = "\(String(format: "%.2f", roi))%  Roi "
-                self.midRight.text = "$\(cost) Cost, \(thisRisk) Risk"
-                self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
-                let lWin = Utilities().dollarStr(largeNumber: updateStats.largestWinner)
-                self.largestWinLabel.text = "Largest Win \(lWin)"
-                let lLos = Utilities().dollarStr(largeNumber: updateStats.largestLoser)
+
+                self.topLeft.text = "$\(Utilities().dollarStr(largeNumber: (self.portfolio.last?.cumulative)!)) Profit"
+                self.topRight.text = "\(String(format: "%.2f", (self.portfolio.last?.winPct)!))% Wins"
+                self.midLeft.text = "\(String(format: "%.2f", 0.00))%  Roi "
+                self.midRight.text = "$\(0.00) Cost, \(thisRisk) Risk"
+               // self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
+                //let lWin = Utilities().dollarStr(largeNumber: 0.00)
+                self.largestWinLabel.text = "Largest Win \(0.00)"
+                //let lLos = Utilities().dollarStr(largeNumber: 0.00)
                 self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
-                self.largestLossLabel.text = "Largest Loss \(lLos)"
-                self.minStarsLabel.text = "Minimun Stars: \(self.minStars)"
-                self.annualProfitLabel.text = "$\(annualProfitString) Annually"
+                self.largestLossLabel.text = "Largest Loss \(0.0)"
+                self.minStarsLabel.text = "Minimun Stars: \(0.00)"
+                self.annualProfitLabel.text = "$\(0.00) Annually"
                 self.spReturnLabel.text = SpReturns().textForStats(yearEnding: 2007)
                 self.ActivityOne(isOn: false)
                 self.getDataForChart()
