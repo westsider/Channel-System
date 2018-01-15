@@ -58,7 +58,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-let _ = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
+
 //                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
 //                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
 //                        if finished {

@@ -45,6 +45,8 @@ class PortfolioFilters {
     var totalProfit:[Double] = []
     var totalCost:[Double] = []
     
+    let commissions:Double = 1.05 * 2.0
+    
     func of(mc:Bool, stars:Bool, numPositions:Int)-> [StatsData] {
 
         let realm = try! Realm()
@@ -78,7 +80,7 @@ class PortfolioFilters {
         if positionCount < numPos && starsOK && matrix {
             positionCount += 1
             tradeCount += 1
-            sumProfit += profit
+            sumProfit += profit - commissions
             sumCost += Cost
             if profit >= 0 {
                 winCount += 1
@@ -117,55 +119,6 @@ class PortfolioFilters {
         let thisDay = StatsData(date: date, dailyCumProfit: sumOfAllProfit, dailyCost: sumCost, winPct: winPct)
         portfolio.append(thisDay)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//    func sumEntriesForEach(entryDate:Date,profit:Double, cost:Double, ticker:String, debug:Bool)-> OneTrade {
-//        tradeCount += 1
-//        cumulatveSum += profit
-//        if profit >= 0 {
-//            winCount += 1
-//        }
-//        winPct = ( Double( winCount ) / Double( tradeCount ) ) * 100.0
-//        let thisTrade = OneTrade(ticker: ticker, date: entryDate, profit: profit, capitalRequired: cost, cumulative: cumulatveSum, cumulativeCost: cumulativeCost, winPct: winPct)
-//        
-//        if debug { printTrades(entryDate: entryDate, profit: profit, cost: cost, ticker: ticker) }
-//        return thisTrade
-//    }
-//    
-//    func printTrades(entryDate:Date,profit:Double, cost:Double, ticker:String) {
-//       // let capReq = Utilities().dollarStr(largeNumber: cost)
-//        let cumulative = Utilities().dollarStr(largeNumber: cumulatveSum)
-//        let date = Utilities().convertToStringNoTimeFrom(date: entryDate)
-//        let dateExit = Utilities().convertToStringNoTimeFrom(date: entryDate)
-//        //let profit = Utilities().dollarStr(largeNumber: profit)
-//        print("\(date)\tExit \(dateExit)\t\(profit)\t\(cost)\t\t\(cumulative)\tCount \(positionCount)")
-//    }
-//    
-//    func printPortfolio(portfolio:[OneTrade]) {
-//        print("Date\t\tProfit\tCapital\tCumulative")
-//        for each in portfolio {
-//            let capReq = Utilities().dollarStr(largeNumber: each.capitalRequired)
-//            let cumulative = Utilities().dollarStr(largeNumber: each.cumulative)
-//            let date = Utilities().convertToStringNoTimeFrom(date: each.date)
-//            let profit = Utilities().dollarStr(largeNumber: each.profit)
-//            print("\(date)\t\(profit)\t\t\(capReq)\t\t\(cumulative)\t\t\(positionCount)")
-//        }
-//    }
-    
-    
-    
 }
 
 
