@@ -77,7 +77,7 @@ class StatsViewController: UIViewController {
     let xDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIXAxisDragModifier.self)
     let zoomExtendsSync = SCIMultiSurfaceModifier(modifierType: SCIZoomExtentsModifier.self)
     
-    var portfolio:[PortfolioFilters.OneTrade] = []
+    var portfolio:[PortfolioFilters.StatsData] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Stats"
@@ -90,7 +90,7 @@ class StatsViewController: UIViewController {
         populateLables()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             
-            self.completeConfiguration()
+            //self.completeConfiguration()
             self.activityIndicator.stopAnimating()
         }        
     }
@@ -162,17 +162,18 @@ class StatsViewController: UIViewController {
         }
     }
 // this is nil and so we call calc stats
-    func getWeeklyFromRealm() {
-        print("\n inside getWeeklyFromRealm()\n")
+    func getWeeklyFromRealm(debug:Bool) {
+        if debug { print("\n inside getWeeklyFromRealm()\n") }
         let realm = try! Realm()
         let weeklyStats = realm.objects(WklyStats.self)
         let sortedByDate = weeklyStats.sorted(byKeyPath: "date", ascending: true)
         if sortedByDate.count >  1 {
             results = sortedByDate
-            print("We have  have weekly stats count > 1")
-            print("now reading from realm count: \(sortedByDate.count)")
-            for each in results! {
-                print(each.date!, each.profit)
+            if debug { print("We have  have weekly stats count > 1")
+                print("now reading from realm count: \(sortedByDate.count)")
+                for each in results! {
+                    print(each.date!, each.profit)
+                }
             }
             completeConfiguration()
         } else {
@@ -183,9 +184,9 @@ class StatsViewController: UIViewController {
 
     //MARK: - update lables
     func populateLables() {
-        let realm = try! Realm()
+        //let realm = try! Realm()
         minStars = Stats().getStars()
-        if let updateStats = realm.objects(Stats.self).last {
+        //if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
             //let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
             //let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
@@ -199,7 +200,7 @@ class StatsViewController: UIViewController {
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
 
-                self.topLeft.text = "$\(Utilities().dollarStr(largeNumber: (self.portfolio.last?.cumulative)!)) Profit"
+                self.topLeft.text = "$\(Utilities().dollarStr(largeNumber: (self.portfolio.last?.dailyCumProfit)!)) Profit"
                 self.topRight.text = "\(String(format: "%.2f", (self.portfolio.last?.winPct)!))% Wins"
                 self.midLeft.text = "\(String(format: "%.2f", 0.00))%  Roi "
                 self.midRight.text = "$\(0.00) Cost, \(thisRisk) Risk"
@@ -215,10 +216,10 @@ class StatsViewController: UIViewController {
                 self.ActivityOne(isOn: false)
                 self.getDataForChart()
             }
-        } else {
-            print("did not find realm")
+       /// } else {
+        //    print("did not find realm")
             //calcStats(debug: false, completion: getDataForChart)
-        }
+        //}
     }
     
     func calcStats(debug:Bool, completion: @escaping () -> ()) {
@@ -239,7 +240,7 @@ class StatsViewController: UIViewController {
     func getDataForChart() {
         ActivityOne(isOn: false)
         print("finished getting stats, calling build chart")
-        getWeeklyFromRealm()
+        getWeeklyFromRealm(debug: false)
     }
     
     // MARK: Overrided Functions
@@ -257,7 +258,7 @@ class StatsViewController: UIViewController {
         cumulativeProfit.acceptUnsortedData = true
         //let portfolio = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
         for things in portfolio {
-            cumulativeProfit.appendX(SCIGeneric(things.date), y: SCIGeneric(things.cumulative))
+            cumulativeProfit.appendX(SCIGeneric(things.date), y: SCIGeneric(things.dailyCumProfit))
         }
         let topChartRenderSeries = SCIFastLineRenderableSeries()
         topChartRenderSeries.dataSeries = cumulativeProfit
@@ -272,7 +273,7 @@ class StatsViewController: UIViewController {
         let cumulativeCost = SCIXyDataSeries(xType: .dateTime, yType: .double)
         cumulativeCost.acceptUnsortedData = true
         for things in portfolio {
-            cumulativeCost.appendX(SCIGeneric(things.date), y: SCIGeneric(things.cumulativeCost))
+            cumulativeCost.appendX(SCIGeneric(things.date), y: SCIGeneric(things.dailyCost))
         }
         let bottomChartRenderSeries = SCIFastColumnRenderableSeries()
         bottomChartRenderSeries.dataSeries = cumulativeCost

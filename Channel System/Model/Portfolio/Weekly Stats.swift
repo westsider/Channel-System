@@ -11,13 +11,14 @@ import RealmSwift
 
 class WklyStats: Object {
     
+    @objc dynamic var entryDate:Date?
     @objc dynamic var date:Date?
     @objc dynamic var profit    = 0.00
     @objc dynamic var cost      = 0.00
     @objc dynamic var maxCost   = 0.00
     @objc dynamic var taskID    = NSUUID().uuidString
     @objc dynamic var ticker    = ""
-    @objc dynamic var entryDate:Date?
+    
     
     func updateCumulativeProfit(date: Date, entryDate:Date, ticker:String, profit: Double, cost:Double, maxCost:Double) {
         print("today \(Date()) date to save \(date)")
