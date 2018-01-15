@@ -93,6 +93,24 @@ class Prices: Object {
         }
     }
     
+    func getStarsFor(ticker:String, debug:Bool)->Int {
+        let realm = try! Realm()
+        let id = ticker
+        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
+        let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
+        if let stars = sortedByDate.first?.stars {
+            
+        
+            if ( debug ) {
+                print("Ticker: \(ticker) Stars: \(stars)")
+            }
+            return stars
+        } else {
+            print("\n----> ALERT! No Stars Found For \(ticker) <----\n")
+            return 0
+        }
+    }
+    
 
     
     //MARK: - Sort Entries

@@ -13,7 +13,7 @@ import RealmSwift
     [X] chart
     [X] cumulative cost
     [ ] calc stats
-    [ ] limit num pos
+    [X] limit num pos
     [ ] apply mc
     [ ] apply stars
     [ ] find big dip
@@ -22,16 +22,6 @@ import RealmSwift
     */
 
 class PortfolioFilters {
-    
-    struct OneTrade {
-        var ticker:String
-        var date: Date
-        var profit:Double
-        var capitalRequired:Double
-        var cumulative:Double
-        var cumulativeCost:Double
-        var winPct:Double = 0.0
-    }
     
     struct StatsData {
         var date: Date
@@ -42,8 +32,6 @@ class PortfolioFilters {
     
     var statsArray:[StatsData] = []
     var portfolio:[StatsData] = []
-    var oneDay:[OneTrade] = []
-    
     var cumulatveSum:Double = 0.0
     var cumulativeCost:Double = 0.0
     var positionCount:Int = 0
@@ -51,7 +39,7 @@ class PortfolioFilters {
     var winCount:Int = 0
     var tradeCount:Int = 0
     var winPct:Double = 0.0
-    
+    var strWinPct:String = ""
     var sumProfit:Double = 0.0
     var sumCost:Double = 0.0
     var totalProfit:[Double] = []
@@ -62,20 +50,21 @@ class PortfolioFilters {
         let realm = try! Realm()
         let weeklyStats = realm.objects(WklyStats.self)
         let sortedByDate = weeklyStats.sorted(byKeyPath: "entryDate", ascending: true)
-        
+ 
         if sortedByDate.count >  1 {
             let results = sortedByDate
             for each in results {
+                
                 // Sum for this date OR start ned day and append the array for sciChart
                 if each.entryDate == lastDate {
                     //print("\tSame date sum profit and cost")
-                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions)
+                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions, ticker: each.ticker)
                 } else {
                     //print("\tNew date return Sums, zero Sums, sum profit and cost")
                     returnSumAndProfit()
                     printEachDay(date:  each.entryDate!)
                     zeroProfitCostCount()
-                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions)
+                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions, ticker: each.ticker)
                 }
                 lastDate = each.entryDate!
             }
@@ -83,11 +72,28 @@ class PortfolioFilters {
         return portfolio
     }
     
-    func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int) {
-        if positionCount < numPos {
+    func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String) {
+        let starsOK = checkStars(ticker: ticker)
+        if positionCount < numPos && starsOK {
+            //let matrix = MarketCondition().getMatixToProveOnChart(date: today.date!)
+            
             positionCount += 1
+            tradeCount += 1
             sumProfit += profit
             sumCost += Cost
+            if profit >= 0 {
+                winCount += 1
+            }
+        }
+    }
+    
+    func checkStars(ticker:String)->Bool {
+        let stars = Prices().getStarsFor(ticker: ticker, debug: false)
+        let minStars:Int = Stats().getStars()
+        if stars >= minStars {
+            return true
+        } else {
+            return false
         }
     }
     
@@ -105,7 +111,9 @@ class PortfolioFilters {
         let strDate = Utilities().convertToStringNoTimeFrom(date: date)
         let cp = Utilities().dollarStr(largeNumber: sumOfAllProfit)
         let strSumCost = Utilities().dollarStr(largeNumber: sumCost)
-        print("\(strDate)\tCumulative Profit \(cp)\t\t\tpositions \(positionCount)\tCost \(strSumCost)")
+        winPct = Double( winCount ) / Double( tradeCount ) * 100.0
+        strWinPct = String(format: "%.2f",winPct)
+        print("\(strDate)\tCumulative Profit \(cp)\t\t\tpositions \(positionCount)\tCost \(strSumCost)\t\t\(String(strWinPct))% Win")
         let thisDay = StatsData(date: date, dailyCumProfit: sumOfAllProfit, dailyCost: sumCost, winPct: winPct)
         portfolio.append(thisDay)
     }

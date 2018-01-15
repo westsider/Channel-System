@@ -86,7 +86,7 @@ class StatsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         // need a completion handler
-        portfolio = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
+        portfolio = PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
         populateLables()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             
@@ -185,7 +185,7 @@ class StatsViewController: UIViewController {
     //MARK: - update lables
     func populateLables() {
         //let realm = try! Realm()
-        minStars = Stats().getStars()
+       // minStars = Stats().getStars()
         //if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
             //let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
@@ -195,6 +195,7 @@ class StatsViewController: UIViewController {
             let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
             let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
             let numYears = Double(numDays) / 365.00
+            let minStars:Int = Stats().getStars()
             //let annualProfit = updateStats.grossProfit / numYears
             //let annualProfitString = Utilities().dollarStr(largeNumber: annualProfit)
             DispatchQueue.main.async {
@@ -210,7 +211,7 @@ class StatsViewController: UIViewController {
                 //let lLos = Utilities().dollarStr(largeNumber: 0.00)
                 self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
                 self.largestLossLabel.text = "Largest Loss \(0.0)"
-                self.minStarsLabel.text = "Minimun Stars: \(0.00)"
+                self.minStarsLabel.text = "Minimun Stars: \(minStars)"
                 self.annualProfitLabel.text = "$\(0.00) Annually"
                 self.spReturnLabel.text = SpReturns().textForStats(yearEnding: 2007)
                 self.ActivityOne(isOn: false)
