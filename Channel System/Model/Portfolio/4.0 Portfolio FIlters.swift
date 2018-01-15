@@ -58,13 +58,13 @@ class PortfolioFilters {
                 // Sum for this date OR start ned day and append the array for sciChart
                 if each.entryDate == lastDate {
                     //print("\tSame date sum profit and cost")
-                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions, ticker: each.ticker)
+                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions, ticker: each.ticker, date: each.entryDate!)
                 } else {
                     //print("\tNew date return Sums, zero Sums, sum profit and cost")
                     returnSumAndProfit()
                     printEachDay(date:  each.entryDate!)
                     zeroProfitCostCount()
-                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions, ticker: each.ticker)
+                    sumProfitAndCost(profit: each.profit, Cost: each.cost, numPos: numPositions, ticker: each.ticker, date: each.entryDate!)
                 }
                 lastDate = each.entryDate!
             }
@@ -72,11 +72,10 @@ class PortfolioFilters {
         return portfolio
     }
     
-    func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String) {
+    func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String, date:Date) {
         let starsOK = checkStars(ticker: ticker)
-        if positionCount < numPos && starsOK {
-            //let matrix = MarketCondition().getMatixToProveOnChart(date: today.date!)
-            
+        let matrix = EntryUtil().checkMatrix(date: date)
+        if positionCount < numPos && starsOK && matrix {
             positionCount += 1
             tradeCount += 1
             sumProfit += profit
@@ -97,6 +96,7 @@ class PortfolioFilters {
         }
     }
     
+
     func returnSumAndProfit() {
         totalProfit.append(sumProfit)
         totalCost.append(sumCost)
