@@ -48,7 +48,7 @@ class PortfolioFilters {
     var mainLoopSize:Int = 0
     let commissions:Double = 1.05 * 2.0
     
-    func of(mc:Bool, stars:Bool, numPositions:Int, completion: @escaping (Bool) -> Void) {
+    func using(mc:Bool, stars:Bool, numPositions:Int, completion: @escaping (Bool) -> Void) {
         //DispatchQueue.global(qos: .background).async {
             var done:Bool = false
             let realm = try! Realm()
@@ -91,6 +91,18 @@ class PortfolioFilters {
         
     }
     
+    func createStats() {
+        // total profit
+        // win pct
+        // roi
+        // cost
+        // largest win, loss
+        // annual return
+        // annual roi
+        // remove buttons
+        // save to realm
+    }
+    
     func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String, date:Date, mc:Bool) {
         var profitHere = profit
         var matrix:Bool = true
@@ -117,7 +129,6 @@ class PortfolioFilters {
             return false
         }
     }
-    
     
     func returnSumAndProfit() {
         totalProfit.append(sumProfit)

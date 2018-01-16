@@ -33,10 +33,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var bottomView: UIView!
     
-    @IBOutlet weak var backtestButton: UIButton!
-    
-    @IBOutlet weak var graphButton: UIButton!
-    
     @IBOutlet weak var minStarsLabel: UILabel!
     
     @IBOutlet weak var annualProfitLabel: UILabel!
@@ -81,18 +77,12 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
         startAnimating(self.size, message: "Filtering Trades", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.lineSpinFadeLoader.rawValue)!)
     }
-    
-    func updateNVActivity(with:String) {
-        DispatchQueue.main.async {
-            NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
-        }
-    }
 
     override func viewDidAppear(_ animated: Bool) {
         portfolio = Performance().getPerformanceChart(debug: true)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             // get realm data for chart
-            PortfolioFilters().of(mc: true, stars: true, numPositions: 20) { (finished) in
+            PortfolioFilters().using(mc: true, stars: true, numPositions: 20) { (finished) in
                 if finished {
                     DispatchQueue.main.async {
                         self.updateNVActivity(with: "Creating Lables")
@@ -102,78 +92,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
                 }
             }
         }        
-    }
-    
-    
-    //MARK: - Backtest Button
-    @IBAction func runNewBacktestAction(_ sender: Any) {
-    }
-    
-    @IBAction func runNewChartCalc(_ sender: Any) {
-    }
-    
-    func showCounter(count:Int,max:Int) {
-        DispatchQueue.main.async {
-            //self.topLeft.textAlignment = .right
-            self.topLeft.text = "Calculating \(count)"
-            self.topRight.text = "of \(max)"
-        }
-    }
-    
-    func textAlpha(isNow:CGFloat){
-        DispatchQueue.main.async {
-            self.topLeft.alpha = isNow
-            self.topRight.alpha = isNow
-            self.midLeft.alpha = isNow
-            self.midRight.alpha = isNow
-            self.bottomLeft.alpha = isNow
-            self.topLeft.alpha = isNow
-            self.topRight.alpha = isNow
-            self.backtestButton.alpha = isNow
-            self.graphButton.alpha = isNow
-            self.largestWinLabel.alpha = isNow
-            self.largestLossLabel.alpha = isNow
-            self.tradingDaysLabel.alpha = isNow
-            self.spReturnLabel.alpha = isNow
-            self.minStarsLabel.alpha = isNow
-            self.annualProfitLabel.alpha = isNow
-        }
-    }
-    
-    func ActivityOne(isOn:Bool) {
-        DispatchQueue.main.async {
-            if isOn {
-                //self.activityIndicator.startAnimating()
-                self.textAlpha(isNow: 0.3)
-                self.backtestButton.alpha = 0.2
-                self.graphButton.alpha = 0.2
-            } else {
-                //self.activityIndicator.stopAnimating()
-                self.textAlpha(isNow: 1.0)
-                self.backtestButton.alpha = 1.0
-                self.graphButton.alpha = 1.0
-            }
-        }
-    }
-// this is nil and so we call calc stats
-    func getWeeklyFromRealm(debug:Bool) {
-        if debug { print("\n inside getWeeklyFromRealm()\n") }
-        let realm = try! Realm()
-        let weeklyStats = realm.objects(WklyStats.self)
-        let sortedByDate = weeklyStats.sorted(byKeyPath: "date", ascending: true)
-        if sortedByDate.count >  1 {
-            results = sortedByDate
-            if debug { print("We have  have weekly stats count > 1")
-                print("now reading from realm count: \(sortedByDate.count)")
-                for each in results! {
-                    print(each.date!, each.profit)
-                }
-            }
-            completeConfiguration()
-        } else {
-            print("No stats in Realm")
-            //calcStats(debug: false, completion: getDataForChart)
-        }
     }
 
     //MARK: - update lables
@@ -208,35 +126,10 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
                 self.minStarsLabel.text = "Minimun Stars: \(minStars)"
                 self.annualProfitLabel.text = "$\(0.00) Annually"
                 self.spReturnLabel.text = SpReturns().textForStats(yearEnding: 2007)
-                self.ActivityOne(isOn: false)
-                self.getDataForChart()
+                self.completeConfiguration()
             }
-       /// } else {
-        //    print("did not find realm")
-            //calcStats(debug: false, completion: getDataForChart)
-        //}
-    }
-    
-    func calcStats(debug:Bool, completion: @escaping () -> ()) {
-//        DispatchQueue.global(qos: .background).async {
-//            self.ActivityOne(isOn:true)
-//            print("\n---------------> Now running new backtest <----------------\n")
-//           // _ = OldPortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
-//
-//            DispatchQueue.main.async {
-//                completion()
-//                print("\n---------------> Now calling completion on new backtest <----------------\n")
-//                self.getStatsfromRealm()
-//                self.ActivityOne(isOn:false)
-//            }
-//        }
     }
 
-    func getDataForChart() {
-        ActivityOne(isOn: false)
-        print("finished getting stats, calling build chart")
-        getWeeklyFromRealm(debug: false)
-    }
     
     // MARK: Overrided Functions
     func completeConfiguration() {
@@ -383,6 +276,12 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         axisMarker.position = value;
         //print("SMA Anntation \(value.doubleData)")
         surface.annotations.add(axisMarker);
+    }
+    
+    func updateNVActivity(with:String) {
+        DispatchQueue.main.async {
+            NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
+        }
     }
 }
 
