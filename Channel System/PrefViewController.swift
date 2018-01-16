@@ -70,7 +70,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             // convert text entered to double
             if let numberStars = Int(textEntered) {
                 // safely get number from risk
-                Stats().changeStars(stars: numberStars)
+                Stats().changeMinStars(stars: numberStars)
                 print("\n-------> Saved new stars of \(numberStars) <------\n")
             } else {
                 print("\n-------> ERROR unwrapping stars <------\n")

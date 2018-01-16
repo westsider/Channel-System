@@ -28,6 +28,19 @@ class PortfolioFilters {
         var winPct:Double
     }
     
+    struct StatsSummary {
+        var totalProfit:Double
+        var annualProfit:Double
+        var totalRoi:Double
+        var annualRoi:Double
+        var winPct:Double
+        var maxCost:Double
+        var largestWin:Double
+        var largestLoss:Double
+        var numDays:Int
+        var numYears:Double
+    }
+    
     var statsArray:[StatsData] = []
     var portfolio:[StatsData] = []
     var cumulatveSum:Double = 0.0
@@ -37,9 +50,13 @@ class PortfolioFilters {
     var winCount:Int = 0
     var tradeCount:Int = 0
     var winPct:Double = 0.0
+    var largestWin:Double = 0.0
+    var largestLoss = 0.0
+    
     var strWinPct:String = ""
     var sumProfit:Double = 0.0
     var sumCost:Double = 0.0
+    
     var totalProfit:[Double] = []
     var totalCost:[Double] = []
     var profitArray:[Double] = []
@@ -47,6 +64,22 @@ class PortfolioFilters {
     var mainLoopCounter:Int = 0
     var mainLoopSize:Int = 0
     let commissions:Double = 1.05 * 2.0
+    
+    func createStats() {
+        sumProfit = totalProfit.reduce(0, +)
+        sumCost = totalCost.max()!
+        let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
+        let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
+        let numYears = Double(numDays) / 365.00
+        let annualProfit = sumProfit / numYears
+        let totalRoi = (sumProfit / sumCost) * 100.0
+        let annualRoi = totalRoi / numYears
+        
+        let allStats = StatsSummary(totalProfit: sumProfit, annualProfit: annualProfit, totalRoi: totalRoi, annualRoi: annualRoi, winPct: winPct, maxCost: sumCost, largestWin: largestWin, largestLoss: largestLoss, numDays: numDays, numYears: numYears)
+        print("\nall stats\ntotal profit \(allStats.totalProfit)\nannual profit \(allStats.annualProfit)\ntotalRoi \(allStats.totalRoi)\nannual roi \(allStats.annualRoi)\nwin pct \(allStats.winPct)\nmax cost \(allStats.maxCost)\nlargest winner \(allStats.largestWin)\nlargest loss \(allStats.largestLoss)\nnum days \(numDays)\nnum years \(numYears)")
+        // save to realm
+        Stats().updateFinalTotal(data: allStats)
+    }
     
     func using(mc:Bool, stars:Bool, numPositions:Int, completion: @escaping (Bool) -> Void) {
         //DispatchQueue.global(qos: .background).async {
@@ -86,23 +119,11 @@ class PortfolioFilters {
         }
         if done {
             Performance().updateFinalTotal(data: portfolio)
+            createStats()
             completion(true)
         }
-        
     }
-    
-    func createStats() {
-        // total profit
-        // win pct
-        // roi
-        // cost
-        // largest win, loss
-        // annual return
-        // annual roi
-        // remove buttons
-        // save to realm
-    }
-    
+
     func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String, date:Date, mc:Bool) {
         var profitHere = profit
         var matrix:Bool = true
@@ -117,6 +138,8 @@ class PortfolioFilters {
             if profitHere >= 0 {
                 winCount += 1
             }
+            if ( profitHere - commissions ) > largestWin { largestWin = profitHere }
+            if ( profitHere - commissions ) < largestLoss { largestLoss = profitHere}
         }
     }
     

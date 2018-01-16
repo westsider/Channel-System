@@ -36,7 +36,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        ManualTrades().showProfit()        
+        ManualTrades().showProfit()
+        CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
+        CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
+            if finished {
+                self.stopAnimating()
+                self.marketConditionUI(debug: false)
+            }
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,14 +62,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-
-                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
-                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
-                        if finished {
-                            self.stopAnimating()
-                            self.marketConditionUI(debug: false)
-                        }
-                    })
+                    
+                    self.marketConditionUI(debug: false)
                     self.stopAnimating()
                 }
             }

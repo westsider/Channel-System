@@ -22,6 +22,7 @@ import Foundation
 class CalcStars {
     func backtest(galaxie: [String], debug:Bool, completion: @escaping () -> ()) {
         var count = 0
+        var allStars:[Int] = []
         var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
         WklyStats().clearWeekly()
         DispatchQueue.global(qos: .background).async {
@@ -39,11 +40,18 @@ class CalcStars {
                 count = index
                 let stars = self.calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: debug)
                 Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: debug)
+                // array of all stars to get average stars
+                allStars.append(stars.stars)
                 count += 1
             }
             print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
+            
             DispatchQueue.main.async {
                 if count == tickerStar.count {
+                    let sumOfStars = allStars.reduce(0, +)
+                    let averageStars = Double( sumOfStars / tickerStar.count )
+                    print("\n--------------------\nAverage  Stars \(averageStars)\n--------------------\n")
+                    Stats().changeAvgStars(avgStars: averageStars)
                     completion()
                 }
             }

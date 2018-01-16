@@ -75,7 +75,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
-        startAnimating(self.size, message: "Filtering Trades", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.lineSpinFadeLoader.rawValue)!)
+        startAnimating(self.size, message: "Backtest In Progress", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -91,43 +91,47 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
                     }
                 }
             }
-        }        
+        }
     }
 
     //MARK: - update lables
     func populateLables() {
-        //let realm = try! Realm()
-       // minStars = Stats().getStars()
-        //if let updateStats = realm.objects(Stats.self).last {
+        let realm = try! Realm()
+       
+        if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
-            //let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
-            //let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
+            let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
+            let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
             let thisRisk = Account().currentRisk()
-            //let roi = updateStats.avgROI * 100
-            let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
-            let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
-            let numYears = Double(numDays) / 365.00
-            let minStars:Int = Stats().getStars()
-            //let annualProfit = updateStats.grossProfit / numYears
-            //let annualProfitString = Utilities().dollarStr(largeNumber: annualProfit)
+            let lWin = Utilities().dollarStr(largeNumber: updateStats.largestWinner)
+            let lLos = Utilities().dollarStr(largeNumber: updateStats.largestLoser)
+            let annualProfit = Utilities().dollarStr(largeNumber: updateStats.annualProfit)
+            let annualRoi = "\(String(format: "%.1f", updateStats.avgROI))%  Annual Roi"
+            let timePeriod = "\(String(format: "%.1f", updateStats.numYears)) years, \(updateStats.numDays) days"
+            
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
-
-                self.topLeft.text = "$\(Utilities().dollarStr(largeNumber: (self.portfolio.last?.dailyCumProfit)!)) Profit"
-                //self.topRight.text = "\(String(format: "%.2f", (self.portfolio.last?.winPct)!))% Wins"
-                self.midLeft.text = "\(String(format: "%.2f", 0.00))%  Roi "
-                self.midRight.text = "$\(0.00) Cost, \(thisRisk) Risk"
-               // self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
-                //let lWin = Utilities().dollarStr(largeNumber: 0.00)
-                self.largestWinLabel.text = "Largest Win \(0.00)"
-                //let lLos = Utilities().dollarStr(largeNumber: 0.00)
-                self.tradingDaysLabel.text = "\(numDays) days, \(String(format: "%.1f", numYears)) years"
-                self.largestLossLabel.text = "Largest Loss \(0.0)"
-                self.minStarsLabel.text = "Minimun Stars: \(minStars)"
-                self.annualProfitLabel.text = "$\(0.00) Annually"
-                self.spReturnLabel.text = SpReturns().textForStats(yearEnding: 2007)
+                
+                self.spReturnLabel.text = "System Performance"
+                
+                self.topLeft.text = "$\(gross) Total Profit"
+                self.topRight.text = "\(String(format: "%.1f", (updateStats.avgPctWin)))% Win Rate"
+                
+                self.midLeft.text = "\(String(format: "%.1f", updateStats.grossROI))%  Total Roi"
+                self.midRight.text = "$\(cost) Cost  $\(thisRisk) Risk"
+                
+                self.bottomLeft.text = "$\(annualProfit) Annual Profit"
+                self.minStarsLabel.text = "\(updateStats.minStars) stars, \(String(format: "%.1f", updateStats.avgStars)) average"
+                
+                self.tradingDaysLabel.text = annualRoi
+                self.annualProfitLabel.text = "max gain \(lWin), loss \(lLos)"
+                
+                self.largestWinLabel.text = timePeriod
+                self.largestLossLabel.text = SpReturns().textForStats(yearEnding: 2007)
+                
                 self.completeConfiguration()
             }
+        }
     }
 
     

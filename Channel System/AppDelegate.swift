@@ -49,17 +49,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 2,
+            schemaVersion: 3,
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
             migrationBlock: { migration, oldSchemaVersion in
                 // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 2) {
-                    migration.enumerateObjects(ofType: WklyStats.className()) { oldObject, newObject in
-                        let entryDate:Date = Date()
-                        newObject?["entryDate"] = entryDate
-
+                if (oldSchemaVersion < 3) {
+                    migration.enumerateObjects(ofType: Stats.className()) { oldObject, newObject in
+                        let annualProfit:Double = 0.0
+                        newObject?["annualProfit"] = annualProfit
+                        
+                        let numYears:Double = 0.0
+                        newObject?["numYears"] = numYears
+                        
+                        let numDays:Int = 0
+                        newObject?["numDays"] = numDays
                 }
             }
         })
