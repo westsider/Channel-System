@@ -85,11 +85,11 @@ class StatsViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        // need a completion handler
-        portfolio = PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
-        populateLables()
+        
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            
+            // need a completion handler
+            self.portfolio = PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
+            self.populateLables()
             //self.completeConfiguration()
             self.activityIndicator.stopAnimating()
         }        

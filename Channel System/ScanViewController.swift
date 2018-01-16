@@ -42,11 +42,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewWillAppear(_ animated: Bool) {
         self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-        self.resetThis(ticker: "PVI", isOn: false)
-        self.canIgetDataFor(ticker: "AAPL", isOn: false)
-
-        //BackTest().testbruteForce(galaxie: self.galaxie)
-        //WklyStats().getWeeklyStatsFromRealm()
+        self.resetThis(ticker: "IYJ", isOn: false)
+        self.canIgetDataFor(ticker: "REM", isOn: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,13 +56,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                     self.firstRun()
                 } else {
 
-//                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
-//                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
-//                        if finished {
-//                            self.stopAnimating()
-//                            self.marketConditionUI(debug: false)
-//                        }
-//                    })
+                    CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
+                    CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
+                        if finished {
+                            self.stopAnimating()
+                            self.marketConditionUI(debug: false)
+                        }
+                    })
                     self.stopAnimating()
                 }
             }
