@@ -54,10 +54,7 @@ class CompanyData: Object {
     
     /////
     func getInfo(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
-//        var galaxie = SymbolLists().allSymbols
-//        if tenOnly {
-//            galaxie = SymbolLists().uniqueElementsFrom(testSet: tenOnly, of: 20); print("1.0 Galaxie Complete")
-//        } 
+
         var counter = 0
         let total = galaxie.count
         for ticker in galaxie {

@@ -47,12 +47,12 @@ class StatsViewController: UIViewController {
     @IBOutlet weak var spReturnLabel: UILabel!
     
     var galaxie = [String]()
+    var portfolio:[Performance.ChartData] = []
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    //var portfolio:[PortfolioFilters.OneTrade]
     let maxBarsOnChart:Int = 100
     var minStars:Int = 0
     //MARK: - chart vars
@@ -77,19 +77,21 @@ class StatsViewController: UIViewController {
     let xDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIXAxisDragModifier.self)
     let zoomExtendsSync = SCIMultiSurfaceModifier(modifierType: SCIZoomExtentsModifier.self)
     
-    var portfolio:[PortfolioFilters.StatsData] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
+        PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        
+        portfolio = Performance().getPerformanceChart(debug: true)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             // need a completion handler
-            self.portfolio = PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
-            self.populateLables()
+            //self.portfolio = PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
+            DispatchQueue.main.async {
+                self.populateLables()
+            }
             //self.completeConfiguration()
             self.activityIndicator.stopAnimating()
         }        
@@ -102,20 +104,20 @@ class StatsViewController: UIViewController {
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
-        ActivityOne(isOn:true)
-        //textAlpha(isNow: 0.3)
-        DispatchQueue.global(qos: .background).async {
-            PortfolioWeekly().weeklyProfit(debug: false) {
-                (result: Bool) in
-                if result {
-                    DispatchQueue.main.async {
-                        self.getDataForChart()
-                        self.ActivityOne(isOn:false)
-                        //self.textAlpha(isNow: 1.0)
-                    }
-                }
-            }
-        }
+//        ActivityOne(isOn:true)
+//        //textAlpha(isNow: 0.3)
+//        DispatchQueue.global(qos: .background).async {
+//            PortfolioWeekly().weeklyProfit(debug: false) {
+//                (result: Bool) in
+//                if result {
+//                    DispatchQueue.main.async {
+//                        self.getDataForChart()
+//                        self.ActivityOne(isOn:false)
+//                        //self.textAlpha(isNow: 1.0)
+//                    }
+//                }
+//            }
+//        }
     }
     
     func showCounter(count:Int,max:Int) {
@@ -202,7 +204,7 @@ class StatsViewController: UIViewController {
                 self.topLeft.textAlignment = .left
 
                 self.topLeft.text = "$\(Utilities().dollarStr(largeNumber: (self.portfolio.last?.dailyCumProfit)!)) Profit"
-                self.topRight.text = "\(String(format: "%.2f", (self.portfolio.last?.winPct)!))% Wins"
+                //self.topRight.text = "\(String(format: "%.2f", (self.portfolio.last?.winPct)!))% Wins"
                 self.midLeft.text = "\(String(format: "%.2f", 0.00))%  Roi "
                 self.midRight.text = "$\(0.00) Cost, \(thisRisk) Risk"
                // self.bottomLeft.text = "\(String(format: "%.2f", updateStats.avgStars)) Avg Stars"
@@ -257,7 +259,6 @@ class StatsViewController: UIViewController {
     fileprivate func topChartDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         let cumulativeProfit = SCIXyDataSeries(xType: .dateTime, yType: .double)
         cumulativeProfit.acceptUnsortedData = true
-        //let portfolio = PortfolioFilters().of(mc: true, stars: true, numPositions: 20)
         for things in portfolio {
             cumulativeProfit.appendX(SCIGeneric(things.date), y: SCIGeneric(things.dailyCumProfit))
         }

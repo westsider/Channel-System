@@ -48,7 +48,7 @@ class PortfolioFilters {
     var mainLoopSize:Int = 0
     let commissions:Double = 1.05 * 2.0
     
-    func of(mc:Bool, stars:Bool, numPositions:Int)-> [StatsData] {
+    func of(mc:Bool, stars:Bool, numPositions:Int) {
         //DispatchQueue.global(qos: .background).async {
             let realm = try! Realm()
             let weeklyStats = realm.objects(WklyStats.self)
@@ -72,19 +72,29 @@ class PortfolioFilters {
                     }
                     self.lastDate = each.entryDate!
                 }
-            }
-            
-        //}
-        //DispatchQueue.main.async {
-            if self.mainLoopCounter == self.mainLoopSize {
-                print("\nHere are the outliers")
-                for each in outlierArray {
-                    print("\(each)")
+                print("ml \(self.mainLoopCounter) = \(self.mainLoopSize)")
+                if self.mainLoopCounter == self.mainLoopSize {
+                    print("\nHere are the outliers")
+                    for each in self.outlierArray {
+                        print("\(each)")
+                    }
                 }
-                
-            }
+            //}
+            
+        }
+        
+        
+        //DispatchQueue.main.async {
+//            if self.mainLoopCounter == self.mainLoopSize {
+//                print("\nHere are the outliers")
+//                for each in outlierArray {
+//                    print("\(each)")
+//                }
+//
+//            }
         //}
-        return portfolio
+        //return portfolio
+        Performance().updateFinalTotal(data: portfolio)
     }
     
     func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String, date:Date, mc:Bool) {
