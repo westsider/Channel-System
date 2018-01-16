@@ -55,8 +55,7 @@ class SCSSyncMultiChartView: UIViewController {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
-    
-    
+
     //MARK: - Add Pices Series
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         surface.renderableSeries.add(getCandleRenderSeries(debug: false, xID: xID, yID: yID))
@@ -108,7 +107,6 @@ class SCSSyncMultiChartView: UIViewController {
     @IBAction func managePortfolioAction(_ sender: Any) {
         print("tapped edit")
         segueToManageVC(taskID: taskIdSelected, action: "Manage")
-        
     }
     
     func sequeToPortfolio() {

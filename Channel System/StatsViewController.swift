@@ -47,7 +47,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    let maxBarsOnChart:Int = 100
+    let maxBarsOnChart:Int = 350
     var minStars:Int = 0
     //MARK: - chart vars
 
@@ -75,11 +75,12 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
-        startAnimating(self.size, message: "Backtest In Progress", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
+        startAnimating(self.size, message: "Optimizing Portfolio", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
     }
 
     override func viewDidAppear(_ animated: Bool) {
         portfolio = Performance().getPerformanceChart(debug: true)
+        
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             // get realm data for chart
             PortfolioFilters().using(mc: true, stars: true, numPositions: 20) { (finished) in
@@ -199,14 +200,14 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         let dateAxisSize:Float = 9.0
         let dollarAxisSize :Float = 12.0
         
-        //let totalBars:Int = results!.count
-        //rangeStart = totalBars - BarsToShow
+        let totalBars:Int = portfolio.count
+        rangeStart = totalBars - BarsToShow
         
         let axisX1:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
         axisX1.axisId = axisX1Id
         rangeSync.attachAxis(axisX1)
         
-        //axisX1.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
+        axisX1.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         axisX1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisX1.style.labelStyle.fontName = "Helvetica"
         axisX1.style.labelStyle.fontSize = dateAxisSize
@@ -218,12 +219,13 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         axisY1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisY1.style.labelStyle.fontName = "Helvetica"
         axisY1.style.labelStyle.fontSize = dollarAxisSize
+        axisY1.autoRange = .always
         sciChartView1.yAxes.add(axisY1)
         
         let axisX2:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
         axisX2.axisId = axisX2Id
         rangeSync.attachAxis(axisX2)
-        //axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
+        axisX2.visibleRange = SCIDoubleRange(min: SCIGeneric(rangeStart), max: SCIGeneric(totalBars))
         axisX2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisX2.style.labelStyle.fontName = "Helvetica"
         axisX2.style.labelStyle.fontSize = dateAxisSize
@@ -234,6 +236,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         axisY2.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisY2.style.labelStyle.fontName = "Helvetica"
         axisY2.style.labelStyle.fontSize = dollarAxisSize
+        axisY2.autoRange = .always
         sciChartView2.yAxes.add(axisY2)
     }
     
