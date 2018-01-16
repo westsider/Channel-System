@@ -9,6 +9,7 @@
 import UIKit
 import SciChart
 import RealmSwift
+import NVActivityIndicatorView
 
 class StatsViewController: UIViewController {
 
@@ -81,43 +82,31 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
-        PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
+        
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {
         portfolio = Performance().getPerformanceChart(debug: true)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            // need a completion handler
-            //self.portfolio = PortfolioFilters().of(mc: true, stars: true , numPositions: 20)
-            DispatchQueue.main.async {
-                self.populateLables()
+            // get realm data for chart
+            PortfolioFilters().of(mc: true, stars: true, numPositions: 20) { (finished) in
+                if finished {
+                    DispatchQueue.main.async {
+                        self.populateLables()
+                        self.activityIndicator.stopAnimating()
+                    }
+                }
             }
-            //self.completeConfiguration()
-            self.activityIndicator.stopAnimating()
         }        
     }
     
     
     //MARK: - Backtest Button
     @IBAction func runNewBacktestAction(_ sender: Any) {
-
     }
     
     @IBAction func runNewChartCalc(_ sender: Any) {
-//        ActivityOne(isOn:true)
-//        //textAlpha(isNow: 0.3)
-//        DispatchQueue.global(qos: .background).async {
-//            PortfolioWeekly().weeklyProfit(debug: false) {
-//                (result: Bool) in
-//                if result {
-//                    DispatchQueue.main.async {
-//                        self.getDataForChart()
-//                        self.ActivityOne(isOn:false)
-//                        //self.textAlpha(isNow: 1.0)
-//                    }
-//                }
-//            }
-//        }
     }
     
     func showCounter(count:Int,max:Int) {
