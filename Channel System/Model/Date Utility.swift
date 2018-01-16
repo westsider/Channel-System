@@ -171,4 +171,36 @@ class Utilities {
             return "🔴"
         }
     }
+    
+    func getUser()-> (user:String, password:String) {
+        var user = ""
+        var password = ""
+        if  let myUser = UserDefaults.standard.object(forKey: "user")   {
+            user = myUser as! String
+        } else {
+            print("No User Set")
+        }
+        if  let myPassWord = UserDefaults.standard.object(forKey: "password")  {
+            password = myPassWord as! String
+        } else {
+            print("No Password Set")
+        }
+        return (user:user, password:password)
+    }
+    
+    func getUserFireBase()-> (user:String, password:String) {
+        var user = ""
+        var password = ""
+        if  let myUser = UserDefaults.standard.object(forKey: "userFireBase")   {
+            user = myUser as! String
+        } else {
+            print("No User Set")
+        }
+        if  let myPassWord = UserDefaults.standard.object(forKey: "passwordFireBase")  {
+            password = myPassWord as! String
+        } else {
+            print("No Password Set")
+        }
+        return (user:user, password:password)
+    }
 }

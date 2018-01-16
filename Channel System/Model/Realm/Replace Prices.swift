@@ -87,8 +87,8 @@ class ReplacePrices {
 
         print("Requesting page \(page) for \(ticker)") //}
         let request = "https://api.intrinio.com/prices?ticker=\(ticker)&page_number=\(page)"
-        let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
-        let password = "e6cf8f921bb621f398240e315ab79068"
+        let user = Utilities().getUser().user
+        let password = Utilities().getUser().password
         var dateIsToday:Bool = false
         var lastHigh:Double = 0.0
         var lastLow:Double = 0.0

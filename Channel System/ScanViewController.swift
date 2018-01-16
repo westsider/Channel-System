@@ -36,7 +36,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        ManualTrades().showProfit()
+        ManualTrades().showProfit()        
     }
     
     override func viewWillAppear(_ animated: Bool) {

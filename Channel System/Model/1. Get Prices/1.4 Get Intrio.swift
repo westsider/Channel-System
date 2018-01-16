@@ -41,8 +41,8 @@ class IntrioFeed {
         //if ( debug ) {
             print("Requesting remote data for \(ticker)") //}
         let request = "https://api.intrinio.com/prices?ticker=\(ticker)" //DWDP
-        let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
-        let password = "e6cf8f921bb621f398240e315ab79068"
+        let user = Utilities().getUser().user
+        let password = Utilities().getUser().password
         var isNewDate:Bool = false
         var inlast10:Bool = false
         var dateIsToday:Bool = false

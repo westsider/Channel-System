@@ -16,8 +16,8 @@ class FirbaseLink {
     let uid = "M4qmbWDT50ayvufas3c9zGzr1DG2"
     
     func auth() {
-        let email = "whansen1@mac.com"
-        let password = "wh123456wh"
+        let email = Utilities().getUserFireBase().user
+        let password = Utilities().getUserFireBase().password
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if let error = error {
                 print(error.localizedDescription)

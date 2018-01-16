@@ -79,14 +79,14 @@ class CompanyData: Object {
         }
     }
     
-   
-    
     func getInfoFor(ticker: String, debug: Bool, completion: @escaping (Bool) -> Void)  {
         // get last price from intrio
         if ( debug ) { print("Requesting company data for \(ticker)") }
         let request = "https://api.intrinio.com/securities?identifier=\(ticker)"
-        let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
-        let password = "e6cf8f921bb621f398240e315ab79068"
+        
+        let user = Utilities().getUser().user
+        let password = Utilities().getUser().password
+        
         
         Alamofire.request("\(request)")
             .authenticate(user: user, password: password)
