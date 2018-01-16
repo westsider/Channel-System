@@ -484,16 +484,13 @@
                                                         <rect key="frame" x="0.0" y="52.666666666666671" width="358" height="20.333333333333329"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Avg ROI ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="Fdl-Hk-vp9">
-                                                                <rect key="frame" x="0.0" y="0.0" width="114" height="20.333333333333332"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="175" height="20.333333333333332"/>
                                                                 <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="16"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="GY3-YP-2fw">
-                                                                <rect key="frame" x="122" y="0.0" width="114" height="20.333333333333332"/>
-                                                            </activityIndicatorView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gross ROI ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="mI0-zv-mLu">
-                                                                <rect key="frame" x="244" y="0.0" width="114" height="20.333333333333332"/>
+                                                                <rect key="frame" x="183" y="0.0" width="175" height="20.333333333333332"/>
                                                                 <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="16"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -630,7 +627,6 @@
                         <viewLayoutGuide key="safeArea" id="O9x-aY-9e8"/>
                     </view>
                     <connections>
-                        <outlet property="activityIndicator" destination="GY3-YP-2fw" id="d68-9n-ov9"/>
                         <outlet property="annualProfitLabel" destination="ImT-pm-W4O" id="RR8-Kj-6SR"/>
                         <outlet property="backtestButton" destination="FwS-Rg-Gkp" id="Co4-IK-a3a"/>
                         <outlet property="bottomLeft" destination="SPT-jl-tNV" id="Xcf-9X-nC7"/>

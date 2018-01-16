@@ -11,7 +11,7 @@ import SciChart
 import RealmSwift
 import NVActivityIndicatorView
 
-class StatsViewController: UIViewController {
+class StatsViewController: UIViewController, NVActivityIndicatorViewable {
 
     @IBOutlet weak var topLeft: UILabel!
     
@@ -29,10 +29,6 @@ class StatsViewController: UIViewController {
     
     @IBOutlet weak var tradingDaysLabel: UILabel!
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
-    @IBOutlet weak var activityIndicatorTwo: UIActivityIndicatorView!
-    
     @IBOutlet weak var topView: UIView!
     
     @IBOutlet weak var bottomView: UIView!
@@ -49,6 +45,7 @@ class StatsViewController: UIViewController {
     
     var galaxie = [String]()
     var portfolio:[Performance.ChartData] = []
+    let size = CGSize(width: 100, height: 100)
     var totalProfit = [Double]()
     var averagePctWin = [Double]()
     var totalROI = [Double]()
@@ -82,8 +79,13 @@ class StatsViewController: UIViewController {
         super.viewDidLoad()
         title = "Stats"
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
-        
-        
+        startAnimating(self.size, message: "Filtering Trades", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.lineSpinFadeLoader.rawValue)!)
+    }
+    
+    func updateNVActivity(with:String) {
+        DispatchQueue.main.async {
+            NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -93,8 +95,9 @@ class StatsViewController: UIViewController {
             PortfolioFilters().of(mc: true, stars: true, numPositions: 20) { (finished) in
                 if finished {
                     DispatchQueue.main.async {
+                        self.updateNVActivity(with: "Creating Lables")
                         self.populateLables()
-                        self.activityIndicator.stopAnimating()
+                        self.stopAnimating()
                     }
                 }
             }
@@ -140,12 +143,12 @@ class StatsViewController: UIViewController {
     func ActivityOne(isOn:Bool) {
         DispatchQueue.main.async {
             if isOn {
-                self.activityIndicator.startAnimating()
+                //self.activityIndicator.startAnimating()
                 self.textAlpha(isNow: 0.3)
                 self.backtestButton.alpha = 0.2
                 self.graphButton.alpha = 0.2
             } else {
-                self.activityIndicator.stopAnimating()
+                //self.activityIndicator.stopAnimating()
                 self.textAlpha(isNow: 1.0)
                 self.backtestButton.alpha = 1.0
                 self.graphButton.alpha = 1.0
