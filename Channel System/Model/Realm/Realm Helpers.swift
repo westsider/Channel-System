@@ -121,14 +121,14 @@ class RealmHelpers: Object {
     func getOpenTrades()-> Results<Prices> {
         let realm = try! Realm()
         let allEntries = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false")
-        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
+        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: true)
         return sortedByDate
     }
     
     func getClosedTrades()-> Results<Prices> {
         let realm = try! Realm()
         let allEntries = realm.objects(Prices.self).filter("inTrade = false AND exitedTrade = true")
-        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: false)
+        let sortedByDate = allEntries.sorted(byKeyPath: "date", ascending: true)
         return sortedByDate
     }
     

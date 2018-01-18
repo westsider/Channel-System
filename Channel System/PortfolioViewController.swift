@@ -79,7 +79,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         cell.detailTextLabel?.text = profitStr
         
         if profit < 0 {
-            cell.contentView.backgroundColor = UIColorScheme().alertCell
+            cell.contentView.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         } else {
             cell.contentView.backgroundColor = UIColorScheme().activeCell
         }

@@ -32,10 +32,10 @@ class ManualTrades {
         var cumCost = [Double]()
         var winCount:Int = 0
         print("\n----------------------------\n \tLive Trades\n----------------------------")
-        trades.append( MyPrice().profit(ticker: "DBB", date: "2017-11-28", entry: 18.21, exit: 17.8, shares: 90.00) )
-        trades.append( MyPrice().profit(ticker: "KO", date: "2017-11-28", entry: 45.57, exit: 46.19, shares: 36.00) )
-        trades.append( MyPrice().profit(ticker: "DJP", date: "2017-12-01", entry: 23.91, exit: 23.05, shares: 100.00) )
-        trades.append( MyPrice().profit(ticker: "EWH", date: "2017-12-01", entry: 25.57, exit: 25.35, shares: 65.00) )
+    trades.append( MyPrice().profit(ticker: "DBB", date: "2017-11-28", entry: 18.21, exit: 17.8, shares: 90.00) )
+    trades.append( MyPrice().profit(ticker: "KO", date: "2017-11-28", entry: 45.57, exit: 46.19, shares: 36.00) )
+    trades.append( MyPrice().profit(ticker: "DJP", date: "2017-12-01", entry: 23.91, exit: 23.05, shares: 100.00) )
+    trades.append( MyPrice().profit(ticker: "EWH", date: "2017-12-01", entry: 25.57, exit: 25.35, shares: 65.00) )
         trades.append( MyPrice().profit(ticker: "V", date: "2017-12-05", entry: 108.64, exit: 111.99, shares: 15.00) )
         trades.append( MyPrice().profit(ticker: "SMH", date: "2017-12-05", entry: 97.4, exit: 97.8, shares: 17.00) )
         trades.append( MyPrice().profit(ticker: "EWT", date: "2017-12-06", entry: 35.98, exit: 36.6, shares: 46.00) )
@@ -51,7 +51,7 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "RSX", date: "2017-12-19", entry: 20.82, exit: 21.71, shares: 80.00) )
         trades.append( MyPrice().profit(ticker: "EWY", date: "12017-12-19", entry: 73.00, exit: 74.84, shares: 22.00) )
         trades.append( MyPrice().profit(ticker: "TLT", date: "2017-12-19", entry: 125.64, exit: 126.94, shares: 7.00) )
-    trades.append( MyPrice().profit(ticker: "EFA", date: "2017-12-20", entry: 69.74, exit: 70.73, shares: 14.00) )
+        trades.append( MyPrice().profit(ticker: "EFA", date: "2017-12-20", entry: 69.74, exit: 70.73, shares: 14.00) )
         trades.append( MyPrice().profit(ticker: "MCD", date: "12017-12-20", entry: 172.21, exit: 173.33, shares: 9.00) )
         trades.append( MyPrice().profit(ticker: "MMM", date: "12017-12-20", entry: 237.05, exit: 235.11, shares: 7.00) )
         trades.append( MyPrice().profit(ticker: "VEA", date: "2017-12-22", entry: 44.58, exit: 45.19, shares: 37.00) )
@@ -87,10 +87,28 @@ class ManualTrades {
         let annumReturnStr = Utilities().dollarStr(largeNumber: annumReturn)
         print("Total\t\t$\(profitSumStr)\t\(winPctStr)% win\n\n$\(avgCost) avg cost\t\t$\(meanCost) mean cost\n\(approxRoiStr)% roi\t\t\t\(annumRoiStr)% annual return\n$\(annumReturnStr) annual gain\n\n")
 
-        //makePastEntry(yyyyMMdd: "2017-12-06", ticker: "EFA", entry: 69.28, stop: 66.24, target: 73.21, shares: 14, risk: 50.00, account: "IB")
-        makePastExit(yyyyMMdd: "2017-12-06", exityyyyMMdd: "2017-12-13", ticker: "EFA", exitPrice: 70.28, debug: true)
+        // trades.append( MyPrice().profit(ticker: "KO", date: "2017-11-28", entry: 45.57, exit: 46.19, shares: 36.00) )
+        // makePastEntry(yyyyMMdd: "2017-11-28", ticker: "KO", entry: 45.57, stop: 44.13, target: 46.99, shares: 36, risk: 50.00, account: "IB")
+        // makePastExit(yyyyMMdd: "2017-11-28", exityyyyMMdd: "2017-12-5", ticker: "KO", exitPrice: 46.19, debug: true)
+        
+        // trades.append( MyPrice().profit(ticker: "DJP", date: "2017-12-01", entry: 23.91, exit: 23.05, shares: 100.00) )
+        // makePastEntry(yyyyMMdd: "2017-12-01", ticker: "DJP", entry: 23.91, stop: 22.98, target: 24.40, shares: 100, risk: 50.00, account: "IB")
+        // makePastExit(yyyyMMdd: "2017-12-01", exityyyyMMdd: "2017-12-7", ticker: "DJP", exitPrice: 23.05, debug: true)
+        
+        // trades.append( MyPrice().profit(ticker: "EWH", date: "2017-12-01", entry: 25.57, exit: 25.35, shares: 65.00) )
+        //pastEntryAndExit(ticker: "EWH", entryDate: "2017-12-01", exitDate: "2017-12-12", entry: 25.57, stop: 24.78, target: 26.32, shares: 65, exitPrice: 25.35)
+        
+        // trades.append( MyPrice().profit(ticker: "V", date: "2017-12-05", entry: 108.64, exit: 111.99, shares: 15.00) )
+//pastEntryAndExit(ticker: "EWH", entryDate: "2017-12-01", exitDate: "2017-12-12", entry: 25.57, stop: 24.78, target: 26.32, shares: 65, exitPrice: 25.35)
+        
         //removeEntry(yyyyMMdd: "2018-01-17", ticker: "EFA", debug: true)
         //showOneTrade(yyyyMMdd: "2017-12-06", ticker: "EFA", debug: true)
+    }
+    
+    func pastEntryAndExit(ticker: String, entryDate: String, exitDate: String,  entry: Double, stop: Double, target: Double, shares: Int, exitPrice: Double) {
+        let risk = 50.00; let account = "IB"
+        makePastEntry(yyyyMMdd: entryDate, ticker: ticker, entry: entry, stop: stop, target: target, shares: shares, risk: risk, account: account)
+        makePastExit(yyyyMMdd: entryDate, exityyyyMMdd: exitDate, ticker: ticker, exitPrice: exitPrice, debug: true)
     }
     
     //this func is not adding entry risk intrade
