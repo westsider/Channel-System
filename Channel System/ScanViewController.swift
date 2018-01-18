@@ -46,7 +46,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
             if finished {
                 self.stopAnimating()
-                self.marketConditionUI(debug: false)
             }
         })
     }

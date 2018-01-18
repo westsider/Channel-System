@@ -33,6 +33,7 @@ class Prices: Object {
     @objc dynamic var inTrade   = false
     @objc dynamic var exitedTrade = false
     @objc dynamic var exitDate:Date = Utilities().closeTradeIn(days: 7)
+    @objc dynamic var exitPrice = 0.00
     @objc dynamic var profit    = 0.00
     @objc dynamic var loss      = 0.00
     @objc dynamic var account   = ""
@@ -50,7 +51,6 @@ class Prices: Object {
            return allPrices.count
         }
     }
-    
     
     func printLastPrices(symbols: [String], last: Int) {
         
@@ -149,8 +149,6 @@ class Prices: Object {
         for each in onePrice {
             debugPrint(each)
         }
-        
-  
     }
     
     func getOnePriceFrom(taskID:String)-> Prices {

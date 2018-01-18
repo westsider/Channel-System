@@ -13,12 +13,10 @@ import RealmSwift
 class PortfolioViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    
-    
+
     let realm:Realm = try! Realm()
     var tasks: Results<Prices>!
-    var isOn = false
+    var showClosedTrades = false
     
     @IBOutlet weak var openTradesBttnTxt: UIButton!
     
@@ -30,7 +28,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     @IBAction func portfolioSwitch(_ sender: UIButton) {
-        let title = activateButton(bool: !isOn)
+        let title = activateButton(bool: !showClosedTrades)
         sender.setTitle(title.0, for: [])
         sender.setTitleColor(title.1, for: [])
         sender.backgroundColor = title.2
@@ -38,7 +36,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func activateButton(bool: Bool)-> (String, UIColor, UIColor) {
-        isOn = bool
+        showClosedTrades = bool
         let onColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         let offColor = #colorLiteral(red: 0.3489862084, green: 0.3490410447, blue: 0.3489741683, alpha: 0)
         let onTitle = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -49,7 +47,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let bkgColor = bool ? onColor : offColor
 
         tasks = bool ? RealmHelpers().getClosedTrades() : RealmHelpers().getOpenTrades()
-        print(isOn,color, title, titleColor)
+        print(showClosedTrades,color, title, titleColor)
         return (title, titleColor, bkgColor)
     }
     
@@ -66,11 +64,17 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let closeString = String(format: "%.2f", (thisSymbol?.close)!)
         let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString) close"
         cell.textLabel?.text = task
-        //print("isOn: \(isOn) \(tasks[indexPath.row].ticker) \(tasks[indexPath.row].taskID)")
-       
-        let profit:Double = ((thisSymbol!.close - tasks[indexPath.row].entry)) * Double(tasks[indexPath.row].shares)
-        print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares))")
-        //print("\n\(tasks[indexPath.row].ticker) entry: \(tasks[indexPath.row].entry) and close \(thisSymbol!.close) shares \(tasks[indexPath.row].shares) and profit \(profit)")
+        
+        var profit:Double = 0.0
+        
+        // showing open trades
+        if !showClosedTrades {
+            profit = ((thisSymbol!.close - tasks[indexPath.row].entry)) * Double(tasks[indexPath.row].shares)
+            print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares))")
+        } else {
+            // showing closed trades
+            profit = (tasks[indexPath.row].profit)
+        }
         let profitStr = "\(String(format: "%.2f", profit)) profit"
         cell.detailTextLabel?.text = profitStr
         
@@ -79,12 +83,19 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         } else {
             cell.contentView.backgroundColor = UIColorScheme().activeCell
         }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let openProfit = totalOpenProfit(debug: false)
-        return "$\(openProfit.0) profit \t\(openProfit.1)% win"
+        // showing open trades
+        if !showClosedTrades {
+            let openProfit = totalOpenProfit(debug: false)
+            return "$\(openProfit.0) profit \t\(openProfit.1)% win"
+        } else {
+            let openProfit = totalClosedProfit(debug: false)
+            return "$\(openProfit.0) profit \t\(openProfit.1)% win"
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int){
@@ -111,6 +122,24 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         return (String(format: "%.2f", sum), winPctStr)
     }
     
+    func totalClosedProfit(debug:Bool)->(String,String) {
+        var sum = 0.00
+        var wins = 0.00
+        for each in tasks {
+
+            let profit:Double = each.profit
+            if debug {print("\(each.ticker) profit: \(String(format: "%.2f", profit))")}
+            sum += profit
+            if profit > 0 {
+                wins += 1
+            }
+        }
+        
+        let winPct = (wins / Double(tasks.count)) * 100
+        let winPctStr = String(format: "%.2f", winPct)
+        return (String(format: "%.2f", sum), winPctStr)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
         selectedSymbol(index: indexPath.row)
@@ -128,7 +157,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     //MARK: - Swipe left to delete old trade if isOn bool is true
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
-        if isOn {
+        if showClosedTrades {
             if editingStyle == .delete {
                 print("swipe left on \(tasks[indexPath.row].taskID)")
                 RealmHelpers().deleteClosedTrade(taskID: tasks[indexPath.row].taskID, debug: false)

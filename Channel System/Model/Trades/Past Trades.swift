@@ -87,87 +87,81 @@ class ManualTrades {
         let annumReturnStr = Utilities().dollarStr(largeNumber: annumReturn)
         print("Total\t\t$\(profitSumStr)\t\(winPctStr)% win\n\n$\(avgCost) avg cost\t\t$\(meanCost) mean cost\n\(approxRoiStr)% roi\t\t\t\(annumRoiStr)% annual return\n$\(annumReturnStr) annual gain\n\n")
 
-        makePastEntry(yyyyMMdd: "2017-12-06", ticker: "EFA", entry: 69.74, stop: 66.24, target: 73.21, shares: 14, risk: 50.00, account: "IB")
-        //makePastExit(yyyyMMdd: "2017-12-20", exityyyyMMdd: "2017-12-06", ticker: "EFA", debug: false)
-        //RealmHelpers().getOpenTrades()
-        //EFA    2017-12-06        11.90
-      
-        //removeEntry(yyyyMMdd: "2018-01-16", ticker: "EFA", debug: true)
-        
+        //makePastEntry(yyyyMMdd: "2017-12-06", ticker: "EFA", entry: 69.28, stop: 66.24, target: 73.21, shares: 14, risk: 50.00, account: "IB")
+        makePastExit(yyyyMMdd: "2017-12-06", exityyyyMMdd: "2017-12-13", ticker: "EFA", exitPrice: 70.28, debug: true)
+        //removeEntry(yyyyMMdd: "2018-01-17", ticker: "EFA", debug: true)
+        //showOneTrade(yyyyMMdd: "2017-12-06", ticker: "EFA", debug: true)
     }
     
     //this func is not adding entry risk intrade
     func makePastEntry(yyyyMMdd: String, ticker: String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, account:String) {
-        let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
-        if myTaskID == "noTaskID" {
-            print("no TaskID found, cancel entry")
-            return
-        }
-        print("Found TaskID: \(myTaskID) for \(ticker)")
-        let tickerInQuestion = Prices().getOneDateFrom(taskID: myTaskID)
-        print("\nThis is \(ticker) on \(yyyyMMdd)")
-        print(tickerInQuestion)
-        print("")
         let capitol = entry * Double(shares)
-        RealmHelpers().makeEntry(taskID: myTaskID, entry: entry, stop: stop, target: target, shares: shares, risk: risk, debug: false, account: account, capital: capitol)
+        // get ticker - date
+        let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: false)
+        let oneDay = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        // save realm
+        let realm = try! Realm()
+        try! realm.write {
+            oneDay.entry     = entry
+            oneDay.stop      = stop
+            oneDay.target    = target
+            oneDay.shares    = shares
+            oneDay.risk      = risk
+            oneDay.inTrade   = true
+            oneDay.account   = account
+            oneDay.capitalReq = capitol
+        }
+        
         print("\nProve it:")
-        let tickerModified = Prices().getOneDateFrom(taskID: myTaskID)
+        let tickerModified = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
         debugPrint(tickerModified)
         print("")
     }
     
-    func makePastExit(yyyyMMdd: String,exityyyyMMdd:String,  ticker: String, debug:Bool) {
-        let tradeEntryID = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
-        print("Found Entry TaskID: \(tradeEntryID) for \(ticker)")
-        let entryToExit = Prices().getOneDateFrom(taskID: tradeEntryID)
+    func makePastExit(yyyyMMdd: String,exityyyyMMdd:String,  ticker: String, exitPrice:Double, debug:Bool) {
+        // get entry
+        let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
+        let entryToExit = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
         print("\nThis is \(ticker) on \(yyyyMMdd)")
         debugPrint(entryToExit)
         print("")
-        
-        // get exit price
-        let tradeExitID = RealmHelpers().getTaskIDfor(yyyyMMdd: exityyyyMMdd, ticker: ticker)
-        print("Found Entry TaskID: \(tradeEntryID) for \(ticker)")
-        let exit = Prices().getOneDateFrom(taskID: tradeExitID)
-        print("\nThis is \(ticker) on \(exityyyyMMdd)")
-        debugPrint(exit)
-        print("")
-        
-//        //let closed = Prices().getOnePriceFrom(taskID: taskID)
-//        if debug { print("Changing \(entryToExit.ticker) to exitedTrade = true") }
-//
-//        let realm = try! Realm()
-//        try! realm.write {
-//            entryToExit.inTrade = false
-//            entryToExit.exitedTrade = true
-//            //tickerInQuestion.
-//            entryToExit.exitDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: true)
-//        }
-//        let closedCheck = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
-//        if debug { print("\nProve it!")
-//            debugPrint(closedCheck) }
+
+        // calc profit
+        let profitForThisTrade = (exitPrice - entryToExit.entry) * Double(entryToExit.shares) - (1.05 * 2) // comm
+        print("profit \(profitForThisTrade) =  exit \(exitPrice) - entry \(entryToExit.entry) * shares \(entryToExit.shares)")
+        let realm = try! Realm()
+        try! realm.write {
+            entryToExit.inTrade = false
+            entryToExit.exitedTrade = true
+            entryToExit.profit = profitForThisTrade
+            entryToExit.exitPrice = exitPrice
+            entryToExit.exitDate = Utilities().convertToDateFrom(string: exityyyyMMdd, debug: true)
+        }
+
+        let closedCheck = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        if debug { print("\nProve it!")
+            debugPrint(closedCheck) }
     }
     
     func removeEntry(yyyyMMdd: String, ticker: String, debug:Bool) {
-        
-        let myTaskID = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
-        print("Found TaskID: \(myTaskID) for \(ticker)")
-        let tickerInQuestion = Prices().getOneDateFrom(taskID: myTaskID)
-        print("\nThis is \(ticker) on \(yyyyMMdd)")
-        debugPrint(tickerInQuestion)
-        print("")
-        
-        //let closed = Prices().getOnePriceFrom(taskID: taskID)
-        if debug { print("Changing \(tickerInQuestion.ticker) to inTrade = false") }
-        
+        let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
+        let oneDay = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        // save realm
         let realm = try! Realm()
         try! realm.write {
-            tickerInQuestion.inTrade = false
-//            tickerInQuestion.exitedTrade = true
-//            tickerInQuestion.exitDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: true)
+            oneDay.inTrade   = false
         }
+
         let closedCheck = RealmHelpers().getTaskIDfor(yyyyMMdd: yyyyMMdd, ticker: ticker)
         if debug { print("\nProve it!")
             debugPrint(closedCheck) }
+    }
+    
+    func showOneTrade(yyyyMMdd: String, ticker: String, debug:Bool) {
+        let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
+        let oneDay = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        if debug { print("\nshow One Trade")
+            debugPrint(oneDay) }
     }
 }
 

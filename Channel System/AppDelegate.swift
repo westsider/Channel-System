@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 3,
+            schemaVersion: 4,
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -67,6 +67,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         newObject?["numDays"] = numDays
                 }
             }
+                if (oldSchemaVersion < 4) {
+                    migration.enumerateObjects(ofType: Prices.className()) { oldObject, newObject in
+                        let exitPrice:Double = 0.0
+                        newObject?["exitPrice"] = exitPrice
+                    }
+                }
         })
         Realm.Configuration.defaultConfiguration = config
 
