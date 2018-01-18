@@ -14,6 +14,8 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     @IBOutlet weak var tableView: UITableView!
     
+    
+    
     let realm:Realm = try! Realm()
     var tasks: Results<Prices>!
     var isOn = false
@@ -25,9 +27,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         tasks = RealmHelpers().getOpenTrades()
         TradeManage().printOpenTrades()
         title = "Portfolio"
-        
     }
-    
     
     @IBAction func portfolioSwitch(_ sender: UIButton) {
         let title = activateButton(bool: !isOn)
@@ -59,21 +59,20 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-//        print("\nThis is the task loaded:")
-//        debugPrint(tasks)
-//        print("")
-        
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let date = tasks[indexPath.row].dateString
         let shortDate = date.dropFirst(5)
         let thisSymbol = Prices().sortOneTicker(ticker: tasks[indexPath.row].ticker, debug: false).last
         let closeString = String(format: "%.2f", (thisSymbol?.close)!)
-        let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString)"
+        let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString) close"
         cell.textLabel?.text = task
         //print("isOn: \(isOn) \(tasks[indexPath.row].ticker) \(tasks[indexPath.row].taskID)")
-        let profit:Double = (thisSymbol!.close - tasks[indexPath.row].entry) * Double(tasks[indexPath.row].shares)
+       
+        let profit:Double = ((thisSymbol!.close - tasks[indexPath.row].entry)) * Double(tasks[indexPath.row].shares)
+        print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares))")
         //print("\n\(tasks[indexPath.row].ticker) entry: \(tasks[indexPath.row].entry) and close \(thisSymbol!.close) shares \(tasks[indexPath.row].shares) and profit \(profit)")
-        cell.detailTextLabel?.text = (String(format: "%.2f", profit))
+        let profitStr = "\(String(format: "%.2f", profit)) profit"
+        cell.detailTextLabel?.text = profitStr
         
         if profit < 0 {
             cell.contentView.backgroundColor = UIColorScheme().alertCell

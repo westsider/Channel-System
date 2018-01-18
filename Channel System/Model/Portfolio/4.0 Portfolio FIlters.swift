@@ -9,16 +9,6 @@
 import Foundation
 import RealmSwift
 
-/*
- 
-
- 33,601  63.82% Win
- [ ] roi, ll, lw,
- [ ] cost, annual gain
- [ ] activity for stats
- [ ] clean up stats functions
- */
-
 class PortfolioFilters {
     
     struct StatsData {

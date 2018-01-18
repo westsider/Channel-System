@@ -888,6 +888,10 @@
 		0D14D0031FE5AB2D000BA6D5 /* OFF */ = {
 			isa = PBXGroup;
 			children = (
+				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
+				0D6C61E520095F7B001FEA2F /* Profit Graph.swift */,
+				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
+				0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */,
 				0D8944A7200162F30046D6AC /* 4.1 Chrono Daily Profit.swift */,
 				0D8944A5200162C50046D6AC /* 4.0 Limited Portfolio Positions.swift */,
 				0DC70C6D1FE1BFEF00DC58BF /* EntryAndExits.swift */,
@@ -934,10 +938,7 @@
 			children = (
 				0D6C61E72009B83F001FEA2F /* 4.0 Portfolio FIlters.swift */,
 				0DEE4CE7200E5FE50055C0FF /* Portfolio Performance.swift */,
-				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
-				0D8944A92001630C0046D6AC /* 4.2 Chrono Weekly Profit.swift */,
 				0D8944AB20017D780046D6AC /* 4.3 Limited Portfolio Util.swift */,
-				0D6C61E520095F7B001FEA2F /* Profit Graph.swift */,
 			);
 			path = Portfolio;
 			sourceTree = "<group>";
@@ -1022,7 +1023,6 @@
 				0D16296D1FF1E54700E11A64 /* Firebase Service.swift */,
 				0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */,
 				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
-				0DCAAFD61FBC37D200095560 /* Price Temp.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";

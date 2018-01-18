@@ -203,4 +203,16 @@ class Utilities {
         }
         return (user:user, password:password)
     }
+    
+    func isFriday(date:Date, debug:Bool) -> Bool {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)
+        let components = calendar!.components([.weekday], from: date as Date)
+        if debug { print("checking date \(date) for weekday num \(String(describing: components.weekday!))") }
+        if components.weekday! == 5 {
+            if debug { print("found a friday!") }
+            return true
+        } else {
+            return false
+        }
+    }
 }

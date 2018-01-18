@@ -142,6 +142,17 @@ class Prices: Object {
         return sortedByDate
     }
     
+    func getFromTest(taskID:String) {
+        let realm = try! Realm()
+        let onePrice = realm.objects(Prices.self).filter("taskID == %@", taskID)
+        print("Showing all files for taskID: \(taskID)")
+        for each in onePrice {
+            debugPrint(each)
+        }
+        
+  
+    }
+    
     func getOnePriceFrom(taskID:String)-> Prices {
         let realm = try! Realm()
         let thisItem = realm.objects(Prices.self).filter("taskID == %@", taskID).first!

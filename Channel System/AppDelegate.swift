@@ -69,17 +69,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         })
         Realm.Configuration.defaultConfiguration = config
-        
-        // License Contract
-        let licencing:String = "<LicenseContract>" +
-        "<Customer>Swift Sense</Customer>" +
-        "<OrderId>ABT171115-1656-88135</OrderId>" +
-        "<LicenseCount>1</LicenseCount>" +
-        "<IsTrialLicense>false</IsTrialLicense>" +
-        "<SupportExpires>11/15/2018 00:00:00</SupportExpires>" +
-        "<ProductCode>SC-IOS-2D-PRO</ProductCode>" +
-        "<KeyCode>364e0b1c08ae94c831328cb783064a526d8ca335a2cb9de59ca53352ae5ed1f01092defffaafec2fbf9800261297e78b5c6e1dc909af374f2f8db8e7996b06f16d55b7dcb3a4cbe34c386396e5ec55af702b90c19eb821ba267e856d724ba4592b8ab35d9a58114583e7ba7af11d8750530bdb965c0a23be79df43b95cb0e9f4cdc7fe1787a37b09751da452cc8dd62bd5e36304ea5c82c9c54d65a9a43472aa5b066762</KeyCode>" +
-        "</LicenseContract>"
+
+        let licencing:String = UserDefaults.standard.object(forKey: "scichartLicense") as! String
         
         SCIChartSurface.setRuntimeLicenseKey(licencing)
         

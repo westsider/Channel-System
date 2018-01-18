@@ -209,12 +209,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 print("Entry done")
                 CalcStars().backtest(galaxie: self.galaxie, debug: true, completion: {
                     print("\ncalc Stars done!\n")
-                    PortfolioWeekly().weeklyProfit(debug: true, completion: { (finished) in
-                        if finished {
-                            self.activityDial.stopAnimating()
-                            self.buttonsAre(on: true)
-                        }
-                    })
+                    
                 })
             }
         })

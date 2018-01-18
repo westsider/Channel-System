@@ -11,6 +11,11 @@ import UIKit
 import NVActivityIndicatorView
 import AVFoundation
 
+// [ ]  stats chartsize full screen
+// [ ]  scan mc text centered, add sp performance beat by Nx, add database health
+// [ ]  Add missing closed trades
+// [ ]  Update main to show todays change, red blue
+
 class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var lastUpdateLable: UILabel!
