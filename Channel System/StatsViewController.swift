@@ -47,7 +47,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    let maxBarsOnChart:Int = 350
+    let maxBarsOnChart:Int = 400
     var minStars:Int = 0
     //MARK: - chart vars
 
