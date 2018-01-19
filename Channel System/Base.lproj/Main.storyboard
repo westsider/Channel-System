@@ -638,7 +638,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="322" height="26.333333333333332"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rz6-vy-pVI">
-                                                        <rect key="frame" x="0.0" y="0.0" width="99.333333333333329" height="26.333333333333332"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="155" height="26.333333333333332"/>
                                                         <color key="backgroundColor" red="0.47451317310333252" green="0.47450375556945801" blue="0.47451013326644897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                         <state key="normal" title="Risk">
@@ -648,11 +648,8 @@
                                                             <action selector="riskAction:" destination="9ui-km-yle" eventType="touchUpInside" id="ujp-Na-jXQ"/>
                                                         </connections>
                                                     </button>
-                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Khd-01-Lac">
-                                                        <rect key="frame" x="111.33333333333334" y="0.0" width="99.333333333333343" height="26.333333333333332"/>
-                                                    </activityIndicatorView>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="50" borderStyle="roundedRect" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fsW-ol-SwK">
-                                                        <rect key="frame" x="222.66666666666671" y="0.0" width="99.333333333333343" height="26.333333333333332"/>
+                                                        <rect key="frame" x="167" y="0.0" width="155" height="26.333333333333332"/>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
@@ -931,7 +928,6 @@
                     </view>
                     <connections>
                         <outlet property="acctTotalLabel" destination="j5p-FP-hYe" id="wB3-0T-R9f"/>
-                        <outlet property="activityDial" destination="Khd-01-Lac" id="4dN-Vw-RnA"/>
                         <outlet property="backTestLabel" destination="vIZ-Xd-6Th" id="ZO8-YP-zch"/>
                         <outlet property="backtestBttn" destination="4Qq-fT-472" id="znT-u8-mzS"/>
                         <outlet property="csvBttn" destination="l1e-KK-Dup" id="sWm-qJ-2Yb"/>

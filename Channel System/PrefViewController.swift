@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import NVActivityIndicatorView
 
-class PrefViewController: UIViewController, UITextViewDelegate {
+class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndicatorViewable {
     
     //all buttons
     @IBOutlet weak var riskBttn: UIButton!
@@ -25,7 +26,6 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var starsButton: UIButton!
     
     // all labels
-    @IBOutlet weak var activityDial: UIActivityIndicatorView!
     @IBOutlet weak var riskLabel: UITextField!
     @IBOutlet weak var ibLabel: UITextField!
     @IBOutlet weak var tdaLabel: UITextField!
@@ -49,7 +49,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     let datafeedBlock = { print( "\nDatafeed finished  <----------\n" ) }
     let backtestBlock = { print( "\nBackTest finished  <----------\n" ) }
     let calcStatsBlock = { print( "\nCalc Stats finished  <----------\n" ) }
-    
+    let size = CGSize(width: 100, height: 100)
     var symbolCount = 0
     var textEntered:String = "No Text"
     
@@ -60,7 +60,6 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         populateLables()
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         symbolCount = galaxie.count
-        activityDial.stopAnimating()
     }
     
     
@@ -101,6 +100,8 @@ class PrefViewController: UIViewController, UITextViewDelegate {
                 // safely get number from risk
                 Account().updateRisk(risk: numberRisk )
                 print("\n-------> Saved new Risk of \(numberRisk) <------\n")
+                print("\nNow running getEveryEntry to reset shares, stop and capRequired\n")
+                recCalcEntry(debug: true)
             } else {
                 print("\n-------> ERROR unwrapping Risk <------\n")
             }
@@ -112,24 +113,18 @@ class PrefViewController: UIViewController, UITextViewDelegate {
         // entriesWithCompletion(completion: entryBlock)
     }
     
-    func calcStats(debug:Bool, completion: @escaping () -> ()) {
-//        DispatchQueue.global(qos: .background).async {
-//            DispatchQueue.main.async {
-//                self.activityDial.startAnimating()
-//                self.buttonsAre(on: false)
-//                self.backTestLabel.text = "saving to realm"
-//            }
-//            _ = PortfolioEntries().allTickerBacktestWithCost(debug: false, saveToRealm: true)
-//            
-//            DispatchQueue.main.async {
-//                self.activityDial.stopAnimating()
-//                self.buttonsAre(on: true)
-//                self.backTestLabel.text = "realm save done"
-//                completion()
-//                // segue to stats
-//                self.segueToStats()
-//            }
-//        }
+    func recCalcEntry(debug:Bool) {
+        startAnimating(self.size, message: "Optimizing Portfolio", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballClipRotateMultiple.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
+        Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
+            if finished  {
+                print("Entry done")
+                self.updateNVActivity(with:"Recalculating Stars")
+                CalcStars().backtest(galaxie: self.galaxie, debug: debug, completion: {
+                    print("\ncalc Stars done!\n")
+                    self.stopAnimating()
+                })
+            }
+        })
     }
     
     @IBAction func ibAction(_ sender: Any) {
@@ -201,8 +196,6 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     }
     
     func entriesWithCompletion(completion: @escaping () -> ()) {
-        activityDial.startAnimating()
-        self.buttonsAre(on: false)
         var count = 0
         Entry().getEveryEntry(galaxie: galaxie, debug: true, completion: { (finished) in
             if finished  {
@@ -226,9 +219,7 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             }
             DispatchQueue.main.async {
                 if count == self.symbolCount-1 {
-                    self.activityDial.stopAnimating()
                     self.entriesLabel.text = "Updated"
-                    self.buttonsAre(on: true)
                     completion()
                     self.backtest(completion: self.backtestBlock)
                 }
@@ -241,8 +232,6 @@ class PrefViewController: UIViewController, UITextViewDelegate {
     }
     
     func backtest(completion: @escaping () -> ()) {
-        activityDial.startAnimating()
-        self.buttonsAre(on: true)
         var count = 0
         var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
         DispatchQueue.global(qos: .background).async {
@@ -267,62 +256,18 @@ class PrefViewController: UIViewController, UITextViewDelegate {
             print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
             DispatchQueue.main.async {
                 if count == tickerStar.count {
-                    self.activityDial.stopAnimating()
+        
                     self.backTestLabel.text = "Updated"
                     completion()
-                    self.buttonsAre(on: false)
-                    self.calcStats(debug: false, completion: self.calcStatsBlock)
                 }
             }
         }
     }
+
     
-    func buttonsAre(on:Bool){
-        if on {
-            riskBttn.isEnabled = true
-            ibBttn.isEnabled = true
-            tdaBttn.isEnabled = true
-            etradeBttn.isEnabled = true
-            csvBttn.isEnabled = true // nil
-            sma10Bttn.isEnabled = true
-            sma200Bttn.isEnabled = true
-            wPctRbttn.isEnabled = true
-            entriesBttn.isEnabled = true
-            backtestBttn.isEnabled = true
-            starsButton.isEnabled = true
-            riskBttn.alpha = 1.0
-            ibBttn.alpha = 1.0
-            tdaBttn.alpha = 1.0
-            etradeBttn.alpha = 1.0
-            csvBttn.alpha = 1.0
-            sma10Bttn.alpha = 1.0
-            sma200Bttn.alpha = 1.0
-            wPctRbttn.alpha = 1.0
-            entriesBttn.alpha = 1.0
-            backtestBttn.alpha = 1.0
-            starsTextField.alpha = 1.0
-        } else {
-            ibBttn.isEnabled = false
-            tdaBttn.isEnabled = false
-            etradeBttn.isEnabled = false
-            csvBttn.isEnabled = false
-            sma10Bttn.isEnabled = false
-            sma200Bttn.isEnabled = false
-            wPctRbttn.isEnabled = false
-            entriesBttn.isEnabled = false
-            backtestBttn.isEnabled = false
-            starsButton.isEnabled = false
-            riskBttn.alpha = 0.2
-            ibBttn.alpha = 0.2
-            tdaBttn.alpha = 0.2
-            etradeBttn.alpha = 0.2
-            csvBttn.alpha = 0.2
-            sma10Bttn.alpha = 0.2
-            sma200Bttn.alpha = 0.2
-            wPctRbttn.alpha = 0.2
-            entriesBttn.alpha = 0.2
-            backtestBttn.alpha = 0.2
-            starsTextField.alpha = 0.2
+    func updateNVActivity(with:String) {
+        DispatchQueue.main.async {
+            NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
         }
     }
     
