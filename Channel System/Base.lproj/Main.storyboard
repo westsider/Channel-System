@@ -6,7 +6,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
@@ -29,49 +28,81 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5g-HL-Lw5">
-                                <rect key="frame" x="16" y="467" width="382" height="100"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sql-BG-IWs" userLabel="Title View">
+                                <rect key="frame" x="8" y="72" width="398" height="73"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checking Last Update" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lIN-xi-Yu4">
-                                        <rect key="frame" x="8" y="38" width="366" height="24"/>
-                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Market Condition For Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Lq-Tm-bk2">
+                                        <rect key="frame" x="31.666666666666657" y="19.333333333333329" width="335.33333333333337" height="35"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Semibold" family="PingFang HK" pointSize="25"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstItem="lIN-xi-Yu4" firstAttribute="leading" secondItem="o5g-HL-Lw5" secondAttribute="leading" constant="8" id="4Ll-Wp-o2E"/>
-                                    <constraint firstAttribute="trailing" secondItem="lIN-xi-Yu4" secondAttribute="trailing" constant="8" id="5TF-J8-4Yi"/>
-                                    <constraint firstItem="lIN-xi-Yu4" firstAttribute="centerY" secondItem="o5g-HL-Lw5" secondAttribute="centerY" id="O63-CF-QlY"/>
-                                    <constraint firstAttribute="height" constant="100" id="Vzw-UN-eXt"/>
+                                    <constraint firstItem="1Lq-Tm-bk2" firstAttribute="centerY" secondItem="Sql-BG-IWs" secondAttribute="centerY" id="PKB-pv-zIl"/>
+                                    <constraint firstItem="1Lq-Tm-bk2" firstAttribute="centerX" secondItem="Sql-BG-IWs" secondAttribute="centerX" id="kEm-Oa-W4i"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pjh-GY-89w">
-                                <rect key="frame" x="16" y="349" width="382" height="100"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hqJ-cA-IP5" userLabel="Market Cond View">
+                                <rect key="frame" x="8" y="152.99999999999997" width="398" height="294.33333333333326"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting to update or trade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hQG-0g-wbn">
-                                        <rect key="frame" x="8" y="38" width="366" height="24"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Updating database and calculating markert condition." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-xe-Ufe">
+                                        <rect key="frame" x="8" y="8" width="382" height="278"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" red="0.52154112490000004" green="0.65439286890000004" blue="0.97105586529999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <dataDetectorType key="dataDetectorTypes" calendarEvent="YES"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.33215844631195068" green="0.3493574857711792" blue="0.39915424585342407" alpha="0.48932470034246578" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="dhA-xe-Ufe" firstAttribute="top" secondItem="hqJ-cA-IP5" secondAttribute="top" constant="8" id="GPA-CT-8NH"/>
+                                    <constraint firstItem="dhA-xe-Ufe" firstAttribute="leading" secondItem="hqJ-cA-IP5" secondAttribute="leading" constant="8" id="Lzh-Xw-KC8"/>
+                                    <constraint firstAttribute="trailing" secondItem="dhA-xe-Ufe" secondAttribute="trailing" constant="8" id="VLK-YC-Njp"/>
+                                    <constraint firstAttribute="bottom" secondItem="dhA-xe-Ufe" secondAttribute="bottom" constant="8" id="t2E-3V-lSQ"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pjh-GY-89w" userLabel="Waiting View">
+                                <rect key="frame" x="8" y="455.33333333333331" width="398" height="73.666666666666686"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting to Update or Trade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hQG-0g-wbn">
+                                        <rect key="frame" x="59.333333333333314" y="21.666666666666686" width="281" height="31"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.3376372755" green="0.34831565619999999" blue="0.39609014990000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="4Hs-Z8-4QO"/>
-                                    <constraint firstItem="hQG-0g-wbn" firstAttribute="centerY" secondItem="Pjh-GY-89w" secondAttribute="centerY" id="Q9V-Dw-SQc"/>
-                                    <constraint firstAttribute="trailing" secondItem="hQG-0g-wbn" secondAttribute="trailing" constant="8" id="XVH-XS-YzG"/>
-                                    <constraint firstItem="hQG-0g-wbn" firstAttribute="leading" secondItem="Pjh-GY-89w" secondAttribute="leading" constant="8" id="yLC-hg-Rz4"/>
+                                    <constraint firstItem="hQG-0g-wbn" firstAttribute="centerX" secondItem="Pjh-GY-89w" secondAttribute="centerX" id="Rso-cK-J55"/>
+                                    <constraint firstItem="hQG-0g-wbn" firstAttribute="centerY" secondItem="Pjh-GY-89w" secondAttribute="centerY" id="l16-dY-E0x"/>
                                 </constraints>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="wG0-AO-Vih">
-                                <rect key="frame" x="16" y="586" width="382" height="126"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5g-HL-Lw5" userLabel="Last Update View">
+                                <rect key="frame" x="8" y="537" width="398" height="73.666666666666629"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checking Last Update" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lIN-xi-Yu4">
+                                        <rect key="frame" x="85.666666666666686" y="21.666666666666629" width="228" height="31"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="lIN-xi-Yu4" firstAttribute="centerY" secondItem="o5g-HL-Lw5" secondAttribute="centerY" id="Sc6-rc-gDl"/>
+                                    <constraint firstItem="lIN-xi-Yu4" firstAttribute="centerX" secondItem="o5g-HL-Lw5" secondAttribute="centerX" id="gT7-ac-9kS"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="wG0-AO-Vih" userLabel="Button Stack View">
+                                <rect key="frame" x="8" y="618.66666666666663" width="398" height="109.33333333333337"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gtg-gI-fW5">
-                                        <rect key="frame" x="0.0" y="0.0" width="183" height="126"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="195" height="109.33333333333333"/>
                                         <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
                                         <state key="normal" title="Update">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -80,9 +111,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8N-0N-Aed">
-                                        <rect key="frame" x="199" y="0.0" width="183" height="126"/>
+                                        <rect key="frame" x="203" y="0.0" width="195" height="109.33333333333333"/>
                                         <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
                                         <state key="normal" title="Trade">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -91,61 +122,31 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="wG0-AO-Vih" secondAttribute="height" multiplier="91:30" id="c7b-aa-YQ0"/>
-                                </constraints>
                             </stackView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Updating database and calculating markert condition." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-xe-Ufe">
-                                <rect key="frame" x="16" y="186" width="382" height="147"/>
-                                <color key="backgroundColor" red="0.1885371208190918" green="0.19965288043022156" blue="0.22353574633598328" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <color key="textColor" red="0.52154112490000004" green="0.65439286890000004" blue="0.97105586529999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <dataDetectorType key="dataDetectorTypes" calendarEvent="YES"/>
-                            </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sql-BG-IWs">
-                                <rect key="frame" x="16" y="87" width="382" height="73"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Market Condition for Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Lq-Tm-bk2">
-                                        <rect key="frame" x="21" y="8" width="353" height="57"/>
-                                        <fontDescription key="fontDescription" name="PingFangHK-Semibold" family="PingFang HK" pointSize="20"/>
-                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="1Lq-Tm-bk2" secondAttribute="trailing" constant="8" id="6bT-q3-xZ1"/>
-                                    <constraint firstItem="1Lq-Tm-bk2" firstAttribute="leading" secondItem="Sql-BG-IWs" secondAttribute="leading" constant="21" id="V2X-ja-1TK"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="73" id="XQe-6Z-CC8"/>
-                                    <constraint firstAttribute="bottom" secondItem="1Lq-Tm-bk2" secondAttribute="bottom" constant="8" id="ew9-um-KHU"/>
-                                    <constraint firstItem="1Lq-Tm-bk2" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="top" constant="8" id="gIx-hZ-jzy"/>
-                                    <constraint firstAttribute="height" constant="73" id="wZN-58-1nT"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.19245842099189758" green="0.20357471704483032" blue="0.22745734453201294" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Sql-BG-IWs" secondAttribute="trailing" constant="16" id="0hK-Zk-RUC"/>
-                            <constraint firstItem="dhA-xe-Ufe" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="bottom" constant="26" id="1wc-d3-jx9"/>
-                            <constraint firstItem="Sql-BG-IWs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="23" id="52m-1w-gdj"/>
-                            <constraint firstItem="dhA-xe-Ufe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="8Mg-h1-qNf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pjh-GY-89w" secondAttribute="trailing" constant="16" id="ADG-GJ-iQh"/>
-                            <constraint firstItem="o5g-HL-Lw5" firstAttribute="top" secondItem="Pjh-GY-89w" secondAttribute="bottom" constant="18" id="ArK-jY-dM7"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wG0-AO-Vih" secondAttribute="bottom" constant="24" id="IPt-23-nlC"/>
-                            <constraint firstItem="Gtg-gI-fW5" firstAttribute="top" secondItem="o5g-HL-Lw5" secondAttribute="bottom" constant="19" id="PYF-Nw-pab"/>
-                            <constraint firstItem="wG0-AO-Vih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Pcf-4A-Pfm"/>
-                            <constraint firstItem="Sql-BG-IWs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Rjj-vK-vlh"/>
-                            <constraint firstItem="Sql-BG-IWs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="T4l-QU-sRU"/>
-                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="dhA-xe-Ufe" secondAttribute="bottom" constant="16" id="Ucs-uw-nkm"/>
-                            <constraint firstItem="dhA-xe-Ufe" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="bottom" constant="26" id="Uff-tG-RGN"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wG0-AO-Vih" secondAttribute="trailing" constant="16" id="W9E-96-tJe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Sql-BG-IWs" secondAttribute="trailing" constant="16" id="dP5-2u-gnO"/>
-                            <constraint firstItem="o5g-HL-Lw5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="eDE-aj-5rv"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dhA-xe-Ufe" secondAttribute="trailing" constant="16" id="jx1-2K-eAK"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-HL-Lw5" secondAttribute="trailing" constant="16" id="lSs-zr-yTD"/>
-                            <constraint firstItem="Sql-BG-IWs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="23" id="oYU-9C-5Pt"/>
-                            <constraint firstItem="Pjh-GY-89w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="qj9-TZ-W41"/>
+                            <constraint firstItem="wG0-AO-Vih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="0e8-bP-bJM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wG0-AO-Vih" secondAttribute="bottom" constant="8" id="36p-CK-bPH"/>
+                            <constraint firstItem="wG0-AO-Vih" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1" priority="250" id="4lD-La-s2k"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-HL-Lw5" secondAttribute="trailing" constant="8" id="F5G-Ss-lOb"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="Gal-k1-Dla"/>
+                            <constraint firstItem="Pjh-GY-89w" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1" priority="750" id="GzV-zD-4uh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wG0-AO-Vih" secondAttribute="trailing" constant="8" id="OqO-7u-djT"/>
+                            <constraint firstItem="hqJ-cA-IP5" firstAttribute="top" secondItem="Sql-BG-IWs" secondAttribute="bottom" constant="8" id="OrB-m4-hxG"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1" priority="750" id="OsI-MC-jqE"/>
+                            <constraint firstItem="hqJ-cA-IP5" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.4" priority="756" id="SqQ-Nd-7qf"/>
+                            <constraint firstItem="hqJ-cA-IP5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="YJc-i6-xPd"/>
+                            <constraint firstItem="Pjh-GY-89w" firstAttribute="top" secondItem="hqJ-cA-IP5" secondAttribute="bottom" constant="8" id="ZJc-dP-KZd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Sql-BG-IWs" secondAttribute="trailing" constant="8" id="e4h-wY-4oB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hqJ-cA-IP5" secondAttribute="trailing" constant="8" id="fXT-Uc-wc9"/>
+                            <constraint firstItem="o5g-HL-Lw5" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1" priority="750" id="gBn-hu-pXb"/>
+                            <constraint firstItem="Pjh-GY-89w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="m8E-Ut-IP2"/>
+                            <constraint firstItem="wG0-AO-Vih" firstAttribute="top" secondItem="o5g-HL-Lw5" secondAttribute="bottom" constant="8" id="sdO-sW-0xm"/>
+                            <constraint firstItem="o5g-HL-Lw5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="vAq-0n-a2r"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pjh-GY-89w" secondAttribute="trailing" constant="8" id="wCJ-6P-4cq"/>
+                            <constraint firstItem="Sql-BG-IWs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="yEX-Fd-IC8"/>
+                            <constraint firstItem="o5g-HL-Lw5" firstAttribute="top" secondItem="Pjh-GY-89w" secondAttribute="bottom" constant="8" id="ygx-Li-uor"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -170,7 +171,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="748" y="114.69265367316342"/>
+            <point key="canvasLocation" x="747.82608695652175" y="114.1304347826087"/>
         </scene>
         <!--Candidates-->
         <scene sceneID="70W-qy-HoG">
