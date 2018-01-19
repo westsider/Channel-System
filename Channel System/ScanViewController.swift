@@ -41,7 +41,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        ManualTrades().showProfit()
+        // ManualTrades().showProfit()
         CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
         CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
             if finished {
