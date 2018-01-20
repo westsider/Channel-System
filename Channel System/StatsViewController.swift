@@ -37,8 +37,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet weak var annualProfitLabel: UILabel!
     
-    @IBOutlet weak var spReturnLabel: UILabel!
-    
     var galaxie = [String]()
     var portfolio:[Performance.ChartData] = []
     let size = CGSize(width: 100, height: 100)
@@ -73,7 +71,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Stats"
+        title = "Performance"
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
         startAnimating(self.size, message: "Optimizing Portfolio", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
     }
@@ -113,8 +111,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
                 
-                self.spReturnLabel.text = "System Performance"
-                
                 self.topLeft.text = "$\(gross) Total Profit"
                 self.topRight.text = "\(String(format: "%.1f", (updateStats.avgPctWin)))% Win Rate"
                 
@@ -125,7 +121,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
                 self.minStarsLabel.text = "\(updateStats.minStars) stars, \(String(format: "%.1f", updateStats.avgStars)) average"
                 
                 self.tradingDaysLabel.text = annualRoi
-                self.annualProfitLabel.text = "max gain \(lWin), loss \(lLos)"
+                self.annualProfitLabel.text = "Max gain \(lWin), loss \(lLos)"
                 
                 self.largestWinLabel.text = timePeriod
                 self.largestLossLabel.text = SpReturns().textForStats(yearEnding: 2007)
