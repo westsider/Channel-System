@@ -17,12 +17,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     @IBOutlet weak var ibBttn: UIButton!
     @IBOutlet weak var tdaBttn: UIButton!
     @IBOutlet weak var etradeBttn: UIButton!
-    @IBOutlet weak var csvBttn: UIButton!
-    @IBOutlet weak var sma10Bttn: UIButton!
-    @IBOutlet weak var sma200Bttn: UIButton!
     @IBOutlet weak var wPctRbttn: UIButton!
-    @IBOutlet weak var entriesBttn: UIButton!
-    @IBOutlet weak var backtestBttn: UIButton!
     @IBOutlet weak var starsButton: UIButton!
     
     // all labels
@@ -30,12 +25,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     @IBOutlet weak var ibLabel: UITextField!
     @IBOutlet weak var tdaLabel: UITextField!
     @IBOutlet weak var etradeLabel: UITextField!
-    @IBOutlet weak var csvLabel: UILabel!
-    @IBOutlet weak var smaLabel: UILabel!
-    @IBOutlet weak var smaTwoHundoLabel: UILabel!
-    @IBOutlet weak var williamsPctLabel: UILabel!
-    @IBOutlet weak var entriesLabel: UILabel!
-    @IBOutlet weak var backTestLabel: UILabel!
     @IBOutlet weak var acctTotalLabel: UILabel!
     @IBOutlet weak var starsTextField: UITextField!
     
@@ -174,26 +163,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         }
     }
     
-    @IBAction func csvAction(_ sender: Any) {
-
-    }
-    
-    @IBAction func smaTenAction(_ sender: Any) {
-
-    }
-    
-    @IBAction func smaTwoHundrd(_ sender: Any) {
-
-    }
-    
-    @IBAction func williamsPctAction(_ sender: Any) {
-
-    }
-    
-    @IBAction func entriesAction(_ sender: Any) {
-        entriesWithCompletion(completion: entryBlock)
-    }
-    
     func entriesWithCompletion(completion: @escaping () -> ()) {
         var count = 0
         Entry().getEveryEntry(galaxie: galaxie, debug: true, completion: { (finished) in
@@ -207,9 +176,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         })
         DispatchQueue.global(qos: .background).async {
             for ( index, symbols ) in self.galaxie.enumerated() {
-                DispatchQueue.main.async {
-                    self.entriesLabel.text = "Loading \(index) of \(self.symbolCount)"
-                }
                 let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false)
                 let firstDate  = Utilities().convertToDateFrom(string: "2014/11/25", debug: false)
                 Entry().calcLong(lastDate: firstDate, debug: false, prices: oneTicker, completion: self.entryBlock)
@@ -218,7 +184,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
             }
             DispatchQueue.main.async {
                 if count == self.symbolCount-1 {
-                    self.entriesLabel.text = "Updated"
                     completion()
                     self.backtest(completion: self.backtestBlock)
                 }
@@ -226,18 +191,11 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         }
     }
     
-    @IBAction func backtestAction(_ sender: Any) {
-        //backtest(completion: backtestBlock)
-    }
-    
     func backtest(completion: @escaping () -> ()) {
         var count = 0
         var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
         DispatchQueue.global(qos: .background).async {
             for ( symC, symbols) in self.galaxie.enumerated() {
-                DispatchQueue.main.async {
-                    self.backTestLabel.text = "profit \(symC) of \(self.galaxie.count)"
-                }
                 let results =   BackTest().enterWhenFlat(ticker: symbols, debug: false, updateRealm: true)
                 tickerStar.append((ticker: symbols, grossProfit: results.0, Roi: results.3, WinPct: results.4))
                 print("\(symC) of \(self.symbolCount)")
@@ -245,9 +203,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
             // loop through array and update stars
             for (index, each) in tickerStar.enumerated() {
                 count = index
-                DispatchQueue.main.async {
-                    self.backTestLabel.text = "star calc \(count) of \(tickerStar.count)"
-                }
                 let stars = CalcStars().calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: false)
                 Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: true)
                 count += 1
@@ -255,14 +210,19 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
             print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
             DispatchQueue.main.async {
                 if count == tickerStar.count {
-        
-                    self.backTestLabel.text = "Updated"
+     
                     completion()
                 }
             }
         }
     }
-
+    
+    @IBAction func allChartsAction(_ sender: Any) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "DebugVC") as! DeBugViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    
     
     func updateNVActivity(with:String) {
         DispatchQueue.main.async {
