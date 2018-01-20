@@ -299,11 +299,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xsk-wm-kOS">
-                                <rect key="frame" x="0.0" y="64.000000000000028" width="414" height="441.66666666666674"/>
+                                <rect key="frame" x="0.0" y="64" width="414" height="515.33333333333337"/>
                                 <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u8c-Sm-UNG">
-                                <rect key="frame" x="0.0" y="513.66666666666663" width="414" height="178.33333333333337"/>
+                                <rect key="frame" x="0.0" y="587.33333333333337" width="414" height="104.66666666666663"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
@@ -311,9 +311,9 @@
                         <constraints>
                             <constraint firstItem="u8c-Sm-UNG" firstAttribute="width" secondItem="HG1-74-wyX" secondAttribute="width" id="4Lu-zw-f91"/>
                             <constraint firstItem="Xsk-wm-kOS" firstAttribute="leading" secondItem="jWr-EO-Fpj" secondAttribute="leading" id="E0O-lg-Rsy"/>
-                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="height" secondItem="HG1-74-wyX" secondAttribute="height" multiplier="0.3" priority="750" id="NRA-7m-qlg"/>
+                            <constraint firstItem="u8c-Sm-UNG" firstAttribute="height" secondItem="HG1-74-wyX" secondAttribute="height" multiplier="0.15" priority="750" id="NRA-7m-qlg"/>
                             <constraint firstItem="Xsk-wm-kOS" firstAttribute="width" secondItem="HG1-74-wyX" secondAttribute="width" id="Qb3-pE-AVf"/>
-                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="height" secondItem="HG1-74-wyX" secondAttribute="height" multiplier="0.6" priority="751" id="RD4-ni-UjL"/>
+                            <constraint firstItem="Xsk-wm-kOS" firstAttribute="height" secondItem="HG1-74-wyX" secondAttribute="height" multiplier="0.7" priority="751" id="RD4-ni-UjL"/>
                             <constraint firstItem="u8c-Sm-UNG" firstAttribute="top" secondItem="Xsk-wm-kOS" secondAttribute="bottom" constant="8" id="a3V-XW-NRv"/>
                             <constraint firstItem="Xsk-wm-kOS" firstAttribute="top" secondItem="jWr-EO-Fpj" secondAttribute="top" id="ezT-cI-PfE"/>
                             <constraint firstItem="u8c-Sm-UNG" firstAttribute="leading" secondItem="jWr-EO-Fpj" secondAttribute="leading" id="jnk-3J-b3E"/>
