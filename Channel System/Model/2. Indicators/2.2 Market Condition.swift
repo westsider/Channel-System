@@ -155,35 +155,45 @@ class MarketCondition: Object {
         let dateString = Utilities().convertToStringNoTimeFrom(date: latest.date!)
         if latest.close > latest.upperBand {
             pct = ((latest.close - latest.upperBand ) / latest.close) * 100
-            longTrendString = "\n\t\t\(String(format: "%.2f", pct))% above the long term trend"
+            longTrendString = "\n\(String(format: "%.2f", pct))% above the long term trend"
         } else if latest.close < latest.lowerBand {
             pct = ((latest.close - latest.upperBand ) / latest.close) * 100
-            longTrendString = "\n\t\t\(String(format: "%.2f", pct))%) below the long term trend"
+            longTrendString = "\n\(String(format: "%.2f", pct))%) below the long term trend"
         } else {
-            longTrendString = "\n\t\the index is withing the trend bands"
+            longTrendString = "\nthe index is withing the trend bands"
         }
         
         let spReturn1 = SpReturns().calcTenYearsReturn(start: 98.31, end: 137.37, yearEnding: 2007)
         let spReturn2 = SpReturns().calcTenYearsReturn(start: 137.37, end: 267.51, yearEnding: 2017)
+        let spReturn1i = SpReturns().calcTenYearsReturnD(start: 98.31, end: 137.37, yearEnding: 2007)
+        let spReturn2i = SpReturns().calcTenYearsReturnD(start: 137.37, end: 267.51, yearEnding: 2017)
+        let updateStats = realm.objects(Stats.self).last
+        let systemReturn = updateStats?.avgROI
+        let comp1 = ( systemReturn! / spReturn1i )
+        let comp2 = (systemReturn! / spReturn2i )
         
         let titleString = "Market Condition \(dateString)"
         
-        var thisString  = "\t\tS&P 500 Index \(latest.close) \(pctChangeStr)"
+        var thisString  = "The S&P 500 Index is at \(latest.close) \(pctChangeStr)"
         
         thisString  += longTrendString
         
-        thisString  += "\n\t\tWe are in a \(latest.trendString) Trend"
+        thisString  += "\nThe index is in a \(latest.trendString) Trend"
         
-        thisString += "\n\t\tCurrently we are \(latest.volatilityString)"
+        thisString += "\nCurrent conditions are \(latest.volatilityString)"
         
-        thisString += "\n\t\t\(latest.guidanceChart) for Longs"
+        thisString += "\n\(latest.guidanceChart) for Longs"
         
-        thisString += "\n\n\t\t" + spReturn1
+        thisString += "\n\n" + spReturn1
         
-        thisString += "\n\t\t" + spReturn2
+        thisString += "\n" + spReturn2
         
-        thisString += "\n\t\t" + "This system is outperforming the market by 30% and 40% respectively"
+        thisString += "\n" + "This system is returning \(String(format: "%.1f", systemReturn!))% annually"
         
+        thisString += "\n" + "outperforming the S&P 500 Index by a mutiple"
+        
+        thisString += "\n" + "of \(String(format: "%.1f", comp1)) times and \(String(format: "%.1f", comp2)) times respectively"
+
         
         if ( debug ) { print(thisString) }
         return ( titleString, thisString )

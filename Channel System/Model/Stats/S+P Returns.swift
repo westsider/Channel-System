@@ -29,4 +29,12 @@ class SpReturns {
         let roi = (annualReturn / end) * 100.00
         return ("10 year benchmark ending \(yearEnding) \(String(format: "%.2f", roi))% ")
     }
+    
+    func calcTenYearsReturnD(start:Double, end: Double, yearEnding:Int)->Double {
+        let tenYrReturn = end - start
+        let annualReturn = tenYrReturn / 10
+        let roi = (annualReturn / end) * 100.00
+        return roi
+    }
+    
 }
