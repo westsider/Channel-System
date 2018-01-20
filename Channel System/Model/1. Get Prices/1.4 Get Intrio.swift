@@ -56,7 +56,6 @@ class IntrioFeed {
                     let json = JSON(value)
                     if ( debug ) { print("JSON: \(json)") }
                     for data in json["data"].arrayValue {
-   
                         if ( debug ) { print("\n---------------> starting json loop  <---------------------") }
                         let prices = Prices()
                         prices.ticker = ticker
@@ -97,13 +96,13 @@ class IntrioFeed {
                         }
                         lastLow = prices.high
                         lastHigh = prices.low
-                    }  // JSON loop ends
+                    }
                     if ( debug ) { print("\(ticker) request complete") }
                     completion(true)
                 case .failure(let error):
                     print("Intrinio Error getting \(ticker)")
                     debugPrint(error)
-                }  // result ends
+                }
         }
     }
     

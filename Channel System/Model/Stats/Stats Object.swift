@@ -68,19 +68,6 @@ class Stats: Object {
         return minStars
     }
     
-//    struct StatsSummary {
-//        var totalProfit:Double
-//        var annualProfit:Double
-//        var totalRoi:Double
-//        var annualRoi:Double
-//        var winPct:Double
-//        var maxCost:Double
-//        var largestWin:Double
-//        var largestLoss:Double
-//        var numDays:Int
-//        var numYears:Double
-//    }
-    
     //MARK: - saveTotalStatsToRealm update or new object
     func updateFinalTotal(data: PortfolioFilters.StatsSummary) {
         
@@ -90,7 +77,6 @@ class Stats: Object {
         let minStars = oldStatstData.last?.minStars
         try! realm.write {
             realm.delete(oldStatstData)
-           
             let statsData = Stats()
             statsData.grossProfit = data.totalProfit
             statsData.annualProfit = data.annualProfit
@@ -104,9 +90,7 @@ class Stats: Object {
             statsData.minStars = minStars!
             statsData.numDays = data.numDays
             statsData.numYears = data.numYears
-            
             realm.add(statsData)
-            
         }
     }
 }

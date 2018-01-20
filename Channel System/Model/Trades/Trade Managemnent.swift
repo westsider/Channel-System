@@ -24,12 +24,11 @@ class TradeManage {
     //MARK: - Stop 3% dow s&p, 5% others = Remove from portfolio
     // might have to get the taskID for trade
     fileprivate func checkStop() {
-        for trades in tasks {
-            if trades.close < trades.stop {
-                // alert vc for stop hit
-                
-                
-                try! realm.write {
+        try! realm.write {
+            for trades in tasks {
+                if trades.close < trades.stop {
+                    // alert vc for stop hit
+                    //try! realm.write {
                     trades.loss = trades.risk
                     trades.shares    = 0
                     trades.exitDate = Date()
@@ -38,7 +37,6 @@ class TradeManage {
                 }
             }
         }
-
     }
     //MARK: - Exit after 7 trading days, Trail stop
     

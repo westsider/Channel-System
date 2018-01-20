@@ -69,18 +69,20 @@ class Entry {
         print("Getting all dates for \(ticker) to calc entries")
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         let realm = try! Realm()
-        for each in prices {
-            if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
-                try! realm.write {
-                    let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
-                    let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk)
-                    each.longEntry = true
-                    each.shares = shares
-                    each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: shares)
-                    each.stop = stopDist.0
-                    each.target = stopDist.1
+        try! realm.write {
+            for each in prices {
+                if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
+                    //try! realm.write {
+                        let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
+                        let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk)
+                        each.longEntry = true
+                        each.shares = shares
+                        each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: shares)
+                        each.stop = stopDist.0
+                        each.target = stopDist.1
+                    //}
+                    if ( deBug ) { print("LE on \(each.dateString)") }
                 }
-                if ( deBug ) { print("LE on \(each.dateString)") }
             }
         }
         print("Calc long for \(ticker) only complete")
@@ -92,16 +94,19 @@ class Entry {
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         
         if reset {
-            for each in prices {
-                
-                let realm = try! Realm()
-                try! realm.write {
-                    each.longEntry = false
-                    each.backTestProfit = 0.00
-                    each.shares = 0
-                    each.capitalReq = 0.00
-                    each.stop = 0.00
-                    each.target = 0.00
+            let realm = try! Realm()
+            try! realm.write {
+                for each in prices {
+                    
+    //                let realm = try! Realm()
+    //                try! realm.write {
+                        each.longEntry = false
+                        each.backTestProfit = 0.00
+                        each.shares = 0
+                        each.capitalReq = 0.00
+                        each.stop = 0.00
+                        each.target = 0.00
+                    //}
                 }
             }
         }
@@ -115,20 +120,22 @@ class Entry {
             // add long entry if none exists
             // need to find a better filer than this
             if ( sortedPrices[index].date! > lastDate ) {
-                if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
-                    try! realm.write {
-                        let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
-                        let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk)
-                        each.longEntry = true
-                        each.shares = shares
-                        each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: shares)
-                        each.stop = stopDist.0
-                        each.target = stopDist.1
-                    }
-                    if ( debug ) { print("LE on \(each.dateString)") }
-                } else {
-                    try! realm.write {
-                        each.longEntry = false
+                try! realm.write {
+                    if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
+                        //try! realm.write {
+                            let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
+                            let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk)
+                            each.longEntry = true
+                            each.shares = shares
+                            each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: shares)
+                            each.stop = stopDist.0
+                            each.target = stopDist.1
+                        //}
+                        if ( debug ) { print("LE on \(each.dateString)") }
+                    } else {
+                        //try! realm.write {
+                            each.longEntry = false
+                        //}
                     }
                 }
             }

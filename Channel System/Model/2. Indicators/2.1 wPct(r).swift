@@ -85,25 +85,28 @@ class PctR {
         }
         
         // divide then multiply answer
-        for ( index, _ ) in sortedPrices.enumerated() {
-            var answer = leftSideEquation[index] / rightSideEquation[index]
-            answer = answer * -100
-            
-            if ( answer > 300 || answer < -300) {
-                print("\n----------> \(answer) is suspicious!\n")
-                answer = 0.01
-            }
-            if ( redoAll) {
-                if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
-                let realm = try! Realm()
-                try! realm.write {
-                    sortedPrices[index].wPctR = answer
+        let realm = try! Realm()
+        try! realm.write {
+            for ( index, _ ) in sortedPrices.enumerated() {
+                var answer = leftSideEquation[index] / rightSideEquation[index]
+                answer = answer * -100
+                
+                if ( answer > 300 || answer < -300) {
+                    print("\n----------> \(answer) is suspicious!\n")
+                    answer = 0.01
                 }
-            } else if ( sortedPrices[index].wPctR == 0.0 ) {
-                if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
-                let realm = try! Realm()
-                try! realm.write {
+                if ( redoAll) {
+                    if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
+    //                let realm = try! Realm()
+    //                try! realm.write {
                     sortedPrices[index].wPctR = answer
+                   // }
+                } else if ( sortedPrices[index].wPctR == 0.0 ) {
+                    if ( debug ) { print("adding wPctR  \(answer) to \(sortedPrices[index].ticker)") }
+//                    let realm = try! Realm()
+//                    try! realm.write {
+                    sortedPrices[index].wPctR = answer
+                    //}
                 }
             }
             //print("%R \(answer) = (Highest High – Closing Price) \(leftSideEquation[index]) / (Highest High – Lowest Low) \( rightSideEquation[index]) x -100")

@@ -18,7 +18,6 @@
 		0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
-		0D31FF6E1FDE0F6D00D87D81 /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */; };
 		0D4A01881FC8C5CF00C53E2F /* AGG.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A01871FC8C5CF00C53E2F /* AGG.csv */; };
 		0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5A43A41FEF10EB00842801 /* S+P Returns.swift */; };
 		0D5CEC761FB378A400762900 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5CEC751FB378A400762900 /* PortfolioViewController.swift */; };
@@ -315,7 +314,6 @@
 		0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.2 Calc Stars.swift"; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
-		0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
 		0D5A43A41FEF10EB00842801 /* S+P Returns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S+P Returns.swift"; sourceTree = "<group>"; };
 		0D5CEC751FB378A400762900 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
@@ -997,7 +995,6 @@
 				0DA5C5112005715F00CB0E05 /* Replace Prices.swift */,
 				0DA5C50D20056C2600CB0E05 /* Clean Database.swift */,
 				0D16296D1FF1E54700E11A64 /* Firebase Service.swift */,
-				0D31FF6D1FDE0F6D00D87D81 /* Accounts.swift */,
 				0DEEA0DE1FCDFC520046BABC /* LastUpdate.swift */,
 			);
 			path = Realm;
@@ -1463,7 +1460,6 @@
 				0DA5C5122005715F00CB0E05 /* Replace Prices.swift in Sources */,
 				0D6726911FF806E300E42A9A /* 1.1 Risk.swift in Sources */,
 				0D6726951FF8076C00E42A9A /* 1.3 Info.swift in Sources */,
-				0D31FF6E1FDE0F6D00D87D81 /* Accounts.swift in Sources */,
 				0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */,
 				0DC70C701FE1CEFB00DC58BF /* Past Trades.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,

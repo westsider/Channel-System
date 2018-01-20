@@ -23,8 +23,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     let size = CGSize(width: 100, height: 100)
     let firebaseBlock = { print( "Firebase Complete" ) }
     let prices = Prices()
-    var updatedProgress: Float = 0
-    var incProgress: Float = 0
     var counter:Int = 0
     var updateRealm:Bool = false
     var lastDateInRealm:Date!
@@ -32,12 +30,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var marketCondition:Results<MarketCondition>!
     var marketReportString = ("No Title", "No Text")
     var reset:Bool = false
-    //var currentRisk:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        //currentRisk = Account().currentRisk()
         // ManualTrades().showProfit()
         CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
         CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
@@ -56,7 +52,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-
             if self.reset {
                 self.csvOnly(galaxie: self.galaxie, debug: false)
             } else {
@@ -132,18 +127,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                                                             print("\ncalc Stars done!\n")
                                                                             self.stopAnimating()
                                                                             self.marketConditionUI(debug: false)
-                                                                            
-                                                                            //self.updateNVActivity(with:"Daily + Weekly Back Test")
-//                                                                            CumulativeProfit().backtestDailyWeekly(debug: debug, completion: { (finished) in
-//                                                                                if finished  {
-//                                                                                    print("Backtest done")
-//                                                                                    DispatchQueue.main.async {
-//                                                                                        self.stopAnimating()
-//                                                                                        self.marketConditionUI(debug: false)
-//
-//                                                                                    }
-//                                                                                }
-//                                                                            })
                                                                         })
                                                                     }
                                                                 })
@@ -200,15 +183,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                                             self.stopAnimating()
                                                             self.marketConditionUI(debug: false)
                                                             self.updateNVActivity(with:"Daily + Weekly Back Test")
-//                                                            CumulativeProfit().backtestDailyWeekly(debug: debug, completion: { (finished) in
-//                                                                if finished  {
-//                                                                    print("Backtest done")
-//                                                                    DispatchQueue.main.async {
-//                                                                        self.stopAnimating()
-//                                                                        self.marketConditionUI(debug: false)
-//                                                                    }
-//                                                                }
-//                                                            })
                                                         })
                                                     }
                                                 })
@@ -241,53 +215,43 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                     if finished {
                         print("info done")
                         self.updateNVActivity(with:"Contacting NYSE")
-                                print("skipping intrinio")
-                                self.updateNVActivity(with:"Loading Trend 1")
-                                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                        print("skipping intrinio")
+                        self.updateNVActivity(with:"Loading Trend 1")
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                            if finished {
+                                print("sma(10) done")
+                                self.updateNVActivity(with:"Loading Trend 2")
+                                SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
                                     if finished {
-                                        print("sma(10) done")
-                                        self.updateNVActivity(with:"Loading Trend 2")
-                                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
+                                        print("sma(200) done")
+                                        self.updateNVActivity(with:"Loading Oscilator")
+                                        PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
                                             if finished {
-                                                print("sma(200) done")
-                                                self.updateNVActivity(with:"Loading Oscilator")
-                                                PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                    if finished {
-                                                        print("oscilator done")
-                                                        self.updateNVActivity(with:"Loading Market Condition")
-                                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                print("oscilator done")
+                                                self.updateNVActivity(with:"Loading Market Condition")
+                                                MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                    if finished  {
+                                                        print("mc done")
+                                                        self.updateNVActivity(with:"Finding Trades")
+                                                        Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
                                                             if finished  {
-                                                                print("mc done")
-                                                                self.updateNVActivity(with:"Finding Trades")
-                                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                                    if finished  {
-                                                                        print("Entry done")
-                                                                        self.updateNVActivity(with:"Brute Force Back Test")
-                                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
-                                                                            print("\ncalc Stars done!\n")
-                                                                            self.stopAnimating()
-                                                                            self.marketConditionUI(debug: false)
-//                                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
-//                                                                            CumulativeProfit().backtestDailyWeekly(debug: debug, completion: { (finished) in
-//                                                                                if finished  {
-//                                                                                    print("Backtest done")
-//                                                                                    DispatchQueue.main.async {
-//                                                                                        self.stopAnimating()
-//                                                                                        self.marketConditionUI(debug: false)
-//                                                                                    }
-//                                                                                }
-//                                                                            })
-                                                                        })
-                                                                    }
+                                                                print("Entry done")
+                                                                self.updateNVActivity(with:"Brute Force Back Test")
+                                                                CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                                    print("\ncalc Stars done!\n")
+                                                                    self.stopAnimating()
+                                                                    self.marketConditionUI(debug: false)
                                                                 })
                                                             }
                                                         })
                                                     }
                                                 })
                                             }
-                                        }
+                                        })
                                     }
                                 }
+                            }
+                        }
                     }
                 }
             }
@@ -307,6 +271,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         let systemSoundId: SystemSoundID = 1106 // connect to power // 1052 tube bell //1016 tweet
         AudioServicesPlaySystemSound(systemSoundId)
     }
+    
     func updateNVActivity(with:String) {
         DispatchQueue.main.async {
             NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
@@ -315,9 +280,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     func firebaseBackup(now:Bool) {
         if now {
-            self.updateUI(with: "Backing Up To Firebase...")
             FirbaseLink().backUp(completion: firebaseBlock)
-            self.updateUI(with: "Backing Up Complete")
         }
     }
     
@@ -359,7 +322,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
 
     @IBAction func manageTradesAction(_ sender: Any) {
-        updateUI(with: "Calculating Performance")
         segueToCandidatesVC()
     }
     
@@ -426,13 +388,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
-    
-    private func updateUI(with: String) {
-        DispatchQueue.main.async {
-            //print(with)
-            self.lastUpdateLable.text =  with
-        }
-    }
     
     private func checkDuplicates() {
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)

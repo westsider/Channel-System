@@ -86,38 +86,40 @@ class MarketCondition: Object {
         let aytrPct = self.atrPct(series: spySeries )
         let volatil = self.volatility(atrSeries: aytrPct, debug: debug)
         var count = 0
-        for (index, today) in spySeries.enumerated() {
-            let todayTrend = self.trend(close: today.close, sma200: today.movAvg200)
-            let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value, debug: debug)
-            let guide = self.guidance(matrix: matrix)
-            
-            let mc = MarketCondition()
-            mc.dateString = today.dateString
-            mc.date = today.date
-            mc.open = today.open
-            mc.high = today.high
-            mc.low = today.low
-            mc.close = today.close
-            mc.movAvg200 = today.movAvg200
-            mc.trend = todayTrend.value
-            mc.trendString = todayTrend.trend
-            mc.upperBand = todayTrend.upper
-            mc.lowerBand = todayTrend.lower
-            mc.volatility = volatil[index].value
-            mc.volatilityString = volatil[index].volatility
-            mc.volatilityAverage = aytrPct[index]
-            mc.stdDevClacHi      = volatil[index].stdDevClacHi
-            mc.stdDevClacLow     = volatil[index].stdDevClacLo
-            mc.guidance = guide.long
-            mc.guidanceChart = guide.guidance
-            mc.matrixResult = matrix.result
-            mc.matrixCondition = matrix.condition
-            
-            try! realm.write {
-                realm.add(mc)
+        try! realm.write {
+            for (index, today) in spySeries.enumerated() {
+                let todayTrend = self.trend(close: today.close, sma200: today.movAvg200)
+                let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value, debug: debug)
+                let guide = self.guidance(matrix: matrix)
+                
+                let mc = MarketCondition()
+                mc.dateString = today.dateString
+                mc.date = today.date
+                mc.open = today.open
+                mc.high = today.high
+                mc.low = today.low
+                mc.close = today.close
+                mc.movAvg200 = today.movAvg200
+                mc.trend = todayTrend.value
+                mc.trendString = todayTrend.trend
+                mc.upperBand = todayTrend.upper
+                mc.lowerBand = todayTrend.lower
+                mc.volatility = volatil[index].value
+                mc.volatilityString = volatil[index].volatility
+                mc.volatilityAverage = aytrPct[index]
+                mc.stdDevClacHi      = volatil[index].stdDevClacHi
+                mc.stdDevClacLow     = volatil[index].stdDevClacLo
+                mc.guidance = guide.long
+                mc.guidanceChart = guide.guidance
+                mc.matrixResult = matrix.result
+                mc.matrixCondition = matrix.condition
+                
+                //try! realm.write {
+                    realm.add(mc)
+                //}
+                count = index
+                if debug { print("MC: finished \(count) of \(spySeries.count)")}
             }
-            count = index
-            if debug { print("MC: finished \(count) of \(spySeries.count)")}
         }
 
         if count == spySeries.count-1 {
@@ -272,36 +274,37 @@ class MarketCondition: Object {
             var isNewDate = false
             let lastInRealm = Prices().getLastDateInMktCond(debug: debug)
             let realm = try! Realm()
-            
-            for (index, today) in spySeries.enumerated() {
-                let todayTrend = self.trend(close: today.close, sma200: today.movAvg200)
-                isNewDate = Prices().checkIfNew(date: today.date!, realmDate:lastInRealm, debug: debug)
-                if isNewDate {
-                    let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value, debug: debug)
-                    let guide = self.guidance(matrix: matrix)
-                    let mc = MarketCondition()
-                    mc.dateString = today.dateString
-                    mc.date = today.date
-                    mc.open = today.open
-                    mc.high = today.high
-                    mc.low = today.low
-                    mc.close = today.close
-                    mc.movAvg200 = today.movAvg200
-                    mc.trend = todayTrend.value
-                    mc.trendString = todayTrend.trend
-                    mc.upperBand = todayTrend.upper
-                    mc.lowerBand = todayTrend.lower
-                    mc.volatility = volatil[index].value
-                    mc.volatilityString = volatil[index].volatility
-                    mc.volatilityAverage = aytrPct[index]
-                    mc.stdDevClacHi      = volatil[index].stdDevClacHi
-                    mc.stdDevClacLow     = volatil[index].stdDevClacLo
-                    mc.guidance = guide.long
-                    mc.guidanceChart = guide.guidance
-                    mc.matrixResult = matrix.result
-                    mc.matrixCondition = matrix.condition
-                    try! realm.write {
+            try! realm.write {
+                for (index, today) in spySeries.enumerated() {
+                    let todayTrend = self.trend(close: today.close, sma200: today.movAvg200)
+                    isNewDate = Prices().checkIfNew(date: today.date!, realmDate:lastInRealm, debug: debug)
+                    if isNewDate {
+                        let matrix = self.setMatrix(trnd: todayTrend.value, volatl: volatil[index].value, debug: debug)
+                        let guide = self.guidance(matrix: matrix)
+                        let mc = MarketCondition()
+                        mc.dateString = today.dateString
+                        mc.date = today.date
+                        mc.open = today.open
+                        mc.high = today.high
+                        mc.low = today.low
+                        mc.close = today.close
+                        mc.movAvg200 = today.movAvg200
+                        mc.trend = todayTrend.value
+                        mc.trendString = todayTrend.trend
+                        mc.upperBand = todayTrend.upper
+                        mc.lowerBand = todayTrend.lower
+                        mc.volatility = volatil[index].value
+                        mc.volatilityString = volatil[index].volatility
+                        mc.volatilityAverage = aytrPct[index]
+                        mc.stdDevClacHi      = volatil[index].stdDevClacHi
+                        mc.stdDevClacLow     = volatil[index].stdDevClacLo
+                        mc.guidance = guide.long
+                        mc.guidanceChart = guide.guidance
+                        mc.matrixResult = matrix.result
+                        mc.matrixCondition = matrix.condition
+                        //try! realm.write {
                         realm.add(mc)
+                        //}
                     }
                 }
             }

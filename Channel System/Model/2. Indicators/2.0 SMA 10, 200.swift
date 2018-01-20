@@ -56,40 +56,47 @@ class SMA {
         if ( debug ) { print("\nFinished calc for\(period) SMA for \(String(describing: sortedPrices.last!.ticker))\n") }
         if ( period == 10 ) {
             if ( debug ) { print("\n---> num of 10 SMA \(averages.count) closes = \(closes.count) <---\n") }
-            for (index, eachAverage) in averages.enumerated() {
-                // add indicator if none exists
-                
-                if ( redoAll ) {
-                    if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
-                    let realm = try! Realm()
-                    try! realm.write {
-                        sortedPrices[index].movAvg10 = eachAverage
+            let realm = try! Realm()
+            try! realm.write {
+                for (index, eachAverage) in averages.enumerated() {
+                    // add indicator if none exists
+                    
+                    if ( redoAll ) {
+                        if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
+    //                    let realm = try! Realm()
+    //                    try! realm.write {
+                            sortedPrices[index].movAvg10 = eachAverage
+                        //}
+                    } else if ( sortedPrices[index].movAvg10 == 0.0 ) {
+                        if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
+                        //let realm = try! Realm()
+                        //try! realm.write {
+                            sortedPrices[index].movAvg10 = eachAverage
+                            if ( debug ) { print("SAVE \(sortedPrices[index].ticker) \(sortedPrices[index].dateString) \(sortedPrices[index].movAvg10)") }
+                        //}
                     }
-                } else if ( sortedPrices[index].movAvg10 == 0.0 ) {
-                    if ( debug ) { print("adding SMA 10 \(eachAverage) to \(sortedPrices[index].ticker)") }
-                    let realm = try! Realm()
-                    try! realm.write {
-                        sortedPrices[index].movAvg10 = eachAverage
-                        if ( debug ) { print("SAVE \(sortedPrices[index].ticker) \(sortedPrices[index].dateString) \(sortedPrices[index].movAvg10)") }
-                    }
+                    
                 }
-                
             }
             return true
         } else {
-            for (index, eachAverage) in averages.enumerated() {
-                
-                if ( redoAll ) {
-                    if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
-                    let realm = try! Realm()
-                    try! realm.write {
-                        sortedPrices[index].movAvg200 = eachAverage
-                    }
-                } else if ( sortedPrices[index].movAvg200 == 0.0 ) {
-                    if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
-                    let realm = try! Realm()
-                    try! realm.write {
-                        sortedPrices[index].movAvg200 = eachAverage
+            
+            let realm = try! Realm()
+            try! realm.write {
+                for (index, eachAverage) in averages.enumerated() {
+                    
+                    if ( redoAll ) {
+                        if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
+    //                    let realm = try! Realm()
+    //                    try! realm.write {
+                            sortedPrices[index].movAvg200 = eachAverage
+                        //}
+                    } else if ( sortedPrices[index].movAvg200 == 0.0 ) {
+                        if ( debug ) { print("adding SMA 200 \(eachAverage) to \(sortedPrices[index].ticker)") }
+                        //let realm = try! Realm()
+                        //try! realm.write {
+                            sortedPrices[index].movAvg200 = eachAverage
+                        //}
                     }
                 }
             }
