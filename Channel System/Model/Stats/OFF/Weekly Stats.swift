@@ -87,3 +87,4 @@ class WklyStats: Object {
     }
 }
 
+

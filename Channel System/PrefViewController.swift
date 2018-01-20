@@ -91,7 +91,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         starsTextField.text = "\(Stats().getStars())"
     }
     
-    //MARK: - TODO - need to make an account realm object to track account size and risk
     @IBAction func riskAction(_ sender: Any) {
         if (riskLabel.text! != "") {
             textEntered = riskLabel.text!

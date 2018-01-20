@@ -9,6 +9,9 @@ import Foundation
 import RealmSwift
 
 class Entry {
+    
+    let currentRisk = Account().currentRisk()
+    
     /**
      - Author: Warren Hansen
      - Step 1 of 3 Complete backtest process
@@ -83,9 +86,7 @@ class Entry {
         print("Calc long for \(ticker) only complete")
         return true
     }
-    //let risk = 50
-    let currentRisk = Account().currentRisk()
-    
+
     func resetEntryFor(ticker: String, reset:Bool) {
         
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
@@ -110,7 +111,6 @@ class Entry {
     func calcLong(lastDate: Date, debug: Bool, prices: Results<Prices>, completion: @escaping () -> ()) {
         let realm = try! Realm()
         let sortedPrices = prices
-        let currentRisk = Account().currentRisk()
         for ( index, each) in sortedPrices.enumerated() {
             // add long entry if none exists
             // need to find a better filer than this

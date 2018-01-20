@@ -32,10 +32,12 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var marketCondition:Results<MarketCondition>!
     var marketReportString = ("No Title", "No Text")
     var reset:Bool = false
+    //var currentRisk:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
+        //currentRisk = Account().currentRisk()
         // ManualTrades().showProfit()
         CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
         CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
@@ -92,7 +94,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     func initializeEverything(galaxie:[String], debug:Bool) {
         updateNVActivity(with:"Clearing Database")
         RealmHelpers().deleteAll()                                                     // 1.0
-        Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
+        //Account().updateRisk(risk: currentRisk); print("1.1 Risk Cmplete")
         updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
         CSVFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in            // 1.2
             if finished {
@@ -167,7 +169,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     //MARK: - Initialize Everything
     func updateNewPrices(galaxie: [String], debug:Bool) {
         //updateNVActivity(with:"Updating Database")                                                   // 1.0
-        Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
+        //Account().updateRisk(risk: currentRisk); print("1.1 Risk Cmplete")
         updateNVActivity(with:"Contacting NYSE")                                            // 1.1
         IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
             if finished {
@@ -229,7 +231,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     func csvOnly(galaxie: [String], debug:Bool) {
         updateNVActivity(with:"Clearing Database")
         RealmHelpers().deleteAll()                                                     // 1.0
-        Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
+        //Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
         updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
         CSVFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in            // 1.2
             if finished {
