@@ -58,7 +58,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-                    
                     self.marketConditionUI(debug: false)
                     self.stopAnimating()
                 }
@@ -82,6 +81,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         self.startAnimating(self.size, message: "Updating Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         subsequentRuns()
     }
+    
     //////////////////////////////////////////////////////////////////////////////////
     //                                  First Run                                   //
     //////////////////////////////////////////////////////////////////////////////////
@@ -260,10 +260,22 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     func marketConditionUI(debug:Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            self.textColor()
             let uiText = MarketCondition().overview(debug: debug)
             self.titleLabel.text = uiText.0
             self.marketCondText.text = uiText.1
             self.playAlertSound()
+        }
+    }
+    
+    func textColor() {
+        let pctChange = MarketCondition().todaysPctChange(debug: true)
+        if pctChange > 0 {
+            marketCondText.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+            titleLabel.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        } else {
+            marketCondText.textColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+            titleLabel.textColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         }
     }
     
@@ -289,37 +301,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-
-    func overview(debug:Bool)-> (String, String ) {
-        let latest = marketCondition.last!
-        var pct:Double = 0.0
-        var longTrendString = ""
-        let dateString = Utilities().convertToStringNoTimeFrom(date: latest.date!)
-        if latest.close > latest.upperBand {
-            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
-            longTrendString = "\n\t\t\(String(format: "%.2f", pct))% above the long term trend"
-        } else if latest.close < latest.lowerBand {
-            pct = ((latest.close - latest.upperBand ) / latest.close) * 100
-            longTrendString = "\n\t\t\(String(format: "%.2f", pct))%) below the long term trend"
-        } else {
-            longTrendString = "\n\t\the index is withing the trend bands"
-        }
-        
-        let titleString = "Market Condition \(dateString)"
-        
-        var thisString  = "\t\tS&P 500 Index is at \(latest.close)"
-        
-        thisString  += longTrendString
-        
-        thisString  += "\n\t\tWe are in a \(latest.trendString) Trend"
-        
-        thisString += "\n\t\tThe volatility is currently \(latest.volatilityString)"
-        
-        thisString += "\n\t\t\(latest.guidanceChart) for Longs"
-        
-        if ( debug ) { print(thisString) }
-        return ( titleString, thisString )
-    }
 
     @IBAction func manageTradesAction(_ sender: Any) {
         segueToCandidatesVC()

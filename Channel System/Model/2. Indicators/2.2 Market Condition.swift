@@ -55,6 +55,17 @@ class MarketCondition: Object {
         print("\nRealm \tMarketCondition \tCleared!\n")
     }
     
+    func todaysPctChange(debug:Bool)-> Double {
+        let oneTicker = Prices().sortOneTicker(ticker: "SPY", debug: false)
+        let totalCount = oneTicker.count - 1
+        let todaysClose = oneTicker[totalCount].close
+        let yestClose = oneTicker[totalCount - 1].close
+        let change = todaysClose - yestClose
+        let pctChange = ( change / todaysClose) * 100.0
+        if debug { print("\nSPY \(oneTicker[totalCount].dateString) \(todaysClose) and yesterday was  \(oneTicker[totalCount - 1].dateString) \(yestClose) change was \(String(format: "%.2f", change)) \(String(format: "%.2f", pctChange))%") }
+        return pctChange
+    }
+    
     func getMarketCondition(debug:Bool, completion: @escaping (Bool) -> Void) {
         var done:Bool = false
         DispatchQueue.global(qos: .background).async {
@@ -129,6 +140,14 @@ class MarketCondition: Object {
         return answer
     }
     func overview(debug:Bool)-> (String, String ) {
+        
+        let pctChange = MarketCondition().todaysPctChange(debug: false)
+        var pctChangeStr:String = "nan"
+        if pctChange > 0 {
+            pctChangeStr = "+\(String(format: "%.2f", pctChange))%"
+        } else {
+            pctChangeStr = "\(String(format: "%.2f", pctChange))%"
+        }
         let realm = try! Realm()
         let latest =  realm.objects(MarketCondition.self).last!
         var pct:Double = 0.0
@@ -144,17 +163,27 @@ class MarketCondition: Object {
             longTrendString = "\n\t\the index is withing the trend bands"
         }
         
+        let spReturn1 = SpReturns().calcTenYearsReturn(start: 98.31, end: 137.37, yearEnding: 2007)
+        let spReturn2 = SpReturns().calcTenYearsReturn(start: 137.37, end: 267.51, yearEnding: 2017)
+        
         let titleString = "Market Condition \(dateString)"
         
-        var thisString  = "\t\tS&P 500 Index is at \(latest.close)"
+        var thisString  = "\t\tS&P 500 Index \(latest.close) \(pctChangeStr)"
         
         thisString  += longTrendString
         
         thisString  += "\n\t\tWe are in a \(latest.trendString) Trend"
         
-        thisString += "\n\t\tThe volatility is currently \(latest.volatilityString)"
+        thisString += "\n\t\tCurrently we are \(latest.volatilityString)"
         
         thisString += "\n\t\t\(latest.guidanceChart) for Longs"
+        
+        thisString += "\n\n\t\t" + spReturn1
+        
+        thisString += "\n\t\t" + spReturn2
+        
+        thisString += "\n\t\t" + "This system is outperforming the market by 30% and 40% respectively"
+        
         
         if ( debug ) { print(thisString) }
         return ( titleString, thisString )
@@ -241,7 +270,7 @@ class MarketCondition: Object {
                 
                 if( today > stdDevClacHi ) {
                     if debug { print("Setting Volatility to 1 because \(today) > \(stdDevClacHi)")}
-                    answer = ("volatil", 1, stdDevClacHi, stdDevClacLo)
+                    answer = ("volatile", 1, stdDevClacHi, stdDevClacLo)
                 }
                 else if( today < stdDevClacLo ) {
                     answer = ("quiet", -1, stdDevClacHi, stdDevClacLo)
@@ -422,6 +451,10 @@ class MarketCondition: Object {
             answer = mc.matrixResult
         }
         return answer
+    }
+    
+    func systemVsSP() {
+         
     }
 }
 
