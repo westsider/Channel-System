@@ -13,7 +13,7 @@ class CheckDatabase {
     
     var portfolio: [String: Int] = [:]
     
-    func report(debug:Bool, galaxie:[String], completion: @escaping (Bool) -> Void) {
+    func report(debug:Bool, galaxie:[String])-> String {
         /*
          1. check num of records in each ticker and alert if less than spy
             -my solution is to wipe and reload manually with CleadDate()
@@ -30,10 +30,12 @@ class CheckDatabase {
         var doublePrints:Int = 0
         var notUpdatedCounter:Int = 0
         var counter:Int = 0
-        
+        var answer:String = "nan"
         if debug {
-            print("\n-------------------------------------------------------")
-            print("Checking database integrity. \(numRecords) records found")}
+            answer = "\n\n-------------------------------------------------------\n"
+            //print()
+            answer +=  "Checking database integrity. \(numRecords) records found"
+        }
         //DispatchQueue.global(qos: .background).async {
         for ticker in galaxie {
             missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
@@ -45,27 +47,29 @@ class CheckDatabase {
         //}
         // DispatchQueue.main.async {
         if counter != total {
-            print("\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)")
+            answer += "\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)"
         } else {
-            print("No missing tickers in realm\n\(counter) records found out of \(total) total symbols")
+            answer += "\nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols"
         }
         
-        print("\n-------------------------------------------------------")
-        print("----------   Database Condition Summary   -------------")
-        print("\tWarning! missing \(missingPriceRecords) days of price data")
-        print("\t\(portfolio)")
-        print("\tWarning! found \(zeroValues) zero values")
+        answer = "\n\n-------------------------------------------------------\n"
+        answer += "\nDatabase Condition Summary"
+        answer += "\nWarning! missing \(missingPriceRecords) days of price data"
+        answer += " \(portfolio)"
+        answer += "\nWarning! found \(zeroValues) zero values"
         if doublePrints != 0 {
-            print("\tWarning! found \(doublePrints) duplicate days")
+            answer += "\nWarning! found \(doublePrints) duplicate days"
         } else {
-            print("\tNo duplicate days found")
+            answer += "\nNo duplicate days found"
         }
         
-        print("\tWarning! found \(notUpdatedCounter) tickers not updated")
+        answer += "\nWarning! found \(notUpdatedCounter) tickers not updated"
+        print(answer)
         print("\tif you see errors call\n\tresetThis(ticker: \"EZU\", isOn: true)\n\tto clean the ticker")
         print("-------------------------------------------------------\n")
-        completion(true)
+        //completion(true)
         //}
+        return answer
     }
     
     func checkForMissingPrices(ticker:String)-> Int {

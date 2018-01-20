@@ -58,12 +58,6 @@ class ReplacePrices {
                                                                 print("Entry done")
                                                                 CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
                                                                     print("\ncalc Stars done!\n")
-                                                                    let thisGalaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-                                                                    CheckDatabase().report(debug: true, galaxie: thisGalaxie, completion: { (finished) in
-                                                                        if finished {
-                                                                            
-                                                                        }
-                                                                    })
                                                                 })
                                                             }
                                                         })

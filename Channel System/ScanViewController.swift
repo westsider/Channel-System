@@ -35,17 +35,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        CompanyData().databeseReport(debug: false, galaxie: self.galaxie)
-        CheckDatabase().report(debug: true, galaxie: self.galaxie, completion: { (finished) in
-            if finished {
-                self.stopAnimating()
-            }
-        })
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        marketConditionUI(debug: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-        self.galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        
         self.resetThis(ticker: "IYJ", isOn: false)
         self.canIgetDataFor(ticker: "REM", isOn: false)
     }
@@ -58,7 +54,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-                    self.marketConditionUI(debug: false)
                     self.stopAnimating()
                 }
             }
@@ -261,9 +256,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     func marketConditionUI(debug:Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             self.textColor()
-            let uiText = MarketCondition().overview(debug: debug)
+            let uiText = MarketCondition().overview(galaxie: self.galaxie, debug: debug)
             self.titleLabel.text = uiText.0
             self.marketCondText.text = uiText.1
+            self.stopAnimating()
             self.playAlertSound()
         }
     }

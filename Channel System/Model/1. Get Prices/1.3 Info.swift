@@ -20,9 +20,10 @@ class CompanyData: Object {
     @objc dynamic var sector        = ""
     @objc dynamic var stopSize        = 3
     
-    func databeseReport(debug:Bool, galaxie:[String]) {
+    func databeseReport(debug:Bool, galaxie:[String])-> String {
         var counter:Int = 0
         let total = galaxie.count
+        var answer:String = ""
         for ticker in galaxie {
             if let symbol = getExchangeFrom(ticker: ticker, debug: debug) {
                 if debug { print("\(symbol.ticker) \(symbol.name) \(symbol.stockExchange) \(symbol.country) \(symbol.sector) \(symbol.stopSize)")}
@@ -32,10 +33,13 @@ class CompanyData: Object {
             }
         }
         if counter != total {
-            print("\n*** WARNING *** Only \(counter) company records out of \(total) records expected")
+             answer = "\n*** WARNING *** Only \(counter) company records out of \(total) records expected"
+            print(answer)
         } else {
-            print("\n*** Company Database is Good ***\n\(counter) company info records found out of \(total) total tickers")
+            answer = "\nCompany Database is nominal\n\(counter) records found out of \(total) expected"
+            print(answer)
         }
+        return answer
     }
     
     //let request = "https://api.intrinio.com/companies?identifier=\(ticker)"

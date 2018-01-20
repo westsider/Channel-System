@@ -139,7 +139,7 @@ class MarketCondition: Object {
         }
         return answer
     }
-    func overview(debug:Bool)-> (String, String ) {
+    func overview(galaxie:[String], debug:Bool)-> (String, String ) {
         
         let pctChange = MarketCondition().todaysPctChange(debug: false)
         var pctChangeStr:String = "nan"
@@ -192,8 +192,11 @@ class MarketCondition: Object {
         
         thisString += "\n" + "outperforming the S&P 500 Index by a mutiple"
         
-        thisString += "\n" + "of \(String(format: "%.1f", comp1)) times and \(String(format: "%.1f", comp2)) times respectively"
+        thisString += "\n" + "of \(String(format: "%.1f", comp1)) times and \(String(format: "%.1f", comp2)) times respectively\n"
 
+        thisString += CompanyData().databeseReport(debug: false, galaxie: galaxie)
+        
+        thisString += CheckDatabase().report(debug: true, galaxie: galaxie)
         
         if ( debug ) { print(thisString) }
         return ( titleString, thisString )
