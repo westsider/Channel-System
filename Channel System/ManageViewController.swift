@@ -61,7 +61,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         populateLables(action: action, debug: false)
         if action == "Entry for" {
             exitSwitch.isEnabled = false
-            exitSwitch.alpha = 0.5
+            exitSwitch.alpha = 0.2
+        } else {
+            exitSwitchSet()
         }
     }
     
@@ -70,18 +72,39 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         title = "Manage Trade"
     }
     
+    func exitSwitchSet() {
+        switch action {
+        case "Target":
+            print("Target action Recieved")
+            exitSwitch.selectedSegmentIndex = 0
+        case "Stop":
+            print("Stop action Recieved")
+            exitSwitch.selectedSegmentIndex = 1
+        case "Date Stop":
+            print("Date Stop action Recieved")
+            exitSwitch.selectedSegmentIndex = 2
+        default:
+            print("No action Recieved")
+        }
+    }
     @IBAction func accountSwitchAction(_ sender: UISegmentedControl) {
         
         switch accountSwitch.selectedSegmentIndex {
-        case 0: account = "TDA"; print("account: \(account)");
-        case 1: account = "E*Trade"; print("account: \(account)");
-        case 2: account = "IB"; print("account: \(account)");
-        default: break;
+            case 0: account = "TDA"; print("account: \(account)");
+            case 1: account = "E*Trade"; print("account: \(account)");
+            case 2: account = "IB"; print("account: \(account)");
+            default: break;
         }
     }
-    //MARK: - popululste lables from exit
+    //MARK: - populate lables from exit
     @IBAction func exitSwitchAction(_ sender: UISegmentedControl) {
-        
+        switch exitSwitch.selectedSegmentIndex {
+        case 0: print("Target Selected"); topLeft.text = "Target Exit"; action = "Target"
+        //MARK: - TODO - selet the proper exit to record in the database
+            case 1: print("Stop Selected"); topLeft.text = "Stop Exit"; action = "Stop"
+            case 2: print("Time Selected"); topLeft.text = "Time Exit"; action = "Date Stop"
+            default: break;
+        }
     }
     
     

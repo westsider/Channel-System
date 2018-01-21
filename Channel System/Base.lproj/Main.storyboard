@@ -993,10 +993,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="1W8-aQ-1Zh">
-                                <rect key="frame" x="20" y="94" width="374" height="464"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="1W8-aQ-1Zh" userLabel="Main Stack View">
+                                <rect key="frame" x="20" y="94" width="374" height="387"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gmm-gm-fNe" userLabel="Inset View">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gmm-gm-fNe" userLabel="Top View">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="259"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="Sgk-PM-wk0" userLabel="Main Stack View">
@@ -1114,10 +1114,10 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zjm-qq-0wa" userLabel="Button Stack View">
-                                        <rect key="frame" x="0.0" y="275" width="374" height="123"/>
+                                        <rect key="frame" x="0.0" y="275" width="374" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r8L-kh-zum">
-                                                <rect key="frame" x="0.0" y="0.0" width="179" height="123"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="179" height="36"/>
                                                 <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <state key="normal" title="Cancel">
@@ -1128,7 +1128,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdd-DE-qEK">
-                                                <rect key="frame" x="195" y="0.0" width="179" height="123"/>
+                                                <rect key="frame" x="195" y="0.0" width="179" height="36"/>
                                                 <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <state key="normal" title="Record">
@@ -1140,15 +1140,14 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aub-o9-ljb" userLabel="HiddenSwitch Stack">
-                                        <rect key="frame" x="0.0" y="414" width="374" height="50"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aub-o9-ljb" userLabel="Target Stack">
+                                        <rect key="frame" x="0.0" y="327" width="374" height="60"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3g-XR-opa">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="60"/>
                                                 <subviews>
-                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iZy-yg-CQW">
-                                                        <rect key="frame" x="20" y="20" width="303" height="29"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iZy-yg-CQW">
+                                                        <rect key="frame" x="16" y="16" width="342" height="29"/>
                                                         <segments>
                                                             <segment title="Target"/>
                                                             <segment title="Stop"/>
@@ -1161,6 +1160,12 @@
                                                     </segmentedControl>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="iZy-yg-CQW" secondAttribute="trailing" priority="750" constant="16" id="5Fy-e0-148"/>
+                                                    <constraint firstItem="iZy-yg-CQW" firstAttribute="leading" secondItem="d3g-XR-opa" secondAttribute="leading" priority="750" constant="16" id="L4k-lo-0Je"/>
+                                                    <constraint firstAttribute="bottom" secondItem="iZy-yg-CQW" secondAttribute="bottom" priority="750" constant="16" id="Upb-pS-I5X"/>
+                                                    <constraint firstItem="iZy-yg-CQW" firstAttribute="top" secondItem="d3g-XR-opa" secondAttribute="top" priority="750" constant="16" id="pn4-Zf-dLS"/>
+                                                </constraints>
                                             </view>
                                         </subviews>
                                         <constraints>
@@ -1182,10 +1187,10 @@
                         </subviews>
                         <color key="backgroundColor" red="0.19247332215309143" green="0.20351335406303406" blue="0.23137971758842468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="Dgc-j9-3tY" firstAttribute="bottom" secondItem="1W8-aQ-1Zh" secondAttribute="bottom" constant="178" id="D42-u8-Nrf"/>
-                            <constraint firstItem="1W8-aQ-1Zh" firstAttribute="top" secondItem="Dgc-j9-3tY" secondAttribute="top" constant="30" id="F9D-eE-xrX"/>
-                            <constraint firstItem="1W8-aQ-1Zh" firstAttribute="trailing" secondItem="Egc-F0-qZD" secondAttribute="trailingMargin" id="Kj9-Ax-9ZZ"/>
-                            <constraint firstItem="1W8-aQ-1Zh" firstAttribute="leading" secondItem="Egc-F0-qZD" secondAttribute="leadingMargin" id="L4M-bN-Ig0"/>
+                            <constraint firstItem="Dgc-j9-3tY" firstAttribute="bottom" secondItem="1W8-aQ-1Zh" secondAttribute="bottom" priority="250" constant="178" id="D42-u8-Nrf"/>
+                            <constraint firstItem="1W8-aQ-1Zh" firstAttribute="top" secondItem="Dgc-j9-3tY" secondAttribute="top" priority="750" constant="30" id="F9D-eE-xrX"/>
+                            <constraint firstItem="1W8-aQ-1Zh" firstAttribute="trailing" secondItem="Egc-F0-qZD" secondAttribute="trailingMargin" priority="750" id="Kj9-Ax-9ZZ"/>
+                            <constraint firstItem="1W8-aQ-1Zh" firstAttribute="leading" secondItem="Egc-F0-qZD" secondAttribute="leadingMargin" priority="750" id="L4M-bN-Ig0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Dgc-j9-3tY"/>
                     </view>
