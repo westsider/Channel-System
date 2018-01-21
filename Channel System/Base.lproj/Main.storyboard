@@ -100,7 +100,7 @@
                                 <rect key="frame" x="8" y="618.66666666666663" width="398" height="109.33333333333337"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gtg-gI-fW5">
-                                        <rect key="frame" x="0.0" y="0.0" width="195" height="109.33333333333333"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="127.33333333333333" height="109.33333333333333"/>
                                         <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
                                         <state key="normal" title="Update">
@@ -110,8 +110,19 @@
                                             <action selector="getNewDataAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JTQ-S9-gBM"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OiJ-BV-QqZ">
+                                        <rect key="frame" x="135.33333333333334" y="0.0" width="127.33333333333334" height="109.33333333333333"/>
+                                        <color key="backgroundColor" red="0.3376372755" green="0.34831565619999999" blue="0.39609014990000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
+                                        <state key="normal" title="Position Check">
+                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="checkPositions:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AfC-oa-l14"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8N-0N-Aed">
-                                        <rect key="frame" x="203" y="0.0" width="195" height="109.33333333333333"/>
+                                        <rect key="frame" x="270.66666666666669" y="0.0" width="127.33333333333331" height="109.33333333333333"/>
                                         <color key="backgroundColor" red="0.3376372754573822" green="0.34831565618515015" blue="0.39609014987945557" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="22"/>
                                         <state key="normal" title="Trade">

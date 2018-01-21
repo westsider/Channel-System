@@ -168,6 +168,15 @@ class ManualTrades {
         
         //removeEntry(yyyyMMdd: "2018-01-17", ticker: "EFA", debug: true)
         //showOneTrade(yyyyMMdd: "2017-12-06", ticker: "EFA", debug: true)
+        
+        // 1 past entry for testing
+        oneEntryForTesting()
+    }
+    
+    func oneEntryForTesting() {
+        let stopTarget = TradeHelpers().calcStopTarget(ticker: "AAPL", close: 170.52, debug: false)
+        let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
+        makePastEntry(yyyyMMdd: "2017/12/29", ticker: "AAPL", entry: 170.52, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB")
     }
     
     func pastEntryAndExit(ticker: String, entryDate: String, exitDate: String,  entry: Double, stop: Double, target: Double, shares: Int, exitPrice: Double) {

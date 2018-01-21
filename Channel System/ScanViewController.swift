@@ -35,13 +35,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
+        // ManualTrades().oneEntryForTesting()
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         marketConditionUI(debug: false)
+        manageTradesOrShowEntries(debug: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-        
         self.resetThis(ticker: "IYJ", isOn: false)
         self.canIgetDataFor(ticker: "REM", isOn: false)
     }
@@ -65,16 +66,69 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         initializeEverything(galaxie: galaxie, debug: false)
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
-    
-    private func subsequentRuns() {
-        print("\nThis is NOT the first run. Updating Prices \n")
-        updateNewPrices(galaxie: galaxie, debug: false)
-    }
-    
+
     //MARK: - get new data
     @IBAction func getNewDataAction(_ sender: Any) {
         self.startAnimating(self.size, message: "Updating Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-        subsequentRuns()
+        updateNewPrices(galaxie: galaxie, debug: false)
+    }
+    
+    @IBAction func checkPositions(_ sender: Any) {
+        manageTradesOrShowEntries(debug: true)
+    }
+    
+    
+    //////////////////////////////////////////////////////////////////////////////////
+    //                              Update New Prices                               //
+    //////////////////////////////////////////////////////////////////////////////////
+    //MARK: - Initialize Everything
+    func updateNewPrices(galaxie: [String], debug:Bool) {
+        //updateNVActivity(with:"Updating Database")                                                   // 1.0
+        //Account().updateRisk(risk: currentRisk); print("1.1 Risk Cmplete")
+        updateNVActivity(with:"Contacting NYSE")                                            // 1.1
+        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
+            if finished {
+                print("intrinio done")
+                self.updateNVActivity(with:"Loading Trend 1")
+                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                    if finished {
+                        print("sma(10) done")
+                        self.updateNVActivity(with:"Loading Trend 2")
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
+                            if finished {
+                                print("sma(200) done")
+                                self.updateNVActivity(with:"Loading Oscilator")
+                                PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
+                                    if finished {
+                                        print("oscilator done")
+                                        self.updateNVActivity(with:"Loading Market Condition")
+                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                            if finished  {
+                                                print("mc done")
+                                                self.updateNVActivity(with:"Finding Trades")
+                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
+                                                    if finished  {
+                                                        print("Entry done")
+                                                        self.updateNVActivity(with:"Brute Force Back Test")
+                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                            print("\ncalc Stars done!\n")
+                                                            self.stopAnimating()
+                                                            self.marketConditionUI(debug: false)
+                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
+                                                            self.manageTradesOrShowEntries(debug: true)
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     //////////////////////////////////////////////////////////////////////////////////
@@ -133,58 +187,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////
-    //                              Update New Prices                               //
-    //////////////////////////////////////////////////////////////////////////////////
-    //MARK: - Initialize Everything
-    func updateNewPrices(galaxie: [String], debug:Bool) {
-        //updateNVActivity(with:"Updating Database")                                                   // 1.0
-        //Account().updateRisk(risk: currentRisk); print("1.1 Risk Cmplete")
-        updateNVActivity(with:"Contacting NYSE")                                            // 1.1
-        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
-            if finished {
-                print("intrinio done")
-                self.updateNVActivity(with:"Loading Trend 1")
-                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
-                    if finished {
-                        print("sma(10) done")
-                        self.updateNVActivity(with:"Loading Trend 2")
-                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
-                            if finished {
-                                print("sma(200) done")
-                                self.updateNVActivity(with:"Loading Oscilator")
-                                PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                    if finished {
-                                        print("oscilator done")
-                                        self.updateNVActivity(with:"Loading Market Condition")
-                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                            if finished  {
-                                                print("mc done")
-                                                self.updateNVActivity(with:"Finding Trades")
-                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                    if finished  {
-                                                        print("Entry done")
-                                                        self.updateNVActivity(with:"Brute Force Back Test")
-                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
-                                                            print("\ncalc Stars done!\n")
-                                                            self.stopAnimating()
-                                                            self.marketConditionUI(debug: false)
-                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
-                                                        })
-                                                    }
-                                                })
-                                            }
-                                        })
-                                    }
-                                })
                             }
                         }
                     }
