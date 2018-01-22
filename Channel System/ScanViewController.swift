@@ -35,16 +35,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        testPastEntries()
-        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-        marketConditionUI(debug: false)
-        manageTradesOrShowEntries(debug: true)
+        // testPastEntries()
+        setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         self.resetThis(ticker: "IYJ", isOn: false)
         self.canIgetDataFor(ticker: "REM", isOn: false)
+        manageTradesOrShowEntries(debug: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,6 +57,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 }
             }
         }
+    }
+    
+    private func setUpUI() {
+        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        let lastUpdate = Prices().getLastDateInRealm(debug: false)
+        let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
+        lastUpdateLable.text = "Last Update: \(dateString)"
+        currentProcessLable.text = "Waiting for Position Check"
+        marketConditionUI(debug: false)
     }
     
     private func firstRun() {
@@ -344,20 +352,18 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 if trades.close < trades.stop {
                     if debug { print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Stop", ticker: trades.ticker, entryDate: trades.dateString)
-                }
-                //MARK: - TODO - Check if target
-                if trades.close > trades.target {
+                } else if trades.close > trades.target {
                     if debug { print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Target", ticker: trades.ticker, entryDate: trades.dateString)
-                }
-                if trades.wPctR > -30 {
+                } else if trades.wPctR > -30 {
                     if debug { print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Pct(R) Targe", ticker: trades.ticker, entryDate: trades.dateString)
-                }
-                //MARK: - TODO - Set up exit date on entry
-                if Date() >= trades.exitDate {
+                } else if Date() >= trades.exitDate {
                     if debug { print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Date Stop", ticker: trades.ticker, entryDate: trades.dateString)
+                } else {
+                    print("Hey! No positions need attention!")
+                    currentProcessLable.text = "No open positions need attention"
                 }
             }
         } else {
