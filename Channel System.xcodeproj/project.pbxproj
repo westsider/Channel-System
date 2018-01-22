@@ -16,6 +16,7 @@
 		0D187BFA1FF97B4000FE4FEC /* 3.0 Every Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BF91FF97B4000FE4FEC /* 3.0 Every Entry.swift */; };
 		0D187BFD1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */; };
 		0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */; };
+		0D1A279A20165F52000F995A /* Show Stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1A279920165F52000F995A /* Show Stops.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
 		0D4A01881FC8C5CF00C53E2F /* AGG.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A01871FC8C5CF00C53E2F /* AGG.csv */; };
@@ -312,6 +313,7 @@
 		0D187BF91FF97B4000FE4FEC /* 3.0 Every Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.0 Every Entry.swift"; sourceTree = "<group>"; };
 		0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.1 Enter When Flat.swift"; sourceTree = "<group>"; };
 		0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.2 Calc Stars.swift"; sourceTree = "<group>"; };
+		0D1A279920165F52000F995A /* Show Stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Show Stops.swift"; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
@@ -981,6 +983,7 @@
 			children = (
 				0D77DDCD1FCF705C007573C3 /* Trade Helpers.swift */,
 				0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */,
+				0D1A279920165F52000F995A /* Show Stops.swift */,
 				0D6F55701FB0E31E00E0723B /* ShowTrades.swift */,
 				0DC70C6F1FE1CEFB00DC58BF /* Past Trades.swift */,
 			);
@@ -1461,6 +1464,7 @@
 				0D6726911FF806E300E42A9A /* 1.1 Risk.swift in Sources */,
 				0D6726951FF8076C00E42A9A /* 1.3 Info.swift in Sources */,
 				0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */,
+				0D1A279A20165F52000F995A /* Show Stops.swift in Sources */,
 				0DC70C701FE1CEFB00DC58BF /* Past Trades.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */,

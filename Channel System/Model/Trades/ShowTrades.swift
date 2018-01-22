@@ -16,7 +16,13 @@ class ShowTrades {
     func showTradesOnChart(currentBar: Int, signal: Bool, high: Double, low: Double, xID:String, yID:String)-> SCIAnnotationCollection {
         if( signal ) {
             annotationGroup.add( createUpArrow(Date: currentBar, Entry: low, xID: xID, yID: yID) )
-            //annotationGroup.add( createStats( xID: xID, yID: yID) )
+        }
+        return annotationGroup
+    }
+    
+    func showStopsOnChart(currentBar: Int, stop:Double, xID:String, yID:String)-> SCIAnnotationCollection {
+        if( stop != 0.0 ) {
+            annotationGroup.add( createCircle(Date: currentBar, stop: stop, xID: xID, yID: yID) )
         }
         return annotationGroup
     }
@@ -26,6 +32,17 @@ class ShowTrades {
         customAnnotationGreen.customView = UIImageView.init(image: UIImage.init(named: "chevronUpBlue"))
         customAnnotationGreen.x1=SCIGeneric(Date)
         customAnnotationGreen.y1=SCIGeneric(Entry)
+        customAnnotationGreen.xAxisId = xID
+        customAnnotationGreen.yAxisId = yID
+        return customAnnotationGreen
+    }
+    
+    // blueCircle
+    func createCircle(Date: Int, stop:Double, xID:String, yID:String)-> SCICustomAnnotation {
+        let customAnnotationGreen = SCICustomAnnotation()
+        customAnnotationGreen.customView = UIImageView.init(image: UIImage.init(named: "stopLine"))
+        customAnnotationGreen.x1=SCIGeneric(Date)
+        customAnnotationGreen.y1=SCIGeneric(stop)
         customAnnotationGreen.xAxisId = xID
         customAnnotationGreen.yAxisId = yID
         return customAnnotationGreen

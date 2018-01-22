@@ -35,8 +35,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        // testPastEntries()
+        testPastEntries()
         setUpUI()
+        //ShowStops().checkStop()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -373,7 +374,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     func testPastEntries() {
-        // ManualTrades().oneEntryForTesting()
+         ManualTrades().oneEntryForTesting()
         // ManualTrades().removeExitFrom(yyyyMMdd: "2017/12/29", exityyyyMMdd: "2018/01/22", ticker: "AAPL", exitPrice: 0.0, debug: true)
         // ManualTrades().removeEntry(yyyyMMdd: "2017/12/29", ticker: "AAPL", debug: true)
     }

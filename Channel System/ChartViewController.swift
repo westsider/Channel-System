@@ -18,6 +18,7 @@ class SCSSyncMultiChartView: UIViewController {
     let showTrades = ShowTrades()
     var ticker:String = ""
     var taskIdSelected:String = ""
+    var showTrailStop:Bool = false
     var rangeStart:Int = 0
     let axisY1Id:String = "Y1"
     let axisX1Id:String = "X1"
@@ -49,6 +50,7 @@ class SCSSyncMultiChartView: UIViewController {
         ticker = (oneTicker.first?.ticker)!
         title = ticker
         completeConfiguration(debug: false)
+        ShowStops().checkStop(showStops: true, ticker: ticker)
     }
     
     @IBAction func segueToSettings(_ sender: Any) {
@@ -127,6 +129,7 @@ class SCSSyncMultiChartView: UIViewController {
         addSlowSmaSeries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         addBands(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
+        showStops(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         
         let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
         let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id,
@@ -249,9 +252,16 @@ class SCSSyncMultiChartView: UIViewController {
             let high:Double = things.high
             let low:Double = things.low
             surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
-            //addMatrixValues(isOn:true, date: things.date!, low: things.low, index: Double(index))
         }
     }
+    
+    fileprivate func showStops(surface:SCIChartSurface, xID:String, yID:String) {
+        for ( index, things) in oneTicker.enumerated() {
+            let trail:Double = things.trailStop
+            surface.annotations = showTrades.showStopsOnChart(currentBar: index, stop: trail, xID: xID, yID: yID)
+        }
+    }
+    
     //MARK: - pctR
     fileprivate func addWPctRSeries(debug: Bool, surface:SCIChartSurface, xID:String, yID:String)  {
         if ticker == "SPY" { return }

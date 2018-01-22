@@ -142,8 +142,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
-        selectedSymbol(index: indexPath.row)
-        
+        segueToChart(index: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -167,10 +166,11 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
        }
     }
     
-    func selectedSymbol(index: Int) {
+    func segueToChart(index: Int) {
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = tasks[index].taskID
         myVC.maxBarsOnChart = 30
+        myVC.showTrailStop = true 
         navigationController?.pushViewController(myVC, animated: true)
     }
 }

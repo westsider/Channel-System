@@ -42,7 +42,6 @@ class TradeManage {
     }
 
     //MARK: - Make an exit from a specific entry
-    
     func exitTrade(yyyyMMdd: String, ticker: String, exitPrice:Double, debug:Bool) {
         // get entry
         let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
@@ -67,23 +66,6 @@ class TradeManage {
         if debug { print("\nProve it!")
             debugPrint(closedCheck) }
     }
-//    func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String, capital: Double) {
-//        //print("You entered \(entryString)")
-//        let realm = try! Realm()
-//        let ticker = Prices().getFrom(taskID: taskID).last!
-//        
-//        try! realm.write {
-//            ticker.entry     = entry
-//            ticker.stop      = stop
-//            ticker.target    = target
-//            ticker.shares    = shares
-//            ticker.risk      = risk
-//            ticker.inTrade   = true
-//            ticker.account   = account
-//            ticker.capitalReq = capital
-//        }
-//        
-//        if ( debug ) { _ = self.getOpenTrades() }
-//    }
+
     
 }

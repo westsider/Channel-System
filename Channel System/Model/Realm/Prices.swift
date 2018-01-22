@@ -27,6 +27,7 @@ class Prices: Object {
     // Manage Trade
     @objc dynamic var entry     = 0.00
     @objc dynamic var stop      = 0.00
+    @objc dynamic var trailStop = 0.00
     @objc dynamic var target    = 0.00
     @objc dynamic var shares    = 0
     @objc dynamic var risk      = 0.00
