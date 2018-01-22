@@ -49,8 +49,8 @@ class SCSSyncMultiChartView: UIViewController {
         marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
         title = ticker
+        ShowStops().checkStop(showStops: showTrailStop, ticker: ticker)
         completeConfiguration(debug: false)
-        ShowStops().checkStop(showStops: true, ticker: ticker)
     }
     
     @IBAction func segueToSettings(_ sender: Any) {

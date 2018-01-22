@@ -9,15 +9,11 @@
 import Foundation
 import RealmSwift
 import SciChart
+
 class ShowStops {
     
-    // goal 1. show trail stop on any ticker in portfolio
-    // this would get called in segue from portfolio to chart
-    // this would be an indicator just like entries
-    // steps to change original stop
-
     func checkStop(showStops:Bool, ticker:String) {
-        
+    
         // flag for showStops in charts vc
         if !showStops {
             return
@@ -60,5 +56,4 @@ class ShowStops {
             priceToChange.trailStop = newStop
         }
     }
-
 }

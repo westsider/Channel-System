@@ -307,6 +307,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = taskID
         myVC.maxBarsOnChart = 30
+        myVC.showTrailStop = true
         navigationController?.pushViewController(myVC, animated: true)
     }
     
