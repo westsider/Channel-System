@@ -60,14 +60,15 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
     
     private func setUpUI() {
-        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         let lastUpdate = Prices().getLastDateInRealm(debug: false)
         let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
         lastUpdateLable.text = "Last Update: \(dateString)"
         currentProcessLable.text = "Waiting for Position Check"
         marketConditionUI(debug: false)
+        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
     }
+    
     
     private func firstRun() {
         print("\nThis is the first run.\n")
@@ -368,7 +369,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             }
         } else {
             // exit here if no entries found
-            segueToCandidatesVC()
         }
     }
     

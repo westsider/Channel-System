@@ -74,8 +74,15 @@ class RealmHelpers: Object {
     
     func getOneDay(ticker:String, date:Date)-> Prices {
         // 2017-12-27 AAPL
-        let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false).filter("date == %@", date).last
-        return oneTicker!
+        if let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false).filter("date == %@", date).last {
+            return oneTicker
+        } else {
+            let nilTicker = Prices()
+            nilTicker.ticker = "nil"
+            nilTicker.date = Date()
+            nilTicker.close = 0.0
+            return nilTicker
+        }
     }
     
     //MARK: - Clear Realm
