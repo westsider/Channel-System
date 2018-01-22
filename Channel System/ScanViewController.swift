@@ -35,7 +35,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        // testPastEntries()
+        testPastEntries()
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         marketConditionUI(debug: false)
         manageTradesOrShowEntries(debug: true)

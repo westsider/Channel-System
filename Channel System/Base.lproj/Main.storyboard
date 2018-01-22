@@ -1117,7 +1117,7 @@
                                         <rect key="frame" x="0.0" y="275" width="374" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r8L-kh-zum">
-                                                <rect key="frame" x="0.0" y="0.0" width="179" height="36"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="114" height="36"/>
                                                 <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <state key="normal" title="Cancel">
@@ -1127,8 +1127,19 @@
                                                     <action selector="cancelAction:" destination="KP2-Kg-sPN" eventType="touchUpInside" id="qPr-7K-Blf"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JT8-qp-OhK">
+                                                <rect key="frame" x="130" y="0.0" width="114" height="36"/>
+                                                <color key="backgroundColor" red="0.33765226599999998" green="0.34825241569999998" blue="0.40001255270000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="Chart">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="segueToChartAction:" destination="KP2-Kg-sPN" eventType="touchUpInside" id="Wuv-g7-mKF"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdd-DE-qEK">
-                                                <rect key="frame" x="195" y="0.0" width="179" height="36"/>
+                                                <rect key="frame" x="260" y="0.0" width="114" height="36"/>
                                                 <color key="backgroundColor" red="0.33765226602554321" green="0.34825241565704346" blue="0.4000125527381897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <state key="normal" title="Record">

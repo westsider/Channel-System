@@ -52,7 +52,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var stop:Double = 0.0
     var target:Double = 0.0
     var stopString:String = " "
-   // let risk:Int = 50
     var currentRisk:Int = 0
     var shares:Int = 0
     var account:String = "TDA"
@@ -303,6 +302,15 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         
         
     }
+    
+    @IBAction func segueToChartAction(_ sender: Any) {
+        let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
+        myVC.taskIdSelected = taskID
+        myVC.maxBarsOnChart = 30
+        navigationController?.pushViewController(myVC, animated: true)
+    }
+    
+    
     //MARK: - Keyboard behavior functions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
