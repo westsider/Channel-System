@@ -42,6 +42,10 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     var textEntered:String = "No Text"
     
+    // new vars to manage open trade
+    var ticker = ""
+    var entryDate = ""
+    
     // preserve calc of shares ect
     var close:Double = 0.0
     var stopDistance:Double = 0.0
@@ -70,6 +74,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Manage Trade"
+        TradeManage().printOpenTrades()
     }
     
     func exitSwitchSet() {
@@ -140,21 +145,25 @@ class ManageViewController: UIViewController, UITextViewDelegate {
                 sequeToPortfolio()
             }
         case "Target":
-            let thisResult = calcGainOrLoss()
-            print("\nclose the trade, add gain of \(thisResult) from Target at \(textEntered)\n")
+            if let exitPrice = Double(textEntered) {
+                print("Closing the trade, target hit, sending target of \(exitPrice) to ManageTrade()")
+                TradeManage().exitTrade(yyyyMMdd: entryDate, ticker: ticker, exitPrice: exitPrice, debug: true)
+            }
         case "Stop":
-            let thisResult = calcGainOrLoss()
-            print("\nclose the trade, add loss of \(thisResult) from stop at \(textEntered)\n")
-           // let loss = entryPrice - exitPrice
-            
+            if let exitPrice = Double(textEntered) {
+                print("Closing the trade, stop hit, sending stop of \(exitPrice) to ManageTrade()")
+                TradeManage().exitTrade(yyyyMMdd: entryDate, ticker: ticker, exitPrice: exitPrice, debug: true)
+            }
         case "Pct(R) Target":
-            let thisResult = calcGainOrLoss()
-            print("\nHere is the trade afer modification\n")
-            debugPrint(thisTrade)
-            print("\nclose the trade, add gain of \(thisResult) from Pct(R) at \(textEntered) \n")
+            if let exitPrice = Double(textEntered) {
+                print("Closing the trade, Pct(R) Target hit, sending price of \(exitPrice) to ManageTrade()")
+                TradeManage().exitTrade(yyyyMMdd: entryDate, ticker: ticker, exitPrice: exitPrice, debug: true)
+            }
         case "Date Stop":
-            let thisResult = calcGainOrLoss()
-            print("\nclose the trade, add result from Date Stop at \(textEntered) \(thisResult)\n")
+            if let exitPrice = Double(textEntered) {
+                print("Closing the trade, Date Stop hit, sending price of \(exitPrice) to ManageTrade()")
+                TradeManage().exitTrade(yyyyMMdd: entryDate, ticker: ticker, exitPrice: exitPrice, debug: true)
+            }
             
         default:
             print("\ndefault triggered in manage trades\n")

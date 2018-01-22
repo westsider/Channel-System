@@ -16,9 +16,11 @@ class TradeManage {
     var tasks = RealmHelpers().getOpenTrades()
     
     func printOpenTrades() {
+        print("\nShowing all open trades")
         for trades in tasks {
             print("\(trades.dateString) \(trades.ticker) close:\(trades.close) risk:\(trades.risk)")
         }
+        print("")
     }
     
     //MARK: - Stop 3% dow s&p, 5% others = Remove from portfolio
@@ -38,8 +40,50 @@ class TradeManage {
             }
         }
     }
-    //MARK: - Exit after 7 trading days, Trail stop
+
+    //MARK: - Make an exit from a specific entry
     
-    //MARK: - Sell above PctR(10) > -30
+    func exitTrade(yyyyMMdd: String, ticker: String, exitPrice:Double, debug:Bool) {
+        // get entry
+        let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
+        let entryToExit = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        print("\nThis is \(ticker) on \(yyyyMMdd)")
+        debugPrint(entryToExit)
+        print("")
+        
+        // calc profit
+        let profitForThisTrade = (exitPrice - entryToExit.entry) * Double(entryToExit.shares) - (1.05 * 2) // comm
+        print("profit \(profitForThisTrade) =  exit \(exitPrice) - entry \(entryToExit.entry) * shares \(entryToExit.shares)")
+        let realm = try! Realm()
+        try! realm.write {
+            entryToExit.inTrade = false
+            entryToExit.exitedTrade = true
+            entryToExit.profit = profitForThisTrade
+            entryToExit.exitPrice = exitPrice
+            entryToExit.exitDate = Date()
+        }
+        
+        let closedCheck = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        if debug { print("\nProve it!")
+            debugPrint(closedCheck) }
+    }
+//    func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String, capital: Double) {
+//        //print("You entered \(entryString)")
+//        let realm = try! Realm()
+//        let ticker = Prices().getFrom(taskID: taskID).last!
+//        
+//        try! realm.write {
+//            ticker.entry     = entry
+//            ticker.stop      = stop
+//            ticker.target    = target
+//            ticker.shares    = shares
+//            ticker.risk      = risk
+//            ticker.inTrade   = true
+//            ticker.account   = account
+//            ticker.capitalReq = capital
+//        }
+//        
+//        if ( debug ) { _ = self.getOpenTrades() }
+//    }
     
 }

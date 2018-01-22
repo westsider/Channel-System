@@ -35,7 +35,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        // ManualTrades().oneEntryForTesting()
+        // testPastEntries()
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         marketConditionUI(debug: false)
         manageTradesOrShowEntries(debug: true)
@@ -343,27 +343,33 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 //MARK: - TODO - Check if stop
                 if trades.close < trades.stop {
                     if debug { print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")}
-                    segueToManageVC(taskID: trades.taskID, action: "Stop")
+                    segueToManageVC(taskID: trades.taskID, action: "Stop", ticker: trades.ticker, entryDate: trades.dateString)
                 }
                 //MARK: - TODO - Check if target
                 if trades.close > trades.target {
                     if debug { print("\nTarget Hit for \(trades.ticker) from \(trades.dateString)\n")}
-                    segueToManageVC(taskID: trades.taskID, action: "Target")
+                    segueToManageVC(taskID: trades.taskID, action: "Target", ticker: trades.ticker, entryDate: trades.dateString)
                 }
                 if trades.wPctR > -30 {
                     if debug { print("\nwPctR Hit for \(trades.ticker) from \(trades.dateString)\n")}
-                    segueToManageVC(taskID: trades.taskID, action: "Pct(R) Target")
+                    segueToManageVC(taskID: trades.taskID, action: "Pct(R) Targe", ticker: trades.ticker, entryDate: trades.dateString)
                 }
                 //MARK: - TODO - Set up exit date on entry
                 if Date() >= trades.exitDate {
                     if debug { print("\nTime Stop Hit for \(trades.ticker) from \(trades.dateString)\n")}
-                    segueToManageVC(taskID: trades.taskID, action: "Date Stop")
+                    segueToManageVC(taskID: trades.taskID, action: "Date Stop", ticker: trades.ticker, entryDate: trades.dateString)
                 }
             }
         } else {
             // exit here if no entries found
             segueToCandidatesVC()
         }
+    }
+    
+    func testPastEntries() {
+        // ManualTrades().oneEntryForTesting()
+        // ManualTrades().removeExitFrom(yyyyMMdd: "2017/12/29", exityyyyMMdd: "2018/01/22", ticker: "AAPL", exitPrice: 0.0, debug: true)
+        // ManualTrades().removeEntry(yyyyMMdd: "2017/12/29", ticker: "AAPL", debug: true)
     }
     
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
@@ -402,10 +408,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    private func segueToManageVC(taskID: String, action: String) {
+    private func segueToManageVC(taskID: String, action: String, ticker:String, entryDate:String) {
         let myVC:ManageViewController = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
         myVC.taskID = taskID
         myVC.action = action
+        // add ticker
+        myVC.ticker = ticker
+        // add date
+        myVC.entryDate = entryDate
         navigationController?.pushViewController(myVC, animated: true)
     }
 }

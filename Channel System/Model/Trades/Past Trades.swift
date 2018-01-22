@@ -249,6 +249,31 @@ class ManualTrades {
             debugPrint(closedCheck) }
     }
     
+    func removeExitFrom(yyyyMMdd: String,exityyyyMMdd:String, ticker: String, exitPrice:Double, debug:Bool) {
+        // get entry
+        let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
+        let entryToExit = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        print("\nThis is \(ticker) on \(yyyyMMdd)")
+        debugPrint(entryToExit)
+        print("")
+        
+        // calc profit
+        let profitForThisTrade = (exitPrice - entryToExit.entry) * Double(entryToExit.shares) - (1.05 * 2) // comm
+        print("profit \(profitForThisTrade) =  exit \(exitPrice) - entry \(entryToExit.entry) * shares \(entryToExit.shares)")
+        let realm = try! Realm()
+        try! realm.write {
+            entryToExit.inTrade = true
+            entryToExit.exitedTrade = false
+            entryToExit.profit = 0.0
+            entryToExit.exitPrice = 0.0
+            //entryToExit.exitDate = Utilities().convertToDateFrom(string: exityyyyMMdd, debug: true)
+        }
+        
+        let closedCheck = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        if debug { print("\nProve it!")
+            debugPrint(closedCheck) }
+    }
+    
     func showOneTrade(yyyyMMdd: String, ticker: String, debug:Bool) {
         let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
         let oneDay = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
