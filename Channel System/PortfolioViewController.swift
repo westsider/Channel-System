@@ -17,6 +17,8 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     let realm:Realm = try! Realm()
     var tasks: Results<Prices>!
     var showClosedTrades = false
+    var costStr:String = "nan"
+    var costDict: [String:Double] = [:]
     
     @IBOutlet weak var openTradesBttnTxt: UIButton!
     
@@ -25,6 +27,10 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         tasks = RealmHelpers().getOpenTrades()
         TradeManage().printOpenTrades()
         title = "Portfolio"
+        
+        let portfolioCost = RealmHelpers().calcPortfolioCost()
+        costStr = Utilities().dollarStr(largeNumber: portfolioCost)
+        costDict = RealmHelpers().portfolioDict()
     }
     
     @IBAction func portfolioSwitch(_ sender: UIButton) {
@@ -62,7 +68,8 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let shortDate = date.dropFirst(5)
         let thisSymbol = Prices().sortOneTicker(ticker: tasks[indexPath.row].ticker, debug: false).last
         let closeString = String(format: "%.2f", (thisSymbol?.close)!)
-        let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString) close"
+        let cost = Utilities().dollarStr(largeNumber: costDict[tasks[indexPath.row].ticker]!)
+        let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString) \t$\(cost)"
         cell.textLabel?.text = task
         
         var profit:Double = 0.0
@@ -91,7 +98,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         // showing open trades
         if !showClosedTrades {
             let openProfit = totalOpenProfit(debug: false)
-            return "$\(openProfit.0) profit \t\(openProfit.1)% win"
+            return "$\(openProfit.0) Profit \t\(openProfit.1)% Win \t$\(costStr) Comitted"
         } else {
             let openProfit = totalClosedProfit(debug: false)
             return "$\(openProfit.0) profit \t\(openProfit.1)% win"

@@ -174,28 +174,31 @@ class ManualTrades {
     }
     
     func oneEntryForTesting() {
-        let entry = 89.86
-        let ticker = "PG"
+//        let entry = 89.86
+//        let ticker = "PG"
+//        let stopTarget = TradeHelpers().calcStopTarget(ticker: ticker, close: entry, debug: false)
+//        let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
+//        let cost = TradeHelpers().capitalRequired(close: entry, shares: shares)
+//        makePastEntry(yyyyMMdd: "2018/01/23", ticker: ticker, entry: entry, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB", cost: cost)
+        
+        let entry = 163.52
+        let ticker = "IBM"
         let stopTarget = TradeHelpers().calcStopTarget(ticker: ticker, close: entry, debug: false)
         let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
-        makePastEntry(yyyyMMdd: "2018/01/23", ticker: ticker, entry: entry, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB")
-        
-        //let entry = 163.52
-        //let ticker = "IBM"
-        //let stopTarget = TradeHelpers().calcStopTarget(ticker: ticker, close: entry, debug: false)
-        //let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
-        //makePastEntry(yyyyMMdd: "2018/01/22", ticker: ticker, entry: entry, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB")
+        let cost = TradeHelpers().capitalRequired(close: entry, shares: shares)
+        makePastEntry(yyyyMMdd: "2018/01/22", ticker: ticker, entry: entry, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB", cost: cost)
     }
     
     func pastEntryAndExit(ticker: String, entryDate: String, exitDate: String,  entry: Double, stop: Double, target: Double, shares: Int, exitPrice: Double) {
         let risk = 50.00; let account = "IB"
-        makePastEntry(yyyyMMdd: entryDate, ticker: ticker, entry: entry, stop: stop, target: target, shares: shares, risk: risk, account: account)
+        let cost = TradeHelpers().capitalRequired(close: entry, shares: shares)
+        makePastEntry(yyyyMMdd: entryDate, ticker: ticker, entry: entry, stop: stop, target: target, shares: shares, risk: risk, account: account, cost: cost)
         makePastExit(yyyyMMdd: entryDate, exityyyyMMdd: exitDate, ticker: ticker, exitPrice: exitPrice, debug: true)
     }
     
     //this func is not adding entry risk intrade
-    func makePastEntry(yyyyMMdd: String, ticker: String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, account:String) {
-        let capitol = entry * Double(shares)
+    func makePastEntry(yyyyMMdd: String, ticker: String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, account:String, cost:Double) {
+
         // get ticker - date
         let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: false)
         let oneDay = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
@@ -209,7 +212,7 @@ class ManualTrades {
             oneDay.risk      = risk
             oneDay.inTrade   = true
             oneDay.account   = account
-            oneDay.capitalReq = capitol
+            oneDay.capitalReq = cost
         }
         
         print("\nProve it:")

@@ -19,8 +19,10 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let portfolioCost = RealmHelpers().calcPortfolioCost()
+        let costStr = Utilities().dollarStr(largeNumber: portfolioCost)
         let days:Int = 4
-        title = "last \(days) day(s)"
+        title = "last \(days) days $\(costStr)"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
         //tasks = Prices().sortOneTicker(ticker: "QQQ", debug: false)
     }

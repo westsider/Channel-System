@@ -35,7 +35,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        testPastEntries()
+        // testPastEntries()
         setUpUI()
     }
     
@@ -63,7 +63,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         let lastUpdate = Prices().getLastDateInRealm(debug: false)
         let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
-        lastUpdateLable.text = "Last Update: \(dateString)"
+        let portfolioCost = RealmHelpers().calcPortfolioCost()
+        let costStr = Utilities().dollarStr(largeNumber: portfolioCost)
+        lastUpdateLable.text = "Last Update: \(dateString) $\(costStr) Comitted"
         currentProcessLable.text = "Waiting for Position Check"
         marketConditionUI(debug: false)
         self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)

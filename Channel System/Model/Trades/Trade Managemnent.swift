@@ -18,7 +18,7 @@ class TradeManage {
     func printOpenTrades() {
         print("\nShowing all open trades")
         for trades in tasks {
-            print("\(trades.dateString) \(trades.ticker) close:\(trades.close) risk:\(trades.risk)")
+            print("\(trades.dateString) \(trades.ticker) close:\(trades.close) risk:\(trades.risk) cost: \(trades.capitalReq)")
         }
         print("")
     }

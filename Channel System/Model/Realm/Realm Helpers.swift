@@ -133,6 +133,23 @@ class RealmHelpers: Object {
         return sortedByDate
     }
     
+    func calcPortfolioCost()-> Double {
+        let realm = try! Realm()
+        let portfolioCost:Double = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false").sum(ofProperty: "capitalReq")
+        print("Total portfolio cost is \(portfolioCost)")
+        return portfolioCost
+    }
+    
+    func portfolioDict()-> [String:Double] {
+        let realm = try! Realm()
+        var costDict: [String:Double] = [:]
+        let portfolio = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false")
+        for each in portfolio {
+            costDict[each.ticker] = each.capitalReq
+        }
+        return costDict
+    }
+    
     func getClosedTrades()-> Results<Prices> {
         let realm = try! Realm()
         let allEntries = realm.objects(Prices.self).filter("inTrade = false AND exitedTrade = true")
