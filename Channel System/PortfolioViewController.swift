@@ -13,21 +13,18 @@ import RealmSwift
 class PortfolioViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-
+    @IBOutlet weak var openTradesBttnTxt: UIButton!
     let realm:Realm = try! Realm()
     var tasks: Results<Prices>!
     var showClosedTrades = false
     var costStr:String = "nan"
     var costDict: [String:Double] = [:]
     
-    @IBOutlet weak var openTradesBttnTxt: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tasks = RealmHelpers().getOpenTrades()
         TradeManage().printOpenTrades()
         title = "Portfolio"
-        
         let portfolioCost = RealmHelpers().calcPortfolioCost()
         costStr = Utilities().dollarStr(largeNumber: portfolioCost)
         costDict = RealmHelpers().portfolioDict()
@@ -51,7 +48,6 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let title = bool ? "Closed" : "Open"
         let titleColor = bool ? onTitle : offTitle
         let bkgColor = bool ? onColor : offColor
-
         tasks = bool ? RealmHelpers().getClosedTrades() : RealmHelpers().getOpenTrades()
         print(showClosedTrades,color, title, titleColor)
         return (title, titleColor, bkgColor)
@@ -101,10 +97,10 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // showing open trades
         if !showClosedTrades {
-            let openProfit = totalOpenProfit(debug: false)
+            let openProfit = TradeHelpers().totalOpenProfit(tasks: tasks, debug: false)
             return "$\(openProfit.0) Profit \t\(openProfit.1)% Win \t$\(costStr) Comitted"
         } else {
-            let openProfit = totalClosedProfit(debug: false)
+            let openProfit = TradeHelpers().totalClosedProfit(tasks: tasks, debug: false)
             return "$\(openProfit.0) profit \t\(openProfit.1)% win"
         }
     }
@@ -115,42 +111,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         header.textLabel?.textColor = UIColor.white
         header.textLabel?.font = UIFont(name: "PingFang HK", size: 20)
     }
-    
-    func totalOpenProfit(debug:Bool)->(String,String) {
-        var sum = 0.00
-        var wins = 0.00
-        for each in tasks {
-            let thisSymbol = Prices().sortOneTicker(ticker: each.ticker, debug: false).last
-            let profit:Double = (thisSymbol!.close - each.entry ) * Double(each.shares)
-            if debug {print("\(each.ticker) profit: \(String(format: "%.2f", profit)) = c:\(thisSymbol!.close) - e:\(each.entry) * s:\(each.shares)")}
-            sum += profit
-            if profit > 0 {
-                wins += 1
-            }
-        }
-        let winPct = (wins / Double(tasks.count)) * 100
-        let winPctStr = String(format: "%.2f", winPct)
-        return (String(format: "%.2f", sum), winPctStr)
-    }
-    
-    func totalClosedProfit(debug:Bool)->(String,String) {
-        var sum = 0.00
-        var wins = 0.00
-        for each in tasks {
 
-            let profit:Double = each.profit
-            if debug {print("\(each.ticker) profit: \(String(format: "%.2f", profit))")}
-            sum += profit
-            if profit > 0 {
-                wins += 1
-            }
-        }
-        
-        let winPct = (wins / Double(tasks.count)) * 100
-        let winPctStr = String(format: "%.2f", winPct)
-        return (String(format: "%.2f", sum), winPctStr)
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
         segueToChart(index: indexPath.row)

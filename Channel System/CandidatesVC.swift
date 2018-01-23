@@ -58,14 +58,10 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.contentView.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         }
         cell.textLabel?.text = BackTest().tableViewString(ticker: ticker)
-        
         let longDate:String = tasks[indexPath.row].dateString
         let date:String = String(longDate.dropFirst(5))
         let slash:String = date.replacingOccurrences(of: "-", with: "/")
-        
         cell.detailTextLabel?.text = slash
-        
-        // if portfolio contains ticker, make bkg Yellow 
         return cell
     }
     

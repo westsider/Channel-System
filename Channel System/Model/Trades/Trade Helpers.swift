@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import RealmSwift
 class TradeHelpers {
     
     /**
@@ -42,5 +42,39 @@ class TradeHelpers {
     
     func capitalRequired(close: Double, shares: Int)-> Double {
         return close * Double( shares )
+    }
+    
+    func totalOpenProfit(tasks:Results<Prices>, debug:Bool)->(String,String) {
+        var sum = 0.00
+        var wins = 0.00
+        for each in tasks {
+            let thisSymbol = Prices().sortOneTicker(ticker: each.ticker, debug: false).last
+            let profit:Double = (thisSymbol!.close - each.entry ) * Double(each.shares)
+            if debug {print("\(each.ticker) profit: \(String(format: "%.2f", profit)) = c:\(thisSymbol!.close) - e:\(each.entry) * s:\(each.shares)")}
+            sum += profit
+            if profit > 0 {
+                wins += 1
+            }
+        }
+        let winPct = (wins / Double(tasks.count)) * 100
+        let winPctStr = String(format: "%.2f", winPct)
+        return (String(format: "%.2f", sum), winPctStr)
+    }
+    
+    func totalClosedProfit(tasks:Results<Prices>, debug:Bool)->(String,String) {
+        var sum = 0.00
+        var wins = 0.00
+        for each in tasks {
+            
+            let profit:Double = each.profit
+            if debug {print("\(each.ticker) profit: \(String(format: "%.2f", profit))")}
+            sum += profit
+            if profit > 0 {
+                wins += 1
+            }
+        }
+        let winPct = (wins / Double(tasks.count)) * 100
+        let winPctStr = String(format: "%.2f", winPct)
+        return (String(format: "%.2f", sum), winPctStr)
     }
 }

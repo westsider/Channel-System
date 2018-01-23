@@ -12,7 +12,6 @@ import RealmSwift
 
 class SCSSyncMultiChartView: UIViewController {
 
-
     var oneTicker:Results<Prices>!
     var marketCondition:Results<MarketCondition>!
     let showTrades = ShowTrades()
@@ -30,7 +29,6 @@ class SCSSyncMultiChartView: UIViewController {
     var maxBarsOnChart:Int = 75
     var sciChartView1 = SCIChartSurface()
     var sciChartView2 = SCIChartSurface()
-    
     let rangeSync = SCIAxisRangeSynchronization()
     let sizeAxisAreaSync = SCIAxisAreaSizeSynchronization()
     let rolloverModifierSync = SCIMultiSurfaceModifier(modifierType: SCIRolloverModifier.self)
@@ -130,15 +128,12 @@ class SCSSyncMultiChartView: UIViewController {
         addBands(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showEntries(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
         showStops(surface: sciChartView1, xID: axisX1Id, yID: axisY1Id)
-        
         let statsText = BackTest().chartString(ticker: (oneTicker.first?.ticker)!)
         let stats = ShowTrades().showStats(xID: axisX1Id, yID: axisY1Id,
                                            date: Double(rangeStart), price: highestPrice, text: statsText)
         let guidanceText = MarketCondition().getStrMatixForChart(debug: debug)
         let guideChart = ShowTrades().showStats(xID: axisX2Id, yID: axisY2Id,
-                                                date: Double(rangeStart), price: highestAtr, text: guidanceText)
-        
-        
+                                            date: Double(rangeStart), price: highestAtr, text: guidanceText)
         sciChartView1.annotations.add(stats)
         sciChartView2.annotations.add(guideChart)
     }
@@ -159,20 +154,15 @@ class SCSSyncMultiChartView: UIViewController {
         sciChartView1 = SCIChartSurface(frame: self.topView.bounds)
         sciChartView1.frame = self.topView.bounds
         sciChartView1.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-
         sciChartView1.translatesAutoresizingMaskIntoConstraints = true
         self.topView.addSubview(sciChartView1)
-        
         sciChartView2 = SCIChartSurface(frame: self.bottomView.bounds)
         sciChartView2.frame = self.bottomView.bounds
         sciChartView2.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
         sciChartView2.translatesAutoresizingMaskIntoConstraints = true
         self.bottomView.addSubview(sciChartView2)
     }
-    
-    
-    
+
     fileprivate func addAxis(BarsToShow: Int) {
         
         let totalBars:Int = oneTicker.count
@@ -469,36 +459,3 @@ class SCSSyncMultiChartView: UIViewController {
         case pad // iPad style UI
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
