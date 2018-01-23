@@ -14,27 +14,16 @@ import NVActivityIndicatorView
 class StatsViewController: UIViewController, NVActivityIndicatorViewable {
 
     @IBOutlet weak var topLeft: UILabel!
-    
     @IBOutlet weak var topRight: UILabel!
-    
     @IBOutlet weak var midLeft: UILabel!
-    
     @IBOutlet weak var midRight: UILabel!
-    
     @IBOutlet weak var bottomLeft: UILabel!
-    
     @IBOutlet weak var largestWinLabel: UILabel!
-    
     @IBOutlet weak var largestLossLabel: UILabel!
-    
     @IBOutlet weak var tradingDaysLabel: UILabel!
-    
     @IBOutlet weak var topView: UIView!
-    
     @IBOutlet weak var bottomView: UIView!
-    
     @IBOutlet weak var minStarsLabel: UILabel!
-    
     @IBOutlet weak var annualProfitLabel: UILabel!
     
     var galaxie = [String]()

@@ -68,7 +68,11 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let shortDate = date.dropFirst(5)
         let thisSymbol = Prices().sortOneTicker(ticker: tasks[indexPath.row].ticker, debug: false).last
         let closeString = String(format: "%.2f", (thisSymbol?.close)!)
-        let cost = Utilities().dollarStr(largeNumber: costDict[tasks[indexPath.row].ticker]!)
+        var cost:String = "N/A"
+        if !showClosedTrades {
+            cost = Utilities().dollarStr(largeNumber: costDict[tasks[indexPath.row].ticker]!) } else {
+            cost = Utilities().dollarStr(largeNumber: tasks[indexPath.row].capitalReq)
+        }
         let task:String = "\(shortDate) \t\(tasks[indexPath.row].ticker) \t\(closeString) \t$\(cost)"
         cell.textLabel?.text = task
         

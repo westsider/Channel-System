@@ -17,6 +17,8 @@
 		0D187BFD1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */; };
 		0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */; };
 		0D1A279A20165F52000F995A /* Show Stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1A279920165F52000F995A /* Show Stops.swift */; };
+		0D20B1D42017F1F6000A5486 /* Get CSV Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D20B1D32017F1F6000A5486 /* Get CSV Routine.swift */; };
+		0D20B1D62017F2AA000A5486 /* First Run Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D20B1D52017F2AA000A5486 /* First Run Routine.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
 		0D4A01881FC8C5CF00C53E2F /* AGG.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A01871FC8C5CF00C53E2F /* AGG.csv */; };
@@ -314,6 +316,8 @@
 		0D187BFC1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.1 Enter When Flat.swift"; sourceTree = "<group>"; };
 		0D187BFE1FF97BC300FE4FEC /* 3.2 Calc Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "3.2 Calc Stars.swift"; sourceTree = "<group>"; };
 		0D1A279920165F52000F995A /* Show Stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Show Stops.swift"; sourceTree = "<group>"; };
+		0D20B1D32017F1F6000A5486 /* Get CSV Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV Routine.swift"; sourceTree = "<group>"; };
+		0D20B1D52017F2AA000A5486 /* First Run Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "First Run Routine.swift"; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
@@ -974,6 +978,8 @@
 			isa = PBXGroup;
 			children = (
 				0D3108481FC8968D00E93CB3 /* constants.swift */,
+				0D20B1D32017F1F6000A5486 /* Get CSV Routine.swift */,
+				0D20B1D52017F2AA000A5486 /* First Run Routine.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1468,6 +1474,7 @@
 				0DC70C701FE1CEFB00DC58BF /* Past Trades.swift in Sources */,
 				0DBE20151FB256F80089FFB2 /* Realm Helpers.swift in Sources */,
 				0D771E071FAE5C5E006269DD /* ChartViewController.swift in Sources */,
+				0D20B1D42017F1F6000A5486 /* Get CSV Routine.swift in Sources */,
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
@@ -1485,6 +1492,7 @@
 				0D6726971FF8079900E42A9A /* 1.4 Get Intrio.swift in Sources */,
 				0DEEA0DF1FCDFC520046BABC /* LastUpdate.swift in Sources */,
 				0D6C61E82009B83F001FEA2F /* 4.0 Portfolio FIlters.swift in Sources */,
+				0D20B1D62017F2AA000A5486 /* First Run Routine.swift in Sources */,
 				0D67269D1FF80B9E00E42A9A /* 1.0 Galaxie.swift in Sources */,
 				0D187BFA1FF97B4000FE4FEC /* 3.0 Every Entry.swift in Sources */,
 				0D6F55711FB0E31E00E0723B /* ShowTrades.swift in Sources */,

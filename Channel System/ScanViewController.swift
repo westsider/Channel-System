@@ -48,7 +48,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             if self.reset {
-                self.csvOnly(galaxie: self.galaxie, debug: false)
+                GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
             } else {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
@@ -73,7 +73,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     private func firstRun() {
         print("\nThis is the first run.\n")
-        initializeEverything(galaxie: galaxie, debug: false)
+        FirstRun().initializeEverything(galaxie: galaxie, debug: false)
         UserDefaults.standard.set(false, forKey: "FirstRun")
     }
 
@@ -87,24 +87,21 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         manageTradesOrShowEntries(debug: true)
     }
     
-    
     //////////////////////////////////////////////////////////////////////////////////
     //                              Update New Prices                               //
     //////////////////////////////////////////////////////////////////////////////////
     //MARK: - Initialize Everything
     func updateNewPrices(galaxie: [String], debug:Bool) {
-        //updateNVActivity(with:"Updating Database")                                                   // 1.0
-        //Account().updateRisk(risk: currentRisk); print("1.1 Risk Cmplete")
-        updateNVActivity(with:"Contacting NYSE")                                            // 1.1
-        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
+        updateNVActivity(with:"Contacting NYSE")
+        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in
             if finished {
                 print("intrinio done")
                 self.updateNVActivity(with:"Loading Trend 1")
-                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in
                     if finished {
                         print("sma(10) done")
                         self.updateNVActivity(with:"Loading Trend 2")
-                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in 
                             if finished {
                                 print("sma(200) done")
                                 self.updateNVActivity(with:"Loading Oscilator")
@@ -133,130 +130,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                         })
                                     }
                                 })
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////
-    //                                  First Run                                   //
-    //////////////////////////////////////////////////////////////////////////////////
-    //MARK: - Initialize Everything
-    func initializeEverything(galaxie:[String], debug:Bool) {
-        updateNVActivity(with:"Clearing Database")
-        RealmHelpers().deleteAll()                                                     // 1.0
-        //Account().updateRisk(risk: currentRisk); print("1.1 Risk Cmplete")
-        updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
-        CSVFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in            // 1.2
-            if finished {
-                print("csv done")
-                self.updateNVActivity(with:"Loading Exchanges")
-                CompanyData().getInfo(galaxie: galaxie, debug: debug) { ( finished ) in // 1.3
-                    if finished {
-                        print("\n*** Company Info done ***\n")
-                        self.updateNVActivity(with:"Contacting NYSE")
-                        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
-                            if finished {
-                                print("intrinio done")
-                                self.updateNVActivity(with:"Loading Trend 1")
-                                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
-                                    if finished {
-                                        print("sma(10) done")
-                                        self.updateNVActivity(with:"Loading Trend 2")
-                                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
-                                            if finished {
-                                                print("sma(200) done")
-                                                self.updateNVActivity(with:"Loading Oscilator")
-                                                PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                    if finished {
-                                                        print("oscilator done")
-                                                        self.updateNVActivity(with:"Loading Market Condition")
-                                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                                            if finished  {
-                                                                print("mc done")
-                                                                self.updateNVActivity(with:"Finding Trades")
-                                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                                    if finished  {
-                                                                        print("Entry done")
-                                                                        self.updateNVActivity(with:"Brute Force Back Test")
-                                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
-                                                                            print("\ncalc Stars done!\n")
-                                                                            self.stopAnimating()
-                                                                            self.marketConditionUI(debug: false)
-                                                                        })
-                                                                    }
-                                                                })
-                                                            }
-                                                        })
-                                                    }
-                                                })
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////
-    //                               Clear for csv only                             //
-    //////////////////////////////////////////////////////////////////////////////////
-    //MARK: - Initialize Everything
-    func csvOnly(galaxie: [String], debug:Bool) {
-        updateNVActivity(with:"Clearing Database")
-        RealmHelpers().deleteAll()                                                     // 1.0
-        //Account().updateRisk(risk: 50); print("1.1 Risk Cmplete")
-        updateNVActivity(with:"Loading Historical Prices")                                            // 1.1
-        CSVFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in            // 1.2
-            if finished {
-                print("csv done")
-                self.updateNVActivity(with:"Loading Exchanges")
-                CompanyData().getInfo(galaxie: galaxie, debug: debug) { ( finished ) in // 1.3
-                    if finished {
-                        print("info done")
-                        self.updateNVActivity(with:"Contacting NYSE")
-                        print("skipping intrinio")
-                        self.updateNVActivity(with:"Loading Trend 1")
-                        SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
-                            if finished {
-                                print("sma(10) done")
-                                self.updateNVActivity(with:"Loading Trend 2")
-                                SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
-                                    if finished {
-                                        print("sma(200) done")
-                                        self.updateNVActivity(with:"Loading Oscilator")
-                                        PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                            if finished {
-                                                print("oscilator done")
-                                                self.updateNVActivity(with:"Loading Market Condition")
-                                                MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                                    if finished  {
-                                                        print("mc done")
-                                                        self.updateNVActivity(with:"Finding Trades")
-                                                        Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                            if finished  {
-                                                                print("Entry done")
-                                                                self.updateNVActivity(with:"Brute Force Back Test")
-                                                                CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
-                                                                    print("\ncalc Stars done!\n")
-                                                                    self.stopAnimating()
-                                                                    self.marketConditionUI(debug: false)
-                                                                })
-                                                            }
-                                                        })
-                                                    }
-                                                })
-                                            }
-                                        })
-                                    }
-                                }
                             }
                         }
                     }
