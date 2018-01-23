@@ -876,7 +876,6 @@
 		0D14D0031FE5AB2D000BA6D5 /* OFF */ = {
 			isa = PBXGroup;
 			children = (
-				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 			);
 			path = OFF;
 			sourceTree = "<group>";
@@ -968,6 +967,7 @@
 			isa = PBXGroup;
 			children = (
 				0DE78F541FD888B400915777 /* Stats Object.swift */,
+				0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */,
 				0D5A43A41FEF10EB00842801 /* S+P Returns.swift */,
 				0D14D0031FE5AB2D000BA6D5 /* OFF */,
 			);
