@@ -12,6 +12,8 @@ import RealmSwift
 class ManageViewController: UIViewController, UITextViewDelegate {
 
     // lables
+    
+    @IBOutlet weak var cashCommited: UILabel!
     @IBOutlet weak var topLeft: UILabel! // Entry For
     
     @IBOutlet weak var topRight: UILabel! // QQQ
@@ -35,13 +37,10 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var exitSwitch: UISegmentedControl!
     
     var taskID:String = ""
-    
     var action:String = "" // Entry For || Manage
-    
     var thisTrade = Prices()
-    
     var textEntered:String = "No Text"
-    
+    var costDict: [String:Double] = [:]
     // new vars to manage open trade
     var ticker = ""
     var entryDate = ""
@@ -74,6 +73,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         title = "Manage Trade"
         TradeManage().printOpenTrades()
+        costDict = RealmHelpers().portfolioDict()
     }
     
     func exitSwitchSet() {
@@ -236,6 +236,8 @@ class ManageViewController: UIViewController, UITextViewDelegate {
                 let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
             }
             // populate lables
+            let cashCom = Utilities().dollarStr(largeNumber: RealmHelpers().calcPortfolioCost())
+            cashCommited.text = "$\(cashCom) Comitted"
             textInput.text = String(thisTrade.close)
             
             topLeft.text = action
