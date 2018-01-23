@@ -55,17 +55,32 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var shares:Int = 0
     var account:String = "TDA"
     var capReq:Double = 0.0
+    var portfolioCost:Double = 0.0
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
         currentRisk = Account().currentRisk()
-        accountSwitch.selectedSegmentIndex = 2
+        
+        thisTrade = Prices().getFrom(taskID: taskID).last!
+        
+        
         populateLables(action: action, debug: false)
         if action == "Entry for" {
             exitSwitch.isEnabled = false
             exitSwitch.alpha = 0.2
         } else {
             exitSwitchSet()
+        }
+
+        // if we can buy in IB do it else use TDA
+        if portfolioCost < 100000 - thisTrade.capitalReq {
+            print("switch is IB")
+            accountSwitch.selectedSegmentIndex = 2
+            account = "IB"
+        } else {
+            print("switch is TDA")
+            accountSwitch.selectedSegmentIndex = 0
+            account = "TDA"
         }
     }
     
@@ -74,6 +89,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         title = "Manage Trade"
         TradeManage().printOpenTrades()
         costDict = RealmHelpers().portfolioDict()
+        portfolioCost =  RealmHelpers().calcPortfolioCost()
     }
     
     func exitSwitchSet() {
@@ -215,7 +231,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         debugPrint(checkTrades)
     }
 
-    
+    //MARK: - TODO - if cash comitted < 100000 buy in IB else buy TDA
     //MARK: - Populate Lables
     func populateLables(action: String, debug: Bool) {
         
@@ -223,7 +239,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
 
         if (action == "Entry For") {
             print("\n calc trade entry, then populate lables\n")
-            thisTrade = Prices().getFrom(taskID: taskID).last!
+            //thisTrade = Prices().getFrom(taskID: taskID).last!
             if debug { debugPrint(thisTrade) }
             // calc target / stop
             close = thisTrade.close
@@ -236,11 +252,11 @@ class ManageViewController: UIViewController, UITextViewDelegate {
                 let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
             }
             // populate lables
-            let cashCom = Utilities().dollarStr(largeNumber: RealmHelpers().calcPortfolioCost())
+            let cashCom = Utilities().dollarStr(largeNumber:portfolioCost)
             cashCommited.text = "$\(cashCom) Comitted"
             textInput.text = String(thisTrade.close)
             
-            topLeft.text = action
+            topLeft.text = "\(action) \(thisTrade.ticker)"
             
             topRight.text = thisTrade.ticker
             
