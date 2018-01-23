@@ -150,6 +150,12 @@ class RealmHelpers: Object {
         return costDict
     }
     
+    func portfolioCount()-> Int{
+        let realm = try! Realm()
+        let portfolio = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false")
+        return portfolio.count
+    }
+    
     func getClosedTrades()-> Results<Prices> {
         let realm = try! Realm()
         let allEntries = realm.objects(Prices.self).filter("inTrade = false AND exitedTrade = true")

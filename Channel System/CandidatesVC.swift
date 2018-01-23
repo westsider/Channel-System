@@ -4,7 +4,7 @@
 //
 //  Created by Warren Hansen on 10/31/17.
 //  Copyright © 2017 Warren Hansen. All rights reserved.
-//   open-source TA-Lib to integrate technical indicators to SciChart!
+//
 
 import UIKit
 import RealmSwift
@@ -19,12 +19,10 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let portfolioCost = RealmHelpers().calcPortfolioCost()
-        let costStr = Utilities().dollarStr(largeNumber: portfolioCost)
+        let portfolioCount = RealmHelpers().portfolioCount()
         let days:Int = 4
-        title = "last \(days) days $\(costStr)"
+        title = "last \(days) days \(portfolioCount) Positions"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
-        //tasks = Prices().sortOneTicker(ticker: "QQQ", debug: false)
     }
 
     @IBAction func clearRealmAction(_ sender: Any) {

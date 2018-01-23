@@ -71,7 +71,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
     }
     
-    
     private func firstRun() {
         print("\nThis is the first run.\n")
         initializeEverything(galaxie: galaxie, debug: false)
