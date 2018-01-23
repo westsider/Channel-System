@@ -12,6 +12,37 @@ import  RealmSwift
 class CheckDatabase {
     
     var portfolio: [String: Int] = [:]
+    let galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
+    
+    func checkDuplicates() {
+        
+        for ticker in galaxie {
+            let _ = findDuplicates(ticker: ticker, debug: true)
+        }
+        print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
+    }
+    
+    func canIgetDataFor(ticker:String, isOn:Bool) {
+        if isOn {
+            ReplacePrices().getLastPrice(ticker: ticker, debug: true, page: 1, saveToRealm: false, completion: { (finished) in
+                if finished {
+                    print("finished getting prices for \(ticker)")
+                }
+            })
+        }
+    }
+    
+    func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
+        if ( deleteAll ) { RealmHelpers().deleteAll() }
+        if ( printPrices ) { Prices().printLastPrices(symbols: galaxie, last: 4) }
+        if ( printTrades ) { RealmHelpers().printOpenTrades() }
+    }
+    
+    func testPastEntries() {
+        //ManualTrades().oneEntryForTesting()
+        // ManualTrades().removeExitFrom(yyyyMMdd: "2017/12/29", exityyyyMMdd: "2018/01/22", ticker: "AAPL", exitPrice: 0.0, debug: true)
+        ManualTrades().removeEntry(yyyyMMdd: "2018/01/23", ticker: "PG", debug: true)
+    }
     
     func report(debug:Bool, galaxie:[String])-> String {
         /*

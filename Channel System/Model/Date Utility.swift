@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AVFoundation
 
 class Utilities {
     
@@ -214,5 +215,10 @@ class Utilities {
         } else {
             return false
         }
+    }
+    
+    func playAlertSound() {
+        let systemSoundId: SystemSoundID = 1106 // connect to power // 1052 tube bell //1016 tweet
+        AudioServicesPlaySystemSound(systemSoundId)
     }
 }

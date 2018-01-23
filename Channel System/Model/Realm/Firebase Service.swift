@@ -14,6 +14,11 @@ import FirebaseDatabase
 class FirbaseLink {
 
     let uid = "M4qmbWDT50ayvufas3c9zGzr1DG2"
+    let firebaseBlock = { print( "Firebase Complete" ) }
+    
+    func firebaseBackup(now:Bool) {
+        if now { FirbaseLink().backUp(completion: firebaseBlock) }
+    }
     
     func auth() {
         let email = Utilities().getUserFireBase().user

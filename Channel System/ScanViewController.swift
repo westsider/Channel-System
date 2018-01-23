@@ -9,7 +9,6 @@ import Foundation
 import RealmSwift
 import UIKit
 import NVActivityIndicatorView
-import AVFoundation
 
 class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
@@ -21,7 +20,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     @IBOutlet weak var tradeButton: UIButton!
     
     let size = CGSize(width: 100, height: 100)
-    let firebaseBlock = { print( "Firebase Complete" ) }
     let prices = Prices()
     var counter:Int = 0
     var updateRealm:Bool = false
@@ -35,13 +33,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        //testPastEntries()
+        // CheckDatabase().testPastEntries()
         setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.resetThis(ticker: "IYJ", isOn: false)
-        self.canIgetDataFor(ticker: "REM", isOn: false)
+        CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
         manageTradesOrShowEntries(debug: true)
     }
     
@@ -57,24 +55,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 }
             }
         }
-    }
-    
-    private func setUpUI() {
-        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-        let lastUpdate = Prices().getLastDateInRealm(debug: false)
-        let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
-        let portfolioCost = RealmHelpers().calcPortfolioCost()
-        let costStr = Utilities().dollarStr(largeNumber: portfolioCost)
-        lastUpdateLable.text = "Last Update: \(dateString) $\(costStr) Comitted"
-        currentProcessLable.text = "Waiting for Position Check"
-        marketConditionUI(debug: false)
-        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-    }
-    
-    private func firstRun() {
-        print("\nThis is the first run.\n")
-        FirstRun().initializeEverything(galaxie: galaxie, debug: false)
-        UserDefaults.standard.set(false, forKey: "FirstRun")
     }
 
     //MARK: - get new data
@@ -145,7 +125,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             self.titleLabel.text = uiText.0
             self.marketCondText.text = uiText.1
             self.stopAnimating()
-            self.playAlertSound()
+            Utilities().playAlertSound()
         }
     }
     
@@ -160,60 +140,19 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-    func playAlertSound() {
-        let systemSoundId: SystemSoundID = 1106 // connect to power // 1052 tube bell //1016 tweet
-        AudioServicesPlaySystemSound(systemSoundId)
-    }
-    
     func updateNVActivity(with:String) {
         DispatchQueue.main.async {
             NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
         }
     }
-    
-    func firebaseBackup(now:Bool) {
-        if now {
-            FirbaseLink().backUp(completion: firebaseBlock)
-        }
-    }
-    
+  
     @IBAction func segueToSettings(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-
     @IBAction func manageTradesAction(_ sender: Any) {
         segueToCandidatesVC()
-    }
-    
-    private func getRealmFrom(ticker: String, DateString: String) {
-        let specificNSDate = Utilities().convertToDateFrom(string: DateString, debug: false)
-        let realm = try! Realm()
-        let predicate = NSPredicate(format: "date == %@", specificNSDate as CVarArg)
-        let results = realm.objects(Prices.self).filter(predicate)
-        print("/nEntries to make:")
-        for each in results {
-            if ( each.ticker == ticker)  {
-                print("\(each.ticker) \(each.dateString) \(each.close)  \(each.taskID)")
-                let close:Double = each.close
-                let stop:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).0
-                let target:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).1
-                let stopDistance:Double = TradeHelpers().calcStopTarget(ticker: each.ticker, close: close, debug: false).2
-                let currentRisk = Account().currentRisk()
-                let shares:Int = TradeHelpers().calcShares(stopDist: stopDistance, risk: currentRisk)
-                let stopString:String = TradeHelpers().stopString(stop: stop)
-                let capReq:Double = TradeHelpers().capitalRequired(close: close, shares: shares)
-                let message:String = "Entry:\(close)\tShares:\(shares)\nStop:\(stopString)\tTarget:\(String(format: "%.2f", target))"; print(message)
-                RealmHelpers().makeEntry(taskID: each.taskID, entry: each.close, stop: stop, target: target, shares: shares, risk: Double(currentRisk), debug: false, account: "Test Account", capital: capReq)
-            }
-        }
-    }
-    
-    private func initially(deleteAll: Bool, printPrices: Bool, printTrades: Bool){
-        if ( deleteAll ) { RealmHelpers().deleteAll() }
-        if ( printPrices ) { Prices().printLastPrices(symbols: galaxie, last: 4) }
-        if ( printTrades ) { RealmHelpers().printOpenTrades() }
     }
     
     //MARK: - Trade Management
@@ -241,42 +180,33 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                     currentProcessLable.text = "No open positions need attention"
                 }
             }
-        } else {
-            // exit here if no entries found
         }
-    }
-    
-    func testPastEntries() {
-         //ManualTrades().oneEntryForTesting()
-        // ManualTrades().removeExitFrom(yyyyMMdd: "2017/12/29", exityyyyMMdd: "2018/01/22", ticker: "AAPL", exitPrice: 0.0, debug: true)
-        ManualTrades().removeEntry(yyyyMMdd: "2018/01/23", ticker: "PG", debug: true)
     }
     
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
-    
-    private func checkDuplicates() {
-        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
-        for ticker in galaxie {
-            let _ = CheckDatabase().findDuplicates(ticker: ticker, debug: true)
-        }
-        print("\nDeleting duplicatre dates from realm...\nmake sure this runs A F T E R csv load!\n")
-    }
-    
-    
+
     func resetThis(ticker:String, isOn:Bool){
         if isOn { ReplacePrices().writeOverPrblemSymbol(ticker: ticker) }
     }
-    
-    func canIgetDataFor(ticker:String, isOn:Bool) {
-        if isOn {
-            ReplacePrices().getLastPrice(ticker: ticker, debug: true, page: 1, saveToRealm: false, completion: { (finished) in
-                if finished {
-                    print("finished getting prices for \(ticker)")
-                }
-            })
-        }
+
+    private func setUpUI() {
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        let lastUpdate = Prices().getLastDateInRealm(debug: false)
+        let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
+        let portfolioCost = RealmHelpers().calcPortfolioCost()
+        let costStr = Utilities().dollarStr(largeNumber: portfolioCost)
+        lastUpdateLable.text = "Last Update: \(dateString) $\(costStr) Comitted"
+        currentProcessLable.text = "Waiting for Position Check"
+        marketConditionUI(debug: false)
+        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
     }
     
+    private func firstRun() {
+        print("\nThis is the first run.\n")
+        FirstRun().initializeEverything(galaxie: galaxie, debug: false)
+        UserDefaults.standard.set(false, forKey: "FirstRun")
+    }
+
     private func segueToChart(ticker: String) {
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = Prices().getLastTaskID()
