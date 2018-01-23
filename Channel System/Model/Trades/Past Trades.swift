@@ -174,9 +174,17 @@ class ManualTrades {
     }
     
     func oneEntryForTesting() {
-        let stopTarget = TradeHelpers().calcStopTarget(ticker: "AAPL", close: 170.52, debug: false)
+        let entry = 89.86
+        let ticker = "PG"
+        let stopTarget = TradeHelpers().calcStopTarget(ticker: ticker, close: entry, debug: false)
         let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
-        makePastEntry(yyyyMMdd: "2017/12/29", ticker: "AAPL", entry: 170.52, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB")
+        makePastEntry(yyyyMMdd: "2018/01/23", ticker: ticker, entry: entry, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB")
+        
+        //let entry = 163.52
+        //let ticker = "IBM"
+        //let stopTarget = TradeHelpers().calcStopTarget(ticker: ticker, close: entry, debug: false)
+        //let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
+        //makePastEntry(yyyyMMdd: "2018/01/22", ticker: ticker, entry: entry, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB")
     }
     
     func pastEntryAndExit(ticker: String, entryDate: String, exitDate: String,  entry: Double, stop: Double, target: Double, shares: Int, exitPrice: Double) {

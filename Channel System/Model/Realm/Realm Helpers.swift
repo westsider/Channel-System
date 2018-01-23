@@ -26,7 +26,7 @@ class RealmHelpers: Object {
         price.movAvg200 = 0.00
         price.wPctR = 0.00
         price.longEntry = false
-        price.inTrade   = false
+        //price.inTrade   = false
         price.exitedTrade = false
         price.taskID = NSUUID().uuidString
         price.account = each.account
@@ -51,11 +51,12 @@ class RealmHelpers: Object {
             price.movAvg10 = 0.00
             price.movAvg200 = 0.00
             price.wPctR = 0.00
-            price.longEntry = false
-            price.inTrade   = false
-            price.exitedTrade = false
+            // commented these out on 1/23 to keep a purchase from today
+            //price.longEntry = false
+            //price.inTrade   = false
+            //price.exitedTrade = false
             price.taskID = NSUUID().uuidString
-            price.account = each.account
+           // price.account = each.account
         })
     }
     

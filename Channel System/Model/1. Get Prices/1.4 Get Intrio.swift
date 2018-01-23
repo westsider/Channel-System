@@ -79,13 +79,16 @@ class IntrioFeed {
                         }
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
                         if ( isNewDate ) {
-                            if ( debug ) { print("we are adding \(prices.dateString) to realm\n") }
-                            RealmHelpers().saveSymbolsToRealm(each: prices)
-                        } else {
-                            if ( debug ) { print("we are NOT adding \(prices.dateString) to realm\n") }
+                             print("we are adding a new object for \(prices.ticker) on \(prices.dateString) to realm")
+    RealmHelpers().saveSymbolsToRealm(each: prices)
                         }
+                        // this section caused the last 100 days to be written over
+                        //else {
+                        //     print("we are updating an old object for \(prices.ticker) on \(prices.dateString) to realm\n")
+                        //}
                         // for saftey and because today will only return an open and close, update the last 10 days
                         if inlast10 {
+                            print("we are only updating the last 10 object for \(prices.ticker) on \(prices.dateString) to realm")
                             RealmHelpers().updatePriorPrice(each: prices)
                         }
                         // if this is today, simulate a high and low becuase even after the close I only show a open and close from the API
