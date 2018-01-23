@@ -256,10 +256,13 @@ class SCSSyncMultiChartView: UIViewController {
     }
     
     fileprivate func showStops(surface:SCIChartSurface, xID:String, yID:String) {
+        var lastValue:SCIGenericType = SCIGeneric(0.0)
         for ( index, things) in oneTicker.enumerated() {
             let trail:Double = things.trailStop
             surface.annotations = showTrades.showStopsOnChart(currentBar: index, stop: trail, xID: xID, yID: yID)
+            lastValue = SCIGeneric(trail)
         }
+        addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), valueFormat: "%.2f", value: lastValue)
     }
     
     //MARK: - pctR
@@ -286,7 +289,7 @@ class SCSSyncMultiChartView: UIViewController {
         indicatorRenderSeries.xAxisId = xID
         indicatorRenderSeries.yAxisId = yID
         surface.renderableSeries.add(indicatorRenderSeries)
-        addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), valueFormat: "%.2f", value: SCIGeneric( wPctR))
+        addAxisMarkerAnnotation(surface: surface, yID:yID, color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), valueFormat: "%.2f", value: SCIGeneric( wPctR))
         
         let triggerRenderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
         triggerRenderSeries.dataSeries = triggerDataSeries
@@ -426,7 +429,7 @@ class SCSSyncMultiChartView: UIViewController {
         
         let textFormatting:SCITextFormattingStyle = SCITextFormattingStyle();
         textFormatting.color = UIColor.white;
-        textFormatting.fontSize = 10;
+        textFormatting.fontSize = 12;
         axisMarker.style.textStyle = textFormatting;
         axisMarker.formattedValue = String.init(format: valueFormat, SCIGenericDouble(value));
         axisMarker.coordinateMode = .absolute

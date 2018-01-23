@@ -52,11 +52,11 @@ class RealmHelpers: Object {
             price.movAvg200 = 0.00
             price.wPctR = 0.00
             // commented these out on 1/23 to keep a purchase from today
-            //price.longEntry = false
-            //price.inTrade   = false
-            //price.exitedTrade = false
+            // price.longEntry = false
+            // price.inTrade   = false
+            // price.exitedTrade = false
+            // price.account = each.account
             price.taskID = NSUUID().uuidString
-           // price.account = each.account
         })
     }
     
