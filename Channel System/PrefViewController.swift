@@ -22,6 +22,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     
     // all labels
     @IBOutlet weak var riskLabel: UITextField!
+    @IBOutlet weak var maxPositionsText: UITextField!
     @IBOutlet weak var ibLabel: UITextField!
     @IBOutlet weak var tdaLabel: UITextField!
     @IBOutlet weak var etradeLabel: UITextField!
@@ -51,6 +52,18 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         symbolCount = galaxie.count
     }
     
+    // MARK: - Max positions change
+    @IBAction func maxPosAction(_ sender: Any) {
+        if (maxPositionsText.text! != "") {
+            textEntered = maxPositionsText.text!
+            // convert text entered to double
+            if let numberPos = Int(textEntered) {
+                // safely get number from max pos
+                UserDefaults.standard.set(numberPos, forKey: "maxPositions")
+            }
+        }
+    }
+    
     
     @IBAction func changeStarsAction(_ sender: Any) {
         if (starsTextField.text! != "") {
@@ -78,6 +91,15 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         etradeLabel.text = Account().textValueFor(account:"E*Trade" )
         acctTotalLabel.text = Account().textValueFor(account:"Accounts" )
         starsTextField.text = "\(Stats().getStars())"
+        
+        // getting max pos
+        if  UserDefaults.standard.object(forKey: "maxPositions") == nil  {
+            UserDefaults.standard.set(20, forKey: "maxPositions")
+            maxPositionsText.text = "\(10)"
+        } else {
+            let maxPos:Int = UserDefaults.standard.object(forKey: "maxPositions") as! Int
+            maxPositionsText.text = "\(maxPos)"
+        }
     }
     
     @IBAction func riskAction(_ sender: Any) {

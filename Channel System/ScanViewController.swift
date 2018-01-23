@@ -35,7 +35,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         // ManualTrades().showProfit()
-        testPastEntries()
+        //testPastEntries()
         setUpUI()
     }
     

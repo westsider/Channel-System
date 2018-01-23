@@ -154,7 +154,6 @@ class BackTest {
                     }
                     if debug { print("\ttradeGain \(String(format: "%.1f", tradeGain)) = tradeGain \(String(format: "%.1f", tradeGain)) + thisLoss \(String(format: "%.1f", thisLoss))") }
                 }
-                UserDefaults.standard.set(each.date, forKey: "StatsUpdate")
             }
         }
         //if debug {  print("All Trades: \(allTrades)") }
