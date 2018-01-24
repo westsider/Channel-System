@@ -28,6 +28,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     @IBOutlet weak var etradeLabel: UITextField!
     @IBOutlet weak var acctTotalLabel: UILabel!
     @IBOutlet weak var starsTextField: UITextField!
+    @IBOutlet weak var addTickerText: UITextField!
     
     var galaxie = [String]()
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
@@ -185,6 +186,23 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         }
     }
     
+    //MARK: - Add Ticker, must add to ETF200 as well VXF
+    @IBAction func addTickerAction(_ sender: Any) {
+        if (etradeLabel.text! != "") {
+            textEntered = addTickerText.text!
+            // get companie info
+            CompanyData().getInfoFor(ticker: textEntered, debug: true, completion: { (finished) in
+                print("Got Comany info for \(self.textEntered)")
+                ReplacePrices().saveNewSymbol(ticker: self.textEntered, saveToRealm: true, debug: true)
+                //MARK: - TODO - need to make user added ticker realm object that is sent to the server so all devices can have access
+            })
+        } else {
+            print("\n-------> ERROR reading Ticker String <------\n")
+        }
+    }
+    
+    
+    
     func entriesWithCompletion(completion: @escaping () -> ()) {
         var count = 0
         Entry().getEveryEntry(galaxie: galaxie, debug: true, completion: { (finished) in
@@ -243,7 +261,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         let myVC = storyboard?.instantiateViewController(withIdentifier: "DebugVC") as! DeBugViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
-    
     
     
     func updateNVActivity(with:String) {

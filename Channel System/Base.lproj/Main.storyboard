@@ -638,10 +638,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DsL-II-TiL">
-                                <rect key="frame" x="16" y="74" width="382" height="354"/>
+                                <rect key="frame" x="16" y="74" width="382" height="398"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="YyG-fR-bOk" userLabel="Main Stack View">
-                                        <rect key="frame" x="30" y="8" width="322" height="338"/>
+                                        <rect key="frame" x="30" y="8" width="322" height="382"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="HW4-7Z-idE" userLabel="Risk Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="322" height="30"/>
@@ -708,7 +708,7 @@
                                                     </textField>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="gpz-2t-Ucz">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="gpz-2t-Ucz" userLabel="IB Stack View">
                                                 <rect key="frame" x="0.0" y="132" width="322" height="30"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uOT-Md-Vhx">
@@ -730,7 +730,7 @@
                                                     </textField>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="u4p-ja-J5i">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="u4p-ja-J5i" userLabel="TDA Stack View">
                                                 <rect key="frame" x="0.0" y="176" width="322" height="30"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KoG-6L-uHD">
@@ -752,7 +752,7 @@
                                                     </textField>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="PDN-pz-MrQ">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="PDN-pz-MrQ" userLabel="Etr Stack View">
                                                 <rect key="frame" x="0.0" y="220" width="322" height="30"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KNp-Sp-h8R">
@@ -773,14 +773,36 @@
                                                     </textField>
                                                 </subviews>
                                             </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Accounts: $100,000" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5p-FP-hYe">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="iEM-dd-4Xl" userLabel="Add Tkr Stack View">
                                                 <rect key="frame" x="0.0" y="264" width="322" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5wJ-nS-mXq">
+                                                        <rect key="frame" x="0.0" y="0.0" width="154" height="30"/>
+                                                        <color key="backgroundColor" red="0.38427734375" green="0.384336918592453" blue="0.38426429033279419" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
+                                                        <state key="normal" title="Add Ticker">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="addTickerAction:" destination="9ui-km-yle" eventType="touchUpInside" id="osc-cc-2d5"/>
+                                                        </connections>
+                                                    </button>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="AAPL" borderStyle="roundedRect" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hwu-up-Efy">
+                                                        <rect key="frame" x="168" y="0.0" width="154" height="30"/>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="search" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Accounts: $100,000" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5p-FP-hYe">
+                                                <rect key="frame" x="0.0" y="308" width="322" height="30"/>
                                                 <fontDescription key="fontDescription" name="PingFangHK-Regular" family="PingFang HK" pointSize="17"/>
                                                 <color key="textColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1pV-hB-46n">
-                                                <rect key="frame" x="0.0" y="308" width="322" height="30"/>
+                                                <rect key="frame" x="0.0" y="352" width="322" height="30"/>
                                                 <color key="backgroundColor" red="0.47446602582931519" green="0.47453778982162476" blue="0.47445029020309448" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="All Charts">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -820,6 +842,7 @@
                     </view>
                     <connections>
                         <outlet property="acctTotalLabel" destination="j5p-FP-hYe" id="wB3-0T-R9f"/>
+                        <outlet property="addTickerText" destination="hwu-up-Efy" id="idH-um-fgc"/>
                         <outlet property="etradeBttn" destination="KNp-Sp-h8R" id="Zm1-Ys-FNQ"/>
                         <outlet property="etradeLabel" destination="bcz-tb-3x2" id="GXZ-Tg-dfO"/>
                         <outlet property="ibBttn" destination="uOT-Md-Vhx" id="v9P-jY-yPp"/>

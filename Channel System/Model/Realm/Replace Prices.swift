@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import RealmSwift
+
 class ReplacePrices {
     
     func writeOverPrblemSymbol(ticker:String) {
