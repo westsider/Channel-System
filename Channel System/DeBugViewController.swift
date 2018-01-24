@@ -48,7 +48,7 @@ class DeBugViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        detectDevice()
+        maxBarsOnChart = Utilities().detectDevice(maxBars: maxBarsOnChart)
         oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false)
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         setUpControls()
@@ -93,7 +93,6 @@ class DeBugViewController: UIViewController {
         highestPrice = 0.0
         if sciChartView1.renderableSeries.count() > 0 {
             sciChartView1.renderableSeries.remove(at: 0)
-            
         }
     }
     
@@ -103,8 +102,6 @@ class DeBugViewController: UIViewController {
         sciChartView1.xAxes.clear()
         sciChartView1.yAxes.clear()
         sciChartView1.chartModifiers.clear()
-        
-        
         sciChartView2.renderableSeries.clear()
         sciChartView2.annotations.clear()
         sciChartView2.xAxes.clear()
@@ -188,10 +185,9 @@ class DeBugViewController: UIViewController {
     
     
     fileprivate func addAxis(BarsToShow: Int) {
-        
         let totalBars:Int = oneTicker.count
         rangeStart = totalBars - BarsToShow
-        
+    
         let axisX1:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
         axisX1.axisId = axisX1Id
         rangeSync.attachAxis(axisX1)
@@ -200,7 +196,6 @@ class DeBugViewController: UIViewController {
         axisX1.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
         axisX1.style.labelStyle.fontName = "Helvetica"
         axisX1.style.labelStyle.fontSize = 14
-        
         sciChartView1.xAxes.add(axisX1)
         
         let axisY1:SCINumericAxis = SCINumericAxis()
@@ -211,23 +206,19 @@ class DeBugViewController: UIViewController {
         //sciChartView1.yAxes.item(at: 0).autoRange = .always
         axisY1.autoRange = .always
         sciChartView1.yAxes.add(axisY1)
-        
     }
     
     fileprivate func addModifiers() {
         sizeAxisAreaSync.syncMode = .right
         sizeAxisAreaSync.attachSurface(sciChartView1)
         sizeAxisAreaSync.attachSurface(sciChartView2)
-        
         let yDragModifier = yDragModifierSync.modifier(forSurface: sciChartView1) as? SCIYAxisDragModifier
         yDragModifier?.axisId = axisY1Id
         yDragModifier?.dragMode = .pan;
-        //sciChartView1.yAxes.item(at: 0).autoRange = .always
         let xDateDragModifier = xDragModifierSync.modifier(forSurface: sciChartView1) as? SCIXAxisDragModifier
         xDateDragModifier?.axisId = axisX1Id
         xDateDragModifier?.dragMode = .pan;
         xDateDragModifier?.clipModeX = .none
-        
         let modifierGroup = SCIChartModifierCollection(childModifiers: [rolloverModifierSync, yDragModifierSync, pinchZoomModifierSync, zoomExtendsSync, xDragModifierSync])
         sciChartView1.chartModifiers = modifierGroup
     }
@@ -238,7 +229,6 @@ class DeBugViewController: UIViewController {
             let high:Double = things.high
             let low:Double = things.low
             surface.annotations = showTrades.showTradesOnChart(currentBar: index, signal: signal, high: high, low: low, xID:xID, yID: yID)
-            //addMatrixValues(isOn:true, date: things.date!, low: things.low, index: Double(index))
         }
     }
     
@@ -248,7 +238,6 @@ class DeBugViewController: UIViewController {
         for ( things) in oneTicker {
             smaDataSeries.appendX(SCIGeneric(things.date!), y: SCIGeneric(things.movAvg10))
         }
-        
         let renderSeries:SCIFastLineRenderableSeries = SCIFastLineRenderableSeries()
         renderSeries.dataSeries = smaDataSeries
         renderSeries.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), withThickness: 0.7)
@@ -272,29 +261,5 @@ class DeBugViewController: UIViewController {
         renderSeries.xAxisId = xID
         renderSeries.yAxisId = yID
         surface.renderableSeries.add(renderSeries)
-    }
-
-    
-    @IBAction func allEntryAction(_ sender: Any) {
-    }
-    
-    @IBAction func flatEntryAction(_ sender: Any) {
-    }
-    
-    func detectDevice() {
-        switch UIDevice.current.userInterfaceIdiom {
-        case .phone:
-            print("It's an iPhone")
-        case .pad:
-            print("it's an iPad")
-            maxBarsOnChart = maxBarsOnChart * 2
-        case .unspecified:
-            print("It's an iPhone")
-        case .tv:
-            print("It's an iPhone")
-            maxBarsOnChart = maxBarsOnChart * 3
-        case .carPlay:
-            print("It's an iPhone")
-        }
     }
 }

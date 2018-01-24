@@ -221,4 +221,23 @@ class Utilities {
         let systemSoundId: SystemSoundID = 1106 // connect to power // 1052 tube bell //1016 tweet
         AudioServicesPlaySystemSound(systemSoundId)
     }
+
+    func detectDevice(maxBars:Int)-> Int {
+        var maxBarsOnChart = maxBars
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            print("It's an iPhone")
+        case .pad:
+            print("it's an iPad")
+            maxBarsOnChart = maxBarsOnChart * 2
+        case .unspecified:
+            print("It's an iPhone")
+        case .tv:
+            print("It's an iPhone")
+            maxBarsOnChart = maxBarsOnChart * 3
+        case .carPlay:
+            print("It's an iPhone")
+        }
+        return maxBarsOnChart
+    }
 }

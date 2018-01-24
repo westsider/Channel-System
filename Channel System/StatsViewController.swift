@@ -36,8 +36,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     var results: Results<WklyStats>?
     let maxBarsOnChart:Int = 400
     var minStars:Int = 0
-    //MARK: - chart vars
-
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
     var ticker:String = "SPY"
@@ -120,7 +118,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
 
-    
     // MARK: Overrided Functions
     func completeConfiguration() {
         configureChartSuraface()
@@ -163,7 +160,6 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         animation.start(afterDelay: 0.3)
         bottomChartRenderSeries.addAnimation(animation)
         surface.renderableSeries.add(bottomChartRenderSeries)
-        
     }
    
     fileprivate func configureChartSuraface() {

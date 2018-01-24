@@ -15,3 +15,4 @@ class UIColorScheme {
     let inactiveCell = #colorLiteral(red: 0.189868629, green: 0.2039808333, blue: 0.2340657711, alpha: 1)
     let alertCell = #colorLiteral(red: 0.2384223342, green: 0.6748339534, blue: 0.9696156383, alpha: 1)
 }
+
