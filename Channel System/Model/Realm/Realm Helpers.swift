@@ -124,6 +124,20 @@ class RealmHelpers: Object {
         if ( debug ) { _ = self.getOpenTrades() }
     }
     
+    func updateRealm(thisTrade:Prices, gain: Double, loss: Double, account:String, capReq:Double ) {
+        print("This is the taskID passed in to update realm \(thisTrade.taskID)")
+        let realm = try! Realm()
+        try! realm.write {
+            thisTrade.exitDate = Date()
+            thisTrade.profit = gain
+            thisTrade.loss = loss
+            thisTrade.exitedTrade = true
+            thisTrade.inTrade = false
+            thisTrade.account = account
+            thisTrade.capitalReq = capReq
+        }
+        TradeHelpers().proveUpdateTrade(taskID: thisTrade.taskID)
+    }
     
     //MARK: - Sort Entries
     func getOpenTrades()-> Results<Prices> {

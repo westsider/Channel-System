@@ -11,29 +11,17 @@ import RealmSwift
 
 class ManageViewController: UIViewController, UITextViewDelegate {
 
-    // lables
-    
     @IBOutlet weak var cashCommited: UILabel!
     @IBOutlet weak var topLeft: UILabel! // Entry For
-    
     @IBOutlet weak var topRight: UILabel! // QQQ
-    
     @IBOutlet weak var midLeft: UILabel!
-    
     @IBOutlet weak var midRight: UILabel!
-    
     @IBOutlet weak var bottomLeft: UILabel!
-    
     @IBOutlet weak var bottomRight: UILabel!
-    
     @IBOutlet weak var textInput: UITextField!
-    
     @IBOutlet weak var accountSwitch: UISegmentedControl!
-    
     @IBOutlet weak var capitalReq: UILabel!
-    
     @IBOutlet weak var stopSizeLable: UILabel!
-
     @IBOutlet weak var exitSwitch: UISegmentedControl!
     
     var taskID:String = ""
@@ -41,11 +29,8 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var thisTrade = Prices()
     var textEntered:String = "No Text"
     var costDict: [String:Double] = [:]
-    // new vars to manage open trade
     var ticker = ""
     var entryDate = ""
-    
-    // preserve calc of shares ect
     var close:Double = 0.0
     var stopDistance:Double = 0.0
     var stop:Double = 0.0
@@ -56,14 +41,19 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var account:String = "TDA"
     var capReq:Double = 0.0
     var portfolioCost:Double = 0.0
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Manage Trade"
+        TradeManage().printOpenTrades()
+        costDict = RealmHelpers().portfolioDict()
+        portfolioCost =  RealmHelpers().calcPortfolioCost()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         print("This is the taskID passes in to VC \(taskID)")
         currentRisk = Account().currentRisk()
-        
         thisTrade = Prices().getFrom(taskID: taskID).last!
-        
-        
         populateLables(action: action, debug: false)
         if action == "Entry for" {
             exitSwitch.isEnabled = false
@@ -71,7 +61,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         } else {
             exitSwitchSet()
         }
-
         // if we can buy in IB do it else use TDA
         if portfolioCost < 100000 - thisTrade.capitalReq {
             print("switch is IB")
@@ -82,14 +71,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             accountSwitch.selectedSegmentIndex = 0
             account = "TDA"
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "Manage Trade"
-        TradeManage().printOpenTrades()
-        costDict = RealmHelpers().portfolioDict()
-        portfolioCost =  RealmHelpers().calcPortfolioCost()
     }
     
     func exitSwitchSet() {
@@ -107,8 +88,8 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             print("No action Recieved")
         }
     }
+    
     @IBAction func accountSwitchAction(_ sender: UISegmentedControl) {
-        
         switch accountSwitch.selectedSegmentIndex {
             case 0: account = "TDA"; print("account: \(account)");
             case 1: account = "E*Trade"; print("account: \(account)");
@@ -116,7 +97,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             default: break;
         }
     }
-    //MARK: - populate lables from exit
+    
     @IBAction func exitSwitchAction(_ sender: UISegmentedControl) {
         switch exitSwitch.selectedSegmentIndex {
         case 0: print("Target Selected"); topLeft.text = "Target Exit"; action = "Target"
@@ -127,14 +108,13 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    
     @IBAction func inputTextAction(_ sender: Any) {
         if let thisText = textInput.text {
             textEntered = thisText
             print(thisText)
         }
     }
-    // MARK: - Cancel
+    
     @IBAction func cancelAction(_ sender: Any) {
         print("Cancel: Unwind charts VC")
         if ( action == "Entry For") {
@@ -145,7 +125,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    // MARK: - Record Trade Entry or Exit
     @IBAction func recordAction(_ sender: Any) {
         if (textInput.text! != "") {
             textEntered = textInput.text!
@@ -154,7 +133,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         switch action {
         case "Entry For":
             print("In Manage VC case Entry Triggered")
-            //MARK: - TODO - make entry func
             if let entryPrice = Double(textEntered) {
                 RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(currentRisk), debug: false, account: account, capital: capReq)
                 sequeToPortfolio()
@@ -187,56 +165,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         self.performSegue(withIdentifier: "unwindToScan", sender: self)
     }
 
-    func calcGainOrLoss()-> Double {
-        print("This is the taskID passes in to calcGain \(thisTrade.taskID)")
-        
-        if let exitPrice = Double(textEntered) {
-            print("\n-----> We have  if let exitPrice of \(exitPrice)<------\n")
-            let entryPrice:Double = thisTrade.entry
-            let shares:Int = thisTrade.shares
-            let result:Double = (exitPrice - entryPrice) * Double(shares)
-            if ( result >= 0 ) {
-                print("\nCalc gain of \(result)")
-                updateRealm(gain: result, loss: 0.0)
-            } else {
-                print("\nCalc loss of \(result)")
-                updateRealm(gain: 0.0, loss: result)
-            }
-            return result
-        } else {
-            return 0.00
-        }
-    }
-    
-    func updateRealm(gain: Double, loss: Double) {
-        // ok - you are updateing the right taskID
-        print("This is the taskID passed in to update realm \(thisTrade.taskID)")
-        let realm = try! Realm()
-        try! realm.write {
-            thisTrade.exitDate = Date()
-            thisTrade.profit = gain
-            thisTrade.loss = loss
-            thisTrade.exitedTrade = true
-            thisTrade.inTrade = false
-            thisTrade.account = account
-            thisTrade.capitalReq = capReq
-        }
-        proveUpdateTrade()
-    }
-    
-    func proveUpdateTrade() {
-        print("Proof the trade has been updated for taskID \(taskID)")
-        let checkTrades:Results<Prices> = RealmHelpers().checkExitedTrade(taskID: taskID)
-        print("\ndubug - checkTrades")
-        debugPrint(checkTrades)
-    }
-
-    //MARK: - TODO - if cash comitted < 100000 buy in IB else buy TDA
-    //MARK: - Populate Lables
     func populateLables(action: String, debug: Bool) {
         
         if debug { print("\npopulate lables") }
-
         if (action == "Entry For") {
             print("\n calc trade entry, then populate lables\n")
             //thisTrade = Prices().getFrom(taskID: taskID).last!
@@ -255,55 +186,28 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             let cashCom = Utilities().dollarStr(largeNumber:portfolioCost)
             cashCommited.text = "$\(cashCom) Comitted"
             textInput.text = String(thisTrade.close)
-            
             topLeft.text = "\(action) \(thisTrade.ticker)"
-            
             topRight.text = thisTrade.ticker
-            
             midLeft.text = "Entry \(String(thisTrade.close))"
-            
             midRight.text = "\(String(shares)) Shares"
-            
             bottomLeft.text = "Stop \(String(format: "%.2f", stop))"
-            
             bottomRight.text = "Target \(String(format: "%.2f", target))"
-            
             capReq = TradeHelpers().capitalRequired(close: close, shares: shares)
-            
             let capReqd:String =  String(format: "%.2f", capReq)
-            
             capitalReq.text = "Cost $\(capReqd)"
-            
             if let stopSize:CompanyData = CompanyData().getExchangeFrom(ticker: thisTrade.ticker, debug: false) {
                 stopSizeLable.text = "Stop Size \(stopSize.stopSize)%"
             } else {
                 stopSizeLable.text = "Stop Size was nil"
             }
-            
-            
-            
-        } else if (action == "Manage") {
-            //MARK: - TODO - set up lables
-            //MARK: - TODO - record trade profit 
-            
-            
         } else {
-            
-            //print("\nJust poplulate lables")
             thisTrade = RealmHelpers().getEntryFor(taskID: taskID).last!
-            //debugPrint(thisTrade)
             textInput.text = String(thisTrade.close)
-            
             topLeft.text = action
-            
             topRight.text = thisTrade.ticker
-            
             midLeft.text = "Entry \(String(thisTrade.entry))"
-            
             midRight.text = "\(String(thisTrade.shares)) Shares"
-            
             bottomLeft.text = "Stop \(String(format: "%.2f", thisTrade.stop))"
-            
             bottomRight.text = "Target \(String(format: "%.2f", thisTrade.target))"
 
             switch thisTrade.account {
@@ -317,8 +221,6 @@ class ManageViewController: UIViewController, UITextViewDelegate {
                     accountSwitch.selectedSegmentIndex = 0
             }
         }
-        
-        
     }
     
     @IBAction func segueToChartAction(_ sender: Any) {
@@ -329,11 +231,11 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         navigationController?.pushViewController(myVC, animated: true)
     }
     
-    
     //MARK: - Keyboard behavior functions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textInput.resignFirstResponder()
         return true
@@ -343,5 +245,4 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         let myVC:PortfolioViewController = storyboard?.instantiateViewController(withIdentifier: "PortfolioVC") as! PortfolioViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
-    
 }

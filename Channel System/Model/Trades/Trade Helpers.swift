@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+
 class TradeHelpers {
     
     /**
@@ -76,5 +77,32 @@ class TradeHelpers {
         let winPct = (wins / Double(tasks.count)) * 100
         let winPctStr = String(format: "%.2f", winPct)
         return (String(format: "%.2f", sum), winPctStr)
+    }
+    
+    func calcGainOrLoss(thisTrade:Prices, textEntered:String, taskID:String, shares:Int, entryPrice:Double, capReq:Double, account:String)-> Double {
+        print("This is the taskID passes in to calcGain \(taskID)")
+        if let exitPrice = Double(textEntered) {
+            print("\n-----> We have  if let exitPrice of \(exitPrice)<------\n")
+            //let entryPrice:Double = thisTrade.entry
+            //let shares:Int = thisTrade.shares
+            let result:Double = (exitPrice - entryPrice) * Double(shares)
+            if ( result >= 0 ) {
+                print("\nCalc gain of \(result)")
+                RealmHelpers().updateRealm(thisTrade: thisTrade, gain: result, loss: 0.0, account: account, capReq: capReq)
+            } else {
+                print("\nCalc loss of \(result)")
+                RealmHelpers().updateRealm(thisTrade: thisTrade, gain: 0.0, loss: result, account: account, capReq: capReq)
+            }
+            return result
+        } else {
+            return 0.00
+        }
+    }
+    
+    func proveUpdateTrade(taskID:String) {
+        print("Proof the trade has been updated for taskID \(taskID)")
+        let checkTrades:Results<Prices> = RealmHelpers().checkExitedTrade(taskID: taskID)
+        print("\ndubug - checkTrades")
+        debugPrint(checkTrades)
     }
 }
