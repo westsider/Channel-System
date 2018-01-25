@@ -34,15 +34,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         title = "Finance"
         // ManualTrades().showProfit()
         // CheckDatabase().testPastEntries()
-setUpUI()
-        
-//        let newTickers = ["TYC", "UA", "UNP", "UNH", "UPS", "URI", "UTX", "UHS", "UNM", "URBN", "VFC", "VLO", "VAR", "VTR", "VRSN", "VZ", "VRTX", "VIAB", "V", "VNO", "VMC", "WMT", "WBA", "DIS", "WM", "WAT", "ANTM", "WFC", "WDC", "WU", "WY", "WHR", "WFM", "WMB", "WEC", "WYN", "WYNN", "XEL", "XRX", "XLNX", "XL", "XYL", "YHOO", "YUM", "ZBH", "ZION", "ZTS"]
-//
-//        for ticker in newTickers {
-//            print("finished \(ticker)")
-//            ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
-//        }
-        // ReplacePrices().deleteOldSymbol(ticker: "BF-B")
+        // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
+        // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
+        setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {

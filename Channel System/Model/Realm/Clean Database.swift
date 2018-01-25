@@ -39,9 +39,9 @@ class CheckDatabase {
     }
     
     func testPastEntries() {
-        //ManualTrades().oneEntryForTesting()
+        ManualTrades().oneEntryForTesting(ticker: "IBM", yyyyMMddSlash: "2018/01/22", price: 163.52)
         // ManualTrades().removeExitFrom(yyyyMMdd: "2017/12/29", exityyyyMMdd: "2018/01/22", ticker: "AAPL", exitPrice: 0.0, debug: true)
-        ManualTrades().removeEntry(yyyyMMdd: "2018/01/23", ticker: "PG", debug: true)
+        //ManualTrades().removeEntry(yyyyMMdd: "2018/01/23", ticker: "PG", debug: true)
     }
     
     func report(debug:Bool, galaxie:[String])-> String {
