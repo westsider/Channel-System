@@ -16,28 +16,50 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var intrinioPass: UITextField!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
     @IBAction func loginAction(_ sender: Any) {
+        saveLogins()
     }
     
-
-    func saveIntrinio(user:String, password:String){
-        var user = ""
-        var password = ""
-        if  let myUser = UserDefaults.standard.object(forKey: "user")   {
-            user = myUser as! String
+    func saveLogins() {
+        if  let myUser = intrinioUser.text  {
+            if myUser.count < 8 {
+                intrinioUser.text = "more characters required"
+                return
+            }
+            UserDefaults.standard.set(myUser, forKey: "user")
         } else {
             print("No User Set")
         }
-        if  let myPassWord = UserDefaults.standard.object(forKey: "password")  {
-            password = myPassWord as! String
+        
+        if  let myPassWord = intrinioUser.text  {
+            if myPassWord.count < 8 {
+                intrinioUser.text = "more characters required"
+                return
+            }
+            UserDefaults.standard.set(myPassWord, forKey: "password")
         } else {
             print("No Password Set")
         }
+        
+        if  let sciPassWord = siChart.text  {
+            if sciPassWord.count < 8 {
+                siChart.text = "more characters required"
+                return
+            }
+            UserDefaults.standard.set(sciPassWord, forKey: "scichartLicense")
+            segueToScanVC()
+        } else {
+            print("No API Key Set")
+        }
+    }
+    
+    private func segueToScanVC() {
+        let myVC:ScanViewController = storyboard?.instantiateViewController(withIdentifier: "ScanVC") as! ScanViewController
+        navigationController?.pushViewController(myVC, animated: true)
     }
 
 }

@@ -80,12 +80,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
         })
+        
         Realm.Configuration.defaultConfiguration = config
 
-        let licencing:String = UserDefaults.standard.object(forKey: "scichartLicense") as! String
-        
-        SCIChartSurface.setRuntimeLicenseKey(licencing)
-        
+        if let licencing = UserDefaults.standard.object(forKey: "scichartLicense")  {
+            SCIChartSurface.setRuntimeLicenseKey(licencing as! String)
+        }
+
         //FirebaseApp.configure()
         
         return true
