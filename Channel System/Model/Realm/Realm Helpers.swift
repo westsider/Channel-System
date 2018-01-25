@@ -147,6 +147,11 @@ class RealmHelpers: Object {
         return sortedByDate
     }
     
+    func pathToDatabase() {
+        let realm = try! Realm()
+        debugPrint("Path to realm file: " + realm.configuration.fileURL!.absoluteString)
+    }
+    
     func calcPortfolioCost()-> Double {
         let realm = try! Realm()
         let portfolioCost:Double = realm.objects(Prices.self).filter("inTrade = true AND exitedTrade = false").sum(ofProperty: "capitalReq")

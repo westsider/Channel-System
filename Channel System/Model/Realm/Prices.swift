@@ -119,15 +119,14 @@ class Prices: Object {
     func sortEntriesBy(recent: Bool, days: Int)-> Results<Prices> {
         let realm = try! Realm()
         let minStars:Int = Stats().getStars()
-        let allEntries = realm.objects(Prices.self).filter("longEntry = true AND stars >= %@", minStars)
-//let allEntries = realm.objects(Prices.self).filter("longEntry == %@", true)
+        let allEntries = realm.objects(Prices.self).filter("longEntry = true").filter("stars  >= %@", minStars)
         let sortDate = allEntries.sorted(byKeyPath: "date", ascending: false)
         
         if ( recent ) {
             let yesterday = Calendar.current.date(byAdding: .day, value: -days, to: Date())
             let specificNSDate:NSDate = yesterday! as NSDate
             let predicate = NSPredicate(format: "longEntry = true AND date > %@", specificNSDate)
-            let results = realm.objects(Prices.self).filter(predicate)
+            let results = realm.objects(Prices.self).filter(predicate).filter("stars  >= %@", minStars)
             let resultsSortDate = results.sorted(byKeyPath: "date", ascending: false)
             return resultsSortDate
         } else {
