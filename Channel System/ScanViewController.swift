@@ -34,34 +34,35 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         title = "Finance"
         // ManualTrades().showProfit()
         // CheckDatabase().testPastEntries()
-//setUpUI()
+setUpUI()
         
-        let oldtickers = ["CSX", "CMI", "CVS", "DHI", "DHR"]
-        for ticker in oldtickers {
-            print("finished \(ticker)")
-            ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
-        }
+//        let newTickers = ["TYC", "UA", "UNP", "UNH", "UPS", "URI", "UTX", "UHS", "UNM", "URBN", "VFC", "VLO", "VAR", "VTR", "VRSN", "VZ", "VRTX", "VIAB", "V", "VNO", "VMC", "WMT", "WBA", "DIS", "WM", "WAT", "ANTM", "WFC", "WDC", "WU", "WY", "WHR", "WFM", "WMB", "WEC", "WYN", "WYNN", "XEL", "XRX", "XLNX", "XL", "XYL", "YHOO", "YUM", "ZBH", "ZION", "ZTS"]
+//
+//        for ticker in newTickers {
+//            print("finished \(ticker)")
+//            ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
+//        }
         // ReplacePrices().deleteOldSymbol(ticker: "BF-B")
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        self.resetThis(ticker: "IYJ", isOn: false)
-//        CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
-//        manageTradesOrShowEntries(debug: true)
+        self.resetThis(ticker: "IYJ", isOn: false)
+        CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
+        manageTradesOrShowEntries(debug: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-//            if self.reset {
-//                GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
-//            } else {
-//                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-//                    self.firstRun()
-//                } else {
-//                    self.stopAnimating()
-//                }
-//            }
-//        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            if self.reset {
+                GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
+            } else {
+                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+                    self.firstRun()
+                } else {
+                    self.stopAnimating()
+                }
+            }
+        }
     }
 
     //MARK: - get new data
