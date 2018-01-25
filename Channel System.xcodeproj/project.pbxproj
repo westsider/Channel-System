@@ -294,6 +294,7 @@
 		0DCAAFD91FBC385100095560 /* SMA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFD81FBC385100095560 /* SMA.swift */; };
 		0DCAAFDB1FBC3AF200095560 /* PctR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDA1FBC3AF200095560 /* PctR.swift */; };
 		0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */; };
+		0DCE3D5F201A934300FC4649 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCE3D5E201A934300FC4649 /* LoginViewController.swift */; };
 		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
 		0DD146AB2003D0630000056C /* DeBugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD146AA2003D0630000056C /* DeBugViewController.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
@@ -595,6 +596,7 @@
 		0DCAAFD81FBC385100095560 /* SMA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMA.swift; sourceTree = "<group>"; };
 		0DCAAFDA1FBC3AF200095560 /* PctR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PctR.swift; sourceTree = "<group>"; };
 		0DCAAFDC1FBC3E7E00095560 /* Long Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Long Entry.swift"; sourceTree = "<group>"; };
+		0DCE3D5E201A934300FC4649 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
 		0DD146AA2003D0630000056C /* DeBugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeBugViewController.swift; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
@@ -953,6 +955,7 @@
 				0D77DDCF1FCF8E1B007573C3 /* StatsViewController.swift */,
 				0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */,
 				0DD146AA2003D0630000056C /* DeBugViewController.swift */,
+				0DCE3D5E201A934300FC4649 /* LoginViewController.swift */,
 				0DEFBCBF1FA912BC00C156B9 /* Model */,
 				0D949CDE1FA3B7B600960BA2 /* Assets.xcassets */,
 				0D949CE01FA3B7B600960BA2 /* LaunchScreen.storyboard */,
@@ -1478,6 +1481,7 @@
 				0D949CD81FA3B7B600960BA2 /* AppDelegate.swift in Sources */,
 				0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
+				0DCE3D5F201A934300FC4649 /* LoginViewController.swift in Sources */,
 				0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,
 				0D187BF81FF940DD00FE4FEC /* 2.2 Market Condition.swift in Sources */,

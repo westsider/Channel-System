@@ -37,7 +37,7 @@
 import UIKit
 import SciChart
 import RealmSwift
-import Firebase
+//import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -86,9 +86,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         SCIChartSurface.setRuntimeLicenseKey(licencing)
         
-        FirebaseApp.configure()
+        //FirebaseApp.configure()
         
         return true
+    }
+    
+    func getDefaultRealm() {
+        let defaultRealmPath = Realm.Configuration.defaultConfiguration.fileURL!
+        let bundleReamPath = Bundle.main.path(forResource: "default", ofType:"realm")
+        
+        if !FileManager.default.fileExists(atPath: defaultRealmPath.path) {
+            do
+            {
+                try FileManager.default.copyItem(atPath: bundleReamPath!, toPath: defaultRealmPath.path)
+            }
+            catch let error as NSError {
+                // Catch fires here, with an NSError being thrown
+                print("error occurred, here are the details:\n \(error)")
+            }
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

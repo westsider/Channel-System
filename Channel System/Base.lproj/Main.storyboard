@@ -993,6 +993,74 @@
             </objects>
             <point key="canvasLocation" x="1418.840579710145" y="1520.3804347826087"/>
         </scene>
+        <!--Login View Controller-->
+        <scene sceneID="dCN-1D-mxH">
+            <objects>
+                <viewController storyboardIdentifier="loginVC" id="emE-3z-pSV" customClass="LoginViewController" customModule="Channel_System" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="POh-5m-CLC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="dIR-m7-0sQ">
+                                <rect key="frame" x="16" y="69.999999999999986" width="382" height="249.66666666666663"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initialize Services" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VhB-Ju-CQB">
+                                        <rect key="frame" x="91.666666666666686" y="0.0" width="199" height="33.666666666666664"/>
+                                        <fontDescription key="fontDescription" name="PingFangHK-Semibold" family="PingFang HK" pointSize="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Scichart License Key" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RgV-aZ-QLQ">
+                                        <rect key="frame" x="16" y="57.666666666666671" width="350" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Intrinio User" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Eyc-R4-KDB">
+                                        <rect key="frame" x="16" y="111.66666666666666" width="350" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Intrinio Password" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bWS-aZ-Qur">
+                                        <rect key="frame" x="16" y="165.66666666666666" width="350" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="syf-Vo-CQP">
+                                        <rect key="frame" x="50" y="219.66666666666669" width="282" height="30"/>
+                                        <color key="backgroundColor" red="0.332110196352005" green="0.34938341379165649" blue="0.40330174565315247" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Login">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Eyc-R4-KDB" secondAttribute="trailing" constant="16" id="LPt-cs-HSd"/>
+                                    <constraint firstItem="bWS-aZ-Qur" firstAttribute="leading" secondItem="dIR-m7-0sQ" secondAttribute="leading" constant="16" id="amH-Ke-sNl"/>
+                                    <constraint firstItem="Eyc-R4-KDB" firstAttribute="leading" secondItem="dIR-m7-0sQ" secondAttribute="leading" constant="16" id="mEH-2g-BKY"/>
+                                    <constraint firstItem="RgV-aZ-QLQ" firstAttribute="leading" secondItem="dIR-m7-0sQ" secondAttribute="leading" constant="16" id="v9L-xp-kKj"/>
+                                    <constraint firstAttribute="trailing" secondItem="RgV-aZ-QLQ" secondAttribute="trailing" constant="16" id="vTc-lF-O6n"/>
+                                    <constraint firstAttribute="trailing" secondItem="bWS-aZ-Qur" secondAttribute="trailing" constant="16" id="wLK-R5-nCy"/>
+                                    <constraint firstItem="syf-Vo-CQP" firstAttribute="leading" secondItem="dIR-m7-0sQ" secondAttribute="leading" constant="50" id="wj4-Yu-UOf"/>
+                                    <constraint firstAttribute="trailing" secondItem="syf-Vo-CQP" secondAttribute="trailing" constant="50" id="yfk-EZ-o5Q"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.20621433854103088" green="0.23560121655464172" blue="0.27717664837837219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dIR-m7-0sQ" firstAttribute="leading" secondItem="32U-Qe-cRg" secondAttribute="leading" constant="16" id="VvP-qv-BkA"/>
+                            <constraint firstItem="32U-Qe-cRg" firstAttribute="trailing" secondItem="dIR-m7-0sQ" secondAttribute="trailing" constant="16" id="eAL-Co-avB"/>
+                            <constraint firstItem="dIR-m7-0sQ" firstAttribute="top" secondItem="32U-Qe-cRg" secondAttribute="top" priority="750" constant="50" id="rNm-aE-YJ0"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="32U-Qe-cRg"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Prp-gy-GH3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2167" y="1522"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="VeR-NG-g8r">
             <objects>
