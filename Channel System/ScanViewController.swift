@@ -34,27 +34,34 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         title = "Finance"
         // ManualTrades().showProfit()
         // CheckDatabase().testPastEntries()
-        setUpUI()
+//setUpUI()
+        
+        let oldtickers = ["CSX", "CMI", "CVS", "DHI", "DHR"]
+        for ticker in oldtickers {
+            print("finished \(ticker)")
+            ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
+        }
+        // ReplacePrices().deleteOldSymbol(ticker: "BF-B")
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.resetThis(ticker: "IYJ", isOn: false)
-        CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
-        manageTradesOrShowEntries(debug: true)
+//        self.resetThis(ticker: "IYJ", isOn: false)
+//        CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
+//        manageTradesOrShowEntries(debug: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            if self.reset {
-                GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
-            } else {
-                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-                    self.firstRun()
-                } else {
-                    self.stopAnimating()
-                }
-            }
-        }
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+//            if self.reset {
+//                GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
+//            } else {
+//                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+//                    self.firstRun()
+//                } else {
+//                    self.stopAnimating()
+//                }
+//            }
+//        }
     }
 
     //MARK: - get new data
@@ -186,7 +193,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     @IBAction func unwindToMenu(segue: UIStoryboardSegue) {}
 
     func resetThis(ticker:String, isOn:Bool){
-        if isOn { ReplacePrices().writeOverPrblemSymbol(ticker: ticker) }
+        if isOn { ReplacePrices().writeOverPrblemSymbol(ticker: ticker)    }
     }
 
     private func setUpUI() {

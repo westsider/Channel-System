@@ -25,6 +25,7 @@ class IntrioFeed {
                         DispatchQueue.main.async {
                             counter += 1
                             print("Intrio \(counter) of \(total)")
+                            //MARK: - TODO - if error getting data return
                             if counter == total {
                                 completion(true)
                             }
@@ -80,7 +81,7 @@ class IntrioFeed {
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
                         if ( isNewDate ) {
                              print("we are adding a new object for \(prices.ticker) on \(prices.dateString) to realm")
-    RealmHelpers().saveSymbolsToRealm(each: prices)
+                            RealmHelpers().saveSymbolsToRealm(each: prices)
                         }
                         // this section caused the last 100 days to be written over
                         //else {
@@ -105,6 +106,7 @@ class IntrioFeed {
                 case .failure(let error):
                     print("Intrinio Error getting \(ticker)")
                     debugPrint(error)
+                    return
                 }
         }
     }

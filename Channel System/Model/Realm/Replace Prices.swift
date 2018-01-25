@@ -15,13 +15,21 @@ class ReplacePrices {
     
     func writeOverPrblemSymbol(ticker:String) {
         deleteOldSymbol(ticker: ticker)
-        saveNewSymbol(ticker: ticker, saveToRealm: true, debug: true)
+        CompanyData().getInfoFor(ticker: ticker, debug: true) { (finished) in
+            if finished {
+                self.saveNewSymbol(ticker: ticker, saveToRealm: true, debug: true)
+            }
+        }
+
     }
     
     func deleteOldSymbol(ticker:String) {
         // delete ralm object
         let realm = try! Realm()
         let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", ticker)
+        for each in oneSymbol {
+            print("\(each.dateString) \(each.ticker) \(each.close)")
+        }
         try! realm.write {
             realm.delete(oneSymbol)
         }
@@ -51,19 +59,25 @@ class ReplacePrices {
                                         PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
                                             if finished {
                                                 print("oscilator done")
-                                                MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                                    if finished  {
-                                                        print("mc done")
+                                               // MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                   // if finished  {
+                                                    //    print("mc done")
                                                         Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
                                                             if finished  {
                                                                 print("Entry done")
                                                                 CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
-                                                                    print("\ncalc Stars done!\n")
+                                                                    //if finished  {
+                                                                        print("\ncalc Stars done!\n")
+                                                                        print("\n-------------------------------------\n\t\tChecking DataBase\n--------------------------------------\n")
+                                                                         _ = MarketCondition().overview(galaxie: SymbolLists().uniqueElementsFrom(testSet: false, of: 100), debug: true)
+                                                                    Utilities().playAlertSound()
+                                                                   // }
+                                                                    
                                                                 })
                                                             }
                                                         })
-                                                    }
-                                                })
+                                                    //}
+                                                //})
                                             }
                                         })
                                     }

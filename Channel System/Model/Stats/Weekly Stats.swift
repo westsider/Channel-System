@@ -83,7 +83,7 @@ class WklyStats: Object {
         try! realm.write {
             realm.delete(weekly)
         }
-        print("\nRealm \tMarketCondition \tCleared!\n")
+        print("\nRealm \tWklyStats \tCleared!\n")
     }
 }
 

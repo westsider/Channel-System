@@ -133,6 +133,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
                 CalcStars().backtest(galaxie: self.galaxie, debug: debug, completion: {
                     print("\ncalc Stars done!\n")
                     self.stopAnimating()
+                    Utilities().playAlertSound()
                 })
             }
         })
@@ -188,16 +189,16 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     
     //MARK: - Add Ticker, must add to ETF200 as well VXF
     @IBAction func addTickerAction(_ sender: Any) {
-        if (etradeLabel.text! != "") {
+        if (addTickerText.text! != "") {
             textEntered = addTickerText.text!
             // get companie info
             CompanyData().getInfoFor(ticker: textEntered, debug: true, completion: { (finished) in
                 print("Got Comany info for \(self.textEntered)")
-                ReplacePrices().saveNewSymbol(ticker: self.textEntered, saveToRealm: true, debug: true)
+                ReplacePrices().writeOverPrblemSymbol(ticker: self.textEntered)
                 //MARK: - TODO - need to make user added ticker realm object that is sent to the server so all devices can have access
             })
         } else {
-            print("\n-------> ERROR reading Ticker String <------\n")
+            print("\n-------> ERROR reading Ticker String \(addTickerText.text!) <------\n")
         }
     }
     

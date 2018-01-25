@@ -27,8 +27,12 @@ class TradeHelpers {
             let target = close + stopDistance
             return  (stop: stop, target: target, stopDistance: stopDistance)
         } else {
-            print("\n*** Warning *** Couldn't get stop and target for \(ticker)\n")
-            return (stop: 0.0, target: 0.0, stopDistance: 0.0)
+            print("\n*** Warning *** Couldn't get company data for \(ticker)\nsetting stop at5%\n")
+            let thisTickersStop = Double(5) * 0.01
+            let stopDistance = close * thisTickersStop
+            let stop = close - stopDistance
+            let target = close + stopDistance
+            return (stop: stop, target: target, stopDistance: stopDistance)
         }
     }
     
