@@ -1034,6 +1034,9 @@
                                         <state key="normal" title="Login">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="loginAction:" destination="emE-3z-pSV" eventType="touchUpInside" id="d40-6I-kqi"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -1056,6 +1059,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="32U-Qe-cRg"/>
                     </view>
+                    <connections>
+                        <outlet property="intrinioPass" destination="bWS-aZ-Qur" id="nTZ-WT-OpC"/>
+                        <outlet property="intrinioUser" destination="Eyc-R4-KDB" id="X4d-DA-a7H"/>
+                        <outlet property="siChart" destination="RgV-aZ-QLQ" id="7ni-mE-EUN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prp-gy-GH3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

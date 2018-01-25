@@ -10,12 +10,19 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var siChart: UITextField!
+    
+    @IBOutlet weak var intrinioUser: UITextField!
+    
+    @IBOutlet weak var intrinioPass: UITextField!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
+    @IBAction func loginAction(_ sender: Any) {
+    }
     
 
     func saveIntrinio(user:String, password:String){
