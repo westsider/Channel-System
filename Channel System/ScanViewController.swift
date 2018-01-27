@@ -33,12 +33,12 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         super.viewDidLoad()
         title = "Finance"
         RealmHelpers().pathToDatabase()
-        // ManualTrades().showProfit()
+        ManualTrades().showProfit()
         // CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
 
-setUpUI()
+//setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {

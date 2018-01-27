@@ -21,6 +21,8 @@ class ShowStops {
 
         let realm = try! Realm()
         let smartPrice = realm.objects(Prices.self).filter("ticker == %@", ticker).filter("inTrade == true")
+        // nil 
+        print("ticker \(ticker)\t\(String(describing: smartPrice.last?.ticker))")
         let entryPrice = (smartPrice.last?.entry)!
         var stop:Double = (smartPrice.last?.stop)!
         let stopDistance = entryPrice - stop

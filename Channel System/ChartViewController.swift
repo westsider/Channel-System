@@ -50,7 +50,8 @@ class SCSSyncMultiChartView: UIViewController {
         marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
         title = ticker
-        ShowStops().checkStop(showStops: showTrailStop, ticker: ticker)
+        if showTrailStop {
+            ShowStops().checkStop(showStops: showTrailStop, ticker: ticker) }
         completeConfiguration(debug: false)
     }
     

@@ -20,6 +20,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     var costStr:String = "nan"
     var costDict: [String:Double] = [:]
     var action = "Target"
+    var showTrailStop:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,18 +42,27 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     func activateButton(bool: Bool)-> (String, UIColor, UIColor) {
         showClosedTrades = bool
+        showTrailStop = !bool
         let onColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         let offColor = #colorLiteral(red: 0.3489862084, green: 0.3490410447, blue: 0.3489741683, alpha: 0)
         let onTitle = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         let offTitle = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        let color = bool ? onColor : offColor
+        //let color = bool ? onColor : offColor
         let title = bool ? "Closed" : "Open"
         let titleColor = bool ? onTitle : offTitle
         let bkgColor = bool ? onColor : offColor
         tasks = bool ? RealmHelpers().getClosedTrades() : RealmHelpers().getOpenTrades()
-        print(showClosedTrades,color, title, titleColor)
+        
+        print("ahowClosedTrades \(showClosedTrades)")
+        for each in tasks {
+            
+            print("\(each.dateString)\t\(each.ticker)")
+        }
+        
         return (title, titleColor, bkgColor)
     }
+    
+    
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return  tasks.count
@@ -78,7 +88,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         // showing open trades
         if !showClosedTrades {
             profit = ((thisSymbol!.close - tasks[indexPath.row].entry)) * Double(tasks[indexPath.row].shares)
-            print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares))")
+            //print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares))")
         } else {
             // showing closed trades
             profit = (tasks[indexPath.row].profit)
@@ -91,9 +101,11 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         } else {
             cell.contentView.backgroundColor = UIColorScheme().activeCell
         }
-        
+        print("\(tasks[indexPath.row].ticker)\t\(date)\t\(profit)")
         return cell
     }
+    
+
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // showing open trades
@@ -146,6 +158,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         myVC.showTrailStop = true
         myVC.entryDate = tasks[index].dateString
         myVC.action = action
+        myVC.showTrailStop = showTrailStop
         print("portfolio segue to chart. sending action \(action)")
         navigationController?.pushViewController(myVC, animated: true)
     }
