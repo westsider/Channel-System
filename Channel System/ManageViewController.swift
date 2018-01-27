@@ -51,7 +51,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("This is the taskID passes in to VC \(taskID)")
+        print("This is the taskID passes in to VC \(taskID) this is action \(action)")
         currentRisk = Account().currentRisk()
         thisTrade = Prices().getFrom(taskID: taskID).last!
         populateLables(action: action, debug: false)
@@ -139,7 +139,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             }
         case "Target":
             if let exitPrice = Double(textEntered) {
-                print("Closing the trade, target hit, sending target of \(exitPrice) to ManageTrade()")
+                print("Closing the trade, target hit, sending target for \(ticker) of \(exitPrice) to ManageTrade()")
                 TradeManage().exitTrade(yyyyMMdd: entryDate, ticker: ticker, exitPrice: exitPrice, debug: true)
             }
         case "Stop":

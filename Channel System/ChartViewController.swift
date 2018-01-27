@@ -17,6 +17,8 @@ class SCSSyncMultiChartView: UIViewController {
     let showTrades = ShowTrades()
     var ticker:String = ""
     var taskIdSelected:String = ""
+    var entryDate:String = ""
+    var action = ""
     var showTrailStop:Bool = false
     var rangeStart:Int = 0
     let axisY1Id:String = "Y1"
@@ -42,6 +44,7 @@ class SCSSyncMultiChartView: UIViewController {
     @IBAction func unwindToCharts(segue: UIStoryboardSegue) {}
     
     override func viewDidLoad() {
+        print("now in chart action is \(action)")
         detectDevice()
         oneTicker = Prices().getFrom(taskID: taskIdSelected)
         marketCondition = MarketCondition().getData()
@@ -101,7 +104,7 @@ class SCSSyncMultiChartView: UIViewController {
     //MARK: - Add To Portfolio
     @IBAction func addToPortfolioAction(_ sender: Any) {
         print("tapped add")
-        segueToManageVC(taskID: taskIdSelected, action: "Entry For")
+        segueToManageVC(taskID: taskIdSelected, action: action) // "Entry For"
     }
     
     @IBAction func managePortfolioAction(_ sender: Any) {
@@ -432,7 +435,10 @@ class SCSSyncMultiChartView: UIViewController {
     func segueToManageVC(taskID: String, action: String) {
         let myVC:ManageViewController = storyboard?.instantiateViewController(withIdentifier: "ManageVC") as! ManageViewController
         myVC.taskID = taskIdSelected
-        myVC.action = "Entry For"
+        myVC.action = action
+        myVC.entryDate = entryDate
+        myVC.ticker = ticker
+        print("segue to manage. action is \(action)")
         navigationController?.pushViewController(myVC, animated: true)
     }
     

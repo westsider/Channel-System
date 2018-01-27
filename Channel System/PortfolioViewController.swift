@@ -19,6 +19,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     var showClosedTrades = false
     var costStr:String = "nan"
     var costDict: [String:Double] = [:]
+    var action = "Target"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,7 +143,10 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = tasks[index].taskID
         myVC.maxBarsOnChart = 30
-        myVC.showTrailStop = true 
+        myVC.showTrailStop = true
+        myVC.entryDate = tasks[index].dateString
+        myVC.action = action
+        print("portfolio segue to chart. sending action \(action)")
         navigationController?.pushViewController(myVC, animated: true)
     }
 }

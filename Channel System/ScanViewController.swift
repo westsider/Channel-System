@@ -37,7 +37,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         // CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
-        setUpUI()
+
+setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -208,6 +209,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         print("\nThis is the first run.\n")
         FirstRun().initializeEverything(galaxie: galaxie, debug: false)
         UserDefaults.standard.set(false, forKey: "FirstRun")
+        // set up all of the ap keys
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "loginVC") as! LoginViewController
+        navigationController?.pushViewController(myVC, animated: true)
     }
 
     private func segueToChart(ticker: String) {

@@ -58,7 +58,7 @@ class LoginViewController: UIViewController {
     }
     
     private func segueToScanVC() {
-        let myVC:ScanViewController = storyboard?.instantiateViewController(withIdentifier: "ScanVC") as! ScanViewController
+        let myVC:ScanViewController = storyboard?.instantiateViewController(withIdentifier: "scanVC") as! ScanViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
 

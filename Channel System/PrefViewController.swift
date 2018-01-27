@@ -203,6 +203,10 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     }
     
     
+    @IBAction func apiKeysAction(_ sender: Any) {
+        let myVC = storyboard?.instantiateViewController(withIdentifier: "loginVC") as! LoginViewController
+        navigationController?.pushViewController(myVC, animated: true)
+    }
     
     func entriesWithCompletion(completion: @escaping () -> ()) {
         var count = 0
