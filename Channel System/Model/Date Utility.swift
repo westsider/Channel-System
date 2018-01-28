@@ -16,7 +16,7 @@ class Utilities {
     let today = Date()
     
     func convertToDateFrom(string: String, debug: Bool)-> Date {
-        if ( debug ) { print("\n0. date from server as string: \(string)") }
+        if ( debug ) { print("\ndate from is string: \(string)") }
         let dateS    = string
         formatter.dateFormat = "yyyy/MM/dd"
         let date:Date = formatter.date(from: dateS)!

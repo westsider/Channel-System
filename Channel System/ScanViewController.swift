@@ -34,7 +34,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         title = "Finance"
         RealmHelpers().pathToDatabase()
         ManualTrades().showProfit()
-        // CheckDatabase().testPastEntries()
+        //CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
 

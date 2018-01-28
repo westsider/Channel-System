@@ -75,9 +75,11 @@ class RealmHelpers: Object {
     
     func getOneDay(ticker:String, date:Date)-> Prices {
         // 2017-12-27 AAPL
-        if let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false).filter("date == %@", date).last {
+        if let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: true).filter("date == %@", date).last {
+            print("getOneDay() suceded for \(ticker)")
             return oneTicker
         } else {
+            print("\(ticker) for \(date) not found!")
             let nilTicker = Prices()
             nilTicker.ticker = "nil"
             nilTicker.date = Date()

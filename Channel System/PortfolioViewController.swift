@@ -20,7 +20,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     var costStr:String = "nan"
     var costDict: [String:Double] = [:]
     var action = "Target"
-    var showTrailStop:Bool = false
+    var showTrailStop:Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,6 +127,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
+        debugPrint(tasks[indexPath.row])
         segueToChart(index: indexPath.row)
     }
     

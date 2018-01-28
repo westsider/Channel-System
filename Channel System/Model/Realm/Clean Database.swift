@@ -39,9 +39,12 @@ class CheckDatabase {
     }
     
     func testPastEntries() {
-        ManualTrades().oneEntryForTesting(ticker: "IBM", yyyyMMddSlash: "2018/01/22", price: 163.52)
-        // ManualTrades().removeExitFrom(yyyyMMdd: "2017/12/29", exityyyyMMdd: "2018/01/22", ticker: "AAPL", exitPrice: 0.0, debug: true)
-        //ManualTrades().removeEntry(yyyyMMdd: "2018/01/23", ticker: "PG", debug: true)
+        //ManualTrades().oneEntryForTesting(ticker: "V", yyyyMMddSlash: "2017/12/05", price: 108.64, shares: 15)
+        //ManualTrades().makePastExit(yyyyMMdd: "2017/12/08", exityyyyMMdd: "2017/12/05", ticker: "KO", exitPrice: 46.19, debug: true)
+        
+        //  ManualTrades().removeEntry(yyyyMMdd: "2017/01/03", ticker: "IYF", debug: true)
+        //  ManualTrades().removeExitFrom(yyyyMMdd: "2017/01/03", exityyyyMMdd: "2017/01/08", ticker: "IYF", exitPrice: 0.0, debug: true)
+       
     }
     
     func report(debug:Bool, galaxie:[String])-> String {

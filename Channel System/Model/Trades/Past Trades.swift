@@ -15,7 +15,7 @@ class MyPrice {
     func profit(ticker: String, date: String, entry:Double, exit:Double, shares: Double)-> (String, Double, Double) {
         var profit:Double = 0.00
         if exit != 0.00 {
-            profit = (exit - entry) * shares - (1.05 * 2) // comm
+            profit = (exit - entry) * shares - (1.04 * 2) // comm
         }
         let cost = shares * entry
         let profitString = String(format: "%.2f", profit)
@@ -57,9 +57,12 @@ class ManualTrades {
         trades.append( MyPrice().profit(ticker: "VEA", date: "2017-12-22", entry: 44.58, exit: 45.19, shares: 37.00) )
         trades.append( MyPrice().profit(ticker: "UNH", date: "2017-12-22", entry: 220.07, exit: 225.65, shares: 7.00) )
         trades.append( MyPrice().profit(ticker: "AAPL", date: "2017-12-27", entry: 170.27, exit: 174.9, shares: 5.00) )
-        trades.append( MyPrice().profit(ticker: "IYF", date: "2017-01-3", entry: 119.41, exit: 120.69, shares: 13.00) )
-        trades.append( MyPrice().profit(ticker: "FXO", date: "2017-01-3", entry: 31.28, exit: 31.68, shares: 53.00) )
-        trades.append( MyPrice().profit(ticker: "PG", date: "2017-01-3", entry: 90.80, exit: 90.87, shares: 18.00) )
+        
+        trades.append( MyPrice().profit(ticker: "IYF", date: "2018-01-3", entry: 119.41, exit: 120.69, shares: 13.00) )
+        trades.append( MyPrice().profit(ticker: "FXO", date: "2018-01-3", entry: 31.28, exit: 31.68, shares: 53.00) )
+        trades.append( MyPrice().profit(ticker: "PG", date: "2018-01-3", entry: 90.80, exit: 90.87, shares: 18.00) )
+        trades.append( MyPrice().profit(ticker: "HRS", date: "2018-01-25", entry: 144.52, exit: 145.14, shares: 23.0) )
+
         
         for each in trades {
             print("\(each.ticker)")
@@ -157,26 +160,26 @@ class ManualTrades {
         // pastEntryAndExit(ticker: "AAPL", entryDate: "2017-12-27", exitDate: "2017-01-08", entry: 170.27, stop: 165.0, target: 180.0, shares: 5, exitPrice: 174.9)
         
         // trades.append( MyPrice().profit(ticker: "IFY", date: "2017-01-3", entry: 119.41, exit: 120.69, shares: 13.00) )
-        // pastEntryAndExit(ticker: "IYF", entryDate: "2017-01-03", exitDate: "2017-01-08", entry: 119.41, stop: 115.66, target: 122.82, shares: 13, exitPrice: 120.69)
+        // pastEntryAndExit(ticker: "IYF", entryDate: "2018-01-03", exitDate: "2018-01-08", entry: 119.41, stop: 115.66, target: 122.82, shares: 13, exitPrice: 120.69)
         
-        // trades.append( MyPrice().profit(ticker: "FXO", date: "2017-01-3", entry: 31.28, exit: 31.68, shares: 53.00) )
-        // pastEntryAndExit(ticker: "FXO", entryDate: "2017-01-03", exitDate: "2017-01-08", entry: 31.28, stop: 30.32, target: 32.2, shares: 53, exitPrice: 31.68)
+        // trades.append( MyPrice().profit(ticker: "FXO", date: "2018-01-3", entry: 31.28, exit: 31.68, shares: 53.00) )
+        // pastEntryAndExit(ticker: "FXO", entryDate: "2018-01-03", exitDate: "2018-01-08", entry: 31.28, stop: 30.32, target: 32.2, shares: 53, exitPrice: 31.68)
         
         // trades.append( MyPrice().profit(ticker: "PG", date: "2017-01-3", entry: 90.80, exit: 90.87, shares: 18.00) )
-        // pastEntryAndExit(ticker: "PG", entryDate: "2017-01-03", exitDate: "2017-01-08", entry: 90.80, stop: 87.6, target: 92.5, shares: 18, exitPrice: 90.87)
+        // pastEntryAndExit(ticker: "PG", entryDate: "2018-01-03", exitDate: "2018-01-08", entry: 90.80, stop: 87.6, target: 92.5, shares: 18, exitPrice: 90.87)
         
         
-        //removeEntry(yyyyMMdd: "2018-01-17", ticker: "EFA", debug: true)
-        //showOneTrade(yyyyMMdd: "2017-12-06", ticker: "EFA", debug: true)
-        
+       // removeEntry(yyyyMMdd: "2017-01-03", ticker: "IYF", debug: true)
+       //removeExitFrom(yyyyMMdd: "2018-01-03", exityyyyMMdd: "2018-01-08", ticker: "IYF", exitPrice: 0.00, debug: true)
+        oneEntryForTesting(ticker: "IBM", yyyyMMddSlash: "2018/01/22", price: 163.52, shares: 20)
         // 1 past entry for testing
         //oneEntryForTesting()
     }
     
-    func oneEntryForTesting(ticker:String, yyyyMMddSlash:String, price:Double) {
+    func oneEntryForTesting(ticker:String, yyyyMMddSlash:String, price:Double, shares:Int) {
         
         let stopTarget = TradeHelpers().calcStopTarget(ticker: ticker, close: price, debug: false)
-        let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
+        //let shares = TradeHelpers().calcShares(stopDist: stopTarget.stopDistance, risk: 100)
         let cost = TradeHelpers().capitalRequired(close: price, shares: shares)
         makePastEntry(yyyyMMdd: yyyyMMddSlash, ticker: ticker, entry: price, stop: stopTarget.stop, target: stopTarget.target, shares: shares, risk: 100, account: "IB", cost: cost)
     }
@@ -241,6 +244,7 @@ class ManualTrades {
     func removeEntry(yyyyMMdd: String, ticker: String, debug:Bool) {
         let tickerDate = Utilities().convertToDateFrom(string: yyyyMMdd, debug: debug)
         let oneDay = RealmHelpers().getOneDay(ticker: ticker, date: tickerDate)
+        print("found \(ticker) on \(yyyyMMdd)"); debugPrint(oneDay)
         // save realm
         let realm = try! Realm()
         try! realm.write {
