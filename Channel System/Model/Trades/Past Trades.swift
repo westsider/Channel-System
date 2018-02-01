@@ -171,7 +171,7 @@ class ManualTrades {
         
        // removeEntry(yyyyMMdd: "2017-01-03", ticker: "IYF", debug: true)
        //removeExitFrom(yyyyMMdd: "2018-01-03", exityyyyMMdd: "2018-01-08", ticker: "IYF", exitPrice: 0.00, debug: true)
-        oneEntryForTesting(ticker: "IBM", yyyyMMddSlash: "2018/01/22", price: 163.52, shares: 20)
+        oneEntryForTesting(ticker: "COG", yyyyMMddSlash: "2018/01/29", price: 27.05, shares: 122)
         // 1 past entry for testing
         //oneEntryForTesting()
     }

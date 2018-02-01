@@ -37,14 +37,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         //CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
-
-//setUpUI()
+        manageTradesOrShowEntries(debug: true)
+        setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.resetThis(ticker: "IYJ", isOn: false)
         CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
-        manageTradesOrShowEntries(debug: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
