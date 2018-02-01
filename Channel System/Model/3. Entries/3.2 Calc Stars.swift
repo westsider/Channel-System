@@ -125,4 +125,44 @@ class CalcStars {
         }
         return (stars, starIcon )
     }
+    
+    func showWinnersAnoLoosers() {
+        let allSymbols = Symbols().indexes + Symbols().DOW30 + Symbols().ETF200 + Symbols().SP500 + Symbols().FAVORITES
+        
+        //MARK: - Remove any duplicated tickers
+        func uniqueElementsFrom(testSet: Bool, of:Int) -> [String] {
+            var set = Set<String>()
+            let result = allSymbols.filter {
+                guard !set.contains($0) else {
+                    return false
+                }
+                set.insert($0)
+                return true
+            }
+            if ( testSet ) {
+                return Array(result.prefix(of))
+            } else {
+                return result
+            }
+        }
+        
+        let galaxie = uniqueElementsFrom(testSet: false, of: 100)
+        var winners:[String] = []
+        var loosers:[String] = []
+
+        for symbols in galaxie {
+            if let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false).last {
+                if oneTicker.stars > 3 {
+                    winners.append(oneTicker.ticker)
+                } else {
+                    loosers.append(oneTicker.ticker)
+                }
+            }
+
+        }
+        print("\nWinners \(winners.count)")
+        debugPrint(winners)
+        print("\nLoosers \(loosers.count)")
+        debugPrint(loosers)
+    }
 }

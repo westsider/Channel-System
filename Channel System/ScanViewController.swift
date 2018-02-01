@@ -39,6 +39,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
         manageTradesOrShowEntries(debug: true)
         setUpUI()
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
