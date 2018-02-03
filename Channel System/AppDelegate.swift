@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 5,
+            schemaVersion: 7,
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -73,10 +73,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         newObject?["exitPrice"] = exitPrice
                     }
                 }
-                if (oldSchemaVersion < 5) {
+                
+                if (oldSchemaVersion < 6) {
                     migration.enumerateObjects(ofType: Prices.className()) { oldObject, newObject in
                         let trailStop:Double = 0.0
                         newObject?["trailStop"] = trailStop
+                    }
+                }
+                if (oldSchemaVersion < 7) {
+                    migration.enumerateObjects(ofType: Stats.className()) { oldObject, newObject in
+                        let longestDDperiod:Int = 0
+                        newObject?["longestDDperiod"] = longestDDperiod
+                        
+                        let longestDDdate:Date = Date()
+                        newObject?["longestDDdate"] = longestDDdate
+                        
+                        let largestDD:Double = 0.0
+                        newObject?["largestDD"] = largestDD
+                        
+                        let largestDDdate:Date = Date()
+                        newObject?["largestDDdate"] = largestDDdate
+                        
+                        let ddAsPctOfProfit:Double = 0.0
+                        newObject?["ddAsPctOfProfit"] = ddAsPctOfProfit
                     }
                 }
         })

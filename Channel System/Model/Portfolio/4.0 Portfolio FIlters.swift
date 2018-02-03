@@ -29,9 +29,15 @@ class PortfolioFilters {
         var largestLoss:Double
         var numDays:Int
         var numYears:Double
+        
+        var longestDDperiod:Int
+        var longestDDdate:Date
+        var largestDD:Double
+        var largestDDdate:Date
+        var ddAsPctOfProfit:Double
     }
     
-    var statsArray:[StatsData] = []
+    //var statsArray:[StatsData] = []
     var portfolio:[StatsData] = []
     var cumulatveSum:Double = 0.0
     var cumulativeCost:Double = 0.0
@@ -55,24 +61,35 @@ class PortfolioFilters {
     var mainLoopSize:Int = 0
     let commissions:Double = 1.05 * 2.0
     
+    
+    var lastprofitPeak:Double = 0.0
+    var profitPeakDates:[(Date,Double)] = []
+    var drawDown:Double = 0.0
+    var maxDrawDown:Double = 0.0
+    var maxDrawDownDate:Date = Date()
+
+    
     func createStats() {
         sumProfit = totalProfit.reduce(0, +)
         sumCost = totalCost.max()!
         let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
-        let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date())
+        let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date(), debug: false)
         let numYears = Double(numDays) / 365.00
         let annualProfit = sumProfit / numYears
         let totalRoi = (sumProfit / sumCost) * 100.0
         let annualRoi = totalRoi / numYears
+        let largestDD = self.findMaxDrawDown(debug: false)
+        let longDD = self.findLongestDrawdown(debug: false)
         
-        let allStats = StatsSummary(totalProfit: sumProfit, annualProfit: annualProfit, totalRoi: totalRoi, annualRoi: annualRoi, winPct: winPct, maxCost: sumCost, largestWin: largestWin, largestLoss: largestLoss, numDays: numDays, numYears: numYears)
-        print("\nall stats\ntotal profit \(allStats.totalProfit)\nannual profit \(allStats.annualProfit)\ntotalRoi \(allStats.totalRoi)\nannual roi \(allStats.annualRoi)\nwin pct \(allStats.winPct)\nmax cost \(allStats.maxCost)\nlargest winner \(allStats.largestWin)\nlargest loss \(allStats.largestLoss)\nnum days \(numDays)\nnum years \(numYears)")
+        let allStats = StatsSummary(totalProfit: sumProfit, annualProfit: annualProfit, totalRoi: totalRoi, annualRoi: annualRoi, winPct: winPct, maxCost: sumCost, largestWin: largestWin, largestLoss: largestLoss, numDays: numDays, numYears: numYears, longestDDperiod: longDD.maxDays, longestDDdate: longDD.endDate, largestDD: largestDD.maxDD, largestDDdate: largestDD.date, ddAsPctOfProfit: largestDD.pctProfit)
+        
+        print("\nall stats\ntotal profit \(allStats.totalProfit)\nannual profit \(allStats.annualProfit)\ntotalRoi \(allStats.totalRoi)\nannual roi \(allStats.annualRoi)\nwin pct \(allStats.winPct)\nmax cost \(allStats.maxCost)\nlargest winner \(allStats.largestWin)\nlargest loss \(allStats.largestLoss)\nnum days \(numDays)\nnum years \(numYears)\nlonget DD \(longDD.maxDays) days on \(Utilities().convertToStringNoTimeFrom(date: longDD.endDate))\nlargest DD \(Utilities().dollarStr(largeNumber: largestDD.maxDD)) on \(Utilities().convertToStringNoTimeFrom(date: largestDD.date))\nDD as % of profit \(String(format: "%.1f", largestDD.pctProfit))%")
         // save to realm
         Stats().updateFinalTotal(data: allStats)
     }
     
     func using(mc:Bool, stars:Bool, numPositions:Int, completion: @escaping (Bool) -> Void) {
-        //DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .background).async {
             var done:Bool = false
             let realm = try! Realm()
             let weeklyStats = realm.objects(WklyStats.self)
@@ -104,19 +121,70 @@ class PortfolioFilters {
                     }
                     done = true
                 }
-            //}
+            }
+
+            if done {
+                Performance().updateFinalTotal(data: self.portfolio)
+                self.createStats()
+                
+                
+                completion(true)
+            }
+        }
+    }
+    
+    func findMaxDrawDown(debug:Bool)-> (maxDD:Double,date:Date, pctProfit:Double) {
+        for each in portfolio {
+            if each.dailyCumProfit > lastprofitPeak {
+                lastprofitPeak = each.dailyCumProfit
+                profitPeakDates.append((each.date, lastprofitPeak))
+            }
             
+            drawDown = lastprofitPeak - each.dailyCumProfit
+            if drawDown > maxDrawDown {
+                maxDrawDown = drawDown
+                maxDrawDownDate = each.date
+            }
         }
-        if done {
-            Performance().updateFinalTotal(data: portfolio)
-            createStats()
-            completion(true)
+        let ddAsPctOfProfit = (portfolio.last?.dailyCumProfit)! / maxDrawDown
+        if debug {
+            print("/nHere is the peak profit date array")
+            for each in self.profitPeakDates {
+                print(Utilities().convertToStringNoTimeFrom(date: each.0), each.1)
+            }
+        
+            print("\nLargest DD was \(Utilities().dollarStr(largeNumber: maxDrawDown)) on \(Utilities().convertToStringNoTimeFrom(date: maxDrawDownDate))")
+            print("Drawdown as % of Profit is \(String(format: "%.2f", ddAsPctOfProfit))")
         }
+        
+        return (maxDrawDown, maxDrawDownDate, ddAsPctOfProfit)
+    }
+    
+    func findLongestDrawdown(debug:Bool)-> (maxDays:Int,endDate:Date) {
+        var longestDD:Int = 0
+        var dateOfDD:Date = Date()
+        for (index, thisDate) in profitPeakDates.enumerated() {
+            
+            // ignore dates befor 11/12/2015
+            let startDate = Utilities().convertToDateFrom(string: "2016/03/12", debug: false)
+            if index >= 2 && thisDate.0 > startDate{
+                let date1 = profitPeakDates[index - 1].0
+                let date2 = profitPeakDates[index].0
+                let days = Utilities().calcuateDaysBetweenTwoDates(start: date1, end: date2, debug: false)
+                if days > longestDD {
+                    longestDD = days
+                    dateOfDD = thisDate.0
+                }
+            }
+        }
+        if debug {print("\nLongest period before new equity high was \(longestDD) days and ended on \(Utilities().convertToStringNoTimeFrom(date: dateOfDD))\n") }
+        return (longestDD, dateOfDD)
     }
 
     func sumProfitAndCost(profit:Double,Cost:Double, numPos:Int, ticker:String, date:Date, mc:Bool) {
         var profitHere = profit
         var matrix:Bool = true
+        
         let starsOK = checkStars(ticker: ticker)
         if mc { matrix = EntryUtil().checkMatrix(date: date) }
         if positionCount < numPos && starsOK && matrix {

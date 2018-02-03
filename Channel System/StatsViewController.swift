@@ -25,6 +25,9 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var minStarsLabel: UILabel!
     @IBOutlet weak var annualProfitLabel: UILabel!
+    @IBOutlet weak var longestDD: UILabel!
+    @IBOutlet weak var ddAsPctOfProfitLabel: UILabel!
+    @IBOutlet weak var largestDDlabel: UILabel!
     
     var galaxie = [String]()
     var portfolio:[Performance.ChartData] = []
@@ -112,6 +115,10 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
                 
                 self.largestWinLabel.text = timePeriod
                 self.largestLossLabel.text = SpReturns().textForStats(yearEnding: 2007)
+                
+                self.longestDD.text = "Longet DD \(updateStats.longestDDperiod) days on \(Utilities().convertToStringNoTimeFrom(date: updateStats.longestDDdate))"
+                self.ddAsPctOfProfitLabel.text = "\(String(format: "%.1f", updateStats.ddAsPctOfProfit))% of Profit DD"
+                self.largestDDlabel.text = "Largest DD $\(Utilities().dollarStr(largeNumber: updateStats.largestDD)) on \(Utilities().convertToStringNoTimeFrom(date: updateStats.largestDDdate))"
                 
                 self.completeConfiguration()
             }

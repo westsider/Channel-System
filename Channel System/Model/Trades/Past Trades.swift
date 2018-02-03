@@ -169,9 +169,10 @@ class ManualTrades {
         // pastEntryAndExit(ticker: "PG", entryDate: "2018-01-03", exitDate: "2018-01-08", entry: 90.80, stop: 87.6, target: 92.5, shares: 18, exitPrice: 90.87)
         
         
-       // removeEntry(yyyyMMdd: "2017-01-03", ticker: "IYF", debug: true)
+        // removeEntry(yyyyMMdd: "2018-01-29", ticker: "ROK", debug: true)
        //removeExitFrom(yyyyMMdd: "2018-01-03", exityyyyMMdd: "2018-01-08", ticker: "IYF", exitPrice: 0.00, debug: true)
-        oneEntryForTesting(ticker: "COG", yyyyMMddSlash: "2018/01/29", price: 27.05, shares: 122)
+       // oneEntryForTesting(ticker: "IBM", yyyyMMddSlash: "2018/02/02", price: 161.7, shares: 20)
+
         // 1 past entry for testing
         //oneEntryForTesting()
     }

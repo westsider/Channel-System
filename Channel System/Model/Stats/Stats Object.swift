@@ -26,6 +26,13 @@ class Stats: Object {
     @objc dynamic var numDays = 0
     @objc dynamic var numYears = 0.00
     
+    @objc dynamic var longestDDperiod = 0
+    @objc dynamic var longestDDdate = Date()
+    @objc dynamic var largestDD = 0.0
+    @objc dynamic var largestDDdate = Date()
+    @objc dynamic var ddAsPctOfProfit = 0.0
+    
+
     func changeMinStars(stars: Int) {
         let realm = try! Realm()
         let id = "01"
@@ -90,6 +97,11 @@ class Stats: Object {
             statsData.minStars = minStars!
             statsData.numDays = data.numDays
             statsData.numYears = data.numYears
+            statsData.longestDDperiod = data.longestDDperiod
+            statsData.longestDDdate = data.longestDDdate
+            statsData.largestDD = data.largestDD
+            statsData.largestDDdate = data.largestDDdate
+            statsData.ddAsPctOfProfit = data.ddAsPctOfProfit
             realm.add(statsData)
         }
     }

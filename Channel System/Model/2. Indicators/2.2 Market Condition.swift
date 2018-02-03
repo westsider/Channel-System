@@ -198,6 +198,10 @@ class MarketCondition: Object {
         
         thisString += CheckDatabase().report(debug: true, galaxie: galaxie)
         
+        thisString +=  "\n"
+        
+        thisString += ShowStops().textForMainUI()
+        
         if ( debug ) { print(thisString) }
         return ( titleString, thisString )
     }

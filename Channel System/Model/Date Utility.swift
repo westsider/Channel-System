@@ -101,16 +101,18 @@ class Utilities {
         return isMakretHours
     }
     
-    func calcuateDaysBetweenTwoDates(start: Date, end: Date) -> Int {
+    func calcuateDaysBetweenTwoDates(start: Date, end: Date, debug:Bool) -> Int {
         
         let currentCalendar = Calendar.current
-        guard let start = currentCalendar.ordinality(of: .day, in: .era, for: start) else {
+        guard let startD = currentCalendar.ordinality(of: .day, in: .era, for: start) else {
             return 0
         }
-        guard let end = currentCalendar.ordinality(of: .day, in: .era, for: end) else {
+        guard let endD = currentCalendar.ordinality(of: .day, in: .era, for: end) else {
             return 0
         }
-        return end - start
+        if debug {
+            print("Start Date \(Utilities().convertToStringNoTimeFrom(date: start)) End Date \(Utilities().convertToStringNoTimeFrom(date: end)) num Days \(endD - startD)") }
+        return endD - startD
     }
     
     func realmNotCurrent(debug: Bool)-> Bool {

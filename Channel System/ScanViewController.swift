@@ -38,9 +38,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
         manageTradesOrShowEntries(debug: true)
-        setUpUI()
-        
-
+        //setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -167,7 +165,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         print("Open trade count is \(tasks.count)")
         if ( tasks.count > 0) {
             for trades in tasks {
-                //MARK: - TODO - Check if stop
+                //MARK: - Check if stop hit
                 if trades.close < trades.stop {
                     if debug { print("\nStop Hit for \(trades.ticker) from \(trades.dateString)\n")}
                     segueToManageVC(taskID: trades.taskID, action: "Stop", ticker: trades.ticker, entryDate: trades.dateString)
@@ -200,8 +198,14 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
         let portfolioCost = RealmHelpers().calcPortfolioCost()
         let costStr = Utilities().dollarStr(largeNumber: portfolioCost)
+        let trailStops = ShowStops().textForMainUI()
         lastUpdateLable.text = "Last Update: \(dateString) $\(costStr) Comitted"
-        currentProcessLable.text = "Waiting for Position Check"
+        if trailStops == "\n--------> Trail Stop Change <--------\n" {
+            currentProcessLable.text = "Waiting for Position Check"
+        } else {
+            currentProcessLable.text = "Trail Stop Change"
+        }
+        
         marketConditionUI(debug: false)
         self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
     }
