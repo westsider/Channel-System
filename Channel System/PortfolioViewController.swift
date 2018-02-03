@@ -88,7 +88,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         // showing open trades
         if !showClosedTrades {
             profit = ((thisSymbol!.close - tasks[indexPath.row].entry)) * Double(tasks[indexPath.row].shares)
-            //print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares))")
+            print("profit: \(profit) = close: \(thisSymbol!.close) - entry: \(tasks[indexPath.row].entry) * shares: \(Double(tasks[indexPath.row].shares)) taskID \(tasks[indexPath.row].taskID)")
         } else {
             // showing closed trades
             profit = (tasks[indexPath.row].profit)

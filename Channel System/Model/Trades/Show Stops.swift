@@ -36,18 +36,26 @@ class ShowStops {
                                         .sorted(byKeyPath: "date", ascending: true)
 
         //MARK: - add trail stop to prices object
+        var priorStop = 0.0
         for each in smartLows {
-            print("\(each.dateString) \(each.low)")
+            print("In Check Stop Loop. Stop is \(stop) on \(each.dateString) low is \(each.low)")
             if each.low > priorLow {
                 // trailstop moves up
-                stop = each.low - stopDistance
+                let tempStop = each.low - stopDistance
+                if tempStop > priorStop {
+                    stop = each.low - stopDistance
+                } else {
+                    stop = priorStop
+                }
                 print("\(each.dateString) \(each.low) is higher, move stop up to \(stop)")
             } else {
+                stop = priorStop
                 print("\(each.dateString) \(each.low) stop remains the same at \(stop)")
                 // trailStop ramins the same
             }
             addTrailStop(on: each.date!, ticker: each.ticker, newStop: stop)
             priorLow = each.low
+             priorStop = stop
         }
     }
     
@@ -91,6 +99,7 @@ class ShowStops {
         
         //MARK: - add trail stop to prices object
         var thisStopChange = ""
+        var priorStop = 0.0
         for each in smartLows {
             
             print("\(each.dateString) \(each.low)")
@@ -100,11 +109,12 @@ class ShowStops {
                 print("\(each.dateString) \(each.low) is higher, move stop up to \(stop)")
                 thisStopChange = "\(each.ticker) stop now \(stop)\n"
             } else {
+                stop = priorStop
                 print("\(each.dateString) \(each.low) stop remains the same at \(stop)")
                 // trailStop ramins the same
             }
             priorLow = each.low
-            
+            priorStop = stop
         }
         uiText += thisStopChange
         return uiText
