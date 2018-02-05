@@ -28,7 +28,7 @@ class SCSSyncMultiChartView: UIViewController {
     var highestAtr:Double = 0.00
     let axisY2Id:String = "Y2"
     let axisX2Id:String = "X2"
-    var maxBarsOnChart:Int = 75
+    var maxBarsOnChart:Int =  75
     var sciChartView1 = SCIChartSurface()
     var sciChartView2 = SCIChartSurface()
     let rangeSync = SCIAxisRangeSynchronization()
@@ -50,8 +50,8 @@ class SCSSyncMultiChartView: UIViewController {
         marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
         title = ticker
-        if showTrailStop {
-            ShowStops().checkStop(showStops: showTrailStop, ticker: ticker) }
+//        if showTrailStop {
+//            ShowStops().checkStop(showStops: showTrailStop, ticker: ticker) }
         completeConfiguration(debug: false)
     }
     

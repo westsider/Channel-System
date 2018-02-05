@@ -37,27 +37,40 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         //CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
-        manageTradesOrShowEntries(debug: true)
-        //setUpUI()
+        
+        let oldDate = Utilities().convertToDateFrom(string: "2018/01/30", debug: true)
+        UserDefaults.standard.set(oldDate, forKey: "todaysDate")
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         self.resetThis(ticker: "IYJ", isOn: false)
         CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+
             if self.reset {
                 GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
             } else {
                 if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
                     self.firstRun()
                 } else {
-                    self.stopAnimating()
+                    // only run database check once a day
+                    if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
+                        let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
+                        if !updateWasToday {
+                            self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
+                                self.manageTradesOrShowEntries(debug: true)
+                                self.setUpUI()
+                                UserDefaults.standard.set(Date(), forKey: "todaysDate")
+                            }
+                        }
+                    }
                 }
             }
-        }
+        
     }
 
     //MARK: - get new data
@@ -207,7 +220,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
         
         marketConditionUI(debug: false)
-        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        //self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
     }
     
     private func firstRun() {
