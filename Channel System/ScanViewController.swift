@@ -32,19 +32,19 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        RealmHelpers().pathToDatabase()
-        ManualTrades().showProfit()
-        //CheckDatabase().testPastEntries()
+        //startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        // RealmHelpers().pathToDatabase()
+        // ManualTrades().showProfit()
+        // CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
-        
-        self.manageTradesOrShowEntries(debug: true)
-        self.setUpUI()
-        UserDefaults.standard.set(Date(), forKey: "todaysDate")
+        //self.manageTradesOrShowEntries(debug: true)
+        // if i need to debug Market Condition
+        // UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2018/02/01", debug: false), forKey: "todaysDate")
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         self.resetThis(ticker: "IYJ", isOn: false)
         CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
     }
@@ -58,15 +58,17 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 self.firstRun()
             } else {
                 // only run database check once a day
+                startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
                 if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
                     let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
                     if !updateWasToday {
-                        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-//                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
-//                            self.manageTradesOrShowEntries(debug: true)
-//                            self.setUpUI()
-//                            UserDefaults.standard.set(Date(), forKey: "todaysDate")
-//                        }
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
+                            self.manageTradesOrShowEntries(debug: true)
+                            self.setUpUI()
+                            UserDefaults.standard.set(Date(), forKey: "todaysDate")
+                        }
+                    } else {
+                        self.stopAnimating()
                     }
                 }
             }
@@ -175,6 +177,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     //MARK: - Trade Management
     private func manageTradesOrShowEntries(debug:Bool) {
         // search for trade management scenario else segue to candidates
+        //startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         let tasks = RealmHelpers().getOpenTrades()
         print("Open trade count is \(tasks.count)")
         if ( tasks.count > 0) {
@@ -207,7 +210,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     }
 
     private func setUpUI() {
-        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         let lastUpdate = Prices().getLastDateInRealm(debug: false)
         let dateString = Utilities().convertToStringNoTimeFrom(date: lastUpdate)
         let portfolioCost = RealmHelpers().calcPortfolioCost()
