@@ -108,10 +108,10 @@ class RealmHelpers: Object {
     }
     //MARK: - Make Entry
     func makeEntry(taskID:String, entry:Double, stop:Double, target:Double, shares:Int, risk:Double, debug:Bool, account:String, capital: Double) {
-        //print("You entered \(entryString)")
+        if ( debug ) { print("You entered at \(entry) now saving to realm") }
         let realm = try! Realm()
         let ticker = Prices().getFrom(taskID: taskID).last!
-
+        
         try! realm.write {
             ticker.entry     = entry
             ticker.stop      = stop

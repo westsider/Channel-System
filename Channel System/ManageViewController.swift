@@ -132,9 +132,10 @@ class ManageViewController: UIViewController, UITextViewDelegate {
 
         switch action {
         case "Entry For":
-            print("In Manage VC case Entry Triggered")
+            print("\nIn Manage VC case \(action)")
             if let entryPrice = Double(textEntered) {
-                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(currentRisk), debug: false, account: account, capital: capReq)
+                print("Converted text to double \(entryPrice)")
+                RealmHelpers().makeEntry(taskID: taskID, entry: entryPrice, stop: stop, target: target, shares: shares, risk: Double(currentRisk), debug: true, account: account, capital: capReq)
                 sequeToPortfolio()
             }
         case "Target":

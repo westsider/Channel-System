@@ -14,13 +14,14 @@ import RealmSwift
 class IntrioFeed {
 
     func getData(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
-
+        print("We are in get Data")
         var counter = 0
         let total = galaxie.count
-        let lastDateInRealm = Prices().getLastDateInRealm(debug: false)
+        let lastDateInRealm = Prices().getLastDateInRealm(debug: debug)
         for  symbols in galaxie {
             DispatchQueue.global(qos: .background).async {
-                self.getLastPrice(ticker: symbols, lastInRealm: lastDateInRealm, debug: false) { ( finished ) in // 1.4
+                self.getLastPrice(ticker: symbols, lastInRealm: lastDateInRealm, debug: debug) { ( finished ) in // 1.4
+                    print("Updateing prices for \(symbols)")
                     if finished {
                         DispatchQueue.main.async {
                             counter += 1

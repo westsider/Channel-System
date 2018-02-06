@@ -38,8 +38,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
         
-        let oldDate = Utilities().convertToDateFrom(string: "2018/01/30", debug: true)
-        UserDefaults.standard.set(oldDate, forKey: "todaysDate")
+        self.manageTradesOrShowEntries(debug: true)
+        self.setUpUI()
+        UserDefaults.standard.set(Date(), forKey: "todaysDate")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,27 +51,26 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidAppear(_ animated: Bool) {
 
-            if self.reset {
-                GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
+        if self.reset {
+            GetCSV().csvOnly(galaxie: self.galaxie, debug: false)
+        } else {
+            if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
+                self.firstRun()
             } else {
-                if  UserDefaults.standard.object(forKey: "FirstRun") == nil  {
-                    self.firstRun()
-                } else {
-                    // only run database check once a day
-                    if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
-                        let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
-                        if !updateWasToday {
-                            self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
-                                self.manageTradesOrShowEntries(debug: true)
-                                self.setUpUI()
-                                UserDefaults.standard.set(Date(), forKey: "todaysDate")
-                            }
-                        }
+                // only run database check once a day
+                if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
+                    let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
+                    if !updateWasToday {
+                        self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+//                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
+//                            self.manageTradesOrShowEntries(debug: true)
+//                            self.setUpUI()
+//                            UserDefaults.standard.set(Date(), forKey: "todaysDate")
+//                        }
                     }
                 }
             }
-        
+        }
     }
 
     //MARK: - get new data
@@ -88,6 +88,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     //////////////////////////////////////////////////////////////////////////////////
     //MARK: - Initialize Everything
     func updateNewPrices(galaxie: [String], debug:Bool) {
+        print("\nwe are updating prices\n")
         updateNVActivity(with:"Contacting NYSE")
         IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in
             if finished {
