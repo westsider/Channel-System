@@ -32,14 +32,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Finance"
-        //startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        workOnDataBase()
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
-        // RealmHelpers().pathToDatabase()
-        // ManualTrades().showProfit()
-        // CheckDatabase().testPastEntries()
-        // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
-        // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
-        //self.manageTradesOrShowEntries(debug: true)
         // if i need to debug Market Condition
         // UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2018/02/01", debug: false), forKey: "todaysDate")
     }
@@ -234,7 +228,16 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "loginVC") as! LoginViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
-
+    
+    func workOnDataBase() {
+        // RealmHelpers().pathToDatabase()
+        // ManualTrades().showProfit()
+        // CheckDatabase().testPastEntries()
+        // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
+        // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
+        //self.manageTradesOrShowEntries(debug: true)
+    }
+    
     private func segueToChart(ticker: String) {
         let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
         myVC.taskIdSelected = Prices().getLastTaskID()
