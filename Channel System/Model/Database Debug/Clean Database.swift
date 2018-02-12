@@ -39,8 +39,8 @@ class CheckDatabase {
     }
     
     func testPastEntries() {
-        //ManualTrades().oneEntryForTesting(ticker: "V", yyyyMMddSlash: "2017/12/05", price: 108.64, shares: 15)
-        //ManualTrades().makePastExit(yyyyMMdd: "2017/12/08", exityyyyMMdd: "2017/12/05", ticker: "KO", exitPrice: 46.19, debug: true)
+        ManualTrades().oneEntryForTesting(ticker: "RSX", yyyyMMddSlash: "2018/02/07", price: 22.35, shares: 149)
+        ManualTrades().makePastExit(yyyyMMdd: "2018/02/07", exityyyyMMdd: "2018/02/08", ticker: "RSX", exitPrice: 21.64, debug: true)
         
         //  ManualTrades().removeEntry(yyyyMMdd: "2017/01/03", ticker: "IYF", debug: true)
         //  ManualTrades().removeExitFrom(yyyyMMdd: "2017/01/03", exityyyyMMdd: "2017/01/08", ticker: "IYF", exitPrice: 0.0, debug: true)
@@ -67,23 +67,27 @@ class CheckDatabase {
         var answer:String = "nan"
         if debug {
             answer = "\n\n-------------------------------------------------------\n"
-            //print()
             answer +=  "Checking database integrity. \(numRecords) records found"
         }
-        //DispatchQueue.global(qos: .background).async {
+        
         for ticker in galaxie {
-            missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
-            zeroValues += self.checkForZeroVal(ticker: ticker)             // test 2
-            doublePrints += self.findDuplicates(ticker: ticker, debug: true) // test 3
-            notUpdatedCounter += Utilities().lastDateMatchesRealm(ticker: ticker, lastUpdate: lastUpdate, debug: false) // test 4
-            counter += 1
+                DispatchQueue.global(qos: .background).async {
+                    missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
+                    zeroValues += self.checkForZeroVal(ticker: ticker)             // test 2
+                    doublePrints += self.findDuplicates(ticker: ticker, debug: true) // test 3
+                    notUpdatedCounter += Utilities().lastDateMatchesRealm(ticker: ticker, lastUpdate: lastUpdate, debug: false) // test 4
+                    counter += 1
+                    if self.numberOfEntries(ticker: ticker) < 1 {
+                        print("Warning, no entries found for \(ticker)")
+                    }
+            }
         }
-        //}
-        // DispatchQueue.main.async {
-        if counter != total {
-            answer += "\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)"
-        } else {
-            answer += "\nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols"
+        DispatchQueue.main.async {
+            if counter != total {
+                answer += "\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)"
+            } else {
+                answer += "\nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols"
+            }
         }
         
         answer = "\n\n-------------------------------------------------------\n"
@@ -125,6 +129,39 @@ class CheckDatabase {
         
         return diff
     }
+    
+    func numberOfEntries(ticker:String)-> Int {
+        let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
+        var tradeCount = 0
+        for each in prices {
+            if each.inTrade == true {
+                tradeCount += 1
+            }
+        }
+        return tradeCount
+    }
+    
+    func checkIndicators(ticker:String)-> Int {
+        let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
+        var sma10 = 0
+        var sma200 = 0
+        var wPtcR = 0
+        for each in prices {
+            if each.movAvg10 == 0.0 {
+                sma10 += 1
+            }
+            if each.movAvg200 == 0.0 {
+                sma200 += 1
+            }
+            if each.wPctR == 0.0 {
+                wPtcR += 1
+            }
+        }
+        print("Found zero values for \(ticker) SMA(10)\(sma10), SMA(200) \(sma200), wPct(R) \(wPtcR)")
+        let allZeroData = sma10 + sma200 + wPtcR
+        return allZeroData
+    }
+    
     
     func checkForZeroVal(ticker:String)-> Int {
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)

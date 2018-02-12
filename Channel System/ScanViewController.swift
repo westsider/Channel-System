@@ -30,16 +30,31 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var reset:Bool = false
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        //super.viewDidLoad()
         title = "Finance"
-        workOnDataBase()
+        //workOnDataBase()
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
         // if i need to debug Market Condition
-        // UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2018/02/01", debug: false), forKey: "todaysDate")
+        //UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2013/02/01", debug: false), forKey: "todaysDate")
+
+        let thisTicker = "QQQ"
+        PriorData().findPagesFor(start: "2013-11-25", end: "2014-12-12", ticker: thisTicker, debug: true, completion: { (pages) in
+            if pages.count > 1 {
+                print("Finished getting pages \(pages)")
+                // 12-2-2015 was first date
+                PriorData().loadfrom(ticker: "QQQ", start: pages[0], end: pages[1], saveToRealm: true, debug: true)
+                // need a completio handler
+                // Recalculate().allIndicators(ticker: thisTicker, debug: true)
+            }
+        })
+
+        //let _ = Prices().sortOneTicker(ticker: "QQQ", debug: true)
+        //let answer = CheckDatabase().report(debug: true, galaxie:["QQQ"])
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.resetThis(ticker: "IYJ", isOn: false)
+        self.resetThis(ticker: "QQQ", isOn: false)
         CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
     }
     
@@ -232,7 +247,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     func workOnDataBase() {
         // RealmHelpers().pathToDatabase()
         // ManualTrades().showProfit()
-        // CheckDatabase().testPastEntries()
+        CheckDatabase().testPastEntries()
         // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
         //self.manageTradesOrShowEntries(debug: true)

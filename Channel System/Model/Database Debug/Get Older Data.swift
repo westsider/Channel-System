@@ -1,51 +1,86 @@
 //
-//  Replace Prices.swift
+//  Get Older Data.swift
 //  Channel System
 //
-//  Created by Warren Hansen on 1/9/18.
+//  Created by Warren Hansen on 2/8/18.
 //  Copyright © 2018 Warren Hansen. All rights reserved.
 //
 
 import Foundation
 import Alamofire
 import SwiftyJSON
-import RealmSwift
 
-class ReplacePrices {
+class PriorData {
     
-    func writeOverPrblemSymbol(ticker:String) {
-        deleteOldSymbol(ticker: ticker)
-        CompanyData().getInfoFor(ticker: ticker, debug: true) { (finished) in
-            if finished {
-                self.saveNewSymbol(ticker: ticker, saveToRealm: true, debug: true)
+    func findPagesFor(start:String, end:String, ticker: String,  debug: Bool,  completion: @escaping ([Int]) -> Void) {
+        
+        var pagesWeNeed:[Int] = []
+        var haveStart:Bool = false
+        var haveEnd:Bool = false
+        
+        for i in 7...12 {
+            print("Requesting page \(i) for \(ticker)") //}
+            let request = "https://api.intrinio.com/prices?ticker=\(ticker)&page_number=\(i)"
+            let user = Utilities().getUser().user
+            let password = Utilities().getUser().password
+            var dateArray:[String] = []
+ 
+            Alamofire.request("\(request)")
+                .authenticate(user: user, password: password)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+    
+                        for data in json["data"].arrayValue {
+                            if let date = data["date"].string {
+                                dateArray.append(date)
+                            }
+                        }  // JSON loop ends
+                        if ( debug ) {
+                            
+                            let firstDate = dateArray.last!
+                            let lastDate = dateArray.first!
+   
+                            print("\(ticker) request complete for page \(i) \(firstDate) -> \(lastDate)")
+                            if  dateArray.contains(start)  {
+                                print("\nPage \(i) holds the start date we need!\n")
+                                haveStart = true
+                                pagesWeNeed.append(i)
+                            }
+                            
+                            if  dateArray.contains(end) {
+                                print("\nPage \(i) holds the end date we need!\n")
+                                haveEnd = true
+                                pagesWeNeed.append(i)
+                            }
+   
+                        }
+                        if haveStart && haveEnd {
+                            print("\nThis search satisfied our needs from pages \(pagesWeNeed)\n")
+                        } else {
+                            print("\nWe need to expand the search\n")
+                        }
+                        completion(pagesWeNeed)
+                    case .failure(let error):
+                        print("\n---------------------------------\n\tIntrinio Error getting \(ticker)\n-----------------------------------")
+                        debugPrint(error)
+                    }  // result ends
             }
         }
-
     }
     
-    func deleteOldSymbol(ticker:String) {
-        // delete ralm object
-        let realm = try! Realm()
-        let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", ticker)
-        for each in oneSymbol {
-            print("\(each.dateString) \(each.ticker) \(each.close)")
-        }
-        try! realm.write {
-            realm.delete(oneSymbol)
-        }
-    }
-    
-    func saveNewSymbol(ticker:String, saveToRealm:Bool, debug:Bool) {
-
+    func loadfrom(ticker:String ,start:Int, end:Int, saveToRealm:Bool, debug:Bool) {
+        
         var countCalls:Int = 0
         let galaxie = [ticker]
         
-        for i in 1...11 {
-            self.getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
+        for i in start...end {
+            getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
                 if finished {
                     countCalls += 1
                     print("got page \(i) countCall = \(countCalls)")
-                    if countCalls == 11 {
+                    if countCalls == 4 {
                         print("\n------> Now Calc Indicators <-----")
                         print("Finished all \(countCalls)")
                         // need 2014/11/25  got 2014-11-05
@@ -59,24 +94,24 @@ class ReplacePrices {
                                         PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
                                             if finished {
                                                 print("oscilator done")
-                                               // MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                                   // if finished  {
-                                                    //    print("mc done")
-                                                        Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                            if finished  {
-                                                                print("Entry done")
-                                                                CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
-                                                                    //if finished  {
-                                                                        print("\ncalc Stars done!\n")
-                                                                        print("\n-------------------------------------\n\t\tChecking DataBase\n--------------------------------------\n")
-                                                                         _ = MarketCondition().overview(galaxie: SymbolLists().uniqueElementsFrom(testSet: false, of: 100), debug: true)
-                                                                    Utilities().playAlertSound()
-                                                                   // }
-                                                                    
-                                                                })
-                                                            }
+                                                // MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                                // if finished  {
+                                                //    print("mc done")
+                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
+                                                    if finished  {
+                                                        print("Entry done")
+                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                            //if finished  {
+                                                            print("\ncalc Stars done!\n")
+                                                            print("\n-------------------------------------\n\t\tChecking DataBase\n--------------------------------------\n")
+                                                            _ = MarketCondition().overview(galaxie: SymbolLists().uniqueElementsFrom(testSet: false, of: 100), debug: true)
+                                                            Utilities().playAlertSound()
+                                                            // }
+                                                            
                                                         })
-                                                    //}
+                                                    }
+                                                })
+                                                //}
                                                 //})
                                             }
                                         })
@@ -89,11 +124,10 @@ class ReplacePrices {
             })
         }
     }
-   
     
-    /// Get realtime ohlc
+    // redo this func to only write to realm the dates that are missing
     func getLastPrice(ticker: String,  debug: Bool, page:Int, saveToRealm:Bool, completion: @escaping (Bool) -> Void) {
-
+        
         print("Requesting page \(page) for \(ticker)") //}
         let request = "https://api.intrinio.com/prices?ticker=\(ticker)&page_number=\(page)"
         let user = Utilities().getUser().user
@@ -107,7 +141,7 @@ class ReplacePrices {
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                   if ( debug ) { print("JSON: \(json)") }
+                    if ( debug ) { print("JSON: \(json)") }
                     for data in json["data"].arrayValue {
                         let prices = Prices()
                         prices.ticker = ticker
@@ -129,7 +163,7 @@ class ReplacePrices {
                         // the next section is complicated becuase the intrio feed will only return open and close for today
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
                         if saveToRealm { RealmHelpers().saveSymbolsToRealm(each: prices) }
-                       
+                        
                         //debugPrint(prices)
                         // if this is today, simulate a high and low becuase even after the close I only show a open and close from the API
                         if dateIsToday {
@@ -160,32 +194,4 @@ class ReplacePrices {
         }
         return with
     }
-    
-    func getSymbolsAvailable(debug: Bool, page:Int, completion: @escaping (Bool) -> Void) {
-        // get last price from intrio
-        //if ( debug ) {
-        print("Requesting remote data for symbols") //}
-        let request = "https://api.intrinio.com/companies?page_number=\(page)" //DWDP  page_number=2
-        let user = "d7e969c0309ff3b9ced6ed36d75e6d0d"
-        let password = "e6cf8f921bb621f398240e315ab79068"
-        Alamofire.request("\(request)")
-            .authenticate(user: user, password: password)
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    if ( debug ) { print("JSON: \(json)") }
-                   // for data in json["data"].arrayValue {
-        
-                    //}  // JSON loop ends
-                    if ( debug ) { print("Symbol request complete") }
-                    completion(true)
-                case .failure(let error):
-                    print("Intrinio Error getting symbols")
-                    debugPrint(error)
-                }  // result ends
-        }
-    }
-    
-    
 }

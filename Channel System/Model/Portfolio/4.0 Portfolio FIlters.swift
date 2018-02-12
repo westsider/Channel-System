@@ -72,7 +72,7 @@ class PortfolioFilters {
     func createStats() {
         sumProfit = totalProfit.reduce(0, +)
         sumCost = totalCost.max()!
-        let fistDayofProfit = Utilities().convertToDateFrom(string: "2016/02/01", debug: false)
+        let fistDayofProfit = Utilities().convertToDateFrom(string: "2014/08/01", debug: false)
         let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date(), debug: false)
         let numYears = Double(numDays) / 365.00
         let annualProfit = sumProfit / numYears
@@ -165,8 +165,8 @@ class PortfolioFilters {
         var dateOfDD:Date = Date()
         for (index, thisDate) in profitPeakDates.enumerated() {
             
-            // ignore dates befor 11/12/2015
-            let startDate = Utilities().convertToDateFrom(string: "2016/03/12", debug: false)
+            // ignore dates befor 2014/03/12
+            let startDate = Utilities().convertToDateFrom(string: "2014/03/12", debug: false)
             if index >= 2 && thisDate.0 > startDate{
                 let date1 = profitPeakDates[index - 1].0
                 let date2 = profitPeakDates[index].0
