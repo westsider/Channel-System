@@ -253,6 +253,18 @@ class Prices: Object {
         }
         print("Number of tickers in realm is \(counter)\n")
     }
+    
+    func isNewDate(ticker:String, date:Date, debug:Bool)-> Bool {
+        var answer = true
+        if sortOneTicker(ticker: ticker, debug: false).filter("date == %@", date).last != nil {
+            answer = false
+            if debug { print("\nwe found \(Utilities().convertToStringNoTimeFrom(date: date)) in current database\n") }
+        } else {
+            if debug { print("\nwe didnt find \(Utilities().convertToStringNoTimeFrom(date: date)) in current database\nAdding this Date\n") }
+        }
+        
+        return answer
+    }
 }
 
 

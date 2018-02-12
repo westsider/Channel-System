@@ -37,14 +37,12 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         // if i need to debug Market Condition
         //UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2013/02/01", debug: false), forKey: "todaysDate")
 
-        let thisTicker = "QQQ"
+        let thisTicker = "DBB"
         PriorData().findPagesFor(start: "2013-11-25", end: "2014-12-12", ticker: thisTicker, debug: true, completion: { (pages) in
             if pages.count > 1 {
                 print("Finished getting pages \(pages)")
                 // 12-2-2015 was first date
-                PriorData().loadfrom(ticker: "QQQ", start: pages[0], end: pages[1], saveToRealm: true, debug: true)
-                // need a completio handler
-                // Recalculate().allIndicators(ticker: thisTicker, debug: true)
+                PriorData().loadfrom(ticker: thisTicker, start: pages[0], end: pages[1], saveToRealm: true, debug: true)
             }
         })
 
@@ -105,11 +103,11 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             if finished {
                 print("intrinio done")
                 self.updateNVActivity(with:"Loading Trend 1")
-                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in
+                SMA().getData(galaxie: galaxie, debug: debug, period: 10, redoAll: false) { ( finished ) in
                     if finished {
                         print("sma(10) done")
                         self.updateNVActivity(with:"Loading Trend 2")
-                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in 
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 200, redoAll: false) { ( finished ) in 
                             if finished {
                                 print("sma(200) done")
                                 self.updateNVActivity(with:"Loading Oscilator")

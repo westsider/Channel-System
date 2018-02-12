@@ -50,10 +50,10 @@ class ReplacePrices {
                         print("Finished all \(countCalls)")
                         // need 2014/11/25  got 2014-11-05
                         //run indicators ect
-                        SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 10, redoAll: true) { ( finished ) in // 2.0
                             if finished {
                                 print("sma(10) done")
-                                SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
+                                SMA().getData(galaxie: galaxie, debug: debug, period: 200, redoAll: true) { ( finished ) in // 2.0
                                     if finished {
                                         print("sma(200) done")
                                         PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in

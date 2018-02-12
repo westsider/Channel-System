@@ -10,12 +10,12 @@ import Foundation
 
 class Recalculate {
     
-    func allIndicators(ticker:String, debug:Bool) {
+    func allIndicators(ticker:String, debug:Bool, redoAll:Bool) {
         
-        SMA().getData(galaxie: [ticker], debug: debug, period: 10) { (finished1) in
+        SMA().getData(galaxie: [ticker], debug: debug, period: 10, redoAll: redoAll) { (finished1) in
             if finished1 {
                 print("Finished SMA10")
-                SMA().getData(galaxie: [ticker], debug: debug, period: 200) { (finished2) in
+                SMA().getData(galaxie: [ticker], debug: debug, period: 200, redoAll: true) { (finished2) in
                     if finished2 {
                         print("Finished SMA200")
                         PctR().getwPctR(galaxie: [ticker], debug: true, completion: { (finished3) in

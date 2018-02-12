@@ -29,11 +29,11 @@ class FirstRun {
                             if finished {
                                 print("intrinio done")
                                 //self.updateNVActivity(with:"Loading Trend 1")
-                                SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
+                                SMA().getData(galaxie: galaxie, debug: debug, period: 10, redoAll: true) { ( finished ) in // 2.0
                                     if finished {
                                         print("sma(10) done")
                                         //self.updateNVActivity(with:"Loading Trend 2")
-                                        SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
+                                        SMA().getData(galaxie: galaxie, debug: debug, period: 200, redoAll: true) { ( finished ) in // 2.0
                                             if finished {
                                                 print("sma(200) done")
                                                 //self.updateNVActivity(with:"Loading Oscilator")

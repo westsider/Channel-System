@@ -85,34 +85,30 @@ class PriorData {
                         print("Finished all \(countCalls)")
                         // need 2014/11/25  got 2014-11-05
                         //run indicators ect
-                        SMA().getData(galaxie: galaxie, debug: debug, period: 10) { ( finished ) in // 2.0
-                            if finished {
+                        SMA().getData(galaxie: galaxie, debug: debug, period: 10, redoAll: true) { ( finished1 ) in // 2.0
+                            if finished1 {
                                 print("sma(10) done")
-                                SMA().getData(galaxie: galaxie, debug: debug, period: 200) { ( finished ) in // 2.0
-                                    if finished {
+                                SMA().getData(galaxie: galaxie, debug: debug, period: 200, redoAll: true) { ( finished2 ) in // 2.0
+                                    if finished2 {
                                         print("sma(200) done")
-                                        PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                            if finished {
+                                        PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished3) in
+                                            if finished3 {
                                                 print("oscilator done")
                                                 // MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
                                                 // if finished  {
                                                 //    print("mc done")
-                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-                                                    if finished  {
+                                                Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished4) in
+                                                    if finished4  {
                                                         print("Entry done")
                                                         CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
                                                             //if finished  {
                                                             print("\ncalc Stars done!\n")
                                                             print("\n-------------------------------------\n\t\tChecking DataBase\n--------------------------------------\n")
-                                                            _ = MarketCondition().overview(galaxie: SymbolLists().uniqueElementsFrom(testSet: false, of: 100), debug: true)
+                                                            //_ = MarketCondition().overview(galaxie: SymbolLists().uniqueElementsFrom(testSet: false, of: 100), debug: true)
                                                             Utilities().playAlertSound()
-                                                            // }
-                                                            
                                                         })
                                                     }
                                                 })
-                                                //}
-                                                //})
                                             }
                                         })
                                     }
@@ -162,14 +158,21 @@ class PriorData {
                         }
                         // the next section is complicated becuase the intrio feed will only return open and close for today
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
-                        if saveToRealm { RealmHelpers().saveSymbolsToRealm(each: prices) }
+                        let isNewDate = Prices().isNewDate(ticker: ticker, date: prices.date!, debug: true)
+                        if saveToRealm && isNewDate {
+                            RealmHelpers().saveSymbolsToRealm(each: prices)
+                            print("Yes we added \(Utilities().convertToStringNoTimeFrom(date: prices.date!))")
+                        }
                         
                         //debugPrint(prices)
                         // if this is today, simulate a high and low becuase even after the close I only show a open and close from the API
-                        if dateIsToday {
+                        if dateIsToday  && isNewDate  {
                             if ( debug ) {  print("replace todays data for \(prices.ticker)") }
                             let simHighLow = self.simulateHighLow(with: prices)
-                            if saveToRealm { RealmHelpers().updateTodaysPrice(each: simHighLow) }
+                            if saveToRealm {
+                                RealmHelpers().updateTodaysPrice(each: simHighLow)
+                                
+                            }
                         }
                         lastLow = prices.high
                         lastHigh = prices.low

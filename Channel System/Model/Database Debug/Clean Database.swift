@@ -39,8 +39,8 @@ class CheckDatabase {
     }
     
     func testPastEntries() {
-        ManualTrades().oneEntryForTesting(ticker: "RSX", yyyyMMddSlash: "2018/02/07", price: 22.35, shares: 149)
-        ManualTrades().makePastExit(yyyyMMdd: "2018/02/07", exityyyyMMdd: "2018/02/08", ticker: "RSX", exitPrice: 21.64, debug: true)
+        ManualTrades().oneEntryForTesting(ticker: "EWT", yyyyMMddSlash: "2018/02/06", price: 37.22, shares: 88)
+        //ManualTrades().makePastExit(yyyyMMdd: "2018/02/07", exityyyyMMdd: "2018/02/08", ticker: "RSX", exitPrice: 21.64, debug: true)
         
         //  ManualTrades().removeEntry(yyyyMMdd: "2017/01/03", ticker: "IYF", debug: true)
         //  ManualTrades().removeExitFrom(yyyyMMdd: "2017/01/03", exityyyyMMdd: "2017/01/08", ticker: "IYF", exitPrice: 0.0, debug: true)

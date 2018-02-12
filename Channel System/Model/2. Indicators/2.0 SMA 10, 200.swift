@@ -11,7 +11,7 @@ import RealmSwift
 
 class SMA {
 
-    func getData(galaxie: [String], debug:Bool, period:Int, completion: @escaping (Bool) -> Void) {
+    func getData(galaxie: [String], debug:Bool, period:Int, redoAll:Bool, completion: @escaping (Bool) -> Void) {
         var counter = 0
         let total = galaxie.count
         var done:Bool = false
@@ -19,7 +19,7 @@ class SMA {
             DispatchQueue.global(qos: .background).async {
                 done = false
                 let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false)
-                done = self.averageOf(period: period, debug: debug, prices: oneTicker, redoAll: false)
+                done = self.averageOf(period: period, debug: debug, prices: oneTicker, redoAll: redoAll)
                 if done {
                     DispatchQueue.main.async {
                         counter += 1
