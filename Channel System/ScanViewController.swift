@@ -28,32 +28,39 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var marketCondition:Results<MarketCondition>!
     var marketReportString = ("No Title", "No Text")
     var reset:Bool = false
-    
+
+
     override func viewDidLoad() {
         //super.viewDidLoad()
         title = "Finance"
         //workOnDataBase()
-        galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 100)
+        // PriorData().addMissing(ticker: ticker, start: 0, end: 13, saveToRealm: true, debug: true) // adds only missing prices then indicators and entries
+        galaxie = SymbolLists().uniqueElementsFrom(testSet: true, of: 100)
         // if i need to debug Market Condition
         //UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2013/02/01", debug: false), forKey: "todaysDate")
+        //CalcStars().showWinnersAndLoosers()
 
-        let thisTicker = "DBB"
-        PriorData().findPagesFor(start: "2013-11-25", end: "2014-12-12", ticker: thisTicker, debug: true, completion: { (pages) in
-            if pages.count > 1 {
-                print("Finished getting pages \(pages)")
-                // 12-2-2015 was first date
-                PriorData().loadfrom(ticker: thisTicker, start: pages[0], end: pages[1], saveToRealm: true, debug: true)
-            }
-        })
+//        let tickersToFix  = ["LQD", "MBB", "OIL", "OIH", "PBE", "PCY", "PFF", "PGJ", "PHB", "RJA", "RPV", "RSP", "RTH", "RWX", "RZV", "SHM", "SHV", "SHY", "SLV", "TFI", "TIP", "UNG", "USO", "UUP", "VDC", "VNQ", "VOT", "VOX", "VPU", "VTV", "VUG", "VV", "VWO"]
+//        // can only get 33 tickers at a time
+//        let tickersToFix2 = ["VXF", "VYM", "XBI", "XES", "XHB", "XLB", "XLE", "XLG", "XLI", "XLK", "XLP", "XLU", "XLV", "XLY", "XME", "AAP", "AES", "AET", "AFL", "AMG", "A", "GAS", "APD", "ARG", "AKAM", "AA", "AGN", "ALXN", "ALLE", "ADS", "ALTR", "ALL", "MO"]
+//        let tickersToFix3 = ["AMZN", "AEE", "AAL", "AEP", "AIG", "AMT", "ABC", "AMP", "AME", "AMGN", "APH", "ADI", "APC", "AON", "AMAT", "APA", "AIV", "AIZ", "ADM", "T", "ADSK", "ADP", "AN", "AZO", "AVGO", "AVB", "BHI", "BLL", "BK", "BCR", "BAX", "BBT", "BDX"]
+//        let tickersToFix4 = ["BBBY", "BBY", "BLX", "HRB", "BRCM", "BMY", "CHRW", "COG", "CAM", "CPB", "COF", "CAH", "HSIC", "KMX", "CCL", "CBG", "CBS", "CELG", "CNP", "CTL", "CERN", "CF", "SCHW", "CHK", "CMG", "CB", "CI", "XEC"]
+//        let tickersToFix5 = [ "CAG", "COP", "CNX", "ED", "BXP", "STZ", "iGLW", "COST", "CCI", "CSX", "CMI", "CVS", "DHR", "DRI", "DVA", "DE", "DLPH", "DAL"] // "CLX", "CME", "CMS", "COH", "CTSH", "CCE", "CL", "CMCSA", "CMA", "CSC",
+//        
+//        let tickersToFix6 = ["CINF", "CTAS", "C", "CTXS", "XRAY", "DVN", "DISCA", "DISCK"]
+//        
+//        for ticker in tickersToFix6 {
+//            //let _ = CheckDatabase().showMissingDatesFor(ticker: ticker, debug: false)
+//            print("\n\n-------------------------------------\n")
+//            PriorData().addMissing(ticker: ticker, start: 0, end: 13, saveToRealm: true, debug: true)
+//        }
 
-        //let _ = Prices().sortOneTicker(ticker: "QQQ", debug: true)
-        //let answer = CheckDatabase().report(debug: true, galaxie:["QQQ"])
-        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.resetThis(ticker: "QQQ", isOn: false)
-        CheckDatabase().canIgetDataFor(ticker: "REM", isOn: false)
+        CheckDatabase().canIgetDataFor(ticker: "ADT", isOn: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,7 +78,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                     if !updateWasToday {
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
                             self.manageTradesOrShowEntries(debug: true)
+                            
                             self.setUpUI()
+                            self.marketConditionUI(debug: false)
                             UserDefaults.standard.set(Date(), forKey: "todaysDate")
                         }
                     } else {
@@ -82,6 +91,21 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
 
+
+    //MARK: - get missing days and calc all results
+    func getPriorPrices() {
+        galaxie = Symbols().Loosers
+        for ticker in galaxie {
+            PriorData().findPagesFor(start: "2013-11-25", end: "2014-12-12", ticker: ticker, debug: true, completion: { (pages) in
+                if pages.count > 1 {
+                    print("Finished getting pages \(pages)")
+                    // 12-2-2015 was first date
+                    PriorData().addMissing(ticker: ticker, start: pages[0], end: pages[1], saveToRealm: true, debug: true)
+                }
+            })
+        }
+    }
+    
     //MARK: - get new data
     @IBAction func getNewDataAction(_ sender: Any) {
         self.startAnimating(self.size, message: "Updating Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
@@ -229,7 +253,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
             currentProcessLable.text = "Trail Stop Change"
         }
         
-        marketConditionUI(debug: false)
+        
         //self.startAnimating(self.size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
     }
     
@@ -245,8 +269,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     func workOnDataBase() {
         // RealmHelpers().pathToDatabase()
         // ManualTrades().showProfit()
-        CheckDatabase().testPastEntries()
-        // ReplacePrices().writeOverPrblemSymbol(ticker: ticker)
+        //CheckDatabase().testPastEntries()
+        ReplacePrices().writeOverPrblemSymbol(ticker: "MDY")
         // ReplacePrices().deleteOldSymbol(ticker: "QRVO")
         //self.manageTradesOrShowEntries(debug: true)
     }

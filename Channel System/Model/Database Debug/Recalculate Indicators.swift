@@ -10,6 +10,12 @@ import Foundation
 
 class Recalculate {
     
+    func indicatorLoopOf(missing:[String]) {
+        for ticker in missing {
+            Recalculate().allIndicators(ticker: ticker, debug: true, redoAll: true)
+        }
+    }
+    
     func allIndicators(ticker:String, debug:Bool, redoAll:Bool) {
         
         SMA().getData(galaxie: [ticker], debug: debug, period: 10, redoAll: redoAll) { (finished1) in

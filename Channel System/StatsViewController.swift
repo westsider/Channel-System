@@ -37,7 +37,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     var totalROI = [Double]()
     var averageStars = [Double]()
     var results: Results<WklyStats>?
-    let maxBarsOnChart:Int = 400
+    let maxBarsOnChart:Int = 850
     var minStars:Int = 0
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
@@ -87,38 +87,67 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
     func populateLables() {
         let realm = try! Realm()
        
+        // freezing here
+        // get the object first then get .last
+        
         if let updateStats = realm.objects(Stats.self).last {
             print("getting saved stats from realm")
             let gross = Utilities().dollarStr(largeNumber: updateStats.grossProfit)
+            print("gross is \(gross)")
             let cost = Utilities().dollarStr(largeNumber: updateStats.maxCost)
+            print("cost is \(cost)")
             let thisRisk = Account().currentRisk()
+            print("thisRisk is \(thisRisk)")
             let lWin = Utilities().dollarStr(largeNumber: updateStats.largestWinner)
+            print("lWin is \(lWin)")
             let lLos = Utilities().dollarStr(largeNumber: updateStats.largestLoser)
+            print("lLos is \(lLos)")
             let annualProfit = Utilities().dollarStr(largeNumber: updateStats.annualProfit)
+            print("annualProfit is \(annualProfit)")
             let annualRoi = "\(String(format: "%.1f", updateStats.avgROI))%  Annual Roi"
+            print("annualRoi is \(annualRoi)")
             let timePeriod = "\(String(format: "%.1f", updateStats.numYears)) years, \(updateStats.numDays) days"
+            print("timePeriod is \(timePeriod)")
+            let avgPctWin =  "\(String(format: "%.1f", (updateStats.avgPctWin)))% Win Rate"
+            print("avgPctWin is \(avgPctWin)")
+            let grossROI = "\(String(format: "%.1f", updateStats.grossROI))%  Total Roi"
+            print("grossROI is \(grossROI)")
+            let minStars = updateStats.minStars
+            print("minStars is \(minStars)")
+            let avgStars = updateStats.avgStars
+            print("avgStars is \(avgStars)")
+            let longerDDperiod = updateStats.longestDDperiod
+            print("longerDDperiod is \(longerDDperiod)")
+            let ddasPctProfit = updateStats.ddAsPctOfProfit
+            print("ddasPctProfit is \(ddasPctProfit)")
+            let largestDD = updateStats.largestDD
+            print("largestDD is \(largestDD)")
+            let longestDDateUnwraped = updateStats.longestDDdate
+            print("longestDDateUnwraped is \(longestDDateUnwraped)")
+            let longestDDdate = Utilities().convertToStringNoTimeFrom(date: longestDDateUnwraped)
+            print("longestDDdate is \(longestDDdate)")
             
             DispatchQueue.main.async {
                 self.topLeft.textAlignment = .left
                 
                 self.topLeft.text = "$\(gross) Total Profit"
-                self.topRight.text = "\(String(format: "%.1f", (updateStats.avgPctWin)))% Win Rate"
+                self.topRight.text = avgPctWin
                 
-                self.midLeft.text = "\(String(format: "%.1f", updateStats.grossROI))%  Total Roi"
+                self.midLeft.text = grossROI
                 self.midRight.text = "$\(cost) Cost  $\(thisRisk) Risk"
                 
                 self.bottomLeft.text = "$\(annualProfit) Annual Profit"
-                self.minStarsLabel.text = "\(updateStats.minStars) stars, \(String(format: "%.1f", updateStats.avgStars)) average"
+                self.minStarsLabel.text = "\(minStars) stars, \(String(format: "%.1f", avgStars)) average"
                 
                 self.tradingDaysLabel.text = annualRoi
                 self.annualProfitLabel.text = "Max gain \(lWin), loss \(lLos)"
                 
                 self.largestWinLabel.text = timePeriod
-                self.largestLossLabel.text = SpReturns().textForStats(yearEnding: 2007)
+                self.largestLossLabel.text = SpReturns().textForStats(yearEnding: 2007) // last before crash
                 
-                self.longestDD.text = "Longet DD \(updateStats.longestDDperiod) days on \(Utilities().convertToStringNoTimeFrom(date: updateStats.longestDDdate))"
-                self.ddAsPctOfProfitLabel.text = "\(String(format: "%.1f", updateStats.ddAsPctOfProfit))% of Profit DD"
-                self.largestDDlabel.text = "Largest DD $\(Utilities().dollarStr(largeNumber: updateStats.largestDD)) on \(Utilities().convertToStringNoTimeFrom(date: updateStats.largestDDdate))"
+                self.longestDD.text = "Longet DD \(longerDDperiod) days on \(longestDDdate)"
+                self.ddAsPctOfProfitLabel.text = "\(String(format: "%.1f", ddasPctProfit))% of Profit DD"
+                self.largestDDlabel.text = "Largest DD $\(Utilities().dollarStr(largeNumber: largestDD)) on \(longestDDdate)"
                 
                 self.completeConfiguration()
             }
@@ -163,9 +192,9 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         bottomChartRenderSeries.dataSeries = cumulativeCost
         bottomChartRenderSeries.paletteProvider = ColumnsTripleColorPalette()
         
-        let animation = SCIWaveRenderableSeriesAnimation(duration: 1.5, curveAnimation: SCIAnimationCurveEaseOut)
-        animation.start(afterDelay: 0.3)
-        bottomChartRenderSeries.addAnimation(animation)
+//        let animation = SCIWaveRenderableSeriesAnimation(duration: 1.5, curveAnimation: SCIAnimationCurveEaseOut)
+//        animation.start(afterDelay: 0.3)
+//        bottomChartRenderSeries.addAnimation(animation)
         surface.renderableSeries.add(bottomChartRenderSeries)
     }
    

@@ -223,6 +223,11 @@ class Utilities {
         let systemSoundId: SystemSoundID = 1106 // connect to power // 1052 tube bell //1016 tweet
         AudioServicesPlaySystemSound(systemSoundId)
     }
+    
+    func playErrorSound() {
+        let systemSoundId: SystemSoundID = 1052 // connect to power // 1052 tube bell //1016 tweet
+        AudioServicesPlaySystemSound(systemSoundId)
+    }
 
     func detectDevice(maxBars:Int)-> Int {
         var maxBarsOnChart = maxBars

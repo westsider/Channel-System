@@ -126,7 +126,7 @@ class CalcStars {
         return (stars, starIcon )
     }
     
-    func showWinnersAnoLoosers() {
+    func showWinnersAndLoosers() {
         let allSymbols = Symbols().indexes + Symbols().DOW30 + Symbols().ETF200 + Symbols().SP500 + Symbols().FAVORITES
         
         //MARK: - Remove any duplicated tickers

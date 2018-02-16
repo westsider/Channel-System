@@ -18,7 +18,7 @@ class PriorData {
         var haveStart:Bool = false
         var haveEnd:Bool = false
         
-        for i in 7...12 {
+        for i in 0...13 {
             print("Requesting page \(i) for \(ticker)") //}
             let request = "https://api.intrinio.com/prices?ticker=\(ticker)&page_number=\(i)"
             let user = Utilities().getUser().user
@@ -31,7 +31,8 @@ class PriorData {
                     switch response.result {
                     case .success(let value):
                         let json = JSON(value)
-    
+                        print("Here is the Json from \(ticker)")
+                        debugPrint(json)
                         for data in json["data"].arrayValue {
                             if let date = data["date"].string {
                                 dateArray.append(date)
@@ -39,8 +40,14 @@ class PriorData {
                         }  // JSON loop ends
                         if ( debug ) {
                             
-                            let firstDate = dateArray.last!
-                            let lastDate = dateArray.first!
+                            guard let firstDate = dateArray.last else {
+                                print("Warning firstDate does not exist")
+                                break
+                            }
+                            guard let lastDate = dateArray.first else {
+                                print("Warning lastDate does not exist")
+                                break
+                            }
    
                             print("\(ticker) request complete for page \(i) \(firstDate) -> \(lastDate)")
                             if  dateArray.contains(start)  {
@@ -61,6 +68,8 @@ class PriorData {
                         } else {
                             print("\nWe need to expand the search\n")
                         }
+                        pagesWeNeed.sort()
+                        
                         completion(pagesWeNeed)
                     case .failure(let error):
                         print("\n---------------------------------\n\tIntrinio Error getting \(ticker)\n-----------------------------------")
@@ -70,12 +79,14 @@ class PriorData {
         }
     }
     
-    func loadfrom(ticker:String ,start:Int, end:Int, saveToRealm:Bool, debug:Bool) {
+    //MARK: - load only a collection of pages
+    func loadfromCollection(ticker:String ,array:[Int], saveToRealm:Bool, debug:Bool) {
         
         var countCalls:Int = 0
         let galaxie = [ticker]
         
-        for i in start...end {
+        print("Looping though pages \(String(describing: array.first)) to \(String(describing: array.last))")
+        for i in array {
             getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
                 if finished {
                     countCalls += 1
@@ -106,6 +117,10 @@ class PriorData {
                                                             print("\n-------------------------------------\n\t\tChecking DataBase\n--------------------------------------\n")
                                                             //_ = MarketCondition().overview(galaxie: SymbolLists().uniqueElementsFrom(testSet: false, of: 100), debug: true)
                                                             Utilities().playAlertSound()
+                                                            if i == 14 {
+                                                                let _ = CheckDatabase().showMissingDatesFor(ticker: ticker, debug: false)
+                                                                Recalculate().allIndicators(ticker: ticker, debug: true, redoAll: true)
+                                                            }
                                                         })
                                                     }
                                                 })
@@ -118,6 +133,27 @@ class PriorData {
                     }
                 }
             })
+        }
+    }
+    
+    //MARK: - load 7 - 13
+    func addMissing(ticker:String ,start:Int, end:Int, saveToRealm:Bool, debug:Bool) {
+        DispatchQueue.global(qos: .background).async {
+            var countCalls:Int = 0
+            print("Looping though pages \(start) to \(end)")
+            for i in start...end {
+                self.getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
+                    if finished {
+                        countCalls += 1
+                        print("got page \(i) countCall = \(countCalls)")
+                        
+                        if i == end {
+                            Recalculate().allIndicators(ticker: ticker, debug: true, redoAll: true)
+                            Utilities().playAlertSound()
+                        }
+                    }
+                })
+            }
         }
     }
     
@@ -183,6 +219,9 @@ class PriorData {
                 case .failure(let error):
                     print("\n---------------------------------\n\tIntrinio Error getting \(ticker)\n-----------------------------------")
                     debugPrint(error)
+                    DispatchQueue.main.async {
+                        Utilities().playErrorSound()
+                    }
                 }  // result ends
         }
     }

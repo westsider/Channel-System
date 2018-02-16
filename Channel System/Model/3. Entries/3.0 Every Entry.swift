@@ -72,7 +72,6 @@ class Entry {
         try! realm.write {
             for each in prices {
                 if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
-                    //try! realm.write {
                         let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
                         let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk)
                         each.longEntry = true
@@ -80,7 +79,6 @@ class Entry {
                         each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: shares)
                         each.stop = stopDist.0
                         each.target = stopDist.1
-                    //}
                     if ( deBug ) { print("LE on \(each.dateString)") }
                 }
             }
@@ -97,16 +95,12 @@ class Entry {
             let realm = try! Realm()
             try! realm.write {
                 for each in prices {
-                    
-    //                let realm = try! Realm()
-    //                try! realm.write {
                         each.longEntry = false
                         each.backTestProfit = 0.00
                         each.shares = 0
                         each.capitalReq = 0.00
                         each.stop = 0.00
                         each.target = 0.00
-                    //}
                 }
             }
         }

@@ -18,20 +18,27 @@ class IntrioFeed {
         var counter = 0
         let total = galaxie.count
         let lastDateInRealm = Prices().getLastDateInRealm(debug: debug)
+        var requestCounter = 0
+
         for  symbols in galaxie {
             DispatchQueue.global(qos: .background).async {
-                self.getLastPrice(ticker: symbols, lastInRealm: lastDateInRealm, debug: debug) { ( finished ) in // 1.4
-                    print("Updateing prices for \(symbols)")
-                    if finished {
-                        DispatchQueue.main.async {
-                            counter += 1
-                            print("Intrio \(counter) of \(total)")
-                            //MARK: - TODO - if error getting data return
-                            if counter == total {
-                                completion(true)
+                requestCounter += 1
+                while requestCounter <= 10 {
+                    print("Intrinio request for \(symbols)")
+                    self.getLastPrice(ticker: symbols, lastInRealm: lastDateInRealm, debug: debug) { ( finished ) in // 1.4
+                        print("\n\n--------------------------------\n--------------------------------\n\tUpdateing prices for \(symbols)\n--------------------------------\n--------------------------------\n\n")
+                        if finished {
+                            requestCounter -= 1
+                            DispatchQueue.main.async {
+                                counter += 1
+                                print("Intrio finished \(symbols) \(counter) of \(total)")
+                                //MARK: - TODO - if error getting data return
+                                if counter == total {
+                                    completion(true)
+                                }
                             }
                         }
-                    }
+                    } //
                 }
             }
         }

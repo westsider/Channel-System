@@ -65,29 +65,34 @@ class CheckDatabase {
         var notUpdatedCounter:Int = 0
         var counter:Int = 0
         var answer:String = "nan"
+        //var missingEnries:[String] = []
         if debug {
             answer = "\n\n-------------------------------------------------------\n"
             answer +=  "Checking database integrity. \(numRecords) records found"
         }
         
         for ticker in galaxie {
-                DispatchQueue.global(qos: .background).async {
-                    missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
-                    zeroValues += self.checkForZeroVal(ticker: ticker)             // test 2
-                    doublePrints += self.findDuplicates(ticker: ticker, debug: true) // test 3
-                    notUpdatedCounter += Utilities().lastDateMatchesRealm(ticker: ticker, lastUpdate: lastUpdate, debug: false) // test 4
-                    counter += 1
-                    if self.numberOfEntries(ticker: ticker) < 1 {
-                        print("Warning, no entries found for \(ticker)")
-                    }
+            DispatchQueue.global(qos: .background).async {
+                missingPriceRecords += self.checkForMissingPrices(ticker: ticker)       // test 1
+                zeroValues += self.checkForZeroVal(ticker: ticker)             // test 2
+                doublePrints += self.findDuplicates(ticker: ticker, debug: true) // test 3
+                notUpdatedCounter += Utilities().lastDateMatchesRealm(ticker: ticker, lastUpdate: lastUpdate, debug: false) // test 4
+                counter += 1
+//                if self.numberOfEntries(ticker: ticker) < 1 {
+//                    missingEnries.append(ticker)
+//                }
             }
         }
+        
         DispatchQueue.main.async {
             if counter != total {
                 answer += "\n***WARNING *** \n missing tickers in realm\nCount of tickers was \(counter) and Num of symbols was \(total)"
             } else {
                 answer += "\nNo missing tickers in realm\n\(counter) records found out of \(total) total symbols"
             }
+            
+//            print("\nHere are tickers with Missing entries\n")
+//            debugPrint(missingEnries)
         }
         
         answer = "\n\n-------------------------------------------------------\n"
@@ -111,8 +116,7 @@ class CheckDatabase {
     }
     
     func checkForMissingPrices(ticker:String)-> Int {
-        //MARK: - TODO list tickers affected
-        
+
         let realm = try! Realm()
         let numSpyPrices = realm.objects(Prices.self).filter("ticker == %@", "SPY").count
         let count = realm.objects(Prices.self).filter("ticker == %@", ticker).count
@@ -130,11 +134,50 @@ class CheckDatabase {
         return diff
     }
     
+    func showMissingDatesFor(ticker:String, debug:Bool)->(String,String) {
+        
+        print("\n--------------------\n\tShowing Missing Dates for \(ticker)\n--------------------\n")
+        var spyDates:[String] = []
+        var tickerDates:[String] = []
+        var missingDates:[String] = []
+        // get dates from SPY, ticker
+        let spy = Prices().sortOneTicker(ticker: "SPY", debug: false)
+        for each in spy {
+            spyDates.append(each.dateString)
+        }
+        let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false)
+        for each in oneTicker {
+            tickerDates.append(each.dateString)
+        }
+        for each in spyDates {
+            if tickerDates.contains(each) {
+                if debug { print("found \(each) in \(ticker) date") }
+            } else {
+                if debug { print("didn't find  \(ticker) in SPY data") }
+                missingDates.append(each)
+            }
+        }
+        let matchingDates = spy.count - missingDates.count
+        print("found \(missingDates.count) dates missing in \(ticker) and \(matchingDates) dates match\n\n")
+        let sortedDates = missingDates.sorted()
+        print("\(ticker) first missing date is \(String(describing: sortedDates.first)), last \(String(describing: sortedDates.last))")
+        debugPrint(missingDates)
+        return (sortedDates.first!, sortedDates.last!)
+    }
+    
+
+    
+    func datesForOneTicker(ticker:String) {
+        let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
+        for each in prices {
+            print(each.dateString)
+        }
+    }
     func numberOfEntries(ticker:String)-> Int {
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
         var tradeCount = 0
         for each in prices {
-            if each.inTrade == true {
+            if each.longEntry {
                 tradeCount += 1
             }
         }
@@ -161,7 +204,6 @@ class CheckDatabase {
         let allZeroData = sma10 + sma200 + wPtcR
         return allZeroData
     }
-    
     
     func checkForZeroVal(ticker:String)-> Int {
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
