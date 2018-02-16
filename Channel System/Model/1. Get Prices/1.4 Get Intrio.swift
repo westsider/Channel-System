@@ -12,6 +12,19 @@ import SwiftyJSON
 import RealmSwift
 
 class IntrioFeed {
+    
+    func getDataSegments(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
+        let segmentGalaxy = galaxie.chunked(by: 14)
+        print("\nSegment count is \(segmentGalaxy.count)\n")
+        var segmentCounter = 0
+        for segment in segmentGalaxy {
+            segmentCounter += 1
+            print("\n++++++++++++++++++++++++++++++++++++++++\n\tWe are beginning segment \(segmentCounter)\n++++++++++++++++++++++++++++++++++++++++\n")
+            getData(galaxie: segment, debug: true, completion: { (finished) in
+                print("\n++++++++++++++++++++++++++++++++++++++++\n\tWe are finished with segment \(segmentCounter)\n++++++++++++++++++++++++++++++++++++++++\n")
+            })
+        }
+    }
 
     func getData(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
         print("We are in get Data")
@@ -22,24 +35,21 @@ class IntrioFeed {
 
         for  symbols in galaxie {
             DispatchQueue.global(qos: .background).async {
-                requestCounter += 1
-                while requestCounter <= 10 {
-                    print("Intrinio request for \(symbols)")
-                    self.getLastPrice(ticker: symbols, lastInRealm: lastDateInRealm, debug: debug) { ( finished ) in // 1.4
-                        print("\n\n--------------------------------\n--------------------------------\n\tUpdateing prices for \(symbols)\n--------------------------------\n--------------------------------\n\n")
-                        if finished {
-                            requestCounter -= 1
-                            DispatchQueue.main.async {
-                                counter += 1
-                                print("Intrio finished \(symbols) \(counter) of \(total)")
-                                //MARK: - TODO - if error getting data return
-                                if counter == total {
-                                    completion(true)
-                                }
+                print("Intrinio request for \(symbols)")
+                self.getLastPrice(ticker: symbols, lastInRealm: lastDateInRealm, debug: debug) { ( finished ) in // 1.4
+                    print("\n\n--------------------------------\n--------------------------------\n\tUpdateing prices for \(symbols)\n--------------------------------\n--------------------------------\n\n")
+                    if finished {
+                        requestCounter -= 1
+                        DispatchQueue.main.async {
+                            counter += 1
+                            print("Intrio finished \(symbols) \(counter) of \(total)")
+                            //MARK: - TODO - if error getting data return
+                            if counter == total {
+                                completion(true)
                             }
                         }
-                    } //
-                }
+                    }
+                } //
             }
         }
     }

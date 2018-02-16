@@ -36,6 +36,11 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         //workOnDataBase()
         // PriorData().addMissing(ticker: ticker, start: 0, end: 13, saveToRealm: true, debug: true) // adds only missing prices then indicators and entries
         galaxie = SymbolLists().uniqueElementsFrom(testSet: true, of: 100)
+        
+
+        IntrioFeed().getDataSegments(galaxie: galaxie, debug: true) { (finished) in
+            print("\n++++++++++++++++++++++++++++++++++++++++\n\tFinished data for \(self.galaxie.count) symbols\n++++++++++++++++++++++++++++++++++++++++\n")
+        }
         // if i need to debug Market Condition
         //UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2013/02/01", debug: false), forKey: "todaysDate")
         //CalcStars().showWinnersAndLoosers()

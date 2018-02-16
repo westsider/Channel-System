@@ -299,6 +299,7 @@
 		0DCE3D5F201A934300FC4649 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCE3D5E201A934300FC4649 /* LoginViewController.swift */; };
 		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
 		0DD146AB2003D0630000056C /* DeBugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD146AA2003D0630000056C /* DeBugViewController.swift */; };
+		0DD22F8420373ECD000E4F97 /* Array Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD22F8320373ECD000E4F97 /* Array Ext.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
 		0DE78F551FD888B400915777 /* Stats Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE78F541FD888B400915777 /* Stats Object.swift */; };
 		0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */; };
@@ -603,6 +604,7 @@
 		0DCE3D5E201A934300FC4649 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
 		0DD146AA2003D0630000056C /* DeBugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeBugViewController.swift; sourceTree = "<group>"; };
+		0DD22F8320373ECD000E4F97 /* Array Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array Ext.swift"; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
 		0DE78F541FD888B400915777 /* Stats Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats Object.swift"; sourceTree = "<group>"; };
 		0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Weekly Stats.swift"; sourceTree = "<group>"; };
@@ -1050,6 +1052,7 @@
 				0DCAAFDE1FBC3EF600095560 /* Indicators */,
 				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
+				0DD22F8320373ECD000E4F97 /* Array Ext.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1482,6 +1485,7 @@
 				0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */,
 				0DA5C50E20056C2600CB0E05 /* Clean Database.swift in Sources */,
 				0D77DDD01FCF8E1B007573C3 /* StatsViewController.swift in Sources */,
+				0DD22F8420373ECD000E4F97 /* Array Ext.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
 				0DA5C5122005715F00CB0E05 /* Replace Prices.swift in Sources */,
 				0D6726911FF806E300E42A9A /* 1.1 Risk.swift in Sources */,
