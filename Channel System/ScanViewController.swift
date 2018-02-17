@@ -35,10 +35,10 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         galaxie = SymbolLists().allSymbols
 
         //PageInfo.showDatesForPages(ticker: "SPY")
-        print("")
-        let spyPages = PageInfo.pagesForSpy()
-        for each in spyPages {
-            print("\(each.0)\t\(each.1) -> \(each.2)")
+        let thisMissing = MissingDates.inThis(ticker: "IJH")
+        print("IJH is missing \(thisMissing.count) dates\n ")
+        for each in thisMissing {
+            print(each)
         }
     }
     
@@ -58,7 +58,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 // only run database check once a day
                 startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
                 if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
-                    let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
+                    var updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
+updateWasToday = false
                     if !updateWasToday {
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
                             self.manageTradesOrShowEntries(debug: true)

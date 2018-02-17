@@ -10,14 +10,28 @@ import Foundation
 
 class MissingDates {
     
-    class func inThis(ticker:String)-> [Date] {
+    class func inThis(ticker:String)-> Set<Date> {
         // get all dates in SPY
+        let spyTicker = Prices().sortOneTicker(ticker: "SPY", debug: false)
+        var spyDateArray:[Date] = []
+        for each in spyTicker {
+            spyDateArray.append(each.date!)
+        }
         // get all dates in ticker
+        let oneTicker = Prices().sortOneTicker(ticker: ticker, debug: false)
+        var tickerDateArray:[Date] = []
+        for each in oneTicker {
+            tickerDateArray.append(each.date!)
+        }
         // make an array of dates ticker is missing
-        return [Date()]
+        //var difference = spyDateArray
+        
+        let filtered = Set(spyDateArray).subtracting(tickerDateArray)
+        // IJH is missing 298 dates
+        return filtered
     }
     
-    class func whatPagesFor(dates:[Date])-> [Int] {
+    class func whatPagesFor(dates:Set<Date> )-> [Int] {
         return [0,1]
     }
     
