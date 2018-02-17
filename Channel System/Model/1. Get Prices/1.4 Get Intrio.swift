@@ -13,19 +13,27 @@ import RealmSwift
 
 class IntrioFeed {
     
+    //MARK: - First Segment the galaxie to throttles the api call to intrinio
     func getDataSegments(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
         let segmentGalaxy = galaxie.chunked(by: 14)
+        let total = segmentGalaxy.count
         print("\nSegment count is \(segmentGalaxy.count)\n")
         var segmentCounter = 0
         for segment in segmentGalaxy {
-            segmentCounter += 1
             print("\n++++++++++++++++++++++++++++++++++++++++\n\tWe are beginning segment \(segmentCounter)\n++++++++++++++++++++++++++++++++++++++++\n")
             getData(galaxie: segment, debug: true, completion: { (finished) in
                 print("\n++++++++++++++++++++++++++++++++++++++++\n\tWe are finished with segment \(segmentCounter)\n++++++++++++++++++++++++++++++++++++++++\n")
+                if finished {
+                    segmentCounter += 1
+                    if segmentCounter == total {
+                        completion(true)
+                    }
+                }
             })
         }
     }
 
+    //MARK: - Second loop through segments to make call to intrinio
     func getData(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
         print("We are in get Data")
         var counter = 0
@@ -54,7 +62,7 @@ class IntrioFeed {
         }
     }
 
-    /// Get realtime ohlc
+    //MARK: - Third call to intrinio for lcurrent and historical data
     func getLastPrice(ticker: String, lastInRealm: Date, debug: Bool, completion: @escaping (Bool) -> Void) {
         // get last price from intrio
         //if ( debug ) {
@@ -122,7 +130,9 @@ class IntrioFeed {
                     if ( debug ) { print("\(ticker) request complete") }
                     completion(true)
                 case .failure(let error):
-                    print("Intrinio Error getting \(ticker)")
+                print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\tIntrinio Error getting \(ticker)\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n")
+                    Utilities().playErrorSound()
+                    Alert.showBasic(title: "Error for \(ticker)", message: error.localizedDescription)
                     debugPrint(error)
                     return
                 }

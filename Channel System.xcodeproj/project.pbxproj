@@ -21,6 +21,7 @@
 		0D20B1D62017F2AA000A5486 /* First Run Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D20B1D52017F2AA000A5486 /* First Run Routine.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
+		0D4122B42037C0F700841D18 /* Missing Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4122B32037C0F700841D18 /* Missing Dates.swift */; };
 		0D4934D0202D04C8008D47DB /* Get Older Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4934CF202D04C8008D47DB /* Get Older Data.swift */; };
 		0D4A01881FC8C5CF00C53E2F /* AGG.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0D4A01871FC8C5CF00C53E2F /* AGG.csv */; };
 		0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5A43A41FEF10EB00842801 /* S+P Returns.swift */; };
@@ -300,6 +301,8 @@
 		0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */; };
 		0DD146AB2003D0630000056C /* DeBugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD146AA2003D0630000056C /* DeBugViewController.swift */; };
 		0DD22F8420373ECD000E4F97 /* Array Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD22F8320373ECD000E4F97 /* Array Ext.swift */; };
+		0DD22F8620374AEA000E4F97 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD22F8520374AEA000E4F97 /* Alert.swift */; };
+		0DD22F882037AA68000E4F97 /* Page Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD22F872037AA68000E4F97 /* Page Dates.swift */; };
 		0DE4D3621FC2193C00C86337 /* Trade Managemnent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */; };
 		0DE78F551FD888B400915777 /* Stats Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE78F541FD888B400915777 /* Stats Object.swift */; };
 		0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */; };
@@ -324,6 +327,7 @@
 		0D20B1D52017F2AA000A5486 /* First Run Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "First Run Routine.swift"; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
+		0D4122B32037C0F700841D18 /* Missing Dates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Missing Dates.swift"; sourceTree = "<group>"; };
 		0D4934CF202D04C8008D47DB /* Get Older Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get Older Data.swift"; sourceTree = "<group>"; };
 		0D4A01871FC8C5CF00C53E2F /* AGG.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AGG.csv; sourceTree = "<group>"; };
 		0D5A43A41FEF10EB00842801 /* S+P Returns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S+P Returns.swift"; sourceTree = "<group>"; };
@@ -605,6 +609,8 @@
 		0DCF74E81FA90EAB00617803 /* CandidatesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidatesVC.swift; sourceTree = "<group>"; };
 		0DD146AA2003D0630000056C /* DeBugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeBugViewController.swift; sourceTree = "<group>"; };
 		0DD22F8320373ECD000E4F97 /* Array Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array Ext.swift"; sourceTree = "<group>"; };
+		0DD22F8520374AEA000E4F97 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		0DD22F872037AA68000E4F97 /* Page Dates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page Dates.swift"; sourceTree = "<group>"; };
 		0DE4D3611FC2193C00C86337 /* Trade Managemnent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Trade Managemnent.swift"; sourceTree = "<group>"; };
 		0DE78F541FD888B400915777 /* Stats Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats Object.swift"; sourceTree = "<group>"; };
 		0DE78F561FD8AB0C00915777 /* Weekly Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Weekly Stats.swift"; sourceTree = "<group>"; };
@@ -924,6 +930,8 @@
 			isa = PBXGroup;
 			children = (
 				0DA5C50D20056C2600CB0E05 /* Clean Database.swift */,
+				0DD22F872037AA68000E4F97 /* Page Dates.swift */,
+				0D4122B32037C0F700841D18 /* Missing Dates.swift */,
 				0D4934CF202D04C8008D47DB /* Get Older Data.swift */,
 				0D74467B20321A1000176D95 /* Recalculate Indicators.swift */,
 			);
@@ -1053,6 +1061,7 @@
 				0D129D4F1FBB4CFD003C6E5E /* Historical Data */,
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 				0DD22F8320373ECD000E4F97 /* Array Ext.swift */,
+				0DD22F8520374AEA000E4F97 /* Alert.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1475,6 +1484,7 @@
 				0D67269A1FF807F800E42A9A /* 2.0 SMA 10, 200.swift in Sources */,
 				0DD146AB2003D0630000056C /* DeBugViewController.swift in Sources */,
 				0D77DDCE1FCF705C007573C3 /* Trade Helpers.swift in Sources */,
+				0DD22F882037AA68000E4F97 /* Page Dates.swift in Sources */,
 				0DEFBCC31FA922F700C156B9 /* SCIGenericWrapper.swift in Sources */,
 				0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */,
 				0D187BFD1FF97B8000FE4FEC /* 3.1 Enter When Flat.swift in Sources */,
@@ -1488,6 +1498,7 @@
 				0DD22F8420373ECD000E4F97 /* Array Ext.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,
 				0DA5C5122005715F00CB0E05 /* Replace Prices.swift in Sources */,
+				0D4122B42037C0F700841D18 /* Missing Dates.swift in Sources */,
 				0D6726911FF806E300E42A9A /* 1.1 Risk.swift in Sources */,
 				0D6726951FF8076C00E42A9A /* 1.3 Info.swift in Sources */,
 				0D5A43A51FEF10EB00842801 /* S+P Returns.swift in Sources */,
@@ -1500,6 +1511,7 @@
 				0D187BF61FF93FF700FE4FEC /* 2.1 wPct(r).swift in Sources */,
 				0DCF74E91FA90EAB00617803 /* CandidatesVC.swift in Sources */,
 				0DCE3D5F201A934300FC4649 /* LoginViewController.swift in Sources */,
+				0DD22F8620374AEA000E4F97 /* Alert.swift in Sources */,
 				0D187BFF1FF97BC300FE4FEC /* 3.2 Calc Stars.swift in Sources */,
 				0D74467C20321A1000176D95 /* Recalculate Indicators.swift in Sources */,
 				0DCAAFDD1FBC3E7E00095560 /* Long Entry.swift in Sources */,

@@ -112,6 +112,7 @@ class CheckDatabase {
         print("-------------------------------------------------------\n")
         //completion(true)
         //}
+        Utilities().playAlertSound()
         return answer
     }
     

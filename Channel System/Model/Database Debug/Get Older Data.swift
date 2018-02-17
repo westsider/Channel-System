@@ -12,6 +12,8 @@ import SwiftyJSON
 
 class PriorData {
     
+    //var arrayOfPages:[(String,Int,String,String)]
+    
     func findPagesFor(start:String, end:String, ticker: String,  debug: Bool,  completion: @escaping ([Int]) -> Void) {
         
         var pagesWeNeed:[Int] = []
@@ -48,7 +50,7 @@ class PriorData {
                                 print("Warning lastDate does not exist")
                                 break
                             }
-   
+               
                             print("\(ticker) request complete for page \(i) \(firstDate) -> \(lastDate)")
                             if  dateArray.contains(start)  {
                                 print("\nPage \(i) holds the start date we need!\n")
@@ -69,7 +71,6 @@ class PriorData {
                             print("\nWe need to expand the search\n")
                         }
                         pagesWeNeed.sort()
-                        
                         completion(pagesWeNeed)
                     case .failure(let error):
                         print("\n---------------------------------\n\tIntrinio Error getting \(ticker)\n-----------------------------------")

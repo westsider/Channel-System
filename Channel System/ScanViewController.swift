@@ -31,36 +31,15 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
 
 
     override func viewDidLoad() {
-        //super.viewDidLoad()
         title = "Finance"
-        //workOnDataBase()
-        // PriorData().addMissing(ticker: ticker, start: 0, end: 13, saveToRealm: true, debug: true) // adds only missing prices then indicators and entries
-        galaxie = SymbolLists().uniqueElementsFrom(testSet: true, of: 100)
-        
+        galaxie = SymbolLists().allSymbols
 
-        IntrioFeed().getDataSegments(galaxie: galaxie, debug: true) { (finished) in
-            print("\n++++++++++++++++++++++++++++++++++++++++\n\tFinished data for \(self.galaxie.count) symbols\n++++++++++++++++++++++++++++++++++++++++\n")
+        //PageInfo.showDatesForPages(ticker: "SPY")
+        print("")
+        let spyPages = PageInfo.pagesForSpy()
+        for each in spyPages {
+            print("\(each.0)\t\(each.1) -> \(each.2)")
         }
-        // if i need to debug Market Condition
-        //UserDefaults.standard.set(Utilities().convertToDateFrom(string: "2013/02/01", debug: false), forKey: "todaysDate")
-        //CalcStars().showWinnersAndLoosers()
-
-//        let tickersToFix  = ["LQD", "MBB", "OIL", "OIH", "PBE", "PCY", "PFF", "PGJ", "PHB", "RJA", "RPV", "RSP", "RTH", "RWX", "RZV", "SHM", "SHV", "SHY", "SLV", "TFI", "TIP", "UNG", "USO", "UUP", "VDC", "VNQ", "VOT", "VOX", "VPU", "VTV", "VUG", "VV", "VWO"]
-//        // can only get 33 tickers at a time
-//        let tickersToFix2 = ["VXF", "VYM", "XBI", "XES", "XHB", "XLB", "XLE", "XLG", "XLI", "XLK", "XLP", "XLU", "XLV", "XLY", "XME", "AAP", "AES", "AET", "AFL", "AMG", "A", "GAS", "APD", "ARG", "AKAM", "AA", "AGN", "ALXN", "ALLE", "ADS", "ALTR", "ALL", "MO"]
-//        let tickersToFix3 = ["AMZN", "AEE", "AAL", "AEP", "AIG", "AMT", "ABC", "AMP", "AME", "AMGN", "APH", "ADI", "APC", "AON", "AMAT", "APA", "AIV", "AIZ", "ADM", "T", "ADSK", "ADP", "AN", "AZO", "AVGO", "AVB", "BHI", "BLL", "BK", "BCR", "BAX", "BBT", "BDX"]
-//        let tickersToFix4 = ["BBBY", "BBY", "BLX", "HRB", "BRCM", "BMY", "CHRW", "COG", "CAM", "CPB", "COF", "CAH", "HSIC", "KMX", "CCL", "CBG", "CBS", "CELG", "CNP", "CTL", "CERN", "CF", "SCHW", "CHK", "CMG", "CB", "CI", "XEC"]
-//        let tickersToFix5 = [ "CAG", "COP", "CNX", "ED", "BXP", "STZ", "iGLW", "COST", "CCI", "CSX", "CMI", "CVS", "DHR", "DRI", "DVA", "DE", "DLPH", "DAL"] // "CLX", "CME", "CMS", "COH", "CTSH", "CCE", "CL", "CMCSA", "CMA", "CSC",
-//        
-//        let tickersToFix6 = ["CINF", "CTAS", "C", "CTXS", "XRAY", "DVN", "DISCA", "DISCK"]
-//        
-//        for ticker in tickersToFix6 {
-//            //let _ = CheckDatabase().showMissingDatesFor(ticker: ticker, debug: false)
-//            print("\n\n-------------------------------------\n")
-//            PriorData().addMissing(ticker: ticker, start: 0, end: 13, saveToRealm: true, debug: true)
-//        }
-
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,7 +75,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
 
-
     //MARK: - get missing days and calc all results
     func getPriorPrices() {
         galaxie = Symbols().Loosers
@@ -113,8 +91,36 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     //MARK: - get new data
     @IBAction func getNewDataAction(_ sender: Any) {
-        self.startAnimating(self.size, message: "Updating Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-        updateNewPrices(galaxie: galaxie, debug: true)
+        self.startAnimating(self.size, message: "Requesting group 1 from NYSE", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
+            let segments = SymbolLists().segmented(by: 10, of727loadOnly: 727) // of 727
+            print("Num Segments is \(segments.count)")
+            let myGroup = DispatchGroup()
+            var groupCounter = 0
+
+            for eachSegment in segments {
+                myGroup.enter()
+                self.updateNewPrices(galaxie: eachSegment, debug: true) { (finished) in
+                    if finished {
+                        groupCounter += 1
+                        let message = "Ticker group \(groupCounter) of \(segments.count) complete"
+                        print("\n\n+++++++++++++++> \(message) \t<+++++++++++++++\n\n")
+                        self.updateNVActivity(with: message)
+                        myGroup.leave()
+                    }
+                }
+            }
+            
+            myGroup.notify(queue: .main) {
+                let message = "Finihed All Groups"
+                print(message)
+                self.updateNVActivity(with: message)
+                self.stopAnimating()
+            }
+        }
+        //MARK: - Todo galxie needs to be changed to in all vc's
+        //let segments = SymbolLists().segmented(by: 14)
     }
     
     @IBAction func checkPositions(_ sender: Any) {
@@ -124,10 +130,11 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     //////////////////////////////////////////////////////////////////////////////////
     //                              Update New Prices                               //
     //////////////////////////////////////////////////////////////////////////////////
-    //MARK: - Initialize Everything
-    func updateNewPrices(galaxie: [String], debug:Bool) {
+    //MARK: - Update New Prices Only
+    func updateNewPrices(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
         print("\nwe are updating prices\n")
-        updateNVActivity(with:"Contacting NYSE")
+        //updateNVActivity(with:"Contacting NYSE")
+        //IntrioFeed().getDataSegments(galaxie: galaxie, debug: true) { (finished) in
         IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in
             if finished {
                 print("intrinio done")
@@ -143,26 +150,30 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                 PctR().getwPctR(galaxie: galaxie, debug: debug, completion: { (finished) in
                                     if finished {
                                         print("oscilator done")
-                                        self.updateNVActivity(with:"Loading Market Condition")
-                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                            if finished  {
-                                                print("mc done")
+                                       // self.updateNVActivity(with:"Loading Market Condition")
+                                        // only load once a day
+                                        //MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                            //if finished  {
+                                             //   print("mc done")
                                                 self.updateNVActivity(with:"Finding Trades")
                                                 Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
                                                     if finished  {
                                                         print("Entry done")
                                                         self.updateNVActivity(with:"Brute Force Back Test")
-                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                        //CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                            completion(true)
                                                             print("\ncalc Stars done!\n")
-                                                            self.stopAnimating()
-                                                            self.marketConditionUI(debug: false)
-                                                            self.updateNVActivity(with:"Daily + Weekly Back Test")
-                                                            self.manageTradesOrShowEntries(debug: true)
-                                                        })
+                                                            print("Finished calculating indicators and trades")
+                                                        Utilities().playAlertSound()
+                                                           // self.stopAnimating()
+                                                           // self.marketConditionUI(debug: false)
+                                                            //self.updateNVActivity(with:"Daily + Weekly Back Test")
+                                                            //self.manageTradesOrShowEntries(debug: true)
+                                                        //})
                                                     }
                                                 })
-                                            }
-                                        })
+                                           // }//
+                                        //}) //
                                     }
                                 })
                             }
@@ -198,6 +209,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     func updateNVActivity(with:String) {
         DispatchQueue.main.async {
             NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
+            self.lastUpdateLable.text = with
         }
     }
   
