@@ -32,7 +32,24 @@ class MissingDates {
     }
     
     class func whatPagesFor(dates:Set<Date> )-> [Int] {
-        return [0,1]
+        
+        let pagesFromSPY = PageInfo.pagesForSpy() // [(Int, Date, Date)]
+        // loop through dates
+        var pagesMissing:[Int] = []
+        for dateToCheck in dates {
+            // if date is bettween a tuble of dates then add the tuple page num
+            for tupleToCheck in pagesFromSPY {
+                if (tupleToCheck.1 ... tupleToCheck.2 ).contains(dateToCheck) {
+                    pagesMissing.append(tupleToCheck.0)
+                }
+            }
+        }
+        
+        // remove page zero because its duplicated in 1
+        let removePageZero = pagesMissing.filter { $0 != 0 }
+        // remove duplicate page nums
+        let duplicatesRemoved = Array(Set(removePageZero))
+        return duplicatesRemoved.sorted()
     }
     
     class func getMissingPagesFor(ticker:String, pages:[Int]) {

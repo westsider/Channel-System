@@ -56,7 +56,7 @@ class PageInfo {
         arrayOfPages.append((10, Utilities().convertToDateFrom(string: "2014-03-03", debug: false), Utilities().convertToDateFrom(string: "2014-07-23", debug: false)))
         arrayOfPages.append((9, Utilities().convertToDateFrom(string: "2014-07-24", debug: false), Utilities().convertToDateFrom(string: "2014-12-12", debug: false)))
         arrayOfPages.append((8, Utilities().convertToDateFrom(string: "2014-12-15", debug: false), Utilities().convertToDateFrom(string: "2015-09-30", debug: false)))
-        arrayOfPages.append((7, Utilities().convertToDateFrom(string: "2015-05-11", debug: false), Utilities().convertToDateFrom(string: "2012-12-19", debug: false)))
+        arrayOfPages.append((7, Utilities().convertToDateFrom(string: "2015-05-11", debug: false), Utilities().convertToDateFrom(string: "2015-09-30", debug: false)))
         arrayOfPages.append((6, Utilities().convertToDateFrom(string: "2015-10-01", debug: false), Utilities().convertToDateFrom(string: "2016-02-24", debug: false)))
         arrayOfPages.append((5, Utilities().convertToDateFrom(string: "2016-02-25", debug: false), Utilities().convertToDateFrom(string: "2016-07-18", debug: false)))
         arrayOfPages.append((4, Utilities().convertToDateFrom(string: "2016-07-19", debug: false), Utilities().convertToDateFrom(string: "2016-12-07", debug: false)))

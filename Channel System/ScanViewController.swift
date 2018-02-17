@@ -37,9 +37,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         //PageInfo.showDatesForPages(ticker: "SPY")
         let thisMissing = MissingDates.inThis(ticker: "IJH")
         print("IJH is missing \(thisMissing.count) dates\n ")
-        for each in thisMissing {
-            print(each)
-        }
+        let missinG = MissingDates.whatPagesFor(dates: thisMissing)
+        print("\nHere are the missing pages \(missinG)")
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,8 +58,8 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 // only run database check once a day
                 startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
                 if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
-                    var updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
-updateWasToday = false
+                    let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
+//updateWasToday = false
                     if !updateWasToday {
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
                             self.manageTradesOrShowEntries(debug: true)
