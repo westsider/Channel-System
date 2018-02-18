@@ -6,6 +6,7 @@
 //  Copyright © 2017 Warren Hansen. All rights reserved.
 //
 
+
 import Foundation
 import Alamofire
 import SwiftyJSON

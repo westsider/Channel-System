@@ -20,7 +20,7 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         let portfolioCount = RealmHelpers().portfolioCount()
-        let days:Int = 1
+        let days:Int = 3
         title = "last \(days) days \(portfolioCount) Positions"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }

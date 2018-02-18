@@ -40,11 +40,57 @@ class CheckDatabase {
     
     func testPastEntries() {
         ManualTrades().oneEntryForTesting(ticker: "EWT", yyyyMMddSlash: "2018/02/06", price: 37.22, shares: 88)
-        //ManualTrades().makePastExit(yyyyMMdd: "2018/02/07", exityyyyMMdd: "2018/02/08", ticker: "RSX", exitPrice: 21.64, debug: true)
-        
+        //  ManualTrades().makePastExit(yyyyMMdd: "2018/02/07", exityyyyMMdd: "2018/02/08", ticker: "RSX", exitPrice: 21.64, debug: true)
         //  ManualTrades().removeEntry(yyyyMMdd: "2017/01/03", ticker: "IYF", debug: true)
         //  ManualTrades().removeExitFrom(yyyyMMdd: "2017/01/03", exityyyyMMdd: "2017/01/08", ticker: "IYF", exitPrice: 0.0, debug: true)
-       
+    }
+    
+    func replaceThe(missingDays:[String]) {
+        //DispatchQueue.global(qos: .userInitiated).async {
+        let myGroup = DispatchGroup()
+        var groupCounter = 0
+        let _ = DispatchQueue.global(qos: .userInitiated)
+        print("\n---------------------------")
+        DispatchQueue.concurrentPerform(iterations: missingDays.count) {
+            i in
+            print("Checking \(missingDays[i]) for missing days...")
+            MissingDates.findAndGetMissingDatesFor(ticker: missingDays[i], completion: { (finished) in
+                myGroup.enter()
+                if finished {
+                    groupCounter += 1
+                    let message = "\(missingDays[i]) \(groupCounter) of \(missingDays.count) complete"
+                    print("\n\n+++++++++++++++> \(message) \t<+++++++++++++++\n\n")
+                    Utilities().playAlertSound()
+                    myGroup.leave()
+                }
+            })
+        }
+        
+        myGroup.notify(queue: DispatchQueue.main) {
+            print("We might have finiahed all of the download groups \(groupCounter) of \(missingDays.count) complete")
+        }
+//            for ticker in missingDays {
+//                myGroup.enter()
+//                // run func
+//                MissingDates.findAndGetMissingDatesFor(ticker: ticker) { (finished) in
+//                    if finished {
+//                        groupCounter += 1
+//
+//                        let message = "\(ticker) \(groupCounter) of \(missingDays.count) complete"
+//                        print("\n\n+++++++++++++++> \(message) \t<+++++++++++++++\n\n")
+//                        Utilities().playAlertSound()
+//                        myGroup.leave()
+//                    }
+//                }
+//                if groupCounter == missingDays.count {
+//                    //let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
+//                    Utilities().playErrorSound()
+//                }
+//            }//
+//        myGroup.notify(queue: DispatchQueue.main) { // 2
+//            print("we Finiahed all of the download groups")
+//        }
+        //}
     }
     
     func report(debug:Bool, galaxie:[String])-> String {
@@ -93,6 +139,14 @@ class CheckDatabase {
             
 //            print("\nHere are tickers with Missing entries\n")
 //            debugPrint(missingEnries)
+            print("\nHere are tickers with missing days\n")
+            var missingDaysArray:[String] = []
+            for each in self.portfolio {
+                missingDaysArray.append(each.key)
+            }
+            debugPrint(missingDaysArray)
+            //MARK: - Todo Uncomment this func to auto fix missing days
+            // self.replaceThe(missingDays: missingDaysArray)
         }
         
         answer = "\n\n-------------------------------------------------------\n"
@@ -108,7 +162,7 @@ class CheckDatabase {
         
         answer += "\nWarning! found \(notUpdatedCounter) tickers not updated"
         print(answer)
-        print("\tif you see errors call\n\tresetThis(ticker: \"EZU\", isOn: true)\n\tto clean the ticker")
+        print("\tif you see errors call\n\tMissingDates.findAndGetMissingDatesFor(ticker:\n\tto clean the ticker")
         print("-------------------------------------------------------\n")
         //completion(true)
         //}

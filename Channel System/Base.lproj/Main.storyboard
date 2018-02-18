@@ -662,10 +662,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DsL-II-TiL">
-                                <rect key="frame" x="16" y="74" width="382" height="398"/>
+                                <rect key="frame" x="16" y="74" width="382" height="442"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="YyG-fR-bOk" userLabel="Main Stack View">
-                                        <rect key="frame" x="30" y="8" width="322" height="382"/>
+                                        <rect key="frame" x="30" y="8" width="322" height="426"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="HW4-7Z-idE" userLabel="Risk Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="322" height="30"/>
@@ -851,6 +851,26 @@
                                                     </button>
                                                 </subviews>
                                             </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="y0E-nm-U7s" userLabel="Search Tickr Stack View">
+                                                <rect key="frame" x="0.0" y="396" width="322" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rYp-lM-6jz">
+                                                        <rect key="frame" x="0.0" y="0.0" width="155" height="30"/>
+                                                        <color key="backgroundColor" red="0.42741107940673828" green="0.42747646570205688" blue="0.42739671468734741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <state key="normal" title="Chart For">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="oneChartAction:" destination="9ui-km-yle" eventType="touchUpInside" id="H7v-im-VHD"/>
+                                                        </connections>
+                                                    </button>
+                                                    <searchBar contentMode="redraw" text="GOOG" translatesAutoresizingMaskIntoConstraints="NO" id="ZcL-ZL-a9y">
+                                                        <rect key="frame" x="167" y="0.0" width="155" height="30"/>
+                                                        <color key="backgroundColor" red="0.79992926120758057" green="0.80004531145095825" blue="0.79990392923355103" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" keyboardAppearance="alert" returnKeyType="continue"/>
+                                                    </searchBar>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="HW4-7Z-idE" firstAttribute="leading" secondItem="YyG-fR-bOk" secondAttribute="leading" id="Ex0-9J-Vbg"/>
@@ -890,6 +910,7 @@
                         <outlet property="maxPositionsText" destination="Y2u-5t-zIj" id="IAq-iU-RjT"/>
                         <outlet property="riskBttn" destination="rz6-vy-pVI" id="89X-aQ-2aM"/>
                         <outlet property="riskLabel" destination="fsW-ol-SwK" id="ADF-pG-z0Y"/>
+                        <outlet property="searchTickerText" destination="ZcL-ZL-a9y" id="d3E-fN-BlF"/>
                         <outlet property="starsButton" destination="UK5-qA-why" id="DbS-7i-9dV"/>
                         <outlet property="starsTextField" destination="W6w-Uy-haw" id="3oc-wM-GmU"/>
                         <outlet property="tdaBttn" destination="KoG-6L-uHD" id="fVs-Hf-gwY"/>

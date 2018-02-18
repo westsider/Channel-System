@@ -137,13 +137,37 @@ class PriorData {
         }
     }
     
-    //MARK: - load 7 - 13
+    func addMissingDatesAndRecalc(ticker:String ,array:[Int], saveToRealm:Bool, debug:Bool, completion: @escaping (Bool) -> Void) {
+        //DispatchQueue.global(qos: .userInitiated).async {
+            var countCalls:Int = 0
+            for i in array  {
+                self.getLastPrice(ticker: ticker, debug: false, page: i, saveToRealm: saveToRealm, completion: { (finished) in
+                    if finished {
+                        countCalls += 1
+                        print("got page \(countCalls) countCall = \(countCalls)")
+                        
+                        if countCalls == array.count {
+                            print("Got all pages from \(array[0]) to \(array.count)")
+                            Recalculate().indicators(ticker: ticker, debug: true, redoAll: true, completion: { (finished) in
+                                if finished {
+                                    print("Finished with indicators for \(ticker)")
+                                    completion(true)
+                                }
+                            })
+                            Utilities().playAlertSound()
+                        }
+                    }
+                })
+            }
+        //}
+    }
+    
     func addMissing(ticker:String ,start:Int, end:Int, saveToRealm:Bool, debug:Bool) {
         DispatchQueue.global(qos: .background).async {
             var countCalls:Int = 0
             print("Looping though pages \(start) to \(end)")
             for i in start...end {
-                self.getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
+                self.getLastPrice(ticker: ticker, debug: false, page: i, saveToRealm: saveToRealm, completion: { (finished) in
                     if finished {
                         countCalls += 1
                         print("got page \(i) countCall = \(countCalls)")
@@ -195,10 +219,10 @@ class PriorData {
                         }
                         // the next section is complicated becuase the intrio feed will only return open and close for today
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
-                        let isNewDate = Prices().isNewDate(ticker: ticker, date: prices.date!, debug: true)
+                        let isNewDate = Prices().isNewDate(ticker: ticker, date: prices.date!, debug: false)
                         if saveToRealm && isNewDate {
                             RealmHelpers().saveSymbolsToRealm(each: prices)
-                            print("Yes we added \(Utilities().convertToStringNoTimeFrom(date: prices.date!))")
+                            if ( debug ) {  print("Yes we added \(Utilities().convertToStringNoTimeFrom(date: prices.date!))") }
                         }
                         
                         //debugPrint(prices)

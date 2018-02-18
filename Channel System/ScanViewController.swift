@@ -29,17 +29,18 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var marketReportString = ("No Title", "No Text")
     var reset:Bool = false
 
-
     override func viewDidLoad() {
         title = "Finance"
         galaxie = SymbolLists().allSymbols
-
+        let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
+        
+        //Recalculate().allIndicators(ticker: "REM", debug: true, redoAll: true)
         //PageInfo.showDatesForPages(ticker: "SPY")
-        let thisMissing = MissingDates.inThis(ticker: "IJH")
-        print("IJH is missing \(thisMissing.count) dates\n ")
-        let missinG = MissingDates.whatPagesFor(dates: thisMissing)
-        print("\nHere are the missing pages \(missinG)")
-
+        //let allMissing = ["HAR", "HOT", "FTI", "ALTR", "SIAL", "GOOGL", "TYC", "ARG"]
+        //let missing2 =   ["PCP", "LLTC", "MHFI", "CVC", "GOOG", "LB", "STJ", "PLL"]
+        //let missing3 =   ["POM", "HCBK", "SNDK", "HSP", "DTV", "GMCR", "PCL", "ALLE"]
+        //let missing4 =   ["JCI", "JOY", "IRM", "TWC", "ADT", "TE", "NAVI", "MYL", "ACE"]
+        //CheckDatabase().replaceThe(missingDays: ["GOOG"])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,11 +60,9 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                 startAnimating(size, message: "Checking Database", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
                 if let todaysDate = UserDefaults.standard.object(forKey: "todaysDate")  {
                     let updateWasToday =  Utilities().thisDateIsToday(date: todaysDate as! Date, debug: false)
-//updateWasToday = false
                     if !updateWasToday {
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
                             self.manageTradesOrShowEntries(debug: true)
-                            
                             self.setUpUI()
                             self.marketConditionUI(debug: false)
                             UserDefaults.standard.set(Date(), forKey: "todaysDate")
@@ -73,20 +72,6 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                     }
                 }
             }
-        }
-    }
-
-    //MARK: - get missing days and calc all results
-    func getPriorPrices() {
-        galaxie = Symbols().Loosers
-        for ticker in galaxie {
-            PriorData().findPagesFor(start: "2013-11-25", end: "2014-12-12", ticker: ticker, debug: true, completion: { (pages) in
-                if pages.count > 1 {
-                    print("Finished getting pages \(pages)")
-                    // 12-2-2015 was first date
-                    PriorData().addMissing(ticker: ticker, start: pages[0], end: pages[1], saveToRealm: true, debug: true)
-                }
-            })
         }
     }
     
