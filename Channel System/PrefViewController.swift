@@ -29,6 +29,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     @IBOutlet weak var acctTotalLabel: UILabel!
     @IBOutlet weak var starsTextField: UITextField!
     @IBOutlet weak var addTickerText: UITextField!
+    @IBOutlet weak var searchTickerText: UISearchBar!
     
     var galaxie = [String]()
     let csvBlock = { print( "\nData returned from CSV <----------\n" ) }
@@ -267,11 +268,35 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
         navigationController?.pushViewController(myVC, animated: true)
     }
     
+    //MARK: - add a ticker to check the chart
+    @IBAction func oneChartAction(_ sender: Any) {
+        if let textEntered = searchTickerText.text {
+            print("Symbol entered was \(textEntered)")
+            let mySymbols = SymbolLists().allSymbols
+            if mySymbols.contains(textEntered) {
+                segueToChart(ticker: "\(textEntered)")
+            } else if textEntered == "" {
+                let message = "Please enter a valid symbol"
+                Alert.showBasic(title: "Empty Search", message: message)
+            }
+            else {
+                let message = "The ticker \(textEntered) is not in your system.\nPlease choose another symbol."
+                Alert.showBasic(title: "Invalid Search", message: message)
+            }
+        }
+    }
+    
     
     func updateNVActivity(with:String) {
         DispatchQueue.main.async {
             NVActivityIndicatorPresenter.sharedInstance.setMessage(with)
         }
+    }
+    
+    private func segueToChart(ticker: String) {
+        let myVC:SCSSyncMultiChartView = storyboard?.instantiateViewController(withIdentifier: "ChartVC") as! SCSSyncMultiChartView
+        myVC.taskIdSelected = Prices().getLastTaskIDfrom(ticker: ticker)
+        navigationController?.pushViewController(myVC, animated: true)
     }
     
     func segueToStats() {

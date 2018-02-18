@@ -32,14 +32,12 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         title = "Finance"
         galaxie = SymbolLists().allSymbols
-        let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
+        //let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
         
         //Recalculate().allIndicators(ticker: "REM", debug: true, redoAll: true)
         //PageInfo.showDatesForPages(ticker: "SPY")
-        //let allMissing = ["HAR", "HOT", "FTI", "ALTR", "SIAL", "GOOGL", "TYC", "ARG"]
-        //let missing2 =   ["PCP", "LLTC", "MHFI", "CVC", "GOOG", "LB", "STJ", "PLL"]
-        //let missing3 =   ["POM", "HCBK", "SNDK", "HSP", "DTV", "GMCR", "PCL", "ALLE"]
-        //let missing4 =   ["JCI", "JOY", "IRM", "TWC", "ADT", "TE", "NAVI", "MYL", "ACE"]
+        //let missing4 =   ["HAR", "HOT", "FTI", "ALTR", "SIAL", "TYC", "ARG", "PCP", "LLTC", "MHFI", "CVC", "GOOG", "STJ", "PLL", "POM", "HCBK", "SNDK", "HSP", "DTV", "GMCR", "PCL", "ALLE", "JCI", "JOY", "TWC", "ADT", "TE", "NAVI", "ACE"]
+
         //CheckDatabase().replaceThe(missingDays: ["GOOG"])
     }
     

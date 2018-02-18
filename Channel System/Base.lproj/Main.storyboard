@@ -864,7 +864,7 @@
                                                             <action selector="oneChartAction:" destination="9ui-km-yle" eventType="touchUpInside" id="H7v-im-VHD"/>
                                                         </connections>
                                                     </button>
-                                                    <searchBar contentMode="redraw" text="GOOG" translatesAutoresizingMaskIntoConstraints="NO" id="ZcL-ZL-a9y">
+                                                    <searchBar contentMode="redraw" placeholder="GOOG" translatesAutoresizingMaskIntoConstraints="NO" id="ZcL-ZL-a9y">
                                                         <rect key="frame" x="167" y="0.0" width="155" height="30"/>
                                                         <color key="backgroundColor" red="0.79992926120758057" green="0.80004531145095825" blue="0.79990392923355103" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" keyboardAppearance="alert" returnKeyType="continue"/>
