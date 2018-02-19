@@ -88,9 +88,7 @@ class Prices: Object {
 
         try! realm.write {
             for each in sortedByDate {
-                //try! realm.write {
                     each.stars = stars
-               // }
             }
         }
     }
@@ -101,8 +99,6 @@ class Prices: Object {
         let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", id)
         let sortedByDate = oneSymbol.sorted(byKeyPath: "date", ascending: true)
         if let stars = sortedByDate.first?.stars {
-            
-        
             if ( debug ) {
                 print("Ticker: \(ticker) Stars: \(stars)")
             }

@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class ManageViewController: UIViewController, UITextViewDelegate {
-
+    
     @IBOutlet weak var cashCommited: UILabel!
     @IBOutlet weak var topLeft: UILabel! // Entry For
     @IBOutlet weak var topRight: UILabel! // QQQ
@@ -41,7 +41,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     var account:String = "TDA"
     var capReq:Double = 0.0
     var portfolioCost:Double = 0.0
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Manage Trade"
@@ -91,10 +91,10 @@ class ManageViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func accountSwitchAction(_ sender: UISegmentedControl) {
         switch accountSwitch.selectedSegmentIndex {
-            case 0: account = "TDA"; print("account: \(account)");
-            case 1: account = "E*Trade"; print("account: \(account)");
-            case 2: account = "IB"; print("account: \(account)");
-            default: break;
+        case 0: account = "TDA"; print("account: \(account)");
+        case 1: account = "E*Trade"; print("account: \(account)");
+        case 2: account = "IB"; print("account: \(account)");
+        default: break;
         }
     }
     
@@ -102,9 +102,9 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         switch exitSwitch.selectedSegmentIndex {
         case 0: print("Target Selected"); topLeft.text = "Target Exit"; action = "Target"
         //MARK: - TODO - selet the proper exit to record in the database
-            case 1: print("Stop Selected"); topLeft.text = "Stop Exit"; action = "Stop"
-            case 2: print("Time Selected"); topLeft.text = "Time Exit"; action = "Date Stop"
-            default: break;
+        case 1: print("Stop Selected"); topLeft.text = "Stop Exit"; action = "Stop"
+        case 2: print("Time Selected"); topLeft.text = "Time Exit"; action = "Date Stop"
+        default: break;
         }
     }
     
@@ -129,7 +129,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         if (textInput.text! != "") {
             textEntered = textInput.text!
         }
-
+        
         switch action {
         case "Entry For":
             print("\nIn Manage VC case \(action)")
@@ -165,7 +165,7 @@ class ManageViewController: UIViewController, UITextViewDelegate {
         print("Record: Unwind from Manage trades VC")
         self.performSegue(withIdentifier: "unwindToScan", sender: self)
     }
-
+    
     func populateLables(action: String, debug: Bool) {
         
         if debug { print("\npopulate lables") }
@@ -210,16 +210,16 @@ class ManageViewController: UIViewController, UITextViewDelegate {
             midRight.text = "\(String(thisTrade.shares)) Shares"
             bottomLeft.text = "Stop \(String(format: "%.2f", thisTrade.stop))"
             bottomRight.text = "Target \(String(format: "%.2f", thisTrade.target))"
-
+            
             switch thisTrade.account {
-                case "TDA" :
-                    accountSwitch.selectedSegmentIndex = 0
-                case "E*Trade" :
-                    accountSwitch.selectedSegmentIndex = 1
-                case "IB" :
-                    accountSwitch.selectedSegmentIndex = 2
-                default:
-                    accountSwitch.selectedSegmentIndex = 0
+            case "TDA" :
+                accountSwitch.selectedSegmentIndex = 0
+            case "E*Trade" :
+                accountSwitch.selectedSegmentIndex = 1
+            case "IB" :
+                accountSwitch.selectedSegmentIndex = 2
+            default:
+                accountSwitch.selectedSegmentIndex = 0
             }
         }
     }

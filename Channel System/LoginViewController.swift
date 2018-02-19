@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
     @IBOutlet weak var siChart: UITextField!
     
     @IBOutlet weak var intrinioUser: UITextField!
@@ -19,7 +19,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-
+    
     @IBAction func loginAction(_ sender: Any) {
         saveLogins()
     }
@@ -61,5 +61,5 @@ class LoginViewController: UIViewController {
         let myVC:ScanViewController = storyboard?.instantiateViewController(withIdentifier: "scanVC") as! ScanViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
-
+    
 }

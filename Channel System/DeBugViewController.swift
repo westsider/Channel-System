@@ -21,7 +21,7 @@ class DeBugViewController: UIViewController {
     var ticker:String = "SPY"
     var taskIdSelected:String = ""
     var galaxie = [String]()
-
+    
     var oneTicker:Results<Prices>!
     let showTrades = ShowTrades()
     
@@ -45,7 +45,7 @@ class DeBugViewController: UIViewController {
     let yDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIYAxisDragModifier.self)
     let xDragModifierSync = SCIMultiSurfaceModifier(modifierType: SCIXAxisDragModifier.self)
     let zoomExtendsSync = SCIMultiSurfaceModifier(modifierType: SCIZoomExtentsModifier.self)
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         maxBarsOnChart = Utilities().detectDevice(maxBars: maxBarsOnChart)
@@ -176,18 +176,18 @@ class DeBugViewController: UIViewController {
         sciChartView1.translatesAutoresizingMaskIntoConstraints = true
         self.chartView.addSubview(sciChartView1)
         
-//        sciChartView2 = SCIChartSurface(frame: self.bottomView.bounds)
-//        sciChartView2.frame = self.bottomView.bounds
-//        sciChartView2.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-//        sciChartView2.translatesAutoresizingMaskIntoConstraints = true
-//        self.bottomView.addSubview(sciChartView2)
+        //        sciChartView2 = SCIChartSurface(frame: self.bottomView.bounds)
+        //        sciChartView2.frame = self.bottomView.bounds
+        //        sciChartView2.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        //        sciChartView2.translatesAutoresizingMaskIntoConstraints = true
+        //        self.bottomView.addSubview(sciChartView2)
     }
     
     
     fileprivate func addAxis(BarsToShow: Int) {
         let totalBars:Int = oneTicker.count
         rangeStart = totalBars - BarsToShow
-    
+        
         let axisX1:SCICategoryDateTimeAxis = SCICategoryDateTimeAxis()
         axisX1.axisId = axisX1Id
         rangeSync.attachAxis(axisX1)

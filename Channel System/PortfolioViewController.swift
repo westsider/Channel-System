@@ -105,7 +105,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         return cell
     }
     
-
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // showing open trades
@@ -124,7 +124,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
         header.textLabel?.textColor = UIColor.white
         header.textLabel?.font = UIFont(name: "PingFang HK", size: 20)
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Tapped row \(indexPath.row)")
         debugPrint(tasks[indexPath.row])
@@ -141,7 +141,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
     
     //MARK: - Swipe left to delete old trade if isOn bool is true
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-
+        
         if showClosedTrades {
             if editingStyle == .delete {
                 print("swipe left on \(tasks[indexPath.row].taskID)")
@@ -149,7 +149,7 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
                 tasks = RealmHelpers().getClosedTrades()
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
-       }
+        }
     }
     
     func segueToChart(index: Int) {

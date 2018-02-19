@@ -21,7 +21,7 @@ class WklyStats: Object {
     
     
     func updateCumulativeProfit(date: Date, entryDate:Date, ticker:String, profit: Double, cost:Double, maxCost:Double) {
-        print("today \(Date()) date to save \(date)")
+        //print("today \(Date()) date to save \(date)")
         if date <= Date() {
             let realm = try! Realm()
             let thisWeek = WklyStats()

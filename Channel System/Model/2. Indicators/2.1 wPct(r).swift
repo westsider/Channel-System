@@ -27,7 +27,7 @@ class PctR {
                 if done {
                     DispatchQueue.main.async {
                         counter += 1
-                        print("oscilator \(counter) of \(total)")
+                        print("oscilator complete on \(counter) of \(total)")
                         if counter == total {
                             completion(true)
                         }
@@ -41,13 +41,21 @@ class PctR {
         // %R = (Highest High – Closing Price) / (Highest High – Lowest Low) x -100
         let sortedPrices = prices
         // need to find HH + LL of last N periods
-        var highs = [Double]()
-        var lows = [Double]()
+        //var highs = [Double]()
+       // var lows = [Double]()
         var highestHigh = [Double]()
         var lowestLow = [Double]()
-        for each in sortedPrices {
-            highs.append(each.high)
-            lows.append(each.low)
+//        for each in sortedPrices {
+//            highs.append(each.high)
+//            lows.append(each.low)
+//        }
+        
+        let highs: [Double] = sortedPrices.map { (close: Prices) in
+            return close.high
+        }
+        
+        let lows: [Double] = sortedPrices.map { (close: Prices) in
+            return close.low
         }
         
         // max high of last 10
@@ -69,6 +77,7 @@ class PctR {
             }
             lowestLow.append(lowArray.min()!)
         }
+        
         
         //(Highest High – Closing Price)
         var leftSideEquation = [Double]()

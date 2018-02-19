@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class SymbolsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     let realm = try! Realm()
@@ -20,11 +20,11 @@ class SymbolsViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         let portfolioCount = RealmHelpers().portfolioCount()
-        let days:Int = 3
+        let days:Int = 4
         title = "last \(days) days \(portfolioCount) Positions"
         tasks = Prices().sortEntriesBy(recent: true, days: days)
     }
-
+    
     @IBAction func clearRealmAction(_ sender: Any) {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
         navigationController?.pushViewController(myVC, animated: true)

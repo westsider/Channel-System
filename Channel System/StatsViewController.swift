@@ -12,7 +12,7 @@ import RealmSwift
 import NVActivityIndicatorView
 
 class StatsViewController: UIViewController, NVActivityIndicatorViewable {
-
+    
     @IBOutlet weak var topLeft: UILabel!
     @IBOutlet weak var topRight: UILabel!
     @IBOutlet weak var midLeft: UILabel!
@@ -65,28 +65,30 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         galaxie = SymbolLists().uniqueElementsFrom(testSet: false, of: 20)
         startAnimating(self.size, message: "Optimizing Portfolio", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.orbit.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         portfolio = Performance().getPerformanceChart(debug: true)
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             // get realm data for chart
-            PortfolioFilters().using(mc: true, stars: true, numPositions: 20) { (finished) in
-                if finished {
-                    DispatchQueue.main.async {
-                        self.updateNVActivity(with: "Creating Lables")
-                        self.populateLables()
-                        self.stopAnimating()
+            DispatchQueue.global(qos: .background).async {
+                PortfolioFilters().using(mc: true, stars: true, numPositions: 20) { (finished) in
+                    if finished {
+                        DispatchQueue.main.async {
+                            self.updateNVActivity(with: "Creating Lables")
+                            self.populateLables()
+                            self.stopAnimating()
+                        }
                     }
                 }
             }
         }
     }
-
+    
     //MARK: - update lables
     func populateLables() {
         let realm = try! Realm()
-       
+        
         // freezing here
         // get the object first then get .last
         
@@ -153,7 +155,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
             }
         }
     }
-
+    
     // MARK: Overrided Functions
     func completeConfiguration() {
         configureChartSuraface()
@@ -192,12 +194,12 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         bottomChartRenderSeries.dataSeries = cumulativeCost
         bottomChartRenderSeries.paletteProvider = ColumnsTripleColorPalette()
         
-//        let animation = SCIWaveRenderableSeriesAnimation(duration: 1.5, curveAnimation: SCIAnimationCurveEaseOut)
-//        animation.start(afterDelay: 0.3)
-//        bottomChartRenderSeries.addAnimation(animation)
+        //        let animation = SCIWaveRenderableSeriesAnimation(duration: 1.5, curveAnimation: SCIAnimationCurveEaseOut)
+        //        animation.start(afterDelay: 0.3)
+        //        bottomChartRenderSeries.addAnimation(animation)
         surface.renderableSeries.add(bottomChartRenderSeries)
     }
-   
+    
     fileprivate func configureChartSuraface() {
         sciChartView1 = SCIChartSurface(frame: self.topView.bounds)
         sciChartView1.frame = self.topView.bounds
@@ -289,7 +291,7 @@ class StatsViewController: UIViewController, NVActivityIndicatorViewable {
         let axisMarker:SCIAxisMarkerAnnotation = SCIAxisMarkerAnnotation()
         axisMarker.yAxisId = yID;
         axisMarker.style.margin = 5;
-
+        
         let textFormatting:SCITextFormattingStyle = SCITextFormattingStyle();
         textFormatting.color = UIColor.white;
         textFormatting.fontSize = 14;
@@ -316,7 +318,7 @@ class ColumnsTripleColorPalette : SCIPaletteProvider {
     
     override init() {
         super.init()
-
+        
         style1.fillBrushStyle = SCILinearGradientBrushStyle(colorStart: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), finish: #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1), direction: .vertical)
         style1.strokeStyle = SCISolidPenStyle(color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), withThickness: 0.2)
         style2.fillBrushStyle = SCILinearGradientBrushStyle(colorStart: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), finish: #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1), direction: .vertical)

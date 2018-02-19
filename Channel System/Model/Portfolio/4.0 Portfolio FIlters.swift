@@ -71,8 +71,8 @@ class PortfolioFilters {
     
     func createStats() {
         sumProfit = totalProfit.reduce(0, +)
-        sumCost = totalCost.max()!
-        let fistDayofProfit = Utilities().convertToDateFrom(string: "2014/08/01", debug: false)
+        sumCost = totalCost.max()!  //2014/08/01
+        let fistDayofProfit = Utilities().convertToDateFrom(string: "2013/11/01", debug: false)
         let numDays = Utilities().calcuateDaysBetweenTwoDates(start: fistDayofProfit, end: Date(), debug: false)
         let numYears = Double(numDays) / 365.00
         let annualProfit = sumProfit / numYears
@@ -221,15 +221,17 @@ class PortfolioFilters {
     }
     
     func printEachDay(date:Date) {
-        let sumOfAllProfit = totalProfit.reduce(0, +)
-        let strDate = Utilities().convertToStringNoTimeFrom(date: date)
-        let cp = Utilities().dollarStr(largeNumber: sumOfAllProfit)
-        let strSumCost = Utilities().dollarStr(largeNumber: sumCost)
-        winPct = Double( winCount ) / Double( tradeCount ) * 100.0
-        strWinPct = String(format: "%.2f",winPct)
-        print("\(strDate)\tCumulative Profit \(cp)\t\t\tpositions \(positionCount)\tCost \(strSumCost)\t\t\(String(strWinPct))% Win")
-        let thisDay = StatsData(date: date, dailyCumProfit: sumOfAllProfit, dailyCost: sumCost, winPct: winPct)
-        portfolio.append(thisDay)
+        DispatchQueue.global(qos: .background).async {
+            let sumOfAllProfit = self.totalProfit.reduce(0, +)
+            let strDate = Utilities().convertToStringNoTimeFrom(date: date)
+            let cp = Utilities().dollarStr(largeNumber: sumOfAllProfit)
+            let strSumCost = Utilities().dollarStr(largeNumber: self.sumCost)
+            self.winPct = Double( self.winCount ) / Double( self.tradeCount ) * 100.0
+            self.strWinPct = String(format: "%.2f",self.winPct)
+            print("\(strDate)\tCumulative Profit \(cp)\t\t\tpositions \(self.positionCount)\tCost \(strSumCost)\t\t\(String(self.strWinPct))% Win")
+            let thisDay = StatsData(date: date, dailyCumProfit: sumOfAllProfit, dailyCost: self.sumCost, winPct: self.winPct)
+            self.portfolio.append(thisDay)
+        }
     }
     
     func printEachTrade(isOn:Bool, ticker:String, date:Date, profit:Double, cost:Double) {
@@ -242,25 +244,29 @@ class PortfolioFilters {
     }
     
     func checkOutliers(date:Date, ticker:String, profit:Double)-> Double {
-        var answer = profit
-        profitArray.append(profit)
-        let average = profitArray.reduce(0, + ) / Double( profitArray.count )
-        let outlier = average * 10
-        let superOutlier = outlier * 4
-        let strProfit = Utilities().dollarStr(largeNumber: profit)
-        let strAvg = Utilities().dollarStr(largeNumber: average)
-        let strDate = Utilities().convertToStringNoTimeFrom(date: date)
-        let strOutlier = Utilities().dollarStr(largeNumber: outlier)
         
-        if profit > outlier && tradeCount > 750 {
-            print("\n\n--------> WARNING Outlier Alert <--------\n\(strDate)\t\(ticker)\t\(strProfit)\tavg is \(strAvg)\tlimit is \(strOutlier)\n-----------------------------------------------------\n\n")
-            outlierArray.append("\(strDate)\t\(ticker)\t\(strProfit)")
-            if profit > superOutlier {
-                print("***** This was a super anomily. reduce profit of \(strProfit) to \(strOutlier) *****\n")
-                answer = outlier
+        var answer = profit
+        DispatchQueue.global(qos: .background).async {
+            self.profitArray.append(profit)
+            let average = self.profitArray.reduce(0, + ) / Double( self.profitArray.count )
+            let outlier = average * 10
+            let superOutlier = outlier * 4
+            let strProfit = Utilities().dollarStr(largeNumber: profit)
+            let strAvg = Utilities().dollarStr(largeNumber: average)
+            let strDate = Utilities().convertToStringNoTimeFrom(date: date)
+            let strOutlier = Utilities().dollarStr(largeNumber: outlier)
+            
+            if profit > outlier && self.tradeCount > 750 {
+                print("\n\n--------> WARNING Outlier Alert <--------\n\(strDate)\t\(ticker)\t\(strProfit)\tavg is \(strAvg)\tlimit is \(strOutlier)\n-----------------------------------------------------\n\n")
+                self.outlierArray.append("\(strDate)\t\(ticker)\t\(strProfit)")
+                if profit > superOutlier {
+                    print("***** This was a super anomily. reduce profit of \(strProfit) to \(strOutlier) *****\n")
+                    answer = outlier
+                }
             }
         }
         return answer
+        
     }
 }
 

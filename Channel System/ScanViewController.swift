@@ -32,29 +32,15 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         title = "Finance"
         galaxie = SymbolLists().allSymbols
-        let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
-        
-        //Recalculate().allIndicators(ticker: "REM", debug: true, redoAll: true)
-        //PageInfo.showDatesForPages(ticker: "SPY")
-        let deleteThese =   ["PCP"]
+        print("\nTotalSymbols \(galaxie.count)\n")
+        galaxie = CalcStars().trimGalaxieFromMinStars(galaxie: galaxie, debug: true)
 
-        // missing older data FTI 4 pages, GOOG 8 pages,
-        
-//        for ticker in deleteThese {
-//            ReplacePrices().deleteOldSymbol(ticker: ticker)
-//        }
-        
-        //MarketCondition().calcMarketCondFirstRun(debug: true)
-        //CheckDatabase().replaceThe(missingDays: ["GOOG"])
-//        PriorData().getLastPrice(ticker: "GOOG", debug: true, page: 8, saveToRealm: true) { (finished) in
-//            if finished {
-//                print("finished getting page 14 for goog")
-//            }
-//        }
+        //let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.resetThis(ticker: "QQQ", isOn: false)
+        //CheckDatabase().replaceThe(missingDays: ["GOOG"])
         CheckDatabase().canIgetDataFor(ticker: "ADT", isOn: false)
     }
     
@@ -90,7 +76,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
         self.startAnimating(self.size, message: "Requesting group 1 from NYSE", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
-            let segments = SymbolLists().segmented(by: 10, of727loadOnly: 727) // of 727
+            let segments = SymbolLists().segmented(by: 10, of727loadOnly: 700) // of 700
             print("Num Segments is \(segments.count)")
             let myGroup = DispatchGroup()
             var groupCounter = 0

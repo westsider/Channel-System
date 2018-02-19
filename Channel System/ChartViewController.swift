@@ -11,7 +11,7 @@ import SciChart
 import RealmSwift
 
 class SCSSyncMultiChartView: UIViewController {
-
+    
     var oneTicker:Results<Prices>!
     var marketCondition:Results<MarketCondition>!
     let showTrades = ShowTrades()
@@ -50,8 +50,8 @@ class SCSSyncMultiChartView: UIViewController {
         marketCondition = MarketCondition().getData()
         ticker = (oneTicker.first?.ticker)!
         title = ticker
-//        if showTrailStop {
-//            ShowStops().checkStop(showStops: showTrailStop, ticker: ticker) }
+        //        if showTrailStop {
+        //            ShowStops().checkStop(showStops: showTrailStop, ticker: ticker) }
         completeConfiguration(debug: false)
     }
     
@@ -59,7 +59,7 @@ class SCSSyncMultiChartView: UIViewController {
         let myVC = storyboard?.instantiateViewController(withIdentifier: "PrefVC") as! PrefViewController
         navigationController?.pushViewController(myVC, animated: true)
     }
-
+    
     //MARK: - Add Pices Series
     fileprivate func addDataSeries(surface:SCIChartSurface, xID:String, yID:String) {
         surface.renderableSeries.add(getCandleRenderSeries(debug: false, xID: xID, yID: yID))
@@ -137,7 +137,7 @@ class SCSSyncMultiChartView: UIViewController {
                                            date: Double(rangeStart), price: highestPrice, text: statsText)
         let guidanceText = MarketCondition().getStrMatixForChart(debug: debug)
         let guideChart = ShowTrades().showStats(xID: axisX2Id, yID: axisY2Id,
-                                            date: Double(rangeStart), price: highestAtr, text: guidanceText)
+                                                date: Double(rangeStart), price: highestAtr, text: guidanceText)
         sciChartView1.annotations.add(stats)
         sciChartView2.annotations.add(guideChart)
     }
@@ -166,7 +166,7 @@ class SCSSyncMultiChartView: UIViewController {
         sciChartView2.translatesAutoresizingMaskIntoConstraints = true
         self.bottomView.addSubview(sciChartView2)
     }
-
+    
     fileprivate func addAxis(BarsToShow: Int) {
         
         let totalBars:Int = oneTicker.count
@@ -241,7 +241,7 @@ class SCSSyncMultiChartView: UIViewController {
     }
     
     fileprivate func showEntries(surface:SCIChartSurface, xID:String, yID:String) {
-         for ( index, things) in oneTicker.enumerated() {
+        for ( index, things) in oneTicker.enumerated() {
             let signal:Bool = things.longEntry
             let high:Double = things.high
             let low:Double = things.low
@@ -451,7 +451,7 @@ class SCSSyncMultiChartView: UIViewController {
             print("it's an iPad")
             maxBarsOnChart = maxBarsOnChart * 2
         case .unspecified:
-           print("It's an iPhone")
+            print("It's an iPhone")
         case .tv:
             print("It's an iPhone")
             maxBarsOnChart = maxBarsOnChart * 3

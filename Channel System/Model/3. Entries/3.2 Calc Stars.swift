@@ -25,37 +25,37 @@ class CalcStars {
         var allStars:[Int] = []
         var tickerStar = [(ticker:String, grossProfit:Double, Roi:Double, WinPct:Double)]()
         WklyStats().clearWeekly()
-        DispatchQueue.global(qos: .background).async {
-            var totals:[Double] = [0.0]
-            for ( symC, symbols) in galaxie.enumerated() {
-                let results =   BackTest().enterWhenFlat(ticker: symbols, debug: debug, updateRealm: true)
-                tickerStar.append((ticker: symbols, grossProfit: results.0, Roi: results.3, WinPct: results.4))
-                print("\(symC) of \(galaxie.count)")
-                totals.append(results.grossProfit)
-            }
-            let sum = totals.reduce(0, +)
-            print("\n---------------------------------------\n\t\tSummary of Brute force backtest\nTotal Tickers \(galaxie.count)\nSum of all trades \(Utilities().dollarStr(largeNumber: sum))\n---------------------------------------\n")
-            // loop through array and update stars
-            for (index, each) in tickerStar.enumerated() {
-                count = index
-                let stars = self.calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: debug)
-                Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: debug)
-                // array of all stars to get average stars
-                allStars.append(stars.stars)
-                count += 1
-            }
-            print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
-            
-            DispatchQueue.main.async {
-                if count == tickerStar.count {
-                    let sumOfStars = allStars.reduce(0, +)
-                    let averageStars = Double( sumOfStars / tickerStar.count )
-                    print("\n--------------------\nAverage  Stars \(averageStars)\n--------------------\n")
-                    Stats().changeAvgStars(avgStars: averageStars)
-                    completion()
-                }
-            }
+        // DispatchQueue.global(qos: .userInitiated).async {
+        var totals:[Double] = [0.0]
+        for ( symC, symbols) in galaxie.enumerated() {
+            let results =   BackTest().enterWhenFlat(ticker: symbols, debug: debug, updateRealm: true)
+            tickerStar.append((ticker: symbols, grossProfit: results.0, Roi: results.3, WinPct: results.4))
+            if debug { print("\(symC) of \(galaxie.count)") }
+            totals.append(results.grossProfit)
         }
+        let sum = totals.reduce(0, +)
+        print("\n---------------------------------------\n\t\tSummary of Brute force backtest\nTotal Tickers \(galaxie.count)\nSum of all trades \(Utilities().dollarStr(largeNumber: sum))\n---------------------------------------\n")
+        // loop through array and update stars
+        for (index, each) in tickerStar.enumerated() {
+            count = index
+            let stars = self.calcStars(grossProfit: each.grossProfit, annualRoi: each.Roi, winPct: each.WinPct, debug: debug)
+            Prices().addStarToTicker(ticker: each.ticker, stars: stars.stars, debug: debug)
+            // array of all stars to get average stars
+            allStars.append(stars.stars)
+            count += 1
+        }
+        print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
+        
+        //DispatchQueue.main.async {
+        if count == tickerStar.count {
+            let sumOfStars = allStars.reduce(0, +)
+            let averageStars = Double( sumOfStars / tickerStar.count )
+            if debug { print("\n--------------------\nAverage  Stars \(averageStars)\n--------------------\n") }
+            Stats().changeAvgStars(avgStars: averageStars)
+            completion()
+        }
+        // }
+        // }
     }
     
     // ( score 50% each for  , winPct literal ) = 80% = 4 stars, 100% = 5 stars
@@ -126,43 +126,26 @@ class CalcStars {
         return (stars, starIcon )
     }
     
-    func showWinnersAndLoosers() {
-        let allSymbols = Symbols().indexes + Symbols().DOW30 + Symbols().ETF200 + Symbols().SP500 + Symbols().FAVORITES
-        
-        //MARK: - Remove any duplicated tickers
-        func uniqueElementsFrom(testSet: Bool, of:Int) -> [String] {
-            var set = Set<String>()
-            let result = allSymbols.filter {
-                guard !set.contains($0) else {
-                    return false
-                }
-                set.insert($0)
-                return true
-            }
-            if ( testSet ) {
-                return Array(result.prefix(of))
-            } else {
-                return result
-            }
-        }
-        
-        let galaxie = uniqueElementsFrom(testSet: false, of: 100)
+    func trimGalaxieFromMinStars(galaxie:[String], debug:Bool)-> [String] {
+        let minStars = Stats().getStars()
         var winners:[String] = []
         var loosers:[String] = []
-
+        
         for symbols in galaxie {
             if let oneTicker = Prices().sortOneTicker(ticker: symbols, debug: false).last {
-                if oneTicker.stars > 3 {
+                if oneTicker.stars >= minStars {
                     winners.append(oneTicker.ticker)
                 } else {
                     loosers.append(oneTicker.ticker)
                 }
             }
-
         }
-        print("\nWinners \(winners.count)")
-        debugPrint(winners)
-        print("\nLoosers \(loosers.count)")
-        debugPrint(loosers)
+        if debug {
+            print("\nGalaxie >= \(minStars)stars is now\(winners.count)")
+            debugPrint(winners)
+            print("\nGalaxie < \(minStars)stars is now\(winners.count)")
+            debugPrint(loosers)
+        }
+        return winners
     }
 }

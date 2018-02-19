@@ -41,7 +41,7 @@ class IntrioFeed {
         let total = galaxie.count
         let lastDateInRealm = Prices().getLastDateInRealm(debug: debug)
         var requestCounter = 0
-
+        
         for  symbols in galaxie {
             DispatchQueue.global(qos: .background).async {
                 print("Intrinio request for \(symbols)")
@@ -67,7 +67,7 @@ class IntrioFeed {
     func getLastPrice(ticker: String, lastInRealm: Date, debug: Bool, completion: @escaping (Bool) -> Void) {
         // get last price from intrio
         //if ( debug ) {
-            print("Requesting remote data for \(ticker)") //}
+        print("Requesting remote data for \(ticker)") //}
         let request = "https://api.intrinio.com/prices?ticker=\(ticker)" //DWDP
         let user = Utilities().getUser().user
         let password = Utilities().getUser().password
@@ -108,7 +108,7 @@ class IntrioFeed {
                         }
                         // only save new days not in realm. this is for first run when we just have csv data from 11/30/2017
                         if ( isNewDate ) {
-                             print("we are adding a new object for \(prices.ticker) on \(prices.dateString) to realm")
+                            print("we are adding a new object for \(prices.ticker) on \(prices.dateString) to realm")
                             RealmHelpers().saveSymbolsToRealm(each: prices)
                         }
                         // this section caused the last 100 days to be written over
@@ -132,7 +132,7 @@ class IntrioFeed {
                     if ( debug ) { print("\(ticker) request complete") }
                     completion(true)
                 case .failure(let error):
-                print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\tIntrinio Error getting \(ticker)\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n")
+                    print("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\tIntrinio Error getting \(ticker)\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n")
                     Utilities().playErrorSound()
                     Alert.showBasic(title: "Error for \(ticker)", message: error.localizedDescription)
                     debugPrint(error)

@@ -30,9 +30,6 @@ class Recalculate {
                                     Entry().getEveryEntry(galaxie: [ticker], debug: debug, completion: { (finished4) in
                                         if finished4 {
                                             print("Finished Entries")
-    //                                        CalcStars().backtest(galaxie: [ticker], debug: debug, completion: {
-    //                                            print("Finished ClacStars")
-    //                                        })
                                         }
                                     })
                                 }

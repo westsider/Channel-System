@@ -65,24 +65,27 @@ class Entry {
         print("\n---------------------------------------\n\t\tSummary of Entry test\nTotal Entries \(totalEntries), Total Tickers \(totalTickers)\n---------------------------------------\n")
         
     }
+    
     func calcLongForOnly(ticker:String, deBug:Bool)->Bool {
         print("Getting all dates for \(ticker) to calc entries")
         let prices = Prices().sortOneTicker(ticker: ticker, debug: false)
-        let realm = try! Realm()
-        try! realm.write {
-            for each in prices {
-                if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
+        //DispatchQueue.global(qos: .background).async {
+            let realm = try! Realm()
+            try! realm.write {
+                for each in prices {
+                    if ( each.close < each.movAvg10 && each.close > each.movAvg200 && each.wPctR < -80 ) {
                         let stopDist = TradeHelpers().calcStopTarget(ticker: each.ticker, close: each.close, debug: false)
-                        let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: currentRisk)
+                        let shares = TradeHelpers().calcShares(stopDist: stopDist.2, risk: self.currentRisk)
                         each.longEntry = true
                         each.shares = shares
                         each.capitalReq = TradeHelpers().capitalRequired(close: each.close, shares: shares)
                         each.stop = stopDist.0
                         each.target = stopDist.1
-                    if ( deBug ) { print("LE on \(each.dateString)") }
+                        if ( deBug ) { print("LE on \(each.dateString)") }
+                    }
                 }
             }
-        }
+        //}
         print("Calc long for \(ticker) only complete")
         return true
     }

@@ -40,17 +40,19 @@ class Performance: Object {
     }
     
     func getPerformanceChart(debug:Bool)-> [ChartData] {
-
+        
         var chartArray:[ChartData]  = []
         let realm = try! Realm()
         let chartData = realm.objects(Performance.self)
         let sortedByDate = chartData.sorted(byKeyPath: "date", ascending: true)
         if debug { print("\nChart Data from Realm\n") }
-        for each in sortedByDate {
-            let oneDay = ChartData(date: each.date!, dailyCumProfit: each.dailyCumProfit, dailyCost: each.dailyCost)
-            chartArray.append(oneDay)
-            if debug { printPerformanceChart(data: oneDay) }
-        }
+        //DispatchQueue.global(qos: .background).async {
+            for each in sortedByDate {
+                let oneDay = ChartData(date: each.date!, dailyCumProfit: each.dailyCumProfit, dailyCost: each.dailyCost)
+                chartArray.append(oneDay)
+                if debug { self.printPerformanceChart(data: oneDay) }
+            }
+        //}
         return chartArray
     }
     

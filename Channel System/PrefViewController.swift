@@ -86,7 +86,6 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     func populateLables() {
         let riskRecd = Account().currentRisk()
         print("Loading risk of \(riskRecd)")
-        //riskLabel.text = "\(riskRecd)"
         riskLabel.text = Account().textValueFor(account: "Risk")
         ibLabel.text = Account().textValueFor(account:"IB" )
         tdaLabel.text = Account().textValueFor(account:"TDA" )
@@ -113,7 +112,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
                 Account().updateRisk(risk: numberRisk )
                 print("\n-------> Saved new Risk of \(numberRisk) <------\n")
                 print("\nNow running getEveryEntry to reset shares, stop and capRequired\n")
-                recCalcEntry(debug: true)
+                recCalcEntry(debug: false)
             } else {
                 print("\n-------> ERROR unwrapping Risk <------\n")
             }
@@ -127,17 +126,19 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
     
     func recCalcEntry(debug:Bool) {
         startAnimating(self.size, message: "Optimizing Portfolio", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballClipRotateMultiple.rawValue)!, color: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),  textColor: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
-        Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
-            if finished  {
-                print("Entry done")
-                self.updateNVActivity(with:"Recalculating Stars")
-                CalcStars().backtest(galaxie: self.galaxie, debug: debug, completion: {
-                    print("\ncalc Stars done!\n")
-                    self.stopAnimating()
-                    Utilities().playAlertSound()
-                })
-            }
-        })
+        DispatchQueue.global(qos: .background).async {
+            Entry().getEveryEntry(galaxie: self.galaxie, debug: debug, completion: { (finished) in
+                if finished  {
+                    print("Entry done")
+                    self.updateNVActivity(with:"Recalculating Stars")
+                    CalcStars().backtest(galaxie: self.galaxie, debug: debug, completion: {
+                        print("\ncalc Stars done!\n")
+                        self.stopAnimating()
+                        Utilities().playAlertSound()
+                    })
+                }
+            })
+        }
     }
     
     @IBAction func ibAction(_ sender: Any) {
@@ -256,7 +257,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
             print("\nYo - Exited 2nd loop with count of \(count) and tickerStar count is \(tickerStar.count)")
             DispatchQueue.main.async {
                 if count == tickerStar.count {
-     
+                    
                     completion()
                 }
             }

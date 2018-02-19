@@ -175,7 +175,10 @@ class BackTest {
         //if debug { print("\tTotal ROI \(totalROI)% Annual ROI \(annualRoi)%") }
         //if debug { print("winPct \(String(format: "%.1f", winPct)) = winCount \(winCount) / tradeCount \(tradeCount)")}
             
-        if debug {   print("\n------------------------------> \(ticker) <--------------------------------------\n$\(String(format: "%.0f", grossProfit)) Profit, LW/LL \(String(format: "%.0f", largestWin))/\(String(format: "%.0f", largestLoser)), \(String(format: "%.2f", annualRoi))% ROI, \(String(format: "%.2f", winPct))% Win, $\(currentRisk) risk, \(tradeCount) trades\n--------------------------------------------------------------------------\n") }
+        //if debug {
+            print("\n------------------------------> \(ticker) <--------------------------------------\n$\(String(format: "%.0f", grossProfit)) Profit, LW/LL \(String(format: "%.0f", largestWin))/\(String(format: "%.0f", largestLoser)), \(String(format: "%.2f", annualRoi))% ROI, \(String(format: "%.2f", winPct))% Win, $\(currentRisk) risk, \(tradeCount) trades\n--------------------------------------------------------------------------\n")
+            
+        //}
        
         return ( grossProfit,largestWin, largestLoser, annualRoi, winPct )
     }
