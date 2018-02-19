@@ -141,10 +141,10 @@ class CalcStars {
             }
         }
         if debug {
-            print("\nGalaxie >= \(minStars)stars is now\(winners.count)")
+            print("\nGalaxie >= \(minStars) stars is now \(winners.count)\n")
             debugPrint(winners)
-            print("\nGalaxie < \(minStars)stars is now\(winners.count)")
-            debugPrint(loosers)
+//            print("\nGalaxie < \(minStars)stars is now\(winners.count)")
+//            debugPrint(loosers)
         }
         return winners
     }
