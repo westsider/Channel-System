@@ -96,6 +96,7 @@ class CompanyData: Object {
                 case .success(let value):
                     let json = JSON(value)
                     //if ( debug ) { print("JSON: \(json)\n") }
+                    // check for missing pages
                     
                     let comData = CompanyData()
                     

@@ -27,9 +27,6 @@ class ReplacePrices {
         // delete ralm object
         let realm = try! Realm()
         let oneSymbol = realm.objects(Prices.self).filter("ticker == %@", ticker)
-        for each in oneSymbol {
-            print("\(each.dateString) \(each.ticker) \(each.close)")
-        }
         try! realm.write {
             realm.delete(oneSymbol)
         }
@@ -108,6 +105,16 @@ class ReplacePrices {
                 case .success(let value):
                     let json = JSON(value)
                    if ( debug ) { print("JSON: \(json)") }
+                    // check for missing pages
+                    if let total_pages = json["total_pages"].int {
+                        if total_pages < page {
+                            let messages = "Page \(page) of Json for \(ticker) is empty! Total pages is only \(total_pages)."
+                            print("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\(messages)\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+                            Alert.showBasic(title: "Data not on server", message: messages)
+                            Utilities().playErrorSound()
+                        }
+                    }
+                    
                     for data in json["data"].arrayValue {
                         let prices = Prices()
                         prices.ticker = ticker
@@ -175,6 +182,16 @@ class ReplacePrices {
                 case .success(let value):
                     let json = JSON(value)
                     if ( debug ) { print("JSON: \(json)") }
+                    // check for missing pages
+                    if let total_pages = json["total_pages"].int {
+                        if total_pages < page {
+                            let messages = "Page \(page) of Json is empty! Total pages is only \(total_pages)."
+                            print("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\(messages)\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+                            Alert.showBasic(title: "Data not on server", message: messages)
+                            Utilities().playErrorSound()
+                        }
+                    }
+                    
                    // for data in json["data"].arrayValue {
         
                     //}  // JSON loop ends

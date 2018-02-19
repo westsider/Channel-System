@@ -32,13 +32,25 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         title = "Finance"
         galaxie = SymbolLists().allSymbols
-        //let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
+        let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
         
         //Recalculate().allIndicators(ticker: "REM", debug: true, redoAll: true)
         //PageInfo.showDatesForPages(ticker: "SPY")
-        //let missing4 =   ["HAR", "HOT", "FTI", "ALTR", "SIAL", "TYC", "ARG", "PCP", "LLTC", "MHFI", "CVC", "GOOG", "STJ", "PLL", "POM", "HCBK", "SNDK", "HSP", "DTV", "GMCR", "PCL", "ALLE", "JCI", "JOY", "TWC", "ADT", "TE", "NAVI", "ACE"]
+        let deleteThese =   ["PCP"]
 
+        // missing older data FTI 4 pages, GOOG 8 pages,
+        
+//        for ticker in deleteThese {
+//            ReplacePrices().deleteOldSymbol(ticker: ticker)
+//        }
+        
+        //MarketCondition().calcMarketCondFirstRun(debug: true)
         //CheckDatabase().replaceThe(missingDays: ["GOOG"])
+//        PriorData().getLastPrice(ticker: "GOOG", debug: true, page: 8, saveToRealm: true) { (finished) in
+//            if finished {
+//                print("finished getting page 14 for goog")
+//            }
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -86,6 +86,16 @@ class PageInfo {
                     switch response.result {
                     case .success(let value):
                         let json = JSON(value)
+                        // check for missing pages
+                        if let total_pages = json["total_pages"].int {
+                            if total_pages < i {
+                                let messages = "Page \(i) of Json for \(ticker) is empty! Total pages is only \(total_pages)."
+                                print("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\(messages)\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+                                Alert.showBasic(title: "Data not on server", message: messages)
+                                Utilities().playErrorSound()
+                            }
+                        }
+                        
                         for data in json["data"].arrayValue {
                             if let date = data["date"].string {
                                 dateArray.append(date)

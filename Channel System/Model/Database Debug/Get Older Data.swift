@@ -35,6 +35,16 @@ class PriorData {
                         let json = JSON(value)
                         print("Here is the Json from \(ticker)")
                         debugPrint(json)
+                        // check for missing pages
+                        if let total_pages = json["total_pages"].int {
+                            if total_pages < i {
+                                let messages = "Page \(i) of Json for \(ticker) is empty! Total pages is only \(total_pages)."
+                                print("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\(messages)\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+                                Alert.showBasic(title: "Data not on server", message: messages)
+                                Utilities().playErrorSound()
+                            }
+                        }
+                        
                         for data in json["data"].arrayValue {
                             if let date = data["date"].string {
                                 dateArray.append(date)
@@ -141,7 +151,7 @@ class PriorData {
         //DispatchQueue.global(qos: .userInitiated).async {
             var countCalls:Int = 0
             for i in array  {
-                self.getLastPrice(ticker: ticker, debug: false, page: i, saveToRealm: saveToRealm, completion: { (finished) in
+                self.getLastPrice(ticker: ticker, debug: true, page: i, saveToRealm: saveToRealm, completion: { (finished) in
                     if finished {
                         countCalls += 1
                         print("got page \(countCalls) countCall = \(countCalls)")
@@ -192,14 +202,38 @@ class PriorData {
         var dateIsToday:Bool = false
         var lastHigh:Double = 0.0
         var lastLow:Double = 0.0
+        
+//        let protectionSpace = URLProtectionSpace.init(host: "api.intrinio.com",
+//                                                      port: nil,
+//                                                      protocol: "http",
+//                                                      realm: nil,
+//                                                      authenticationMethod: nil)
+//
+//        let userCredential = URLCredential(user: user,
+//                                           password: password,
+//                                           persistence: .permanent)
+//
+//        URLCredentialStorage.shared.setDefaultCredential(userCredential, for: protectionSpace)
+        
         Alamofire.request("\(request)")
             .authenticate(user: user, password: password)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    if ( debug ) { print("JSON: \(json)") }
+                    if ( debug ) { print("Page \(page) of JSON: \(json)") }
+                    // check for missing pages
+                    if let total_pages = json["total_pages"].int {
+                        if total_pages < page {
+                            let messages = "Page \(page) of Json for \(ticker) is empty! Total pages is only \(total_pages)."
+                            print("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\(messages)\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+                            Alert.showBasic(title: "Data not on server", message: messages)
+                            Utilities().playErrorSound()
+                        }
+                    }
+                    
                     for data in json["data"].arrayValue {
+                        
                         let prices = Prices()
                         prices.ticker = ticker
                         if let date = data["date"].string {
@@ -244,6 +278,7 @@ class PriorData {
                 case .failure(let error):
                     print("\n---------------------------------\n\tIntrinio Error getting \(ticker)\n-----------------------------------")
                     debugPrint(error)
+                    Alert.showBasic(title: "\(ticker) Error", message: error.localizedDescription)
                     DispatchQueue.main.async {
                         Utilities().playErrorSound()
                     }

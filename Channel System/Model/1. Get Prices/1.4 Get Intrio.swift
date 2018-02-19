@@ -83,6 +83,7 @@ class IntrioFeed {
                 case .success(let value):
                     let json = JSON(value)
                     if ( debug ) { print("JSON: \(json)") }
+                    
                     for data in json["data"].arrayValue {
                         if ( debug ) { print("\n---------------> starting json loop  <---------------------") }
                         let prices = Prices()
