@@ -64,8 +64,9 @@ class RealmHelpers: Object {
         let realm = try! Realm()
         let price = getOneDay(ticker: each.ticker, date: each.date!)
         print("now updating prior day \(price.ticker) for \(price.dateString)")
+
         try! realm.write({
-            price.open = each.open
+            
             price.high = each.high
             price.low = each.low
             price.close = each.close

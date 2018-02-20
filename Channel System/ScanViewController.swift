@@ -30,12 +30,13 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     var reset:Bool = false
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = "Finance"
         galaxie = SymbolLists().allSymbols
         print("\nTotalSymbols \(galaxie.count)\n")
         galaxie = CalcStars().trimGalaxieFromMinStars(galaxie: galaxie, debug: true)
-
         //let _ = CheckDatabase().report(debug: true, galaxie: SymbolLists().allSymbols)
+        //IntrioFeed().standatdNetworkCall(ticker: "QQQ", lastInRealm: Date(), debug: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,36 +74,15 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     
     //MARK: - get new data
     @IBAction func getNewDataAction(_ sender: Any) {
-        self.startAnimating(self.size, message: "Requesting group 1 from NYSE", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1 ) {
-            let segments = SymbolLists().segmented(by: 10, of727loadOnly: 700) // of 700
-            print("Num Segments is \(segments.count)")
-            let myGroup = DispatchGroup()
-            var groupCounter = 0
-
-            for eachSegment in segments {
-                myGroup.enter()
-                self.updateNewPrices(galaxie: eachSegment, debug: true) { (finished) in
-                    if finished {
-                        groupCounter += 1
-                        let message = "Ticker group \(groupCounter) of \(segments.count) complete"
-                        print("\n\n+++++++++++++++> \(message) \t<+++++++++++++++\n\n")
-                        self.updateNVActivity(with: message)
-                        myGroup.leave()
-                    }
-                }
-            }
-            
-            myGroup.notify(queue: .main) {
-                let message = "Finihed All Groups"
-                print(message)
-                self.updateNVActivity(with: message)
+        self.startAnimating(self.size, message: "Contacting NYSE", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballRotateChase.rawValue)!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.updateNewPrices(galaxie: self.galaxie, debug: false) { (finished) in
+            if finished {
+                print("\n\n+++++++++++++++> Finished updating tickers \t<+++++++++++++++\n\n")
                 self.stopAnimating()
             }
         }
-        //MARK: - Todo galxie needs to be changed to in all vc's
-        //let segments = SymbolLists().segmented(by: 14)
+       }
     }
     
     @IBAction func checkPositions(_ sender: Any) {
@@ -115,9 +95,7 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
     //MARK: - Update New Prices Only
     func updateNewPrices(galaxie: [String], debug:Bool, completion: @escaping (Bool) -> Void) {
         print("\nwe are updating prices\n")
-        //updateNVActivity(with:"Contacting NYSE")
-        //IntrioFeed().getDataSegments(galaxie: galaxie, debug: true) { (finished) in
-        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in
+        IntrioFeed().getDataAsync(galaxie: galaxie, debug: debug) { ( finished ) in
             if finished {
                 print("intrinio done")
                 self.updateNVActivity(with:"Loading Trend 1")
@@ -134,28 +112,26 @@ class ScanViewController: UIViewController, NVActivityIndicatorViewable {
                                         print("oscilator done")
                                        // self.updateNVActivity(with:"Loading Market Condition")
                                         // only load once a day
-                                        //MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
-                                            //if finished  {
-                                             //   print("mc done")
+                                        MarketCondition().getMarketCondition(debug: debug, completion: { (finished) in
+                                            if finished  {
+                                                print("mc done")
                                                 self.updateNVActivity(with:"Finding Trades")
                                                 Entry().getEveryEntry(galaxie: galaxie, debug: debug, completion: { (finished) in
                                                     if finished  {
                                                         print("Entry done")
                                                         self.updateNVActivity(with:"Brute Force Back Test")
-                                                        //CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
+                                                        CalcStars().backtest(galaxie: galaxie, debug: debug, completion: {
                                                             completion(true)
-                                                            print("\ncalc Stars done!\n")
                                                             print("Finished calculating indicators and trades")
-                                                        Utilities().playAlertSound()
-                                                           // self.stopAnimating()
-                                                           // self.marketConditionUI(debug: false)
-                                                            //self.updateNVActivity(with:"Daily + Weekly Back Test")
-                                                            //self.manageTradesOrShowEntries(debug: true)
-                                                        //})
+                                                            self.marketConditionUI(debug: false)
+                                                            self.manageTradesOrShowEntries(debug: true)
+                                                            self.stopAnimating()
+                                                            Utilities().playAlertSound()
+                                                        })
                                                     }
                                                 })
-                                           // }//
-                                        //}) //
+                                            }//
+                                        }) //
                                     }
                                 })
                             }

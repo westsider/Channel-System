@@ -115,6 +115,7 @@ class PrefViewController: UIViewController, UITextViewDelegate, NVActivityIndica
                 recCalcEntry(debug: false)
             } else {
                 print("\n-------> ERROR unwrapping Risk <------\n")
+                Alert.showBasic(title: "Risk Not Valid", message: "Please enter a whole number, no spaces, decimals or letters.")
             }
         } else {
             print("\n-------> ERROR reading Risk String <------\n")

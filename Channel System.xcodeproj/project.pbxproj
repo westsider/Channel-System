@@ -19,6 +19,7 @@
 		0D1A279A20165F52000F995A /* Show Stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1A279920165F52000F995A /* Show Stops.swift */; };
 		0D20B1D42017F1F6000A5486 /* Get CSV Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D20B1D32017F1F6000A5486 /* Get CSV Routine.swift */; };
 		0D20B1D62017F2AA000A5486 /* First Run Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D20B1D52017F2AA000A5486 /* First Run Routine.swift */; };
+		0D2529B1203B95C9002EF175 /* Http Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2529B0203B95C9002EF175 /* Http Responses.swift */; };
 		0D3108491FC8968D00E93CB3 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3108481FC8968D00E93CB3 /* constants.swift */; };
 		0D31FF6C1FDDB22A00D87D81 /* PrefViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */; };
 		0D4122B42037C0F700841D18 /* Missing Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4122B32037C0F700841D18 /* Missing Dates.swift */; };
@@ -326,6 +327,7 @@
 		0D1A279920165F52000F995A /* Show Stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Show Stops.swift"; sourceTree = "<group>"; };
 		0D20B1D32017F1F6000A5486 /* Get CSV Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Get CSV Routine.swift"; sourceTree = "<group>"; };
 		0D20B1D52017F2AA000A5486 /* First Run Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "First Run Routine.swift"; sourceTree = "<group>"; };
+		0D2529B0203B95C9002EF175 /* Http Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Http Responses.swift"; sourceTree = "<group>"; };
 		0D3108481FC8968D00E93CB3 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		0D31FF6B1FDDB22A00D87D81 /* PrefViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefViewController.swift; sourceTree = "<group>"; };
 		0D4122B32037C0F700841D18 /* Missing Dates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Missing Dates.swift"; sourceTree = "<group>"; };
@@ -1065,6 +1067,7 @@
 				0D949CED1FA3DF9B00960BA2 /* Date Utility.swift */,
 				0DD22F8320373ECD000E4F97 /* Array Ext.swift */,
 				0DD22F8520374AEA000E4F97 /* Alert.swift */,
+				0D2529B0203B95C9002EF175 /* Http Responses.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1497,6 +1500,7 @@
 				0D949CEE1FA3DF9B00960BA2 /* Date Utility.swift in Sources */,
 				0DE78F571FD8AB0C00915777 /* Weekly Stats.swift in Sources */,
 				0DA5C50E20056C2600CB0E05 /* Clean Database.swift in Sources */,
+				0D2529B1203B95C9002EF175 /* Http Responses.swift in Sources */,
 				0D77DDD01FCF8E1B007573C3 /* StatsViewController.swift in Sources */,
 				0DD22F8420373ECD000E4F97 /* Array Ext.swift in Sources */,
 				0D7B2E801FC3699D004B751C /* ManageViewController.swift in Sources */,

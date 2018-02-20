@@ -25,7 +25,7 @@ class FirstRun {
                     if finished {
                         print("\n*** Company Info done ***\n")
                         //self.updateNVActivity(with:"Contacting NYSE")
-                        IntrioFeed().getData(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
+                        IntrioFeed().getDataAsync(galaxie: galaxie, debug: debug) { ( finished ) in // 1.4
                             if finished {
                                 print("intrinio done")
                                 //self.updateNVActivity(with:"Loading Trend 1")

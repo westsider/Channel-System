@@ -194,9 +194,9 @@ class MarketCondition: Object {
         
         thisString += "\n" + "of \(String(format: "%.1f", comp1)) times and \(String(format: "%.1f", comp2)) times respectively\n"
 
-        thisString += CompanyData().databeseReport(debug: false, galaxie: galaxie)
+        //thisString += CompanyData().databeseReport(debug: false, galaxie: galaxie)
         
-        thisString += CheckDatabase().report(debug: true, galaxie: galaxie)
+        //thisString += CheckDatabase().report(debug: true, galaxie: galaxie)
         
         thisString +=  "\n"
         
